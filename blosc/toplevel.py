@@ -105,8 +105,8 @@ def free_resources():
     _ext.free_resources()
 
 
-def compress(string, typesize, clevel=5, shuffle=True):
-    """compress(string, typesize[, clevel=5, shuffle=True]])
+def compress(string, typesize, clevel=9, shuffle=True):
+    """compress(string, typesize[, clevel=9, shuffle=True]])
 
     Returns compressed string.
 
@@ -118,7 +118,7 @@ def compress(string, typesize, clevel=5, shuffle=True):
             The data type size.
         clevel : int (optional)
             The compression level from 0 (no compression) to 9
-            (maximum compression).  The default is 5.
+            (maximum compression).  The default is 9.
         shuffle : bool (optional)
             Whether you want to activate the shuffle filter or not.
             The default is True.
