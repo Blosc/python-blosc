@@ -52,3 +52,10 @@ Please refer to docstrings.  Start by the main package:
 
 and ask for more docstrings in the referenced functions.
 
+Mailing list
+------------
+
+Discussion about this module is welcome in the Blosc list:
+
+blosc@googlegroups.com
+http://groups.google.es/group/blosc
