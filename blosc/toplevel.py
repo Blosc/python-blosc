@@ -105,14 +105,14 @@ def free_resources():
     _ext.free_resources()
 
 
-def compress(string, typesize, clevel=9, shuffle=True):
-    """compress(string, typesize[, clevel=9, shuffle=True]])
+def compress(bytesobj, typesize, clevel=9, shuffle=True):
+    """compress(bytesobj, typesize[, clevel=9, shuffle=True]])
 
-    Returns compressed string.
+    Returns compressed bytes object.
 
     Parameters
     ----------
-        string : str
+        bytesobj : str / bytes
             This is data to be compressed.
         typesize : int
             The data type size.
@@ -125,68 +125,68 @@ def compress(string, typesize, clevel=9, shuffle=True):
 
     Returns
     -------
-        out : str
-            The compressed data in form of a Python string.
+        out : str / bytes
+            The compressed data in form of a Python str / bytes object.
 
     Examples
     --------
 
     >>> import array
     >>> a = array.array('i', range(1000*1000))
-    >>> a_string = a.tostring()
-    >>> c_string = compress(a_string, typesize=4)
-    >>> len(c_string) < len(a_string)
+    >>> a_bytesobj = a.tostring()
+    >>> c_bytesobj = compress(a_bytesobj, typesize=4)
+    >>> len(c_bytesobj) < len(a_bytesobj)
     True
 
     """
 
-    if type(string) is not bytes:
+    if type(bytesobj) is not bytes:
         raise ValueError(
             "only string (2.x) or bytes (3.x) objects supported as input")
 
-    if len(string) > _ext.BLOSC_MAX_BUFFERSIZE:
-        raise ValueError("string length cannot be larger than %d bytes" % \
+    if len(bytesobj) > _ext.BLOSC_MAX_BUFFERSIZE:
+        raise ValueError("bytesobj length cannot be larger than %d bytes" % \
                          _ext.BLOSC_MAX_BUFFERSIZE)
 
     if clevel < 0 or clevel > 9:
         raise ValueError("clevel can only be in the 0-9 range.")
 
-    return _ext.compress(string, typesize, clevel, shuffle)
+    return _ext.compress(bytesobj, typesize, clevel, shuffle)
 
 
-def decompress(string):
-    """decompress(string)
+def decompress(bytesobj):
+    """decompress(bytesobj)
 
-    Returns decompressed string.
+    Returns decompressed bytesobj.
 
     Parameters
     ----------
-        string : str
+        bytesobj : str / bytes
             This is data to be decompressed.
 
     Returns
     -------
-        out : str
-            The decompressed data in form of a Python string.
+        out : str / bytes
+            The decompressed data in form of a Python str / bytes object.
 
     Examples
     --------
 
     >>> import array
     >>> a = array.array('i', range(1000*1000))
-    >>> a_string = a.tostring()
-    >>> c_string = compress(a_string, typesize=4)
-    >>> a_string2 = decompress(c_string)
-    >>> a_string == a_string2
+    >>> a_bytesobj = a.tostring()
+    >>> c_bytesobj = compress(a_bytesobj, typesize=4)
+    >>> a_bytesobj2 = decompress(c_bytesobj)
+    >>> a_bytesobj == a_bytesobj2
     True
 
     """
 
-    if type(string) is not bytes:
+    if type(bytesobj) is not bytes:
         raise ValueError(
             "only string (2.x) or bytes (3.x) objects supported as input")
 
-    return _ext.decompress(string)
+    return _ext.decompress(bytesobj)
 
 
 if __name__ == '__main__':
