@@ -1,0 +1,92 @@
+====================================================
+ Announcing python-blosc 1.0
+ A Python wrapper for the Blosc compression library
+====================================================
+
+What is new?
+============
+
+Everything.  This is the first public version of the Python wrapper
+for Blosc (1.1).  It supports Python 2.6, 2.7 and 3.1.
+
+The API is very simple and it loosely follows the zlib module.  There
+are two basic functions, `compress()` and `decompress()`, as well as
+two additional calls specific for compressing NumPy arrays,
+`pack_array()` and `unpack_array`.  There are also utilities for
+changing dynamically the number of threads used or to release
+resources when you are not going to need blosc for a while.
+
+Just to whet you appetite:
+
+# Let's create a NumPy array with 80 MB full of data
+>>> import numpy as np
+>>> a = np.linspace(0, 100, 1e7)
+>>> bytes_array = a.tostring()  # get a bytes stream
+
+# Blosc is a very fast compressor
+>>> import zlib
+>>> %time zpacked = zlib.compress(bytes_array)
+CPU times: user 7.66 s, sys: 0.04 s, total: 7.70 s
+Wall time: 7.72 s
+>>> import blosc
+>>> %time bpacked = blosc.compress(bytes_array, 8)
+CPU times: user 0.20 s, sys: 0.03 s, total: 0.23 s
+Wall time: 0.02 s  # ~ 400x faster than zlib (using 16 threads here)
+
+# ... and optimized for binary data ...
+>>> len(zpacked)
+52994692
+>>>  len(bytes_array) / float(len(zpacked))
+1.5095851486409242   # 1.5x compression ratio
+>>> len(bpacked)
+8040187
+>>>  len(bytes_array) / float(len(bpacked))
+9.9500173316864391   # 10x compression ratio
+
+# Blosc is also very fast when decompressing
+>>> %time bytes_array2 = zlib.decompress(zpacked)
+CPU times: user 0.62 s, sys: 0.02 s, total: 0.64 s
+Wall time: 0.64 s
+>>> %time bytes_array2 = blosc.decompress(bpacked)
+CPU times: user 0.15 s, sys: 0.06 s, total: 0.20 s
+Wall time: 0.03 s   # 20x times faster than zlib
+
+# You can pack and unpack NumPy arrays very easily too:
+>>> packed = blosc.pack_array(a)
+>>> a2 = blosc.unpack_array(packed)
+>>> np.alltrue(a == a2)
+True
+
+[using a machine with 16 cores and the IPython shell for the %time
+magic command]
+
+
+What is it?
+===========
+
+Blosc [1]_ is a high performance compressor optimized for binary data.
+It has been designed to transmit data to the processor cache faster
+than the traditional, non-compressed, direct memory fetch approach via
+a memcpy() OS call.
+
+This is a Python package that wraps it.
+
+.. [1] http://blosc.pytables.org
+
+
+Download sources
+================
+
+Please go to:
+
+http://github.com/FrancescAlted/python-blosc
+
+and download the stable release from here.
+
+Blosc is distributed using the MIT license, see LICENSES/BLOSC.txt for
+details.
+
+
+----
+
+  **Enjoy data!**
