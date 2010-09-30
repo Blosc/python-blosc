@@ -85,7 +85,7 @@ Blosc is a high performance compressor optimized for binary data.
       maintainer_email = 'faltet@pytables.org',
       url = 'http://github.com/FrancescAlted/python-blosc',
       license = 'http://www.opensource.org/licenses/mit-license.php',
-      download_url = 'http://github.com/downloads/FrancescAlted/python-blosc/python-blosc-%s.tar.gz' % (VERSION,),
+      download_url = 'http://github.com/downloads/FrancescAlted/python-blosc/blosc-%s.tar.gz' % (VERSION,),
       platforms = ['any'],
       ext_modules = [
         Extension( "blosc.blosc_extension",
