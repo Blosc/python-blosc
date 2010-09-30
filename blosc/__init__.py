@@ -23,11 +23,20 @@ Public variables
 Public functions
 ----------------
 
-compress(string, typesize[, clevel=5, shuffle=True]])::
-    Compress string, with a given type size.
+compress(bytesobj, typesize[, clevel=5, shuffle=True])::
+    Compress bytesobj, with a given type size.
 
-decompress(string)::
-    Decompresses a compressed string.
+decompress(bytesobj)::
+    Decompresses a bytesobj compressed object.
+
+pack_array(array[, clevel=9, shuffle=True])::
+    Pack (compress) a NumPy array.
+
+unpack_array(packed_array)::
+    Unpack (decompress) a packed NumPy array.
+
+Utilities
+---------
 
 detect_number_of_cores()::
     Returns the number of cores in the system.
@@ -45,6 +54,8 @@ from blosc.version import __version__
 from blosc.toplevel import (
     compress,
     decompress,
+    pack_array,
+    unpack_array,
     detect_number_of_cores,
     free_resources,
     set_nthreads,
@@ -61,5 +72,6 @@ from blosc.blosc_extension import (
 
 # Initialize Blosc
 ncores = detect_number_of_cores()
-set_nthreads(ncores)
+#set_nthreads(ncores)
+set_nthreads(1)
 blosclib_version = "%s (%s)" % (BLOSC_VERSION_STRING, BLOSC_VERSION_DATE)

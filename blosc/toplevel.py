@@ -6,7 +6,7 @@
 #
 ########################################################################
 
-import os
+import os, cPickle
 
 import blosc
 from blosc import blosc_extension as _ext
@@ -108,12 +108,12 @@ def free_resources():
 def compress(bytesobj, typesize, clevel=9, shuffle=True):
     """compress(bytesobj, typesize[, clevel=9, shuffle=True]])
 
-    Returns compressed bytes object.
+    Compress bytesobj, with a given type size.
 
     Parameters
     ----------
         bytesobj : str / bytes
-            This is data to be compressed.
+            The data to be compressed.
         typesize : int
             The data type size.
         clevel : int (optional)
@@ -157,12 +157,12 @@ def compress(bytesobj, typesize, clevel=9, shuffle=True):
 def decompress(bytesobj):
     """decompress(bytesobj)
 
-    Returns decompressed bytesobj.
+    Decompresses a bytesobj compressed object.
 
     Parameters
     ----------
         bytesobj : str / bytes
-            This is data to be decompressed.
+            The data to be decompressed.
 
     Returns
     -------
@@ -187,6 +187,98 @@ def decompress(bytesobj):
             "only string (2.x) or bytes (3.x) objects supported as input")
 
     return _ext.decompress(bytesobj)
+
+
+def pack_array(array, clevel=9, shuffle=True):
+    """pack_array(array[, clevel=9, shuffle=True]])
+
+    Pack (compress) a NumPy array.
+
+    Parameters
+    ----------
+        array : ndarray
+            The NumPy array to be packed.
+        clevel : int (optional)
+            The compression level from 0 (no compression) to 9
+            (maximum compression).  The default is 9.
+        shuffle : bool (optional)
+            Whether you want to activate the shuffle filter or not.
+            The default is True.
+
+    Returns
+    -------
+        out : str / bytes
+            The packed array in form of a Python str / bytes object.
+
+    Examples
+    --------
+
+    >>> import numpy
+    >>> a = numpy.arange(1e6)
+    >>> parray = pack_array(a)
+    >>> len(parray) < a.size*a.itemsize
+    True
+
+    """
+
+    if not (hasattr(array, 'dtype') and hasattr(array, 'shape')):
+        # This does not quack like an ndarray
+        raise ValueError(
+            "only NumPy ndarrays objects supported as input")
+
+    itemsize = array.itemsize
+    if array.size*itemsize > _ext.BLOSC_MAX_BUFFERSIZE:
+        raise ValueError("array size cannot be larger than %d bytes" % \
+                         _ext.BLOSC_MAX_BUFFERSIZE)
+
+    # Use the fastest pickle available
+    pickled_array = cPickle.dumps(array, cPickle.HIGHEST_PROTOCOL)
+    # ... and compress the pickle
+    packed_array = compress(pickled_array, itemsize, clevel, shuffle)
+
+    return packed_array
+
+
+def unpack_array(packed_array):
+    """unpack_array(packed_array)
+
+    Unpack (decompress) a packed NumPy array.
+
+    Parameters
+    ----------
+        packed_array : str / bytes
+            The packed array to be decompressed.
+
+    Returns
+    -------
+        out : ndarray
+            The decompressed data in form of a NumPy array.
+
+    Examples
+    --------
+
+    >>> import numpy
+    >>> a = numpy.arange(1e6)
+    >>> parray = pack_array(a)
+    >>> len(parray) < a.size*a.itemsize
+    True
+    >>> a2 = unpack_array(parray)
+    >>> numpy.alltrue(a == a2)
+    True
+
+    """
+
+    if type(packed_array) is not bytes:
+        raise ValueError(
+            "only string (2.x) or bytes (3.x) objects supported as input")
+
+    # First decompress the pickle
+    pickled_array = _ext.decompress(packed_array)
+    # ... and unpickle
+    array = cPickle.loads(pickled_array)
+
+    return array
+
 
 
 if __name__ == '__main__':
