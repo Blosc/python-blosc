@@ -72,6 +72,5 @@ from blosc.blosc_extension import (
 
 # Initialize Blosc
 ncores = detect_number_of_cores()
-#set_nthreads(ncores)
-set_nthreads(1)
+set_nthreads(ncores)
 blosclib_version = "%s (%s)" % (BLOSC_VERSION_STRING, BLOSC_VERSION_DATE)
