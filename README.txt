@@ -55,6 +55,10 @@ Please refer to docstrings.  Start by the main package:
 
 and ask for more docstrings in the referenced functions.
 
+Also, some examples are available on python-blosc wiki page:
+
+http://github.com/FrancescAlted/python-blosc/wiki
+
 Mailing list
 ============
 
