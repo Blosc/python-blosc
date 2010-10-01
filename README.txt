@@ -6,27 +6,30 @@ blosc: a Python package that wraps the Blosc compressor
 :URL: http://blosc.pytables.org
 
 What it is
-----------
+==========
 
-Blosc is a high performance compressor optimized for binary data.  It
-has been designed to transmit data to the processor cache faster than
-the traditional, non-compressed, direct memory fetch approach via a
-memcpy() OS call.
+Blosc (http://blosc.pytables.org) is a high performance compressor
+optimized for binary data.  It has been designed to transmit data to
+the processor cache faster than the traditional, non-compressed,
+direct memory fetch approach via a memcpy() OS call.
 
-The functions in this package allow compression and decompression
-using the Blosc library (http://blosc.pytables.org).
+Blosc works well for compressing numerical arrays that contains data
+with relatively low entropy, like sparse data, time series, grids with
+regular-spaced values, etc.
+
+This is a Python package that wraps it.
 
 Building
---------
+========
 
 Assuming that you have a C compiler installed, do:
 
 $ python setup.py build_ext --inplace
 
-This package supports both Python 2.6/3.1 or higher versions.
+This package supports Python 2.6, 2.7 and 3.1 or higher versions.
 
 Testing
--------
+=======
 
 After compiling, you can quickly check that the package is sane by
 running:
@@ -36,14 +39,14 @@ $ export PYTHONPATH=.  (not needed on Win)
 $ python blosc/toplevel.py  (add -v for verbose mode)
 
 Installing
-----------
+==========
 
 Install it as a typical Python package:
 
 $ python setup.py install
 
 Documentation
--------------
+=============
 
 Please refer to docstrings.  Start by the main package:
 
@@ -53,7 +56,7 @@ Please refer to docstrings.  Start by the main package:
 and ask for more docstrings in the referenced functions.
 
 Mailing list
-------------
+============
 
 Discussion about this module is welcome in the Blosc list:
 
