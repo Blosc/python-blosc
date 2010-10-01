@@ -284,7 +284,7 @@ def unpack_array(packed_array):
 if __name__ == '__main__':
     # test myself
     import doctest
-    print("Testing blosc version: %s [%s]" % \
+    print("Testing python-blosc version: %s [C-Blosc: %s]" % \
           (blosc.__version__, blosc.blosclib_version))
     nfail, ntests = doctest.testmod()
     if nfail == 0:
