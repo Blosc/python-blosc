@@ -1,5 +1,5 @@
 ====================================================
- Announcing python-blosc 1.0.2
+ Announcing python-blosc 1.0.3
  A Python wrapper for the Blosc compression library
 ====================================================
 
@@ -20,8 +20,7 @@ python-blosc is a Python package that wraps it.
 What is new?
 ============
 
-Updated to Blosc 1.1.2.  Fixes some bugs when dealing with very small
-buffers (typically smaller than specified typesizes).  Closes #1.
+*** Add blurb here ***
 
 Basic Usage
 ===========
