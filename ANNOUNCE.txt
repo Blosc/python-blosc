@@ -25,16 +25,37 @@ What is new?
 Basic Usage
 ===========
 
->>> import numpy as np
->>> a = np.linspace(0, 100, 1e7)
->>> bytes_array = a.tostring()
->>> import blosc
->>> bpacked = blosc.compress(bytes_array, typesize=8)
->>> bytes_array2 = blosc.decompress(bpacked)
->>> print(bytes_array == bytes_array2)
-True
+[Using IPython shell and a 2-core machine below]
 
-More examples are available on python-blosc wiki page:
+# Create a binary string made of int (32-bit) elements
+>>> import array
+>>> a = array.array('i', range(10*1000*1000))
+>>> bytes_array = a.tostring()
+
+# Compress it
+>>> import blosc
+>>> bpacked = blosc.compress(bytes_array, typesize=a.itemsize)
+>>> len(bytes_array) / len(bpacked)
+110      # 110x compression ratio.  Not bad!
+# Compression speed?
+>>> timeit blosc.compress(bytes_array, typesize=a.itemsize)
+100 loops, best of 3: 12.8 ms per loop
+>>> len(bytes_array) / 0.0128 / (1024*1024*1024)
+2.9103830456733704  # wow, compressing at ~ 3 GB/s.  That's fast!
+
+# Decompress it
+>>> bytes_array2 = blosc.decompress(bpacked)
+# Check whether our data have had a good trip
+>>> bytes_array == bytes_array2
+True    # yup, it seems so
+# Decompression speed?
+>>> timeit blosc.decompress(bpacked)
+10 loops, best of 3: 21.3 ms per loop
+>>> len(bytes_array) / 0.0213 / (1024*1024*1024)
+1.7489625814375185  # decompressing at ~ 1.7 GB/s is pretty good too!
+
+More examples showing other features (and using NumPy arrays) are
+available on the python-blosc wiki page:
 
 http://github.com/FrancescAlted/python-blosc/wiki
 
