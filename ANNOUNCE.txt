@@ -20,7 +20,8 @@ python-blosc is a Python package that wraps it.
 What is new?
 ============
 
-*** Add blurb here ***
+Updated to Blosc 1.1.2.  Fixes some bugs when dealing with very small
+buffers (typically smaller than specified typesizes).  Closes #1.
 
 Basic Usage
 ===========
