@@ -63,7 +63,7 @@ Basic Usage
             b = a[::-1]", number=10)
 0.10316681861877441
 >>> len(bytes_array)*10 / 0.1031 / (1024*1024*1024)
-3.6132786600018565  # ~ 3 GB/s is memcpy speed
+3.6132786600018565  # ~ 3.6 GB/s is memcpy speed
 
 # Decompress it
 >>> bytes_array2 = blosc.decompress(bpacked)
