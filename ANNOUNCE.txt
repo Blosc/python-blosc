@@ -1,5 +1,5 @@
 ====================================================
- Announcing python-blosc 1.0.3
+ Announcing python-blosc *** version here ***
  A Python wrapper for the Blosc compression library
 ====================================================
 
@@ -20,12 +20,7 @@ python-blosc is a Python package that wraps it.
 What is new?
 ============
 
-Blosc has been updated to 1.1.3, allowing much improved compression
-ratio under some circumstances.  Also, the number of cores on Windows
-platform is detected correctly now (thanks to Han Genuit).
-
-Last, but not least, Windows binaries for Python 2.6 and 2.7 are
-provided (both in 32-bit and 64-bit flavors).
+#XXX version-specific blurb XXX#
 
 For more info, you can see the release notes in:
 
