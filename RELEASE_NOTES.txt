@@ -14,6 +14,9 @@ Changes from 1.0.2 to 1.0.3
   large blocks (> 64 KB) and high compression levels (> 6) under some
   circumstances (special data distribution).
 
+- The number of cores on Windows are detected now correctly.  Thanks to
+  Han Genuit for noticing that and suggesting a patch.
+
 
 Changes from 1.0.1 to 1.0.2
 ===========================
