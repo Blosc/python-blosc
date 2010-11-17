@@ -20,12 +20,16 @@ python-blosc is a Python package that wraps it.
 What is new?
 ============
 
-*** Add blurb here ***
+Blosc has been updated to 1.1.3, allowing much improved compression
+ratio under some circumstances.  Also, the number of cores on Windows
+platform is detected correctly now (thanks to Han Genuit).
+
+For more info, you can see the release notes in:
+
+https://github.com/FrancescAlted/python-blosc/wiki/Release-notes
 
 Basic Usage
 ===========
-
-[Using IPython shell and a 2-core machine below]
 
 # Create a binary string made of int (32-bit) elements
 >>> import array
@@ -37,22 +41,49 @@ Basic Usage
 >>> bpacked = blosc.compress(bytes_array, typesize=a.itemsize)
 >>> len(bytes_array) / len(bpacked)
 110      # 110x compression ratio.  Not bad!
+
 # Compression speed?
->>> timeit blosc.compress(bytes_array, typesize=a.itemsize)
-100 loops, best of 3: 12.8 ms per loop
->>> len(bytes_array) / 0.0128 / (1024*1024*1024)
-2.9103830456733704  # wow, compressing at ~ 3 GB/s.  That's fast!
+>>> from timeit import timeit
+>>> timeit("blosc.compress(bytes_array, a.itemsize)",
+           "import blosc, array; \
+            a = array.array('i', range(10*1000*1000)); \
+            bytes_array = a.tostring()", \
+            number=10)
+0.040534019470214844
+>>> len(bytes_array)*10 / 0.0405 / (1024*1024*1024)
+9.1982476505232444  # wow, compressing at ~ 9 GB/s.  That's fast!
+# This is actually much faster than a `memcpy` system call
+>>> timeit("ctypes.memmove(b.buffer_info()[0], a.buffer_info()[0], \
+            len(a)*a.itemsize)",
+            "import array, ctypes; \
+            a = array.array('i', range(10*1000*1000)); \
+            b = a[::-1]", number=10)
+0.10316681861877441
+>>> len(bytes_array)*10 / 0.1031 / (1024*1024*1024)
+3.6132786600018565  # ~ 3 GB/s is memcpy speed
 
 # Decompress it
 >>> bytes_array2 = blosc.decompress(bpacked)
 # Check whether our data have had a good trip
 >>> bytes_array == bytes_array2
 True    # yup, it seems so
+
 # Decompression speed?
->>> timeit blosc.decompress(bpacked)
-10 loops, best of 3: 21.3 ms per loop
->>> len(bytes_array) / 0.0213 / (1024*1024*1024)
-1.7489625814375185  # decompressing at ~ 1.7 GB/s is pretty good too!
+>>> timeit("s2 = blosc.decompress(bpacked)",
+           "import blosc, array; \
+            a = array.array('i', range(10*1000*1000)); \
+            bytes_array = a.tostring(); \
+            bpacked = blosc.compress(bytes_array, a.itemsize)", \
+            number=10)
+0.083872079849243164
+> len(bytes_array)*10 / 0.0838 / (1024*1024*1024)
+4.4454538167803275  # decompressing at ~ 4.4 GB/s is pretty good too!
+
+[Using a machine with 8 physical cores with hyper-threading]
+
+The above examples use maximum compression level 9 (default), and
+although lower compression levels produce smaller compression ratios,
+they are also faster (reaching speeds exceeding 11 GB/s).
 
 More examples showing other features (and using NumPy arrays) are
 available on the python-blosc wiki page:
