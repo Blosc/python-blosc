@@ -67,6 +67,7 @@ from blosc.blosc_extension import (
     BLOSC_VERSION_DATE,
     BLOSC_MAX_BUFFERSIZE,
     BLOSC_MAX_THREADS,
+    BLOSC_MAX_TYPESIZE,
     )
 
 
