@@ -177,6 +177,7 @@ initblosc_extension(void)
   /* Integer macros */
   PyModule_AddIntMacro(m, BLOSC_MAX_BUFFERSIZE);
   PyModule_AddIntMacro(m, BLOSC_MAX_THREADS);
+  PyModule_AddIntMacro(m, BLOSC_MAX_TYPESIZE);
 
   /* String macros */
   PyModule_AddStringMacro(m, BLOSC_VERSION_STRING);
@@ -204,6 +205,7 @@ PyInit_blosc_extension(void) {
   /* Integer macros */
   PyModule_AddIntMacro(m, BLOSC_MAX_BUFFERSIZE);
   PyModule_AddIntMacro(m, BLOSC_MAX_THREADS);
+  PyModule_AddIntMacro(m, BLOSC_MAX_TYPESIZE);
 
   /* String macros */
   PyModule_AddStringMacro(m, BLOSC_VERSION_STRING);
