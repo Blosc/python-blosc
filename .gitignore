@@ -1,0 +1,3 @@
+blosc/blosc_extension.so
+blosc/version.py
+build/
