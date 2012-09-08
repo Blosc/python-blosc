@@ -1,10 +1,11 @@
-====================================================
- Announcing python-blosc *** version here ***
- A Python wrapper for the Blosc compression library
-====================================================
+============================================
+Announcing python-blosc *** version here ***
+============================================
 
 What is it?
 ===========
+
+A Python wrapper for the Blosc compression library.
 
 Blosc (http://blosc.pytables.org) is a high performance compressor
 optimized for binary data.  It has been designed to transmit data to
