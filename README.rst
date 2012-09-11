@@ -22,9 +22,9 @@ This is a Python package that wraps it.
 Building
 ========
 
-Assuming that you have a C compiler installed, do:
+Assuming that you have a C compiler installed, do::
 
-$ python setup.py build_ext --inplace
+    $ python setup.py build_ext --inplace
 
 This package supports Python 2.6, 2.7 and 3.1 or higher versions.
 
@@ -32,26 +32,26 @@ Testing
 =======
 
 After compiling, you can quickly check that the package is sane by
-running:
+running::
 
-$ PYTHONPATH=.   (or "set PYTHONPATH=." on Win)
-$ export PYTHONPATH=.  (not needed on Win)
-$ python blosc/toplevel.py  (add -v for verbose mode)
+    $ PYTHONPATH=.   (or "set PYTHONPATH=." on Win)
+    $ export PYTHONPATH=.  (not needed on Win)
+    $ python blosc/toplevel.py  (add -v for verbose mode)
 
 Installing
 ==========
 
-Install it as a typical Python package:
+Install it as a typical Python package::
 
-$ python setup.py install
+    $ python setup.py install
 
 Documentation
 =============
 
-Please refer to docstrings.  Start by the main package:
+Please refer to docstrings.  Start by the main package::
 
->>> import blosc
->>> help(blosc)
+    >>> import blosc
+    >>> help(blosc)
 
 and ask for more docstrings in the referenced functions.
 

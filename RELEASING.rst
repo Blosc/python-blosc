@@ -11,7 +11,7 @@ Following are notes useful for releasing python-blosc.
 Preliminaries
 -------------
 
-- Make sure that ``RELEASE_NOTES.txt`` and ``ANNOUNCE.txt`` are up to
+- Make sure that ``RELEASE_NOTES.rst`` and ``ANNOUNCE.rst`` are up to
   date with the latest news in the release.
 
 - Check that ``VERSION`` file contains the correct number.
@@ -62,12 +62,12 @@ Announcing
 
   *WARNING*: Remember that the syntax for github pages is "markdown"
    and not "RestructuredText" (not well supported, apparently).  When
-   copying the text from ``RELEASE_NOTES.txt`` to the wiki, double
+   copying the text from ``RELEASE_NOTES.rst`` to the wiki, double
    chek that it reads as it should (the ``Preview`` button is your
    friend!).
 
 - Send an announcement to the NumPy list and python-announce list.
-  Use the ``ANNOUNCE.txt`` file as skeleton (or possibly as the
+  Use the ``ANNOUNCE.rst`` file as skeleton (or possibly as the
   definitive version).
 
 Post-release actions
@@ -82,8 +82,8 @@ Post-release actions
 
 Do the next actions in master or any new branch (if applicable):
 
-- Create new headers for adding new features in ``RELEASE_NOTES.txt``
-  and empty the release-specific information in ``ANNOUNCE.txt`` and
+- Create new headers for adding new features in ``RELEASE_NOTES.rst``
+  and empty the release-specific information in ``ANNOUNCE.rst`` and
   add this place-holder instead:
 
   #XXX version-specific blurb XXX#
