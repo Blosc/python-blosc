@@ -61,8 +61,8 @@ PyDoc_STRVAR(compress__doc__,
 static PyObject *
 PyBlosc_compress(PyObject *self, PyObject *args)
 {
-    PyObject *result_str = NULL;
-    void *input, *output;
+    PyObject *output = NULL;
+    void *input;
     int clevel, shuffle, cbytes;
     int nbytes, typesize;
 
@@ -72,7 +72,7 @@ PyBlosc_compress(PyObject *self, PyObject *args)
       return NULL;
 
     /* Alloc memory for compression */
-    output = malloc(nbytes+BLOSC_MAX_OVERHEAD);
+    output = PyBytes_FromStringAndSize(NULL, nbytes+BLOSC_MAX_OVERHEAD);
     if (output == NULL) {
       PyErr_SetString(PyExc_MemoryError,
                       "Can't allocate memory to compress data");
@@ -82,22 +82,19 @@ PyBlosc_compress(PyObject *self, PyObject *args)
     /* Compress */
     Py_BEGIN_ALLOW_THREADS;
     cbytes = blosc_compress(clevel, shuffle, (size_t)typesize, (size_t)nbytes,
-                            input, output, nbytes+BLOSC_MAX_OVERHEAD);
+                            input, PyBytes_AS_STRING(output), nbytes+BLOSC_MAX_OVERHEAD);
     Py_END_ALLOW_THREADS;
 
     if (cbytes < 0) {
       blosc_error(cbytes, "while compressing data");
-      free(output);
       return NULL;
     }
-
-    /* This forces a copy of the output, but anyway */
-    result_str = PyBytes_FromStringAndSize((char *)output, cbytes);
-
-    /* Free the initial buffer */
-    free(output);
-
-    return result_str;
+    /* Attempt to resize, if it's much smaller, a copy is required. */
+    if (_PyBytes_Resize(&output, cbytes) < 0){
+        /* the memory exception will have been set, hopefully */
+        return NULL;
+    }
+    return output;
 }
 
 PyDoc_STRVAR(decompress__doc__,
