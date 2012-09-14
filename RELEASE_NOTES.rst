@@ -10,6 +10,12 @@
 Changes from 1.0.3 to 1.0.4
 ===========================
 
+ #XXX version-specific blurb XXX#
+
+
+Changes from 1.0.3 to 1.0.4
+===========================
+
 - Optimized the amount of data copied during compression (using
   _PyBytes_Resize() now instead of old PyBytes_FromStringAndSize()).
 

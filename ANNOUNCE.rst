@@ -21,12 +21,7 @@ python-blosc is a Python package that wraps it.
 What is new?
 ============
 
-Optimized the amount of data copied during compression (using
-_PyBytes_Resize() now instead of old PyBytes_FromStringAndSize()).
-
-This leads to improvements in compression speed ranging from 1.2x for
-highly compressible chunks up to 7x for mostly uncompressible data.
-Thanks to Valentin Haenel for this nice contribution.
+#XXX version-specific blurb XXX#
 
 For more info, you can see the release notes in:
 
