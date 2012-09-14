@@ -10,7 +10,12 @@
 Changes from 1.0.3 to 1.0.4
 ===========================
 
-- (None yet)
+- Optimized the amount of data copied during compression (using
+  _PyBytes_Resize() now instead of old PyBytes_FromStringAndSize()).
+
+  This leads to improvements in compression speed ranging from 1.2x for
+  highly compressible chunks up to 7x for mostly uncompressible data.
+  Thanks to Valentin Haenel for this nice contribution.
 
 
 Changes from 1.0.2 to 1.0.3
