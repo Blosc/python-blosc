@@ -627,12 +627,6 @@ int blosc_compress(int clevel, int doshuffle, size_t typesize, size_t nbytes,
             BLOSC_MAX_BUFFERSIZE);
     return -1;
   }
-  if (destsize > BLOSC_MAX_BUFFERSIZE) {
-    /* If buffer is too large, give up. */
-    fprintf(stderr, "Output buffer size cannot exceed %d bytes\n",
-            BLOSC_MAX_BUFFERSIZE);
-    return -1;
-  }
 
   /* We can safely do this assignation now */
   nbytes_ = (uint32_t)nbytes;
