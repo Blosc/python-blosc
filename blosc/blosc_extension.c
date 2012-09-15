@@ -83,6 +83,7 @@ PyBlosc_compress(PyObject *self, PyObject *args)
     Py_END_ALLOW_THREADS;
     if (cbytes < 0) {
       blosc_error(cbytes, "while compressing data");
+      Py_XDECREF(output);
       return NULL;
     }
 
