@@ -9,7 +9,7 @@
 **********************************************************************/
 
 
-
+#define PY_SSIZE_T_CLEAN   /* allows Py_ssize_t in s# format for parsing arguments */
 #include "Python.h"
 #include "blosc.h"
 
@@ -63,8 +63,8 @@ PyBlosc_compress(PyObject *self, PyObject *args)
 {
     PyObject *output = NULL;
     void *input;
-    int clevel, shuffle, cbytes;
-    int nbytes, typesize;
+    int clevel, shuffle, cbytes, typesize;
+    Py_ssize_t nbytes;
 
     /* require Python string object, typesize, clevel and shuffle agrs */
     if (!PyArg_ParseTuple(args, "s#iii:compress", &input, &nbytes,
@@ -72,23 +72,20 @@ PyBlosc_compress(PyObject *self, PyObject *args)
       return NULL;
 
     /* Alloc memory for compression */
-    output = PyBytes_FromStringAndSize(NULL, nbytes+BLOSC_MAX_OVERHEAD);
-    if (output == NULL) {
-      PyErr_SetString(PyExc_MemoryError,
-                      "Can't allocate memory to compress data");
+    if (!(output = PyBytes_FromStringAndSize(NULL, nbytes+BLOSC_MAX_OVERHEAD)))
       return NULL;
-    }
 
     /* Compress */
     Py_BEGIN_ALLOW_THREADS;
     cbytes = blosc_compress(clevel, shuffle, (size_t)typesize, (size_t)nbytes,
-                            input, PyBytes_AS_STRING(output), nbytes+BLOSC_MAX_OVERHEAD);
+                            input, PyBytes_AS_STRING(output),
+                            (size_t)nbytes+BLOSC_MAX_OVERHEAD);
     Py_END_ALLOW_THREADS;
-
     if (cbytes < 0) {
       blosc_error(cbytes, "while compressing data");
       return NULL;
     }
+
     /* Attempt to resize, if it's much smaller, a copy is required. */
     if (_PyBytes_Resize(&output, cbytes) < 0){
         /* the memory exception will have been set, hopefully */
@@ -106,22 +103,22 @@ PyBlosc_decompress(PyObject *self, PyObject *args)
 {
     PyObject *result_str;
     void *input, *output;
-    int cbytes, err;
-    size_t nbytes, cbytes2, blocksize;
+    int err;
+    size_t nbytes, cbytes, cbytes2, blocksize;
 
-    if (!PyArg_ParseTuple(args, "s#:decompress", &input, &cbytes))
+    if (!PyArg_ParseTuple(args, "s#:decompress", &input, (Py_ssize_t*)&cbytes))
       return NULL;
 
     /* Get the length of the uncompressed buffer */
     blosc_cbuffer_sizes(input, &nbytes, &cbytes2, &blocksize);
-
-    if (cbytes != (int)cbytes2) {
-      blosc_error(cbytes, ": not a Blosc buffer or header info is corrupted");
+    if ((size_t)cbytes != cbytes2) {
+      blosc_error((int)cbytes,
+                  ": not a Blosc buffer or header info is corrupted");
       return NULL;
     }
 
     /* Book memory for the result */
-    if (!(result_str = PyBytes_FromStringAndSize(NULL, nbytes)))
+    if (!(result_str = PyBytes_FromStringAndSize(NULL, (Py_ssize_t)nbytes)))
       return NULL;
     output = PyBytes_AS_STRING(result_str);
 
