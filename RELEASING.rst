@@ -4,9 +4,8 @@ Releasing python-blosc
 
 :Author: Francesc Alted
 :Contact: faltet@pytables.org
-:Date: 2010-11-16
+:Date: 2012-09-16
 
-Following are notes useful for releasing python-blosc.
 
 Preliminaries
 -------------
@@ -48,10 +47,10 @@ Uploading
 
 - Upload it also in the PyPi repository.
 
-  * First, register the new version with:
-    $ python setup.py register
+  * First, register and upload the sources for the new version with:
+    $ python setup.py register upload
 
-  * Then upload the files manually using the PyPI web interface.
+  * Then upload the binary files manually using the PyPI web interface.
 
 Announcing
 ----------
@@ -73,14 +72,16 @@ Announcing
 Post-release actions
 --------------------
 
-- Create a tag ``X.Y`` from ``master``.  Use the next message::
+- Create a tag ``X.Y.Z`` from ``master``.  Use the next message::
 
-    Created X.Y tag for python-blosc X.Y.
+    $ git tag -a vX.Y.Z -m "Tagging version X.Y.Z"
+
+- Push the tag to the github repo::
+
+    $ git push --tags
 
 - Edit ``VERSION`` in master to increment the version to the next
-  minor one (i.e. X.Y --> X.(Y+1)).
-
-Do the next actions in master or any new branch (if applicable):
+  minor one (i.e. X.Y.Z --> X.Y.(Z+1).dev).
 
 - Create new headers for adding new features in ``RELEASE_NOTES.rst``
   and empty the release-specific information in ``ANNOUNCE.rst`` and
