@@ -1,5 +1,5 @@
 =============================
-Announcing python-blosc 1.0.4
+Announcing python-blosc 1.0.5
 =============================
 
 What is it?
@@ -21,7 +21,13 @@ python-blosc is a Python package that wraps it.
 What is new?
 ============
 
-#XXX version-specific blurb XXX#
+- Upgraded to latest Blosc 1.1.4.
+
+- Better handling of condition errors, and improved memory releasing in
+  case of errors (thanks to Valentin Haenel and Han Genuit).
+
+- Better handling of types (should compile without warning now, at least
+  with GCC).
 
 For more info, you can see the release notes in:
 

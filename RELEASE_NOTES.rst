@@ -1,5 +1,5 @@
 ======================================
- Release notes for python-blosc 1.0.4
+ Release notes for python-blosc 1.0.5
 ======================================
 
 :Author: Francesc Alted i Abad
@@ -7,10 +7,16 @@
 :URL: http://blosc.pytables.org
 
 
-Changes from 1.0.3 to 1.0.4
+Changes from 1.0.4 to 1.0.5
 ===========================
 
- #XXX version-specific blurb XXX#
+- Upgraded to latest Blosc 1.1.4.
+
+- Better handling of condition errors, and improved memory releasing in
+  case of errors (thanks to Valentin Haenel and Han Genuit).
+
+- Better handling of types (should compile without warning now, at least
+  with GCC).
 
 
 Changes from 1.0.3 to 1.0.4

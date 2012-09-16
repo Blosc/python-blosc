@@ -45,12 +45,11 @@ Uploading
 - Go to the downloads section of the python-blosc project in github
   and upload the source tarball and the binary packages.
 
-- Upload it also in the PyPi repository.
+- Register and upload it also in the PyPi repository::
 
-  * First, register and upload the sources for the new version with:
-    $ python setup.py register upload
+    $ python setup.py sdist upload
+    $ python setup.py register
 
-  * Then upload the binary files manually using the PyPI web interface.
 
 Tagging
 -------
