@@ -70,14 +70,8 @@ Announcing
 
   https://github.com/FrancescAlted/python-blosc/wiki/Release-notes
 
-  *WARNING*: Remember that the syntax for github pages is "markdown"
-   and not "RestructuredText" (not well supported, apparently).  When
-   copying the text from ``RELEASE_NOTES.rst`` to the wiki, double
-   chek that it reads as it should (the ``Preview`` button is your
-   friend!).
-
-- Send an announcement to the NumPy list and python-announce list.
-  Use the ``ANNOUNCE.rst`` file as skeleton (or possibly as the
+- Send an announcement to the blosc, numpy list and python-announce
+  lists.  Use the ``ANNOUNCE.rst`` file as skeleton (or possibly as the
   definitive version).
 
 Post-release actions

@@ -16,8 +16,6 @@ Blosc works well for compressing numerical arrays that contains data
 with relatively low entropy, like sparse data, time series, grids with
 regular-spaced values, etc.
 
-python-blosc is a Python package that wraps it.
-
 What is new?
 ============
 
