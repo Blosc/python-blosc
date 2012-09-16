@@ -52,6 +52,18 @@ Uploading
 
   * Then upload the binary files manually using the PyPI web interface.
 
+Tagging
+-------
+
+- Create a tag ``X.Y.Z`` from ``master``.  Use the next message::
+
+    $ git tag -a vX.Y.Z -m "Tagging version X.Y.Z"
+
+- Push the tag to the github repo::
+
+    $ git push --tags
+
+
 Announcing
 ----------
 
@@ -71,14 +83,6 @@ Announcing
 
 Post-release actions
 --------------------
-
-- Create a tag ``X.Y.Z`` from ``master``.  Use the next message::
-
-    $ git tag -a vX.Y.Z -m "Tagging version X.Y.Z"
-
-- Push the tag to the github repo::
-
-    $ git push --tags
 
 - Edit ``VERSION`` in master to increment the version to the next
   minor one (i.e. X.Y.Z --> X.Y.(Z+1).dev).
