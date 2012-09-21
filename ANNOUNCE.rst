@@ -1,5 +1,5 @@
 =============================
-Announcing python-blosc 1.0.6
+Announcing python-blosc 1.0.7
 =============================
 
 What is it?
@@ -19,7 +19,7 @@ regular-spaced values, etc.
 What is new?
 ============
 
-Fix compile error with msvc compilers.  Thanks to Christoph Gohlke.
+  #XXX version-specific blurb XXX#
 
 For more info, you can see the release notes in:
 
