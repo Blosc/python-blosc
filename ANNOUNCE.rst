@@ -19,7 +19,7 @@ regular-spaced values, etc.
 What is new?
 ============
 
- #XXX version-specific blurb XXX#
+Fix compile error with msvc compilers.  Thanks to Christoph Gohlke.
 
 For more info, you can see the release notes in:
 

@@ -10,7 +10,7 @@
 Changes from 1.0.5 to 1.0.6
 ===========================
 
- #XXX version-specific blurb XXX#
+- Fix compile error with msvc compilers.  Thanks to Christoph Gohlke.
 
 
 Changes from 1.0.4 to 1.0.5
