@@ -6,7 +6,11 @@
 #
 ########################################################################
 
-import os, cPickle
+import os
+try:
+    import cPickle as pickle
+except ImportError:
+    import pickle
 
 import blosc
 from blosc import blosc_extension as _ext
@@ -236,7 +240,7 @@ def pack_array(array, clevel=9, shuffle=True):
                          _ext.BLOSC_MAX_BUFFERSIZE)
 
     # Use the fastest pickle available
-    pickled_array = cPickle.dumps(array, cPickle.HIGHEST_PROTOCOL)
+    pickled_array = pickle.dumps(array, pickle.HIGHEST_PROTOCOL)
     # ... and compress the pickle
     packed_array = compress(pickled_array, itemsize, clevel, shuffle)
 
@@ -279,7 +283,7 @@ def unpack_array(packed_array):
     # First decompress the pickle
     pickled_array = _ext.decompress(packed_array)
     # ... and unpickle
-    array = cPickle.loads(pickled_array)
+    array = pickle.loads(pickled_array)
 
     return array
 
