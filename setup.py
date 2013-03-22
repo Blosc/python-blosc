@@ -36,8 +36,8 @@ open('blosc/version.py', 'w').write('__version__ = "%s"\n' % VERSION)
 CFLAGS = os.environ.get('CFLAGS', '').split()
 LFLAGS = os.environ.get('LFLAGS', '').split()
 lib_dirs = []
-libs = []
-inc_dirs = ['c-blosc']
+libs = ['blosc']
+inc_dirs = []
 optional_libs = []
 
 # Handle --lflags=[FLAGS] --cflags=[FLAGS]
@@ -91,11 +91,7 @@ Blosc is a high performance compressor optimized for binary data.
         Extension( "blosc.blosc_extension",
                    include_dirs=inc_dirs,
                    define_macros=def_macros,
-                   sources = [ "blosc/blosc_extension.c",
-                               "c-blosc/blosc.c", "c-blosc/blosclz.c",
-                               "c-blosc/shuffle.c" ],
-                   depends = [ "c-blosc/blosc.h", "c-blosc/blosclz.h",
-                               "c-blosc/shuffle.h" ],
+                   sources = [ "blosc/blosc_extension.c",],
                    library_dirs=lib_dirs,
                    libraries=libs,
                    extra_link_args=LFLAGS,
