@@ -28,6 +28,23 @@ Assuming that you have a C compiler installed, do::
 
 This package supports Python 2.6, 2.7 and 3.1 or higher versions.
 
+If you have cloned the git repository you must update the blosc submodule using
+``git submodule init`` and ``git submodule update``::
+
+    $ git submulde init
+    Submodule 'c-blosc' (git://github.com/FrancescAlted/blosc.git) registered for path 'c-blosc'
+    $ git submodule update
+    Cloning into c-blosc...
+    remote: Counting objects: 1432, done.
+    remote: Compressing objects: 100% (497/497), done.
+    remote: Total 1432 (delta 969), reused 1378 (delta 916)
+    Receiving objects: 100% (1432/1432), 358.56 KiB | 290 KiB/s, done.
+    Resolving deltas: 100% (969/969), done.
+    Submodule path 'c-blosc': checked out 'f8c691c2783986880235b9a39d809856cc2af3a8'
+
+You can read more about using submodule in the `chapter 6.6 of ProGit
+<http://git-scm.com/book/en/Git-Tools-Submodules>`_.
+
 Testing
 =======
 
