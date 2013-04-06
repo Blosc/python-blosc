@@ -84,6 +84,24 @@ compress_helper(unsigned long input, int nbytes,
     return output;
 }
 
+PyDoc_STRVAR(compress_ptr__doc__,
+"compress_ptr(pointer, len, typesize, clevel, shuffle]) -- Return compressed string.\n"
+             );
+
+static PyObject *
+PyBlosc_compress_ptr(PyObject *self, PyObject *args)
+{
+    unsigned long input;
+    int nbytes, clevel, shuffle, typesize;
+
+    /* require an address, buffer length, typesize, clevel and shuffle agrs */
+    if (!PyArg_ParseTuple(args, "kiiii:compress", &input, &nbytes,
+                          &typesize, &clevel, &shuffle))
+      return NULL;
+
+    return compress_helper(input, nbytes, typesize, clevel, shuffle);
+}
+
 PyDoc_STRVAR(compress__doc__,
 "compress(string[, typesize, clevel, shuffle]) -- Return compressed string.\n"
              );
@@ -152,6 +170,8 @@ static PyMethodDef blosc_methods[] =
 {
   {"compress", (PyCFunction)PyBlosc_compress,  METH_VARARGS,
    compress__doc__},
+  {"compress_ptr", (PyCFunction)PyBlosc_compress_ptr,  METH_VARARGS,
+   compress_ptr__doc__},
   {"decompress", (PyCFunction)PyBlosc_decompress, METH_VARARGS,
    decompress__doc__},
   {"free_resources", (PyCFunction)PyBlosc_free_resources, METH_VARARGS,
