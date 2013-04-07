@@ -91,15 +91,15 @@ PyDoc_STRVAR(compress_ptr__doc__,
 static PyObject *
 PyBlosc_compress_ptr(PyObject *self, PyObject *args)
 {
-    unsigned long input;
+    PyObject * input;
     int nbytes, clevel, shuffle, typesize;
 
     /* require an address, buffer length, typesize, clevel and shuffle agrs */
-    if (!PyArg_ParseTuple(args, "kiiii:compress", &input, &nbytes,
+    if (!PyArg_ParseTuple(args, "Oiiii:compress", &input, &nbytes,
                           &typesize, &clevel, &shuffle))
       return NULL;
 
-    return compress_helper((void *)input, nbytes, typesize, clevel, shuffle);
+    return compress_helper(PyLong_AsVoidPtr(input), nbytes, typesize, clevel, shuffle);
 }
 
 PyDoc_STRVAR(compress__doc__,
