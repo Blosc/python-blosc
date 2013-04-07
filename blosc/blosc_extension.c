@@ -54,7 +54,7 @@ PyBlosc_free_resources(PyObject *self)
 }
 
 static PyObject *
-compress_helper(unsigned long input, int nbytes,
+compress_helper(void * input, int nbytes,
         int typesize, int clevel, int shuffle){
 
     int cbytes;
@@ -67,7 +67,7 @@ compress_helper(unsigned long input, int nbytes,
     /* Compress */
     Py_BEGIN_ALLOW_THREADS;
     cbytes = blosc_compress(clevel, shuffle, (size_t)typesize, (size_t)nbytes,
-                            (void *)input, PyBytes_AS_STRING(output),
+                            input, PyBytes_AS_STRING(output),
                             (size_t)nbytes+BLOSC_MAX_OVERHEAD);
     Py_END_ALLOW_THREADS;
     if (cbytes < 0) {
@@ -99,7 +99,7 @@ PyBlosc_compress_ptr(PyObject *self, PyObject *args)
                           &typesize, &clevel, &shuffle))
       return NULL;
 
-    return compress_helper(input, nbytes, typesize, clevel, shuffle);
+    return compress_helper((void *)input, nbytes, typesize, clevel, shuffle);
 }
 
 PyDoc_STRVAR(compress__doc__,
@@ -117,7 +117,7 @@ PyBlosc_compress(PyObject *self, PyObject *args)
     if (!PyArg_ParseTuple(args, "s#iii:compress", &input, &nbytes,
                           &typesize, &clevel, &shuffle))
       return NULL;
-    return compress_helper((unsigned long)input, (int)nbytes,
+    return compress_helper(input, (int)nbytes,
             typesize, clevel, shuffle);
 }
 
