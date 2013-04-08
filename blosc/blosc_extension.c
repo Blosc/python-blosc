@@ -92,14 +92,18 @@ static PyObject *
 PyBlosc_compress_ptr(PyObject *self, PyObject *args)
 {
     PyObject * input;
+    void * input_ptr;
     int nbytes, clevel, shuffle, typesize;
 
     /* require an address, buffer length, typesize, clevel and shuffle agrs */
     if (!PyArg_ParseTuple(args, "Oiiii:compress", &input, &nbytes,
                           &typesize, &clevel, &shuffle))
       return NULL;
-
-    return compress_helper(PyLong_AsVoidPtr(input), nbytes, typesize, clevel, shuffle);
+    /*  convert to void pointer safely */
+    input_ptr = PyLong_AsVoidPtr(input);
+    if (input_ptr == NULL)
+      return NULL;
+    return compress_helper(input_ptr, nbytes, typesize, clevel, shuffle);
 }
 
 PyDoc_STRVAR(compress__doc__,
