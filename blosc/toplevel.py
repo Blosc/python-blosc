@@ -157,17 +157,17 @@ def compress(bytesobj, typesize, clevel=9, shuffle=True):
 
     return _ext.compress(bytesobj, typesize, clevel, shuffle)
 
-def compress_ptr(address, length, typesize, clevel=9, shuffle=True):
-    """compress_ptr(address, length, typesize[, clevel=9, shuffle=True]])
+def compress_ptr(address, items, typesize, clevel=9, shuffle=True):
+    """compress_ptr(address, items, typesize[, clevel=9, shuffle=True]])
 
-    Compress the data at address with a given length and typesize.
+    Compress the data at address with a given items and typesize.
 
     Parameters
     ----------
         address : int or long
             the pointer to the data to be compressed
-        length : int
-            The length of the data to be compressed in bytes.
+        items : int
+            The number of items (of typesize) to be compressed.
         typesize : int
             The data type size.
         clevel : int (optional)
@@ -193,10 +193,10 @@ def compress_ptr(address, length, typesize, clevel=9, shuffle=True):
 
 
     >>> import numpy
-    >>> length = 7
-    >>> np_array = numpy.arange(length)
+    >>> items = 7
+    >>> np_array = numpy.arange(items)
     >>> c = compress_ptr(np_array.__array_interface__['data'][0], \
-        length*np_array.dtype.itemsize, np_array.dtype.itemsize)
+        items, np_array.dtype.itemsize)
     >>> d = decompress(c)
     >>> np_ans = numpy.fromstring(d, dtype=np_array.dtype)
     >>> (np_array == np_ans).all()
@@ -205,14 +205,14 @@ def compress_ptr(address, length, typesize, clevel=9, shuffle=True):
     >>> import ctypes
     >>> Array23 = ctypes.c_double
     >>> typesize = 8
-    >>> data = [float(i) for i in range(length)]
-    >>> Array = ctypes.c_double * length
+    >>> data = [float(i) for i in range(items)]
+    >>> Array = ctypes.c_double * items
     >>> a = Array(*data)
-    >>> c = compress_ptr(ctypes.addressof(a), length*typesize, typesize)
+    >>> c = compress_ptr(ctypes.addressof(a), items, typesize)
     >>> d = decompress(c)
     >>> import struct
     >>> ans = [struct.unpack('d', d[i:i+typesize])[0] \
-            for i in range(0,length*typesize,typesize)]
+            for i in range(0,items*typesize,typesize)]
     >>> data == ans
     True
     """
@@ -221,7 +221,7 @@ def compress_ptr(address, length, typesize, clevel=9, shuffle=True):
         raise TypeError(
             "only int or long objects are supported as address"
                 )
-
+    length = items * typesize
     if length > _ext.BLOSC_MAX_BUFFERSIZE:
         raise ValueError("length cannot be larger than %d bytes" % \
                          _ext.BLOSC_MAX_BUFFERSIZE)
