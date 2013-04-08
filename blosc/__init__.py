@@ -26,6 +26,9 @@ Public functions
 compress(bytesobj, typesize[, clevel=5, shuffle=True])::
     Compress bytesobj, with a given type size.
 
+compress_ptr(address, length, typesize[, clevel=9, shuffle=True]])
+    Compress the data at address with a given length and typesize.
+
 decompress(bytesobj)::
     Decompresses a bytesobj compressed object.
 
@@ -53,6 +56,7 @@ from blosc.version import __version__
 
 from blosc.toplevel import (
     compress,
+    compress_ptr,
     decompress,
     pack_array,
     unpack_array,
