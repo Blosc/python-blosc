@@ -160,7 +160,7 @@ def compress(bytesobj, typesize, clevel=9, shuffle=True):
 def compress_ptr(address, items, typesize, clevel=9, shuffle=True):
     """compress_ptr(address, items, typesize[, clevel=9, shuffle=True]])
 
-    Compress the data at address with a given items and typesize.
+    Compress the data at address with given items and typesize.
 
     Parameters
     ----------
