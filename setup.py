@@ -13,6 +13,10 @@ from distutils.core import setup
 
 ########### Check versions ##########
 
+def exit_with_error(message):
+    print('ERROR: %s' % message)
+    sys.exit(1)
+
 # Check for Python
 if sys.version_info[0] == 2:
     if sys.version_info[1] < 6:
