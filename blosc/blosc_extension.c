@@ -126,6 +126,46 @@ PyBlosc_compress(PyObject *self, PyObject *args)
             typesize, clevel, shuffle);
 }
 
+PyDoc_STRVAR(decompress_ptr__doc__,
+"decompress_ptr(string, pointer) -- Decompress string into pointer.\n"
+             );
+
+static PyObject *
+PyBlosc_decompress_ptr(PyObject *self, PyObject *args)
+{
+    PyObject * pointer;
+    void * input, * output;
+    size_t nbytes, cbytes, cbytes2, blocksize;
+    int err;
+
+    /* require a compressed string and a pointer  */
+    if (!PyArg_ParseTuple(args, "s#O:decompress", &input, (Py_ssize_t*)&cbytes, &pointer))
+      return NULL;
+
+    /*  convert the int or long Python object to a void * */
+    output = PyLong_AsVoidPtr(pointer);
+    if (output == NULL)
+      return NULL;
+
+    /* Get the length of the uncompressed buffer */
+    blosc_cbuffer_sizes(input, &nbytes, &cbytes2, &blocksize);
+    if ((size_t)cbytes != cbytes2) {
+      blosc_error((int)cbytes,
+                  ": not a Blosc buffer or header info is corrupted");
+      return NULL;
+    }
+
+    /* Do the decompression */
+    Py_BEGIN_ALLOW_THREADS;
+    err = blosc_decompress(input, output, nbytes);
+    Py_END_ALLOW_THREADS;
+
+    if (err < 0 || err != (int)nbytes) {
+      blosc_error(err, "while decompressing data");
+      return NULL;
+    }
+    return Py_None;
+}
 
 PyDoc_STRVAR(decompress__doc__,
 "decompress(string) -- Return decompressed string.\n"
@@ -179,6 +219,8 @@ static PyMethodDef blosc_methods[] =
    compress_ptr__doc__},
   {"decompress", (PyCFunction)PyBlosc_decompress, METH_VARARGS,
    decompress__doc__},
+  {"decompress_ptr", (PyCFunction)PyBlosc_decompress_ptr, METH_VARARGS,
+   decompress_ptr__doc__},
   {"free_resources", (PyCFunction)PyBlosc_free_resources, METH_VARARGS,
    free_resources__doc__},
   {"set_nthreads", (PyCFunction)PyBlosc_set_nthreads, METH_VARARGS,
