@@ -268,6 +268,67 @@ def decompress(bytesobj):
 
     return _ext.decompress(bytesobj)
 
+def decompress_ptr(bytesobj, address):
+    """decompress_ptr(bytesobj, address)
+
+    Decompresses a bytesobj compressed object into the memory at address.
+
+    Parameters
+    ----------
+        bytesobj : str / bytes
+            The data to be decompressed.
+        address : int or long
+            the pointer to the data to be compressed
+    Notes
+    -----
+    This function can be used anywhere that a memory address is available in
+    Python. For example the Numpy "__array_interface__['data'][0]" construct,
+    or when using the ctypes modules.
+
+    Importantly, the user is responsible for making sure that the memory
+    address is valid and that the memory pointed to is contiguous and can be
+    written to. Passing a non-valid address has a high likelihood of crashing
+    the interpreter by segfault.
+
+    Examples
+    --------
+
+    >>> import numpy
+    >>> items = 7
+    >>> np_array = numpy.arange(items)
+    >>> c = compress_ptr(np_array.__array_interface__['data'][0], \
+        items, np_array.dtype.itemsize)
+    >>> np_ans = numpy.empty(items, dtype=np_array.dtype)
+    >>> decompress_ptr(c, np_ans.__array_interface__['data'][0])
+    >>> (np_array == np_ans).all()
+    True
+
+    >>> import ctypes
+    >>> Array23 = ctypes.c_double
+    >>> typesize = 8
+    >>> data = [float(i) for i in range(items)]
+    >>> Array = ctypes.c_double * items
+    >>> in_array = Array(*data)
+    >>> c = compress_ptr(ctypes.addressof(in_array), items, typesize)
+    >>> out_array = ctypes.create_string_buffer(items*typesize)
+    >>> decompress_ptr(c, ctypes.addressof(out_array))
+    >>> import struct
+    >>> ans = [struct.unpack('d', out_array[i:i+typesize])[0] \
+            for i in range(0,items*typesize,typesize)]
+    >>> data == ans
+    True
+
+
+    """
+
+    if type(bytesobj) is not bytes:
+        raise ValueError(
+            "only string (2.x) or bytes (3.x) objects supported as input")
+
+    if not isinstance(address, (int, long)):
+        raise TypeError( "only int or long objects are supported as address")
+
+    _ext.decompress_ptr(bytesobj, address)
 
 def pack_array(array, clevel=9, shuffle=True):
     """pack_array(array[, clevel=9, shuffle=True]])
