@@ -157,6 +157,79 @@ def compress(bytesobj, typesize, clevel=9, shuffle=True):
 
     return _ext.compress(bytesobj, typesize, clevel, shuffle)
 
+def compress_ptr(address, items, typesize, clevel=9, shuffle=True):
+    """compress_ptr(address, items, typesize[, clevel=9, shuffle=True]])
+
+    Compress the data at address with given items and typesize.
+
+    Parameters
+    ----------
+        address : int or long
+            the pointer to the data to be compressed
+        items : int
+            The number of items (of typesize) to be compressed.
+        typesize : int
+            The data type size.
+        clevel : int (optional)
+            The compression level from 0 (no compression) to 9
+            (maximum compression).  The default is 9.
+        shuffle : bool (optional)
+            Whether you want to activate the shuffle filter or not.
+            The default is True.
+
+    Returns
+    -------
+        out : str / bytes
+            The compressed data in form of a Python str / bytes object.
+
+    Notes
+    -----
+    This function can be used anywhere that a memory address is available in
+    Python. For example the Numpy "__array_interface__['data'][0]" construct,
+    or when using the ctypes modules.
+
+    Examples
+    --------
+
+
+    >>> import numpy
+    >>> items = 7
+    >>> np_array = numpy.arange(items)
+    >>> c = compress_ptr(np_array.__array_interface__['data'][0], \
+        items, np_array.dtype.itemsize)
+    >>> d = decompress(c)
+    >>> np_ans = numpy.fromstring(d, dtype=np_array.dtype)
+    >>> (np_array == np_ans).all()
+    True
+
+    >>> import ctypes
+    >>> Array23 = ctypes.c_double
+    >>> typesize = 8
+    >>> data = [float(i) for i in range(items)]
+    >>> Array = ctypes.c_double * items
+    >>> a = Array(*data)
+    >>> c = compress_ptr(ctypes.addressof(a), items, typesize)
+    >>> d = decompress(c)
+    >>> import struct
+    >>> ans = [struct.unpack('d', d[i:i+typesize])[0] \
+            for i in range(0,items*typesize,typesize)]
+    >>> data == ans
+    True
+    """
+
+    if not isinstance(address, (int, long)):
+        raise TypeError(
+            "only int or long objects are supported as address"
+                )
+    length = items * typesize
+    if length > _ext.BLOSC_MAX_BUFFERSIZE:
+        raise ValueError("length cannot be larger than %d bytes" % \
+                         _ext.BLOSC_MAX_BUFFERSIZE)
+
+    if clevel < 0 or clevel > 9:
+        raise ValueError("clevel can only be in the 0-9 range.")
+
+    return _ext.compress_ptr(address, length, typesize, clevel, shuffle)
 
 def decompress(bytesobj):
     """decompress(bytesobj)

@@ -53,23 +53,12 @@ PyBlosc_free_resources(PyObject *self)
     return Py_None;
 }
 
-
-PyDoc_STRVAR(compress__doc__,
-"compress(string[, typesize, clevel, shuffle]) -- Return compressed string.\n"
-             );
-
 static PyObject *
-PyBlosc_compress(PyObject *self, PyObject *args)
-{
-    PyObject *output = NULL;
-    void *input;
-    int clevel, shuffle, cbytes, typesize;
-    Py_ssize_t nbytes;
+compress_helper(void * input, size_t nbytes,
+        size_t typesize, int clevel, int shuffle){
 
-    /* require Python string object, typesize, clevel and shuffle agrs */
-    if (!PyArg_ParseTuple(args, "s#iii:compress", &input, &nbytes,
-                          &typesize, &clevel, &shuffle))
-      return NULL;
+    int cbytes;
+    PyObject *output = NULL;
 
     /* Alloc memory for compression */
     if (!(output = PyBytes_FromStringAndSize(NULL, nbytes+BLOSC_MAX_OVERHEAD)))
@@ -77,9 +66,9 @@ PyBlosc_compress(PyObject *self, PyObject *args)
 
     /* Compress */
     Py_BEGIN_ALLOW_THREADS;
-    cbytes = blosc_compress(clevel, shuffle, (size_t)typesize, (size_t)nbytes,
+    cbytes = blosc_compress(clevel, shuffle, typesize, nbytes,
                             input, PyBytes_AS_STRING(output),
-                            (size_t)nbytes+BLOSC_MAX_OVERHEAD);
+                            nbytes+BLOSC_MAX_OVERHEAD);
     Py_END_ALLOW_THREADS;
     if (cbytes < 0) {
       blosc_error(cbytes, "while compressing data");
@@ -94,6 +83,49 @@ PyBlosc_compress(PyObject *self, PyObject *args)
     }
     return output;
 }
+
+PyDoc_STRVAR(compress_ptr__doc__,
+"compress_ptr(pointer, len, typesize, clevel, shuffle]) -- Return compressed string.\n"
+             );
+
+static PyObject *
+PyBlosc_compress_ptr(PyObject *self, PyObject *args)
+{
+    PyObject * input;
+    void * input_ptr;
+    size_t nbytes, typesize;
+    int clevel, shuffle;
+
+    /* require an address, buffer length, typesize, clevel and shuffle agrs */
+    if (!PyArg_ParseTuple(args, "Oiiii:compress", &input, &nbytes,
+                          &typesize, &clevel, &shuffle))
+      return NULL;
+    /*  convert to void pointer safely */
+    input_ptr = PyLong_AsVoidPtr(input);
+    if (input_ptr == NULL)
+      return NULL;
+    return compress_helper(input_ptr, nbytes, typesize, clevel, shuffle);
+}
+
+PyDoc_STRVAR(compress__doc__,
+"compress(string[, typesize, clevel, shuffle]) -- Return compressed string.\n"
+             );
+
+static PyObject *
+PyBlosc_compress(PyObject *self, PyObject *args)
+{
+    void *input;
+    size_t nbytes, typesize;
+    int clevel, shuffle;
+
+    /* require Python string object, typesize, clevel and shuffle agrs */
+    if (!PyArg_ParseTuple(args, "s#iii:compress", &input, &nbytes,
+                          &typesize, &clevel, &shuffle))
+      return NULL;
+    return compress_helper(input, nbytes,
+            typesize, clevel, shuffle);
+}
+
 
 PyDoc_STRVAR(decompress__doc__,
 "decompress(string) -- Return decompressed string.\n"
@@ -143,6 +175,8 @@ static PyMethodDef blosc_methods[] =
 {
   {"compress", (PyCFunction)PyBlosc_compress,  METH_VARARGS,
    compress__doc__},
+  {"compress_ptr", (PyCFunction)PyBlosc_compress_ptr,  METH_VARARGS,
+   compress_ptr__doc__},
   {"decompress", (PyCFunction)PyBlosc_decompress, METH_VARARGS,
    decompress__doc__},
   {"free_resources", (PyCFunction)PyBlosc_free_resources, METH_VARARGS,
