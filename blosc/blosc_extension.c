@@ -126,6 +126,39 @@ PyBlosc_compress(PyObject *self, PyObject *args)
             typesize, clevel, shuffle);
 }
 
+static int
+get_nbytes(void * input, size_t cbytes, size_t * nbytes)
+{
+    size_t cbytes2, blocksize;
+
+    /* Get the length of the uncompressed buffer */
+    blosc_cbuffer_sizes(input, nbytes, &cbytes2, &blocksize);
+    if ((size_t)cbytes != cbytes2) {
+      blosc_error((int)cbytes,
+                  ": not a Blosc buffer or header info is corrupted");
+      return 0;
+    }
+    return 1;
+}
+
+static int
+decompress_helper(void * input, size_t nbytes, void * output)
+{
+    int err;
+
+    /* Do the decompression */
+    Py_BEGIN_ALLOW_THREADS;
+    err = blosc_decompress(input, output, nbytes);
+    Py_END_ALLOW_THREADS;
+
+    if (err < 0 || err != (int)nbytes) {
+      blosc_error(err, "while decompressing data");
+      return 0;
+    }
+    return 1;
+}
+
+
 PyDoc_STRVAR(decompress_ptr__doc__,
 "decompress_ptr(string, pointer) -- Decompress string into pointer.\n"
              );
@@ -135,8 +168,7 @@ PyBlosc_decompress_ptr(PyObject *self, PyObject *args)
 {
     PyObject * pointer;
     void * input, * output;
-    size_t nbytes, cbytes, cbytes2, blocksize;
-    int err;
+    size_t cbytes, nbytes;
 
     /* require a compressed string and a pointer  */
     if (!PyArg_ParseTuple(args, "s#O:decompress", &input, (Py_ssize_t*)&cbytes, &pointer))
@@ -147,23 +179,15 @@ PyBlosc_decompress_ptr(PyObject *self, PyObject *args)
     if (output == NULL)
       return NULL;
 
-    /* Get the length of the uncompressed buffer */
-    blosc_cbuffer_sizes(input, &nbytes, &cbytes2, &blocksize);
-    if ((size_t)cbytes != cbytes2) {
-      blosc_error((int)cbytes,
-                  ": not a Blosc buffer or header info is corrupted");
+    /*  fetch the uncompressed size into nbytes */
+    if (!get_nbytes(input, cbytes, &nbytes))
       return NULL;
-    }
 
-    /* Do the decompression */
-    Py_BEGIN_ALLOW_THREADS;
-    err = blosc_decompress(input, output, nbytes);
-    Py_END_ALLOW_THREADS;
-
-    if (err < 0 || err != (int)nbytes) {
-      blosc_error(err, "while decompressing data");
+    /* do decompression */
+    if (!decompress_helper(input, nbytes, output))
       return NULL;
-    }
+
+    /*  return None, since result was decompressed into output */
     return Py_None;
 }
 
@@ -176,38 +200,27 @@ PyBlosc_decompress(PyObject *self, PyObject *args)
 {
     PyObject *result_str;
     void *input, *output;
-    int err;
-    size_t nbytes, cbytes, cbytes2, blocksize;
+    size_t nbytes, cbytes;
 
     if (!PyArg_ParseTuple(args, "s#:decompress", &input, (Py_ssize_t*)&cbytes))
       return NULL;
 
-    /* Get the length of the uncompressed buffer */
-    blosc_cbuffer_sizes(input, &nbytes, &cbytes2, &blocksize);
-    if ((size_t)cbytes != cbytes2) {
-      blosc_error((int)cbytes,
-                  ": not a Blosc buffer or header info is corrupted");
+    /*  fetch the uncompressed size into nbytes */
+    if (!get_nbytes(input, cbytes, &nbytes))
       return NULL;
-    }
 
     /* Book memory for the result */
     if (!(result_str = PyBytes_FromStringAndSize(NULL, (Py_ssize_t)nbytes)))
       return NULL;
     output = PyBytes_AS_STRING(result_str);
 
-    /* Do the decompression */
-    Py_BEGIN_ALLOW_THREADS;
-    err = blosc_decompress(input, output, nbytes);
-    Py_END_ALLOW_THREADS;
-
-    if (err < 0 || err != (int)nbytes) {
-      blosc_error(err, "while decompressing data");
+    /*  do decompression */
+    if (!decompress_helper(input, nbytes, output)){
       Py_XDECREF(result_str);
       return NULL;
     }
 
     return result_str;
-
 }
 
 
