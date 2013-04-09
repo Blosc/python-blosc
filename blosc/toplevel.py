@@ -12,7 +12,6 @@ try:
 except ImportError:
     import pickle
 
-import blosc
 from blosc import blosc_extension as _ext
 
 
@@ -364,6 +363,7 @@ def unpack_array(packed_array):
 
 if __name__ == '__main__':
     # test myself
+    import blosc
     import doctest
     print("Testing python-blosc version: %s [C-Blosc: %s]" % \
           (blosc.__version__, blosc.blosclib_version))
