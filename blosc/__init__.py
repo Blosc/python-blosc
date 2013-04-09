@@ -32,6 +32,9 @@ compress_ptr(address, items, typesize[, clevel=9, shuffle=True]])
 decompress(bytesobj)::
     Decompresses a bytesobj compressed object.
 
+decompress_ptr(bytesobj, address)::
+    Decompresses a bytesobj compressed object into the memory at address.
+
 pack_array(array[, clevel=9, shuffle=True])::
     Pack (compress) a NumPy array.
 
@@ -58,6 +61,7 @@ from blosc.toplevel import (
     compress,
     compress_ptr,
     decompress,
+    decompress_ptr,
     pack_array,
     unpack_array,
     detect_number_of_cores,
