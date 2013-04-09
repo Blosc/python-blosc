@@ -126,6 +126,13 @@ PyBlosc_compress(PyObject *self, PyObject *args)
             typesize, clevel, shuffle);
 }
 
+/*  Read blosc header from input and fetch the uncompressed size into nbytes.
+ *  Also makes sure that value of the compressed bytes from the header is the
+ *  same as the cbytes provided by the input.
+ *
+ *  Returns 1 on success and 0 on failure with a Python exception set.
+ *
+ *  */
 static int
 get_nbytes(void * input, size_t cbytes, size_t * nbytes)
 {
@@ -141,6 +148,11 @@ get_nbytes(void * input, size_t cbytes, size_t * nbytes)
     return 1;
 }
 
+/*  Decompress nbytes from input into output.
+ *
+ *  Returns 1 on success and 0 on failure with a Python exception set.
+ *
+ *  */
 static int
 decompress_helper(void * input, size_t nbytes, void * output)
 {
