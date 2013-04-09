@@ -187,6 +187,11 @@ def compress_ptr(address, items, typesize, clevel=9, shuffle=True):
     Python. For example the Numpy "__array_interface__['data'][0]" construct,
     or when using the ctypes modules.
 
+    Importantly, the user is responsible for making sure that the memory
+    address is valid and that the memory pointed to is contiguous. Passing a
+    non-valid address has a high likelihood of crashing the interpreter by
+    segfault.
+
     Examples
     --------
 
