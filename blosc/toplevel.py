@@ -34,14 +34,14 @@ def detect_number_of_cores():
             ncpus = os.sysconf("SC_NPROCESSORS_ONLN")
             if isinstance(ncpus, int) and ncpus > 0:
                 return ncpus
-        else: # OSX:
+        else:  # OSX:
             return int(os.popen2("sysctl -n hw.ncpu")[1].read())
     # Windows:
     if "NUMBER_OF_PROCESSORS" in os.environ:
-        ncpus = int(os.environ["NUMBER_OF_PROCESSORS"]);
+        ncpus = int(os.environ["NUMBER_OF_PROCESSORS"])
         if ncpus > 0:
             return ncpus
-    return 1 # Default
+    return 1  # Default
 
 
 def set_nthreads(nthreads):
@@ -77,7 +77,7 @@ def set_nthreads(nthreads):
 
     """
     if nthreads > _ext.BLOSC_MAX_THREADS:
-        raise ValueError("the number of threads cannot be larger than %d" % \
+        raise ValueError("the number of threads cannot be larger than %d" %
                          _ext.BLOSC_MAX_THREADS)
 
     return _ext.set_nthreads(nthreads)
@@ -148,13 +148,14 @@ def compress(bytesobj, typesize, clevel=9, shuffle=True):
             "only string (2.x) or bytes (3.x) objects supported as input")
 
     if len(bytesobj) > _ext.BLOSC_MAX_BUFFERSIZE:
-        raise ValueError("bytesobj length cannot be larger than %d bytes" % \
+        raise ValueError("bytesobj length cannot be larger than %d bytes" %
                          _ext.BLOSC_MAX_BUFFERSIZE)
 
     if clevel < 0 or clevel > 9:
         raise ValueError("clevel can only be in the 0-9 range.")
 
     return _ext.compress(bytesobj, typesize, clevel, shuffle)
+
 
 def compress_ptr(address, items, typesize, clevel=9, shuffle=True):
     """compress_ptr(address, items, typesize[, clevel=9, shuffle=True]])
@@ -222,18 +223,18 @@ def compress_ptr(address, items, typesize, clevel=9, shuffle=True):
     """
 
     if not isinstance(address, (int, long)):
-        raise TypeError(
-            "only int or long objects are supported as address"
-                )
+        raise TypeError("only int or long objects are supported as address")
+
     length = items * typesize
     if length > _ext.BLOSC_MAX_BUFFERSIZE:
-        raise ValueError("length cannot be larger than %d bytes" % \
+        raise ValueError("length cannot be larger than %d bytes" %
                          _ext.BLOSC_MAX_BUFFERSIZE)
 
     if clevel < 0 or clevel > 9:
         raise ValueError("clevel can only be in the 0-9 range.")
 
     return _ext.compress_ptr(address, length, typesize, clevel, shuffle)
+
 
 def decompress(bytesobj):
     """decompress(bytesobj)
@@ -313,7 +314,7 @@ def pack_array(array, clevel=9, shuffle=True):
 
     itemsize = array.itemsize
     if array.size*itemsize > _ext.BLOSC_MAX_BUFFERSIZE:
-        raise ValueError("array size cannot be larger than %d bytes" % \
+        raise ValueError("array size cannot be larger than %d bytes" %
                          _ext.BLOSC_MAX_BUFFERSIZE)
 
     # Use the fastest pickle available
@@ -365,12 +366,11 @@ def unpack_array(packed_array):
     return array
 
 
-
 if __name__ == '__main__':
     # test myself
     import blosc
     import doctest
-    print("Testing python-blosc version: %s [C-Blosc: %s]" % \
+    print("Testing python-blosc version: %s [C-Blosc: %s]" %
           (blosc.__version__, blosc.blosclib_version))
     nfail, ntests = doctest.testmod()
     if nfail == 0:
