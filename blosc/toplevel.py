@@ -115,21 +115,21 @@ def compress(bytesobj, typesize, clevel=9, shuffle=True):
 
     Parameters
     ----------
-        bytesobj : str / bytes
-            The data to be compressed.
-        typesize : int
-            The data type size.
-        clevel : int (optional)
-            The compression level from 0 (no compression) to 9
-            (maximum compression).  The default is 9.
-        shuffle : bool (optional)
-            Whether you want to activate the shuffle filter or not.
-            The default is True.
+    bytesobj : str / bytes
+        The data to be compressed.
+    typesize : int
+        The data type size.
+    clevel : int (optional)
+        The compression level from 0 (no compression) to 9
+        (maximum compression).  The default is 9.
+    shuffle : bool (optional)
+        Whether you want to activate the shuffle filter or not.
+        The default is True.
 
     Returns
     -------
-        out : str / bytes
-            The compressed data in form of a Python str / bytes object.
+    out : str / bytes
+        The compressed data in form of a Python str / bytes object.
 
     Examples
     --------
@@ -164,23 +164,23 @@ def compress_ptr(address, items, typesize, clevel=9, shuffle=True):
 
     Parameters
     ----------
-        address : int or long
-            the pointer to the data to be compressed
-        items : int
-            The number of items (of typesize) to be compressed.
-        typesize : int
-            The data type size.
-        clevel : int (optional)
-            The compression level from 0 (no compression) to 9
-            (maximum compression).  The default is 9.
-        shuffle : bool (optional)
-            Whether you want to activate the shuffle filter or not.
-            The default is True.
+    address : int or long
+        the pointer to the data to be compressed
+    items : int
+        The number of items (of typesize) to be compressed.
+    typesize : int
+        The data type size.
+    clevel : int (optional)
+        The compression level from 0 (no compression) to 9
+        (maximum compression).  The default is 9.
+    shuffle : bool (optional)
+        Whether you want to activate the shuffle filter or not.
+        The default is True.
 
     Returns
     -------
-        out : str / bytes
-            The compressed data in form of a Python str / bytes object.
+    out : str / bytes
+        The compressed data in form of a Python str / bytes object.
 
     Notes
     -----
@@ -195,7 +195,6 @@ def compress_ptr(address, items, typesize, clevel=9, shuffle=True):
 
     Examples
     --------
-
 
     >>> import numpy
     >>> items = 7
@@ -243,13 +242,13 @@ def decompress(bytesobj):
 
     Parameters
     ----------
-        bytesobj : str / bytes
-            The data to be decompressed.
+    bytesobj : str / bytes
+        The data to be decompressed.
 
     Returns
     -------
-        out : str / bytes
-            The decompressed data in form of a Python str / bytes object.
+    out : str / bytes
+        The decompressed data in form of a Python str / bytes object.
 
     Examples
     --------
@@ -281,10 +280,11 @@ def decompress_ptr(bytesobj, address):
 
     Parameters
     ----------
-        bytesobj : str / bytes
-            The data to be decompressed.
-        address : int or long
-            the pointer to the data to be compressed
+    bytesobj : str / bytes
+        The data to be decompressed.
+    address : int or long
+        the pointer to the data to be compressed
+
     Notes
     -----
     This function can be used anywhere that a memory address is available in
@@ -324,7 +324,6 @@ def decompress_ptr(bytesobj, address):
     >>> data == ans
     True
 
-
     """
 
     if type(bytesobj) is not bytes:
@@ -343,19 +342,19 @@ def pack_array(array, clevel=9, shuffle=True):
 
     Parameters
     ----------
-        array : ndarray
-            The NumPy array to be packed.
-        clevel : int (optional)
-            The compression level from 0 (no compression) to 9
-            (maximum compression).  The default is 9.
-        shuffle : bool (optional)
-            Whether you want to activate the shuffle filter or not.
-            The default is True.
+    array : ndarray
+        The NumPy array to be packed.
+    clevel : int (optional)
+        The compression level from 0 (no compression) to 9
+        (maximum compression).  The default is 9.
+    shuffle : bool (optional)
+        Whether you want to activate the shuffle filter or not.
+        The default is True.
 
     Returns
     -------
-        out : str / bytes
-            The packed array in form of a Python str / bytes object.
+    out : str / bytes
+        The packed array in form of a Python str / bytes object.
 
     Examples
     --------
@@ -393,13 +392,13 @@ def unpack_array(packed_array):
 
     Parameters
     ----------
-        packed_array : str / bytes
-            The packed array to be decompressed.
+    packed_array : str / bytes
+        The packed array to be decompressed.
 
     Returns
     -------
-        out : ndarray
-            The decompressed data in form of a NumPy array.
+    out : ndarray
+        The decompressed data in form of a NumPy array.
 
     Examples
     --------
