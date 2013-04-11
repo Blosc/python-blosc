@@ -94,12 +94,18 @@ PyBlosc_compress_ptr(PyObject *self, PyObject *args)
     PyObject * input;
     void * input_ptr;
     size_t nbytes, typesize;
+    Py_ssize_t nbytes_;
     int clevel, shuffle;
 
     /* require an address, buffer length, typesize, clevel and shuffle agrs */
-    if (!PyArg_ParseTuple(args, "Oiiii:compress", &input, &nbytes,
+    if (!PyArg_ParseTuple(args, "Oniii:compress", &input, &nbytes_,
                           &typesize, &clevel, &shuffle))
       return NULL;
+    /* Protection against negative values */
+    if (nbytes_ < 0)
+      return NULL;
+    /* Now we can use a cast safely here */
+    nbytes = (size_t)nbytes_;
     /*  convert to void pointer safely */
     input_ptr = PyLong_AsVoidPtr(input);
     if (input_ptr == NULL)
