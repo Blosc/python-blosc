@@ -186,10 +186,11 @@ PyBlosc_decompress_ptr(PyObject *self, PyObject *args)
 {
     PyObject * pointer;
     void * input, * output;
-    size_t cbytes, nbytes;
+    Py_ssize_t cbytes;
+    size_t nbytes;
 
     /* require a compressed string and a pointer  */
-    if (!PyArg_ParseTuple(args, "s#O:decompress", &input, (Py_ssize_t*)&cbytes, &pointer))
+    if (!PyArg_ParseTuple(args, "s#O:decompress", &input, &cbytes, &pointer))
       return NULL;
 
     /*  convert the int or long Python object to a void * */
@@ -198,7 +199,7 @@ PyBlosc_decompress_ptr(PyObject *self, PyObject *args)
       return NULL;
 
     /*  fetch the uncompressed size into nbytes */
-    if (!get_nbytes(input, cbytes, &nbytes))
+    if (!get_nbytes(input, (size_t)cbytes, &nbytes))
       return NULL;
 
     /* do decompression */
