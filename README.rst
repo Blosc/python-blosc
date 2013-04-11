@@ -59,6 +59,47 @@ Also, some examples are available on python-blosc wiki page:
 
 http://github.com/FrancescAlted/python-blosc/wiki
 
+Merging Blosc sources from upstream
+===================================
+
+We use the `subtree merge technique
+<http://git-scm.com/book/en/Git-Tools-Subtree-Merging>`_ to maintain the
+upstream Blosc sources. In case you need to synchronise, the following recipe
+may help to get setup the first time.
+
+1) Add the upstream Blosc sources as an additional remote called
+``c-blosc-origin``::
+
+    $ git remote add -f c-blosc-origin git://github.com/FrancescAlted/blosc.git
+
+2) Checkout the ``master`` branch as ``c-blosc``::
+
+    $ git co -b c-blosc c-blosc-origin/master
+
+3) Reset the ``c-blosc`` branch to the desired tag::
+
+    $ git reset --hard vX.Y.Z
+
+4) Checkout the branch you want to subtree merge to::
+
+    $ git checkout master
+
+5) Actually perform the subtree merge::
+
+    $ git merge --squash -s subtree --no-commit c-blosc
+
+6) Finalize the subtree merge with a commit::
+
+    $ git commit -m "subtree merge blosc vX.Y.Z"
+
+If you alread have the ``c-blosc-origin`` remote set up and the ``c-blosc``
+branch created, you can just update it::
+
+    $ git checkout c-blosc
+    $ git pull
+
+And then proceed with step 3 above.
+
 Mailing list
 ============
 
