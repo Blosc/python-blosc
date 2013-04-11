@@ -71,8 +71,8 @@ def set_nthreads(nthreads):
     --------
     Set the number of threads to 2 and then to 1:
 
-    >>> oldn = set_nthreads(2)
-    >>> set_nthreads(1)
+    >>> oldn = blosc.set_nthreads(2)
+    >>> blosc.set_nthreads(1)
     2
 
     """
@@ -102,7 +102,7 @@ def free_resources():
     Examples
     --------
 
-    >>> free_resources()
+    >>> blosc.free_resources()
     >>>
     """
     _ext.free_resources()
@@ -115,21 +115,21 @@ def compress(bytesobj, typesize, clevel=9, shuffle=True):
 
     Parameters
     ----------
-        bytesobj : str / bytes
-            The data to be compressed.
-        typesize : int
-            The data type size.
-        clevel : int (optional)
-            The compression level from 0 (no compression) to 9
-            (maximum compression).  The default is 9.
-        shuffle : bool (optional)
-            Whether you want to activate the shuffle filter or not.
-            The default is True.
+    bytesobj : str / bytes
+        The data to be compressed.
+    typesize : int
+        The data type size.
+    clevel : int (optional)
+        The compression level from 0 (no compression) to 9
+        (maximum compression).  The default is 9.
+    shuffle : bool (optional)
+        Whether you want to activate the shuffle filter or not.
+        The default is True.
 
     Returns
     -------
-        out : str / bytes
-            The compressed data in form of a Python str / bytes object.
+    out : str / bytes
+        The compressed data in form of a Python str / bytes object.
 
     Examples
     --------
@@ -137,7 +137,7 @@ def compress(bytesobj, typesize, clevel=9, shuffle=True):
     >>> import array
     >>> a = array.array('i', range(1000*1000))
     >>> a_bytesobj = a.tostring()
-    >>> c_bytesobj = compress(a_bytesobj, typesize=4)
+    >>> c_bytesobj = blosc.compress(a_bytesobj, typesize=4)
     >>> len(c_bytesobj) < len(a_bytesobj)
     True
 
@@ -164,23 +164,23 @@ def compress_ptr(address, items, typesize, clevel=9, shuffle=True):
 
     Parameters
     ----------
-        address : int or long
-            the pointer to the data to be compressed
-        items : int
-            The number of items (of typesize) to be compressed.
-        typesize : int
-            The data type size.
-        clevel : int (optional)
-            The compression level from 0 (no compression) to 9
-            (maximum compression).  The default is 9.
-        shuffle : bool (optional)
-            Whether you want to activate the shuffle filter or not.
-            The default is True.
+    address : int or long
+        the pointer to the data to be compressed
+    items : int
+        The number of items (of typesize) to be compressed.
+    typesize : int
+        The data type size.
+    clevel : int (optional)
+        The compression level from 0 (no compression) to 9
+        (maximum compression).  The default is 9.
+    shuffle : bool (optional)
+        Whether you want to activate the shuffle filter or not.
+        The default is True.
 
     Returns
     -------
-        out : str / bytes
-            The compressed data in form of a Python str / bytes object.
+    out : str / bytes
+        The compressed data in form of a Python str / bytes object.
 
     Notes
     -----
@@ -196,13 +196,12 @@ def compress_ptr(address, items, typesize, clevel=9, shuffle=True):
     Examples
     --------
 
-
     >>> import numpy
     >>> items = 7
     >>> np_array = numpy.arange(items)
-    >>> c = compress_ptr(np_array.__array_interface__['data'][0], \
+    >>> c = blosc.compress_ptr(np_array.__array_interface__['data'][0], \
         items, np_array.dtype.itemsize)
-    >>> d = decompress(c)
+    >>> d = blosc.decompress(c)
     >>> np_ans = numpy.fromstring(d, dtype=np_array.dtype)
     >>> (np_array == np_ans).all()
     True
@@ -213,8 +212,8 @@ def compress_ptr(address, items, typesize, clevel=9, shuffle=True):
     >>> data = [float(i) for i in range(items)]
     >>> Array = ctypes.c_double * items
     >>> a = Array(*data)
-    >>> c = compress_ptr(ctypes.addressof(a), items, typesize)
-    >>> d = decompress(c)
+    >>> c = blosc.compress_ptr(ctypes.addressof(a), items, typesize)
+    >>> d = blosc.decompress(c)
     >>> import struct
     >>> ans = [struct.unpack('d', d[i:i+typesize])[0] \
             for i in range(0,items*typesize,typesize)]
@@ -243,13 +242,13 @@ def decompress(bytesobj):
 
     Parameters
     ----------
-        bytesobj : str / bytes
-            The data to be decompressed.
+    bytesobj : str / bytes
+        The data to be decompressed.
 
     Returns
     -------
-        out : str / bytes
-            The decompressed data in form of a Python str / bytes object.
+    out : str / bytes
+        The decompressed data in form of a Python str / bytes object.
 
     Examples
     --------
@@ -257,8 +256,8 @@ def decompress(bytesobj):
     >>> import array
     >>> a = array.array('i', range(1000*1000))
     >>> a_bytesobj = a.tostring()
-    >>> c_bytesobj = compress(a_bytesobj, typesize=4)
-    >>> a_bytesobj2 = decompress(c_bytesobj)
+    >>> c_bytesobj = blosc.compress(a_bytesobj, typesize=4)
+    >>> a_bytesobj2 = blosc.decompress(c_bytesobj)
     >>> a_bytesobj == a_bytesobj2
     True
     >>> "" == blosc.decompress(blosc.compress("", 1))
@@ -281,10 +280,11 @@ def decompress_ptr(bytesobj, address):
 
     Parameters
     ----------
-        bytesobj : str / bytes
-            The data to be decompressed.
-        address : int or long
-            the pointer to the data to be compressed
+    bytesobj : str / bytes
+        The data to be decompressed.
+    address : int or long
+        the pointer to the data to be compressed
+
     Notes
     -----
     This function can be used anywhere that a memory address is available in
@@ -302,10 +302,10 @@ def decompress_ptr(bytesobj, address):
     >>> import numpy
     >>> items = 7
     >>> np_array = numpy.arange(items)
-    >>> c = compress_ptr(np_array.__array_interface__['data'][0], \
+    >>> c = blosc.compress_ptr(np_array.__array_interface__['data'][0], \
         items, np_array.dtype.itemsize)
     >>> np_ans = numpy.empty(items, dtype=np_array.dtype)
-    >>> decompress_ptr(c, np_ans.__array_interface__['data'][0])
+    >>> blosc.decompress_ptr(c, np_ans.__array_interface__['data'][0])
     >>> (np_array == np_ans).all()
     True
 
@@ -315,15 +315,14 @@ def decompress_ptr(bytesobj, address):
     >>> data = [float(i) for i in range(items)]
     >>> Array = ctypes.c_double * items
     >>> in_array = Array(*data)
-    >>> c = compress_ptr(ctypes.addressof(in_array), items, typesize)
+    >>> c = blosc.compress_ptr(ctypes.addressof(in_array), items, typesize)
     >>> out_array = ctypes.create_string_buffer(items*typesize)
-    >>> decompress_ptr(c, ctypes.addressof(out_array))
+    >>> blosc.decompress_ptr(c, ctypes.addressof(out_array))
     >>> import struct
     >>> ans = [struct.unpack('d', out_array[i:i+typesize])[0] \
             for i in range(0,items*typesize,typesize)]
     >>> data == ans
     True
-
 
     """
 
@@ -343,26 +342,26 @@ def pack_array(array, clevel=9, shuffle=True):
 
     Parameters
     ----------
-        array : ndarray
-            The NumPy array to be packed.
-        clevel : int (optional)
-            The compression level from 0 (no compression) to 9
-            (maximum compression).  The default is 9.
-        shuffle : bool (optional)
-            Whether you want to activate the shuffle filter or not.
-            The default is True.
+    array : ndarray
+        The NumPy array to be packed.
+    clevel : int (optional)
+        The compression level from 0 (no compression) to 9
+        (maximum compression).  The default is 9.
+    shuffle : bool (optional)
+        Whether you want to activate the shuffle filter or not.
+        The default is True.
 
     Returns
     -------
-        out : str / bytes
-            The packed array in form of a Python str / bytes object.
+    out : str / bytes
+        The packed array in form of a Python str / bytes object.
 
     Examples
     --------
 
     >>> import numpy
     >>> a = numpy.arange(1e6)
-    >>> parray = pack_array(a)
+    >>> parray = blosc.pack_array(a)
     >>> len(parray) < a.size*a.itemsize
     True
 
@@ -393,23 +392,23 @@ def unpack_array(packed_array):
 
     Parameters
     ----------
-        packed_array : str / bytes
-            The packed array to be decompressed.
+    packed_array : str / bytes
+        The packed array to be decompressed.
 
     Returns
     -------
-        out : ndarray
-            The decompressed data in form of a NumPy array.
+    out : ndarray
+        The decompressed data in form of a NumPy array.
 
     Examples
     --------
 
     >>> import numpy
     >>> a = numpy.arange(1e6)
-    >>> parray = pack_array(a)
+    >>> parray = blosc.pack_array(a)
     >>> len(parray) < a.size*a.itemsize
     True
-    >>> a2 = unpack_array(parray)
+    >>> a2 = blosc.unpack_array(parray)
     >>> numpy.alltrue(a == a2)
     True
 
