@@ -32,11 +32,22 @@ Testing
 =======
 
 After compiling, you can quickly check that the package is sane by
-running::
+running the doctests in ``blosc/toplevel.py``::
 
     $ PYTHONPATH=.   (or "set PYTHONPATH=." on Win)
     $ export PYTHONPATH=.  (not needed on Win)
     $ python blosc/toplevel.py  (add -v for verbose mode)
+
+There is also a test suite in ``blosc/test.py`` which you can run with::
+
+    $ PYTHONPATH=.   (or "set PYTHONPATH=." on Win)
+    $ export PYTHONPATH=.  (not needed on Win)
+    $ python blosc/test.py  (add -v for verbose mode)
+
+Or alternatively, you can use the third-party ``nosetests`` script to run both
+the doctests and the test suite::
+
+    $ nosetests --with-doctest (add -v for verbose mode)
 
 Installing
 ==========
