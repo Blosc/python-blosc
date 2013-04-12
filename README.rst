@@ -68,7 +68,7 @@ upstream Blosc sources. In case you need to synchronise, the following recipe
 may help to get setup the first time.
 
 1) Add the upstream Blosc sources as an additional remote called
-``c-blosc-origin``::
+   ``c-blosc-origin``::
 
     $ git remote add -f c-blosc-origin git://github.com/FrancescAlted/blosc.git
 
