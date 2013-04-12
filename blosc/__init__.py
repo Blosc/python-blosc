@@ -26,7 +26,7 @@ Public functions
 compress(bytesobj, typesize[, clevel=5, shuffle=True])::
     Compress bytesobj, with a given type size.
 
-compress_ptr(address, items, typesize[, clevel=9, shuffle=True]])
+compress_ptr(address, items, typesize[, clevel=9, shuffle=True]])::
     Compress the data at address with given items and typesize.
 
 decompress(bytesobj)::
