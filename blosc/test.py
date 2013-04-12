@@ -88,6 +88,8 @@ class TestCodec(unittest.TestCase):
         # the machine.
         self.assertRaises(ValueError, blosc.pack_array, ones)
 
+    def test_unpack_array_exceptions(self):
+        self.assertRaises(ValueError, blosc.unpack_array, 1.0)
 
 if __name__ == '__main__':
         unittest.main()
