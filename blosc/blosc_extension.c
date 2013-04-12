@@ -184,12 +184,13 @@ PyDoc_STRVAR(decompress_ptr__doc__,
 static PyObject *
 PyBlosc_decompress_ptr(PyObject *self, PyObject *args)
 {
-    PyObject * pointer;
+    PyObject * pointer, * return_int;
     void * input, * output;
-    size_t cbytes, nbytes;
+    Py_ssize_t cbytes;
+    size_t nbytes;
 
     /* require a compressed string and a pointer  */
-    if (!PyArg_ParseTuple(args, "s#O:decompress", &input, (Py_ssize_t*)&cbytes, &pointer))
+    if (!PyArg_ParseTuple(args, "s#O:decompress", &input, &cbytes, &pointer))
       return NULL;
 
     /*  convert the int or long Python object to a void * */
@@ -198,15 +199,20 @@ PyBlosc_decompress_ptr(PyObject *self, PyObject *args)
       return NULL;
 
     /*  fetch the uncompressed size into nbytes */
-    if (!get_nbytes(input, cbytes, &nbytes))
+    if (!get_nbytes(input, (size_t)cbytes, &nbytes))
       return NULL;
 
     /* do decompression */
     if (!decompress_helper(input, nbytes, output))
       return NULL;
 
-    /*  return None, since result was decompressed into output */
-    return Py_None;
+    /*  Return nbytes as python integer. This is legitimate, because
+     *  decompress_helper above has checked that the number of bytes written
+     *  was indeed nbytes.
+     *  */
+    return_int = PyInt_FromSize_t(nbytes);
+    Py_INCREF(return_int);
+    return return_int;
 }
 
 PyDoc_STRVAR(decompress__doc__,
