@@ -9,3 +9,5 @@ class TestCodec(unittest.TestCase):
         d = blosc.decompress(c)
         self.assertEqual(s, d)
 
+if __name__ == '__main__':
+        unittest.main()
