@@ -12,6 +12,10 @@ class TestCodec(unittest.TestCase):
         d = blosc.decompress(c)
         self.assertEqual(s, d)
 
+    def test_set_nthreads_exceptions(self):
+        self.assertRaises(ValueError, blosc.set_nthreads,
+                blosc.BLOSC_MAX_THREADS +1)
+
     def test_compress_exceptions(self):
         s = '0123456789'
 
