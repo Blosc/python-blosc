@@ -49,5 +49,10 @@ class TestCodec(unittest.TestCase):
         self.assertRaises(ValueError, blosc.compress_ptr, address,
                 blosc.BLOSC_MAX_BUFFERSIZE+1, typesize=typesize)
 
+    def test_decompress_excpetions(self):
+        self.assertRaises(ValueError, blosc.decompress, 1.0)
+        self.assertRaises(ValueError, blosc.decompress, ['abc'])
+
+
 if __name__ == '__main__':
         unittest.main()
