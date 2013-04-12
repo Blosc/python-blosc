@@ -1,5 +1,7 @@
+from __future__ import division
 import unittest
 import ctypes
+import numpy
 import blosc
 
 class TestCodec(unittest.TestCase):
@@ -68,6 +70,20 @@ class TestCodec(unittest.TestCase):
                 1.0)
         self.assertRaises(TypeError, blosc.decompress_ptr, c,
                 ['abc'])
+
+    def test_pack_array_exceptions(self):
+        self.assertRaises(ValueError, blosc.pack_array, 'abc')
+        self.assertRaises(ValueError, blosc.pack_array, 1.0)
+
+        items = (blosc.BLOSC_MAX_BUFFERSIZE / 8) +1
+        one = numpy.ones(1)
+        # use stride trick to make an array that looks like a huge one
+        ones = numpy.lib.stride_tricks.as_strided(one, shape=(1,items),
+                strides=(8,0))[0]
+        # if the value error is not raised, may run out of memory, depending on
+        # the machine.
+        self.assertRaises(ValueError, blosc.pack_array, ones)
+
 
 if __name__ == '__main__':
         unittest.main()
