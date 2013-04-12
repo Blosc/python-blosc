@@ -26,8 +26,7 @@ class TestCodec(unittest.TestCase):
         # Make sure we do have a valid address, to reduce the chance of a
         # segfault if we do actually start compressing because the exceptions
         # aren't raised.
-        typesize = 8
-        items = 8
+        typesize, items = 8, 8
         data = [float(i) for i in range(items)]
         Array = ctypes.c_double * items
         array = Array(*data)
@@ -52,8 +51,8 @@ class TestCodec(unittest.TestCase):
         self.assertRaises(ValueError, blosc.decompress, ['abc'])
 
     def test_decompress_ptr_excpetions(self):
-        typesize = 8
-        items = 7
+        # make sure we do have a valid address
+        typesize, items = 8, 8
         data = [float(i) for i in range(items)]
         Array = ctypes.c_double * items
         in_array = Array(*data)
