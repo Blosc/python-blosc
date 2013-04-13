@@ -25,7 +25,7 @@ class TestCodec(unittest.TestCase):
         s = b'0123456789'
 
         if py3:
-            self.assertRaises(ValueError, blosc.compress, rs, typesize=1)
+            self.assertRaises(TypeError, blosc.compress, rs, typesize=1)
         self.assertRaises(ValueError, blosc.compress, s, typesize=1, clevel=-1)
         self.assertRaises(ValueError, blosc.compress, s, typesize=1, clevel=10)
 
