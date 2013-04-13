@@ -208,7 +208,6 @@ def compress_ptr(address, items, typesize, clevel=9, shuffle=True):
     True
 
     >>> import ctypes
-    >>> Array23 = ctypes.c_double
     >>> typesize = 8
     >>> data = [float(i) for i in range(items)]
     >>> Array = ctypes.c_double * items
@@ -318,7 +317,6 @@ def decompress_ptr(bytesobj, address):
     True
 
     >>> import ctypes
-    >>> Array23 = ctypes.c_double
     >>> typesize = 8
     >>> data = [float(i) for i in range(items)]
     >>> Array = ctypes.c_double * items
