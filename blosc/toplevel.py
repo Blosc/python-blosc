@@ -286,6 +286,11 @@ def decompress_ptr(bytesobj, address):
     address : int or long
         the pointer to the data to be compressed
 
+    Returns
+    -------
+    nbytes : int
+        the number of bytes written to the buffer
+
     Notes
     -----
     This function can be used anywhere that a memory address is available in
@@ -306,8 +311,10 @@ def decompress_ptr(bytesobj, address):
     >>> c = blosc.compress_ptr(np_array.__array_interface__['data'][0], \
         items, np_array.dtype.itemsize)
     >>> np_ans = numpy.empty(items, dtype=np_array.dtype)
-    >>> blosc.decompress_ptr(c, np_ans.__array_interface__['data'][0])
+    >>> nbytes = blosc.decompress_ptr(c, np_ans.__array_interface__['data'][0])
     >>> (np_array == np_ans).all()
+    True
+    >>> nbytes == items * np_array.dtype.itemsize
     True
 
     >>> import ctypes
@@ -318,11 +325,13 @@ def decompress_ptr(bytesobj, address):
     >>> in_array = Array(*data)
     >>> c = blosc.compress_ptr(ctypes.addressof(in_array), items, typesize)
     >>> out_array = ctypes.create_string_buffer(items*typesize)
-    >>> blosc.decompress_ptr(c, ctypes.addressof(out_array))
+    >>> nbytes = blosc.decompress_ptr(c, ctypes.addressof(out_array))
     >>> import struct
     >>> ans = [struct.unpack('d', out_array[i:i+typesize])[0] \
             for i in range(0,items*typesize,typesize)]
     >>> data == ans
+    True
+    >>> nbytes == items * typesize
     True
 
     """
@@ -334,7 +343,7 @@ def decompress_ptr(bytesobj, address):
     if not isinstance(address, (int, long)):
         raise TypeError( "only int or long objects are supported as address")
 
-    _ext.decompress_ptr(bytesobj, address)
+    return _ext.decompress_ptr(bytesobj, address)
 
 def pack_array(array, clevel=9, shuffle=True):
     """pack_array(array[, clevel=9, shuffle=True]])
@@ -429,7 +438,6 @@ def unpack_array(packed_array):
 
 if __name__ == '__main__':
     # test myself
-    import blosc
     import doctest
     print("Testing python-blosc version: %s [C-Blosc: %s]" %
           (blosc.__version__, blosc.blosclib_version))
