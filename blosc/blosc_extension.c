@@ -207,7 +207,7 @@ PyBlosc_decompress_ptr(PyObject *self, PyObject *args)
      *  decompress_helper above has checked that the number of bytes written
      *  was indeed nbytes.
      *  */
-    return_int = PyInt_FromSize_t(nbytes);
+    return_int = PyLong_FromSize_t(nbytes);
     Py_INCREF(return_int);
     return return_int;
 }
