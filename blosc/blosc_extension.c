@@ -101,9 +101,6 @@ PyBlosc_compress_ptr(PyObject *self, PyObject *args)
     if (!PyArg_ParseTuple(args, "Oniii:compress", &input, &nbytes_,
                           &typesize, &clevel, &shuffle))
       return NULL;
-    /* Protection against negative values */
-    if (nbytes_ < 0)
-      return NULL;
     /* Now we can use a cast safely here */
     nbytes = (size_t)nbytes_;
     /*  convert to void pointer safely */

@@ -44,6 +44,8 @@ class TestCodec(unittest.TestCase):
                 typesize=typesize, clevel=10)
 
 
+        self.assertRaises(TypeError, blosc.compress_ptr, 1.0, -1,
+                typesize=typesize)
         self.assertRaises(TypeError, blosc.compress_ptr, 1.0, items,
                 typesize=typesize)
         self.assertRaises(TypeError, blosc.compress_ptr, ['abc'], items,
@@ -52,11 +54,11 @@ class TestCodec(unittest.TestCase):
         self.assertRaises(ValueError, blosc.compress_ptr, address,
                 blosc.BLOSC_MAX_BUFFERSIZE+1, typesize=typesize)
 
-    def test_decompress_excpetions(self):
+    def test_decompress_exceptions(self):
         self.assertRaises(ValueError, blosc.decompress, 1.0)
         self.assertRaises(ValueError, blosc.decompress, ['abc'])
 
-    def test_decompress_ptr_excpetions(self):
+    def test_decompress_ptr_exceptions(self):
         # make sure we do have a valid address
         typesize, items = 8, 8
         data = [float(i) for i in range(items)]

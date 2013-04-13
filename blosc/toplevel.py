@@ -224,6 +224,9 @@ def compress_ptr(address, items, typesize, clevel=9, shuffle=True):
     if not isinstance(address, (int, long)):
         raise TypeError("only int or long objects are supported as address")
 
+    if items < 0:
+        raise ValueError("items cannot be negative")
+
     length = items * typesize
     if length > _ext.BLOSC_MAX_BUFFERSIZE:
         raise ValueError("length cannot be larger than %d bytes" %
