@@ -13,6 +13,7 @@ except ImportError:
     import pickle
 
 from blosc import blosc_extension as _ext
+import blosc  # needed for running doctests from nosetests
 
 
 def detect_number_of_cores():
