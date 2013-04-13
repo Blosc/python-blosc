@@ -1,13 +1,17 @@
 from __future__ import division
+import sys
 import unittest
 import ctypes
 import numpy
 import blosc
 
+
+py3 = sys.version_info[0] == 3
+
 class TestCodec(unittest.TestCase):
 
     def test_basic_codec(self):
-        s = '0123456789'
+        s = b'0123456789'
         c = blosc.compress(s, typesize=1)
         d = blosc.decompress(c)
         self.assertEqual(s, d)
@@ -17,8 +21,11 @@ class TestCodec(unittest.TestCase):
                 blosc.BLOSC_MAX_THREADS +1)
 
     def test_compress_exceptions(self):
-        s = '0123456789'
+        rs = '0123456789'
+        s = b'0123456789'
 
+        if py3:
+            self.assertRaises(ValueError, blosc.compress, rs, typesize=1)
         self.assertRaises(ValueError, blosc.compress, s, typesize=1, clevel=-1)
         self.assertRaises(ValueError, blosc.compress, s, typesize=1, clevel=10)
 
