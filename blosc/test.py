@@ -50,14 +50,13 @@ class TestCodec(unittest.TestCase):
         self.assertRaises(ValueError, blosc.compress_ptr, address, items,
                 typesize=typesize, clevel=10)
 
-
-        self.assertRaises(TypeError, blosc.compress_ptr, 1.0, -1,
-                typesize=typesize)
         self.assertRaises(TypeError, blosc.compress_ptr, 1.0, items,
                 typesize=typesize)
         self.assertRaises(TypeError, blosc.compress_ptr, ['abc'], items,
                 typesize=typesize)
 
+        self.assertRaises(ValueError, blosc.compress_ptr, address, -1,
+                typesize=typesize)
         self.assertRaises(ValueError, blosc.compress_ptr, address,
                 blosc.BLOSC_MAX_BUFFERSIZE+1, typesize=typesize)
 
