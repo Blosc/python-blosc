@@ -385,7 +385,7 @@ def pack_array(array, clevel=9, shuffle=True):
 
     if not (hasattr(array, 'dtype') and hasattr(array, 'shape')):
         # This does not quack like an ndarray
-        raise ValueError(
+        raise TypeError(
             "only NumPy ndarrays objects supported as input")
 
     itemsize = array.itemsize

@@ -85,8 +85,8 @@ class TestCodec(unittest.TestCase):
                 ['abc'])
 
     def test_pack_array_exceptions(self):
-        self.assertRaises(ValueError, blosc.pack_array, 'abc')
-        self.assertRaises(ValueError, blosc.pack_array, 1.0)
+        self.assertRaises(TypeError, blosc.pack_array, 'abc')
+        self.assertRaises(TypeError, blosc.pack_array, 1.0)
 
         items = (blosc.BLOSC_MAX_BUFFERSIZE / 8) +1
         one = numpy.ones(1)
