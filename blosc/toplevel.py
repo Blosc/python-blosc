@@ -268,9 +268,9 @@ def decompress(bytesobj):
     >>> a_bytesobj2 = blosc.decompress(c_bytesobj)
     >>> a_bytesobj == a_bytesobj2
     True
-    >>> "" == blosc.decompress(blosc.compress("", 1))
+    >>> b"" == blosc.decompress(blosc.compress(b"", 1))
     True
-    >>> "1"*7 == blosc.decompress(blosc.compress("1"*7, 8))
+    >>> b"1"*7 == blosc.decompress(blosc.compress(b"1"*7, 8))
     True
 
     """
