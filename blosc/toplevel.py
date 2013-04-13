@@ -7,6 +7,7 @@
 ########################################################################
 
 import os
+import sys
 try:
     import cPickle as pickle
 except ImportError:
@@ -15,6 +16,10 @@ except ImportError:
 from blosc import blosc_extension as _ext
 import blosc  # needed for running doctests from nosetests
 
+if sys.version_info[0] < 3:
+    int_ = (int, long)
+else:
+    int_ = (int,)
 
 def detect_number_of_cores():
     """
@@ -221,7 +226,7 @@ def compress_ptr(address, items, typesize, clevel=9, shuffle=True):
     True
     """
 
-    if not isinstance(address, (int, long)):
+    if not isinstance(address, int_):
         raise TypeError("only int or long objects are supported as address")
 
     if items < 0:
@@ -341,7 +346,7 @@ def decompress_ptr(bytesobj, address):
         raise ValueError(
             "only string (2.x) or bytes (3.x) objects supported as input")
 
-    if not isinstance(address, (int, long)):
+    if not isinstance(address, int_):
         raise TypeError( "only int or long objects are supported as address")
 
     return _ext.decompress_ptr(bytesobj, address)
