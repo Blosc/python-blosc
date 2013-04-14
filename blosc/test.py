@@ -8,6 +8,7 @@ import blosc
 
 py3 = sys.version_info[0] == 3
 
+
 class TestCodec(unittest.TestCase):
 
     def test_basic_codec(self):
@@ -100,5 +101,17 @@ class TestCodec(unittest.TestCase):
     def test_unpack_array_exceptions(self):
         self.assertRaises(ValueError, blosc.unpack_array, 1.0)
 
+
+def test():
+    import blosc.toplevel
+    suite = unittest.TestLoader().loadTestsFromTestCase(TestCodec)
+    # If in the future we split this test file in several, the auto-discover
+    # might be interesting
+
+    # suite = unittest.TestLoader().discover(start_dir='.', pattern='test*.py')
+    suite.addTests(unittest.TestLoader().loadTestsFromModule(blosc.toplevel))
+    unittest.TextTestRunner(verbosity=2).run(suite)
+
+
 if __name__ == '__main__':
-        unittest.main()
+    test()

@@ -53,6 +53,9 @@ free_resources()::
 set_nthreads(nthreads)::
     Set the number of threads to be used during Blosc operation.
 
+test()::
+    Run the test suite.
+
 """
 
 from blosc.version import __version__
@@ -83,3 +86,7 @@ from blosc.blosc_extension import (
 ncores = detect_number_of_cores()
 set_nthreads(ncores)
 blosclib_version = "%s (%s)" % (BLOSC_VERSION_STRING, BLOSC_VERSION_DATE)
+
+# Tests
+from blosc.test import test
+
