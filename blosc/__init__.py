@@ -88,5 +88,6 @@ set_nthreads(ncores)
 blosclib_version = "%s (%s)" % (BLOSC_VERSION_STRING, BLOSC_VERSION_DATE)
 
 # Tests
-from blosc.test import test
+from blosc.test import run as test
+
 
