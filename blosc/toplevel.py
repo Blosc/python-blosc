@@ -114,6 +114,11 @@ def free_resources():
     _ext.free_resources()
 
 
+def _check_clevel(clevel):
+    if not 0 <= clevel <= 9:
+        raise ValueError("clevel can only be in the 0-9 range.")
+
+
 def compress(bytesobj, typesize, clevel=9, shuffle=True):
     """compress(bytesobj, typesize[, clevel=9, shuffle=True]])
 
@@ -157,8 +162,7 @@ def compress(bytesobj, typesize, clevel=9, shuffle=True):
         raise ValueError("bytesobj length cannot be larger than %d bytes" %
                          _ext.BLOSC_MAX_BUFFERSIZE)
 
-    if clevel < 0 or clevel > 9:
-        raise ValueError("clevel can only be in the 0-9 range.")
+    _check_clevel(clevel)
 
     return _ext.compress(bytesobj, typesize, clevel, shuffle)
 
@@ -237,8 +241,7 @@ def compress_ptr(address, items, typesize, clevel=9, shuffle=True):
         raise ValueError("length cannot be larger than %d bytes" %
                          _ext.BLOSC_MAX_BUFFERSIZE)
 
-    if clevel < 0 or clevel > 9:
-        raise ValueError("clevel can only be in the 0-9 range.")
+    _check_clevel(clevel)
 
     return _ext.compress_ptr(address, length, typesize, clevel, shuffle)
 
