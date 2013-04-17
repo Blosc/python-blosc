@@ -21,6 +21,7 @@ if sys.version_info[0] < 3:
 else:
     int_ = (int,)
 
+
 def detect_number_of_cores():
     """
     detect_number_of_cores()
@@ -114,6 +115,34 @@ def free_resources():
     _ext.free_resources()
 
 
+def _check_clevel(clevel):
+    if not 0 <= clevel <= 9:
+        raise ValueError("clevel can only be in the 0-9 range.")
+
+
+def _check_typesize(typesize):
+    if not 1 <= typesize <= _ext.BLOSC_MAX_TYPESIZE:
+        raise ValueError("typesize can only be in the 1-%d range." %
+                         _ext.BLOSC_MAX_TYPESIZE)
+
+
+def _check_bytesobj(bytesobj):
+    if not isinstance(bytesobj, bytes):
+        raise TypeError("only string (2.x) or bytes (3.x) objects"
+                        "supported as input")
+
+
+def _check_input_length(input_name, input_len):
+    if input_len > _ext.BLOSC_MAX_BUFFERSIZE:
+        raise ValueError("%s cannot be larger than %d bytes" %
+                         (input_name, _ext.BLOSC_MAX_BUFFERSIZE))
+
+
+def _check_address(address):
+    if not isinstance(address, int_):
+        raise TypeError("only int or long objects are supported as address")
+
+
 def compress(bytesobj, typesize, clevel=9, shuffle=True):
     """compress(bytesobj, typesize[, clevel=9, shuffle=True]])
 
@@ -149,16 +178,10 @@ def compress(bytesobj, typesize, clevel=9, shuffle=True):
 
     """
 
-    if not isinstance(bytesobj, bytes):
-        raise TypeError(
-                "only string (2.x) or bytes (3.x) objects supported as input")
-
-    if len(bytesobj) > _ext.BLOSC_MAX_BUFFERSIZE:
-        raise ValueError("bytesobj length cannot be larger than %d bytes" %
-                         _ext.BLOSC_MAX_BUFFERSIZE)
-
-    if clevel < 0 or clevel > 9:
-        raise ValueError("clevel can only be in the 0-9 range.")
+    _check_bytesobj(bytesobj)
+    _check_input_length('bytesobj', len(bytesobj))
+    _check_typesize(typesize)
+    _check_clevel(clevel)
 
     return _ext.compress(bytesobj, typesize, clevel, shuffle)
 
@@ -226,19 +249,13 @@ def compress_ptr(address, items, typesize, clevel=9, shuffle=True):
     True
     """
 
-    if not isinstance(address, int_):
-        raise TypeError("only int or long objects are supported as address")
-
+    _check_address(address)
     if items < 0:
         raise ValueError("items cannot be negative")
-
     length = items * typesize
-    if length > _ext.BLOSC_MAX_BUFFERSIZE:
-        raise ValueError("length cannot be larger than %d bytes" %
-                         _ext.BLOSC_MAX_BUFFERSIZE)
-
-    if clevel < 0 or clevel > 9:
-        raise ValueError("clevel can only be in the 0-9 range.")
+    _check_input_length('length', length)
+    _check_typesize(typesize)
+    _check_clevel(clevel)
 
     return _ext.compress_ptr(address, length, typesize, clevel, shuffle)
 
@@ -275,11 +292,10 @@ def decompress(bytesobj):
 
     """
 
-    if not isinstance(bytesobj, bytes):
-        raise TypeError(
-                "only string (2.x) or bytes (3.x) objects supported as input")
+    _check_bytesobj(bytesobj)
 
     return _ext.decompress(bytesobj)
+
 
 def decompress_ptr(bytesobj, address):
     """decompress_ptr(bytesobj, address)
@@ -342,14 +358,11 @@ def decompress_ptr(bytesobj, address):
 
     """
 
-    if not isinstance(bytesobj, bytes):
-        raise TypeError(
-                "only string (2.x) or bytes (3.x) objects supported as input")
-
-    if not isinstance(address, int_):
-        raise TypeError( "only int or long objects are supported as address")
+    _check_bytesobj(bytesobj)
+    _check_address(address)
 
     return _ext.decompress_ptr(bytesobj, address)
+
 
 def pack_array(array, clevel=9, shuffle=True):
     """pack_array(array[, clevel=9, shuffle=True]])
@@ -387,11 +400,10 @@ def pack_array(array, clevel=9, shuffle=True):
         # This does not quack like an ndarray
         raise TypeError(
             "only NumPy ndarrays objects supported as input")
-
     itemsize = array.itemsize
-    if array.size*itemsize > _ext.BLOSC_MAX_BUFFERSIZE:
-        raise ValueError("array size cannot be larger than %d bytes" %
-                         _ext.BLOSC_MAX_BUFFERSIZE)
+    _check_input_length('array size', array.size*itemsize)
+    _check_typesize(array.itemsize)
+    _check_clevel(clevel)
 
     # Use the fastest pickle available
     pickled_array = pickle.dumps(array, pickle.HIGHEST_PROTOCOL)
@@ -430,9 +442,7 @@ def unpack_array(packed_array):
 
     """
 
-    if not isinstance(packed_array, bytes):
-        raise TypeError(
-                "only string (2.x) or bytes (3.x) objects supported as input")
+    _check_bytesobj(packed_array)
 
     # First decompress the pickle
     pickled_array = _ext.decompress(packed_array)
