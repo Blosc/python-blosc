@@ -149,9 +149,9 @@ def compress(bytesobj, typesize, clevel=9, shuffle=True):
 
     """
 
-    if type(bytesobj) is not bytes:
-        raise ValueError(
-            "only string (2.x) or bytes (3.x) objects supported as input")
+    if not isinstance(bytesobj, bytes):
+        raise TypeError(
+                "only string (2.x) or bytes (3.x) objects supported as input")
 
     if len(bytesobj) > _ext.BLOSC_MAX_BUFFERSIZE:
         raise ValueError("bytesobj length cannot be larger than %d bytes" %
@@ -275,9 +275,9 @@ def decompress(bytesobj):
 
     """
 
-    if type(bytesobj) is not bytes:
-        raise ValueError(
-            "only string (2.x) or bytes (3.x) objects supported as input")
+    if not isinstance(bytesobj, bytes):
+        raise TypeError(
+                "only string (2.x) or bytes (3.x) objects supported as input")
 
     return _ext.decompress(bytesobj)
 
@@ -342,9 +342,9 @@ def decompress_ptr(bytesobj, address):
 
     """
 
-    if type(bytesobj) is not bytes:
-        raise ValueError(
-            "only string (2.x) or bytes (3.x) objects supported as input")
+    if not isinstance(bytesobj, bytes):
+        raise TypeError(
+                "only string (2.x) or bytes (3.x) objects supported as input")
 
     if not isinstance(address, int_):
         raise TypeError( "only int or long objects are supported as address")
@@ -385,7 +385,7 @@ def pack_array(array, clevel=9, shuffle=True):
 
     if not (hasattr(array, 'dtype') and hasattr(array, 'shape')):
         # This does not quack like an ndarray
-        raise ValueError(
+        raise TypeError(
             "only NumPy ndarrays objects supported as input")
 
     itemsize = array.itemsize
@@ -430,9 +430,9 @@ def unpack_array(packed_array):
 
     """
 
-    if type(packed_array) is not bytes:
-        raise ValueError(
-            "only string (2.x) or bytes (3.x) objects supported as input")
+    if not isinstance(packed_array, bytes):
+        raise TypeError(
+                "only string (2.x) or bytes (3.x) objects supported as input")
 
     # First decompress the pickle
     pickled_array = _ext.decompress(packed_array)
