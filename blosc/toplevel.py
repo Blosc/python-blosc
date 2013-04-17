@@ -119,6 +119,12 @@ def _check_clevel(clevel):
         raise ValueError("clevel can only be in the 0-9 range.")
 
 
+def _check_typesize(typesize):
+    if not 1 <= typesize <= _ext.BLOSC_MAX_TYPESIZE:
+        raise ValueError("typesize can only be in the 1-%d range." %
+                _ext.BLOSC_MAX_TYPESIZE)
+
+
 def _check_bytesobj(bytesobj):
     if not isinstance(bytesobj, bytes):
         raise TypeError(
@@ -173,6 +179,7 @@ def compress(bytesobj, typesize, clevel=9, shuffle=True):
 
     _check_bytesobj(bytesobj)
     _check_input_length('bytesobj', len(bytesobj))
+    _check_typesize(typesize)
     _check_clevel(clevel)
 
     return _ext.compress(bytesobj, typesize, clevel, shuffle)
@@ -246,6 +253,7 @@ def compress_ptr(address, items, typesize, clevel=9, shuffle=True):
         raise ValueError("items cannot be negative")
     length = items * typesize
     _check_input_length('length', length)
+    _check_typesize(typesize)
     _check_clevel(clevel)
 
     return _ext.compress_ptr(address, length, typesize, clevel, shuffle)
@@ -391,6 +399,7 @@ def pack_array(array, clevel=9, shuffle=True):
             "only NumPy ndarrays objects supported as input")
     itemsize = array.itemsize
     _check_input_length('array size', array.size*itemsize)
+    _check_typesize(array.itemsize)
     _check_clevel(clevel)
 
     # Use the fastest pickle available
