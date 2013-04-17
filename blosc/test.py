@@ -97,6 +97,9 @@ class TestCodec(unittest.TestCase):
         # the machine.
         self.assertRaises(ValueError, blosc.pack_array, ones)
 
+        self.assertRaises(ValueError, blosc.pack_array, one, clevel=-1)
+        self.assertRaises(ValueError, blosc.pack_array, one, clevel=10)
+
     def test_unpack_array_exceptions(self):
         self.assertRaises(TypeError, blosc.unpack_array, 1.0)
 

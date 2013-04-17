@@ -396,6 +396,8 @@ def pack_array(array, clevel=9, shuffle=True):
         raise ValueError("array size cannot be larger than %d bytes" %
                          _ext.BLOSC_MAX_BUFFERSIZE)
 
+    _check_clevel(clevel)
+
     # Use the fastest pickle available
     pickled_array = pickle.dumps(array, pickle.HIGHEST_PROTOCOL)
     # ... and compress the pickle
