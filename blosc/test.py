@@ -102,7 +102,7 @@ class TestCodec(unittest.TestCase):
         self.assertRaises(ValueError, blosc.unpack_array, 1.0)
 
 
-def test():
+def run():
     import blosc.toplevel
     suite = unittest.TestLoader().loadTestsFromTestCase(TestCodec)
     # If in the future we split this test file in several, the auto-discover
@@ -114,4 +114,4 @@ def test():
 
 
 if __name__ == '__main__':
-    test()
+    run()
