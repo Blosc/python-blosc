@@ -131,6 +131,11 @@ def _check_input_length(input_name, input_len):
                          (input_name, _ext.BLOSC_MAX_BUFFERSIZE))
 
 
+def _check_address(address):
+    if not isinstance(address, int_):
+        raise TypeError("only int or long objects are supported as address")
+
+
 def compress(bytesobj, typesize, clevel=9, shuffle=True):
     """compress(bytesobj, typesize[, clevel=9, shuffle=True]])
 
@@ -238,8 +243,7 @@ def compress_ptr(address, items, typesize, clevel=9, shuffle=True):
     True
     """
 
-    if not isinstance(address, int_):
-        raise TypeError("only int or long objects are supported as address")
+    _check_address(address)
 
     if items < 0:
         raise ValueError("items cannot be negative")
@@ -351,8 +355,7 @@ def decompress_ptr(bytesobj, address):
 
     _check_bytesobj(bytesobj)
 
-    if not isinstance(address, int_):
-        raise TypeError( "only int or long objects are supported as address")
+    _check_address(address)
 
     return _ext.decompress_ptr(bytesobj, address)
 
