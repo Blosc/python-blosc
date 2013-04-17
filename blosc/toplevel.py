@@ -21,6 +21,7 @@ if sys.version_info[0] < 3:
 else:
     int_ = (int,)
 
+
 def detect_number_of_cores():
     """
     detect_number_of_cores()
@@ -122,13 +123,13 @@ def _check_clevel(clevel):
 def _check_typesize(typesize):
     if not 1 <= typesize <= _ext.BLOSC_MAX_TYPESIZE:
         raise ValueError("typesize can only be in the 1-%d range." %
-                _ext.BLOSC_MAX_TYPESIZE)
+                         _ext.BLOSC_MAX_TYPESIZE)
 
 
 def _check_bytesobj(bytesobj):
     if not isinstance(bytesobj, bytes):
-        raise TypeError(
-                "only string (2.x) or bytes (3.x) objects supported as input")
+        raise TypeError("only string (2.x) or bytes (3.x) objects"
+                        "supported as input")
 
 
 def _check_input_length(input_name, input_len):
@@ -295,6 +296,7 @@ def decompress(bytesobj):
 
     return _ext.decompress(bytesobj)
 
+
 def decompress_ptr(bytesobj, address):
     """decompress_ptr(bytesobj, address)
 
@@ -360,6 +362,7 @@ def decompress_ptr(bytesobj, address):
     _check_address(address)
 
     return _ext.decompress_ptr(bytesobj, address)
+
 
 def pack_array(array, clevel=9, shuffle=True):
     """pack_array(array[, clevel=9, shuffle=True]])
