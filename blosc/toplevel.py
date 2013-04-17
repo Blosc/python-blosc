@@ -125,6 +125,12 @@ def _check_bytesobj(bytesobj):
                 "only string (2.x) or bytes (3.x) objects supported as input")
 
 
+def _check_input_length(input_name, input_len):
+    if input_len > _ext.BLOSC_MAX_BUFFERSIZE:
+        raise ValueError("%s cannot be larger than %d bytes" %
+                         (input_name, _ext.BLOSC_MAX_BUFFERSIZE))
+
+
 def compress(bytesobj, typesize, clevel=9, shuffle=True):
     """compress(bytesobj, typesize[, clevel=9, shuffle=True]])
 
@@ -162,9 +168,7 @@ def compress(bytesobj, typesize, clevel=9, shuffle=True):
 
     _check_bytesobj(bytesobj)
 
-    if len(bytesobj) > _ext.BLOSC_MAX_BUFFERSIZE:
-        raise ValueError("bytesobj length cannot be larger than %d bytes" %
-                         _ext.BLOSC_MAX_BUFFERSIZE)
+    _check_input_length('bytesobj', len(bytesobj))
 
     _check_clevel(clevel)
 
@@ -241,9 +245,7 @@ def compress_ptr(address, items, typesize, clevel=9, shuffle=True):
         raise ValueError("items cannot be negative")
 
     length = items * typesize
-    if length > _ext.BLOSC_MAX_BUFFERSIZE:
-        raise ValueError("length cannot be larger than %d bytes" %
-                         _ext.BLOSC_MAX_BUFFERSIZE)
+    _check_input_length('length', length)
 
     _check_clevel(clevel)
 
@@ -392,9 +394,7 @@ def pack_array(array, clevel=9, shuffle=True):
             "only NumPy ndarrays objects supported as input")
 
     itemsize = array.itemsize
-    if array.size*itemsize > _ext.BLOSC_MAX_BUFFERSIZE:
-        raise ValueError("array size cannot be larger than %d bytes" %
-                         _ext.BLOSC_MAX_BUFFERSIZE)
+    _check_input_length('array size', array.size*itemsize)
 
     _check_clevel(clevel)
 
