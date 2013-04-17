@@ -119,6 +119,12 @@ def _check_clevel(clevel):
         raise ValueError("clevel can only be in the 0-9 range.")
 
 
+def _check_bytesobj(bytesobj):
+    if not isinstance(bytesobj, bytes):
+        raise TypeError(
+                "only string (2.x) or bytes (3.x) objects supported as input")
+
+
 def compress(bytesobj, typesize, clevel=9, shuffle=True):
     """compress(bytesobj, typesize[, clevel=9, shuffle=True]])
 
@@ -154,9 +160,7 @@ def compress(bytesobj, typesize, clevel=9, shuffle=True):
 
     """
 
-    if not isinstance(bytesobj, bytes):
-        raise TypeError(
-                "only string (2.x) or bytes (3.x) objects supported as input")
+    _check_bytesobj(bytesobj)
 
     if len(bytesobj) > _ext.BLOSC_MAX_BUFFERSIZE:
         raise ValueError("bytesobj length cannot be larger than %d bytes" %
@@ -278,9 +282,7 @@ def decompress(bytesobj):
 
     """
 
-    if not isinstance(bytesobj, bytes):
-        raise TypeError(
-                "only string (2.x) or bytes (3.x) objects supported as input")
+    _check_bytesobj(bytesobj)
 
     return _ext.decompress(bytesobj)
 
@@ -345,9 +347,7 @@ def decompress_ptr(bytesobj, address):
 
     """
 
-    if not isinstance(bytesobj, bytes):
-        raise TypeError(
-                "only string (2.x) or bytes (3.x) objects supported as input")
+    _check_bytesobj(bytesobj)
 
     if not isinstance(address, int_):
         raise TypeError( "only int or long objects are supported as address")
@@ -435,9 +435,7 @@ def unpack_array(packed_array):
 
     """
 
-    if not isinstance(packed_array, bytes):
-        raise TypeError(
-                "only string (2.x) or bytes (3.x) objects supported as input")
+    _check_bytesobj(packed_array)
 
     # First decompress the pickle
     pickled_array = _ext.decompress(packed_array)
