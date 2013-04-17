@@ -172,9 +172,7 @@ def compress(bytesobj, typesize, clevel=9, shuffle=True):
     """
 
     _check_bytesobj(bytesobj)
-
     _check_input_length('bytesobj', len(bytesobj))
-
     _check_clevel(clevel)
 
     return _ext.compress(bytesobj, typesize, clevel, shuffle)
@@ -244,13 +242,10 @@ def compress_ptr(address, items, typesize, clevel=9, shuffle=True):
     """
 
     _check_address(address)
-
     if items < 0:
         raise ValueError("items cannot be negative")
-
     length = items * typesize
     _check_input_length('length', length)
-
     _check_clevel(clevel)
 
     return _ext.compress_ptr(address, length, typesize, clevel, shuffle)
@@ -354,7 +349,6 @@ def decompress_ptr(bytesobj, address):
     """
 
     _check_bytesobj(bytesobj)
-
     _check_address(address)
 
     return _ext.decompress_ptr(bytesobj, address)
@@ -395,10 +389,8 @@ def pack_array(array, clevel=9, shuffle=True):
         # This does not quack like an ndarray
         raise TypeError(
             "only NumPy ndarrays objects supported as input")
-
     itemsize = array.itemsize
     _check_input_length('array size', array.size*itemsize)
-
     _check_clevel(clevel)
 
     # Use the fastest pickle available
