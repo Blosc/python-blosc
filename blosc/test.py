@@ -27,6 +27,11 @@ class TestCodec(unittest.TestCase):
 
         if py3:
             self.assertRaises(TypeError, blosc.compress, rs, typesize=1)
+
+        self.assertRaises(ValueError, blosc.compress, s, typesize=0)
+        self.assertRaises(ValueError, blosc.compress, s,
+                typesize=blosc.BLOSC_MAX_TYPESIZE+1)
+
         self.assertRaises(ValueError, blosc.compress, s, typesize=1, clevel=-1)
         self.assertRaises(ValueError, blosc.compress, s, typesize=1, clevel=10)
 
@@ -45,6 +50,11 @@ class TestCodec(unittest.TestCase):
         Array = ctypes.c_double * items
         array = Array(*data)
         address = ctypes.addressof(array)
+
+        self.assertRaises(ValueError, blosc.compress_ptr, address, items,
+                typesize=-1)
+        self.assertRaises(ValueError, blosc.compress_ptr, address, items,
+                typesize=blosc.BLOSC_MAX_TYPESIZE+1)
 
         self.assertRaises(ValueError, blosc.compress_ptr, address, items,
                 typesize=typesize, clevel=-1)
@@ -96,6 +106,9 @@ class TestCodec(unittest.TestCase):
         # if the value error is not raised, may run out of memory, depending on
         # the machine.
         self.assertRaises(ValueError, blosc.pack_array, ones)
+
+        self.assertRaises(ValueError, blosc.pack_array, one, clevel=-1)
+        self.assertRaises(ValueError, blosc.pack_array, one, clevel=10)
 
     def test_unpack_array_exceptions(self):
         self.assertRaises(TypeError, blosc.unpack_array, 1.0)
