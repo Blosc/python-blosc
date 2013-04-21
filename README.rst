@@ -83,7 +83,7 @@ may help to get setup the first time.
 
 2) Checkout the ``master`` branch as ``c-blosc``::
 
-    $ git co -b c-blosc c-blosc-origin/master
+    $ git checkout -b c-blosc c-blosc-origin/master
 
 3) Reset the ``c-blosc`` branch to the desired tag::
 
