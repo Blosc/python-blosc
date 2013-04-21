@@ -2,9 +2,9 @@
  Blosc: A blocking, shuffling and lossless compression library
 ===============================================================
 
-:Author: Francesc Alted i Abad
-:Contact: faltet@pytables.org
-:URL: http://blosc.pytables.org
+:Author: Francesc Alted
+:Contact: faltet@gmail.com
+:URL: http://www.blosc.org
 
 What is it?
 ===========
@@ -29,9 +29,9 @@ You can see some recent benchmarks about Blosc performance in [3]_
 Blosc is distributed using the MIT license, see LICENSES/BLOSC.txt for
 details.
 
-.. [1] http://blosc.pytables.org
+.. [1] http://www.blosc.org
 .. [2] http://www.pytables.org/docs/CISE-12-2-ScientificPro.pdf
-.. [3] http://blosc.pytables.org/trac/wiki/SyntheticBenchmarks
+.. [3] http://www.blosc.org/trac/wiki/SyntheticBenchmarks
 
 Meta-compression and other advantages over existing compressors
 ===============================================================
@@ -89,17 +89,23 @@ Blosc consists of the next files (in blosc/ directory)::
 Just add these files to your project in order to use Blosc.  For
 information on compression and decompression routines, see blosc.h.
 
-To compile using GCC (4.4 or higher recommended) on Unix::
+To compile using GCC (4.4 or higher recommended) on Unix:
 
-  gcc -O3 -msse2 -o myprog myprog.c blosc/*.c -lpthread
+.. code-block:: console
 
-Using Windows and MINGW::
+   $ gcc -O3 -msse2 -o myprog myprog.c blosc/*.c -lpthread
 
-  gcc -O3 -msse2 -o myprog myprog.c blosc\*.c
+Using Windows and MINGW:
 
-Using Windows and MSVC (2008 or higher recommended)::
+.. code-block:: console
 
-  cl /Ox /Femyprog.exe myprog.c blosc\*.c
+   $ gcc -O3 -msse2 -o myprog myprog.c blosc\*.c
+
+Using Windows and MSVC (2008 or higher recommended):
+
+.. code-block:: console
+
+  $ cl /Ox /Femyprog.exe myprog.c blosc\*.c
 
 A simple usage example is the benchmark in the bench/bench.c file.
 Also, another example for using Blosc as a generic HDF5 filter is in
@@ -112,7 +118,9 @@ platforms.
 Testing Blosc
 =============
 
-Go to the test/ directory and issue::
+Go to the test/ directory and issue:
+
+.. code-block:: console
 
   $ make test
 
@@ -125,6 +133,47 @@ http://blosc.pytables.org/trac/wiki/SyntheticBenchmarks
 where instructions on how to intensively test (and benchmark) Blosc
 are given.  If while running these tests you get some error, please
 report it back!
+
+Compiling the Blosc library with CMake
+======================================
+
+Blosc can also be built, tested and installed using CMake_.
+The following procedure describes the "out of source" build.
+
+Create the build directory and move into it:
+
+.. code-block:: console
+
+  $ mkdir build
+  $ cd build
+
+Configure Blosc in release mode (enable optimizations) specifying the
+installation directory:
+
+.. code-block:: console
+
+  $ cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=INSTALL_DIR \
+      PATH_TO_BLOSC_SOURCE_DIR
+
+Please note that configuration can also be performed using UI tools
+provided by CMake_ (ccmake or cmake-gui):
+
+.. code-block:: console
+
+  $ cmake-gui PATH_TO_BLOSC_SOURCE_DIR
+
+Build, test and install Blosc:
+
+.. code-block:: console
+
+  $ make
+  $ make test
+  $ make install 
+
+The static and dynamic version of the Blosc library, together with
+header files, will be installed into the specified INSTALL_DIR.
+
+.. _CMake: http://www.cmake.org
 
 Wrapper for Python
 ==================
@@ -151,11 +200,20 @@ Acknowledgments
 ===============
 
 I'd like to thank the PyTables community that have collaborated in the
-exhaustive testing of Blosc.  With an aggregate amount of more than
-300 TB of different datasets compressed *and* decompressed
-successfully, I can say that Blosc is pretty safe now and ready for
-production purposes.  Also, Valentin Haenel did a terrific work fixing
-typos and improving docs and the plotting script.
+exhaustive testing of Blosc.  With an aggregate amount of more than 300 TB of
+different datasets compressed *and* decompressed successfully, I can say that
+Blosc is pretty safe now and ready for production purposes.
+
+Other important cotributions:
+
+* Thibault North contributed a way to call BLosc from different threads in a
+  safe way.
+
+* The cmake support was a contribution of Thibault North, Antonio Valentino
+  and Mark Wiebe.
+
+* Valentin Haenel did a terrific work fixing typos and improving docs and the
+  plotting script.
 
 
 ----
