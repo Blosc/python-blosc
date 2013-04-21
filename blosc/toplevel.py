@@ -67,6 +67,11 @@ def set_nthreads(nthreads):
     out : int
         The previous number of used threads.
 
+    Raises
+    ------
+    ValueError
+        If nthreads is larger that the maximum number of threads blosc can use.
+
     Notes
     -----
     The number of threads for Blosc is the maximum number of cores
@@ -166,6 +171,15 @@ def compress(bytesobj, typesize, clevel=9, shuffle=True):
     out : str / bytes
         The compressed data in form of a Python str / bytes object.
 
+    Raises
+    ------
+    TypeError
+        If bytesobj is not of type bytes or string.
+    ValueError
+        If bytesobj is too long.
+        If typesize is not within the allowed range.
+        if clevel is not not within the allowed range.
+
     Examples
     --------
 
@@ -210,6 +224,15 @@ def compress_ptr(address, items, typesize, clevel=9, shuffle=True):
     -------
     out : str / bytes
         The compressed data in form of a Python str / bytes object.
+
+    Raises
+    ------
+    TypeError
+        If address is not of type int or long.
+    ValueError
+        If items * typesize is larger than the maximum allowed buffer size.
+        If typesize is not within the allowed range.
+        if clevel is not not within the allowed range.
 
     Notes
     -----
@@ -275,6 +298,11 @@ def decompress(bytesobj):
     out : str / bytes
         The decompressed data in form of a Python str / bytes object.
 
+    Raises
+    ------
+    TypeError
+        If bytesobj is not of type bytes or string.
+
     Examples
     --------
 
@@ -313,6 +341,12 @@ def decompress_ptr(bytesobj, address):
     -------
     nbytes : int
         the number of bytes written to the buffer
+
+    Raises
+    ------
+    TypeError
+        If bytesobj is not of type bytes or string.
+        If address is not of type int or long.
 
     Notes
     -----
@@ -385,6 +419,16 @@ def pack_array(array, clevel=9, shuffle=True):
     out : str / bytes
         The packed array in form of a Python str / bytes object.
 
+    Raises
+    ------
+    TypeError
+        If array does not quack like a numpy ndarray.
+    ValueError
+        If array.itemsize * array.size is larger than the maximum allowed
+            buffer size.
+        If typesize is not within the allowed range.
+        if clevel is not not within the allowed range.
+
     Examples
     --------
 
@@ -427,6 +471,11 @@ def unpack_array(packed_array):
     -------
     out : ndarray
         The decompressed data in form of a NumPy array.
+
+    Raises
+    ------
+    TypeError
+        If packed_array is not of type bytes or string.
 
     Examples
     --------
