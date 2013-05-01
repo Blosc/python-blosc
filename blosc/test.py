@@ -38,8 +38,9 @@ class TestCodec(unittest.TestCase):
         self.assertRaises(TypeError, blosc.compress, 1.0, 1)
         self.assertRaises(TypeError, blosc.compress, ['abc'], 1)
 
-        self.assertRaises(ValueError, blosc.compress,
-                'a' * (blosc.BLOSC_MAX_BUFFERSIZE+1), typesize=1)
+        # This is trying to create a buffer of 2 GB!
+        #self.assertRaises(ValueError, blosc.compress,
+        #        'a' * (blosc.BLOSC_MAX_BUFFERSIZE+1), typesize=1)
 
     def test_compress_ptr_exceptions(self):
         # Make sure we do have a valid address, to reduce the chance of a
@@ -98,17 +99,17 @@ class TestCodec(unittest.TestCase):
         self.assertRaises(TypeError, blosc.pack_array, 'abc')
         self.assertRaises(TypeError, blosc.pack_array, 1.0)
 
-        items = (blosc.BLOSC_MAX_BUFFERSIZE / 8) +1
-        one = numpy.ones(1)
+        items = (blosc.BLOSC_MAX_BUFFERSIZE / 8) + 1
+        one = numpy.ones(1, dtype=numpy.int64)
+        self.assertRaises(ValueError, blosc.pack_array, one, clevel=-1)
+        self.assertRaises(ValueError, blosc.pack_array, one, clevel=10)
+
         # use stride trick to make an array that looks like a huge one
         ones = numpy.lib.stride_tricks.as_strided(one, shape=(1,items),
                 strides=(8,0))[0]
-        # if the value error is not raised, may run out of memory, depending on
-        # the machine.
-        self.assertRaises(ValueError, blosc.pack_array, ones)
 
-        self.assertRaises(ValueError, blosc.pack_array, one, clevel=-1)
-        self.assertRaises(ValueError, blosc.pack_array, one, clevel=10)
+        # This should always raise an error
+        self.assertRaises(ValueError, blosc.pack_array, ones)
 
     def test_unpack_array_exceptions(self):
         self.assertRaises(TypeError, blosc.unpack_array, 1.0)
