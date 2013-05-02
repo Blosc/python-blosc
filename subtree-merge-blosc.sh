@@ -33,7 +33,7 @@ fi
 # fetch the contents of this tag
 git fetch $remote $blosc_tag_long || exit 1
 # subtree merge it
-git merge --squash -s subtree --no-commit FETCH_HEAD || exit 1
+git merge --squash -s subtree FETCH_HEAD || exit 1
 if git diff --staged --quiet ; then
     echo "nothing new to be committed"
     exit 1
