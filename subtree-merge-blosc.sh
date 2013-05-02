@@ -35,7 +35,7 @@ git fetch $remote $blosc_tag_long || exit 1
 # subtree merge it
 git merge --squash -s subtree --no-commit FETCH_HEAD || exit 1
 if git diff --staged --quiet ; then
-    echo "nothing new to be commited"
+    echo "nothing new to be committed"
     exit 1
 else
     # set a custom commit message
