@@ -76,18 +76,19 @@ We use the `subtree merge technique
 upstream Blosc sources. However, we do not use the technique exactly as listed
 in the Pro-Git book.
 
-The reason is quite technical: adding the Blosc Git-Repository as a remote will
+The reason is quite technical: adding the Blosc Git repository as a remote will
 also include the Blosc tags in your repository.  Since the Blosc and
 python-blosc repositories share the same tagging scheme, i.e. ``v.X.Y.Z``, we
 may have potentially conflicting tags. For example, one might want to tag
 python-blosc ``v1.2.1``, however, since Blosc already has a tag of this name,
 Git will deny you creating this. One could use the ``--no-tags`` option for
-``git fetch`` -- but alas, this would defeat the purpose. The tagged versions
-of Blosc are exactly the ones we are interested in for the subtree merge. So,
-as a compromise there is a shell script ``subtree-merge-blosc.sh`` which
-accepts a single tag as argument and does a plain ``git fetch``. This has the
-effect of fetching the commit that the requested tag points to, but not
-actually fetching the tag or any of the other tags.
+``git fetch`` when fetching Blosc -- but alas, this would defeat the purpose.
+The tagged versions of Blosc are exactly the ones we are interested in for the
+subtree merge! So, as a compromise there is a shell script
+``subtree-merge-blosc.sh``.  This accepts a single tag as argument and does a
+plain ``git fetch``. This has the effect of fetching the commit that the
+requested tag points to, but not actually fetching that tag or any of the other
+tags.
 
 It is not perfect and can probably be improved upon, but it does have some
 comments in the source, checks for some common errors and tries to abort as
