@@ -1,7 +1,7 @@
 /*********************************************************************
   Blosc - Blocked Suffling and Compression Library
 
-  Author: Francesc Alted (faltet@pytables.org)
+  Author: Francesc Alted <faltet@blosc.org>
   Creation date: 2009-05-20
 
   See LICENSES/BLOSC.txt for details about copyright and rights to use.
@@ -440,7 +440,7 @@ static int serial_blosc(void)
 /* Threaded version for compression/decompression */
 static int parallel_blosc(void)
 {
-  int32_t rc;
+  int rc;
 
   /* Check whether we need to restart threads */
   if (!init_threads_done || pid != getpid()) {
@@ -520,7 +520,8 @@ static int do_job(void)
 
   /* Initialize/reset temporaries if needed */
   if (!init_temps_done) {
-    int ret = create_temporaries();
+    int ret;
+    ret = create_temporaries();
     if (ret < 0) {
       return -1;
     }
@@ -1005,7 +1006,7 @@ static int t_blosc(void *tids)
   uint8_t *dest;
   uint8_t *tmp;
   uint8_t *tmp2;
-  int32_t rc;
+  int rc;
 
   while (1) {
 
@@ -1211,6 +1212,9 @@ static int init_threads(void)
 int blosc_set_nthreads(int nthreads_new) 
 {
   int ret;
+
+  /* Init global lock */
+  pthread_mutex_init(&global_comp_mutex, NULL);   
 
   /* Take global lock  */
   pthread_mutex_lock(&global_comp_mutex);
