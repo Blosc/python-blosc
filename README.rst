@@ -73,41 +73,44 @@ Merging Blosc sources from upstream
 
 We use the `subtree merge technique
 <http://git-scm.com/book/en/Git-Tools-Subtree-Merging>`_ to maintain the
-upstream Blosc sources. In case you need to synchronise, the following recipe
-may help to get setup the first time.
+upstream Blosc sources. However, we do not use the technique exactly as listed
+in the Pro-Git book.
 
-1) Add the upstream Blosc sources as an additional remote called
-   ``c-blosc-origin``::
+The reason is quite technical: adding the Blosc Git repository as a remote will
+also include the Blosc tags in your repository.  Since the Blosc and
+python-blosc repositories share the same tagging scheme, i.e. ``v.X.Y.Z``, we
+may have potentially conflicting tags. For example, one might want to tag
+python-blosc ``v1.2.1``, however, since Blosc already has a tag of this name,
+Git will deny you creating this. One could use the ``--no-tags`` option for
+``git fetch`` when fetching Blosc -- but alas, this would defeat the purpose.
+The tagged versions of Blosc are exactly the ones we are interested in for the
+subtree merge! So, as a compromise there is a shell script
+``subtree-merge-blosc.sh``.  This accepts a single tag as argument and does a
+plain ``git fetch``. This has the effect of fetching the commit that the
+requested tag points to, but not actually fetching that tag or any of the other
+tags.
 
-    $ git remote add -f c-blosc-origin git://github.com/FrancescAlted/blosc.git
+It is not perfect and can probably be improved upon, but it does have some
+comments in the source, checks for some common errors and tries to abort as
+early as possible in case things go wrong. A sample invocation is shown below:
 
-2) Checkout the ``master`` branch as ``c-blosc``::
+.. code-block:: console
 
-    $ git checkout -b c-blosc c-blosc-origin/master
+    $ ./subtree-merge-blosc.sh v1.2.1
+    found remote tag: '4eda92c4dcba18849d482f5014b374d8b4b4cdfc	refs/tags/v1.2.1'
+    warning: no common commits
+    remote: Counting objects: 1558, done.
+    remote: Compressing objects: 100% (606/606), done.
+    remote: Total 1558 (delta 958), reused 1528 (delta 932)
+    Receiving objects: 100% (1558/1558), 468.67 KiB | 304 KiB/s, done.
+    Resolving deltas: 100% (958/958), done.
+    From git://github.com/FrancescAlted/blosc
+     + tag               v1.2.1     -> FETCH_HEAD
+    Squash commit -- not updating HEAD
+    Automatic merge went well; stopped before committing as requested
+    [subtree-merge-blosc.sh b7a7378] subtree merge blosc v1.2.1
+     16 files changed, 60 insertions(+), 43 deletions(-)
 
-3) Reset the ``c-blosc`` branch to the desired tag::
-
-    $ git reset --hard vX.Y.Z
-
-4) Checkout the branch you want to subtree merge to::
-
-    $ git checkout master
-
-5) Actually perform the subtree merge::
-
-    $ git merge --squash -s subtree --no-commit c-blosc
-
-6) Finalize the subtree merge with a commit::
-
-    $ git commit -m "subtree merge blosc vX.Y.Z"
-
-If you alread have the ``c-blosc-origin`` remote set up and the ``c-blosc``
-branch created, you can just update it::
-
-    $ git checkout c-blosc
-    $ git pull
-
-And then proceed with step 3 above.
 
 Mailing list
 ============
