@@ -37,7 +37,8 @@ c = blosc.pack_array(in_)
 out = blosc.unpack_array(c)
 assert((in_ == out).all())
 toc = time.time()
-print "Time for pack_array/unpack_array: %.3f s" % (toc-tic,)
+print "Time for pack_array/unpack_array:     %.3f s." % (toc-tic,),
+print "\tCompr ratio: %.2f" % (in_.size*in_.dtype.itemsize*1. / len(c))
 
 tic = time.time()
 c = blosc.compress_ptr(in_.__array_interface__['data'][0],
@@ -46,5 +47,6 @@ out = numpy.empty(in_.size, dtype=in_.dtype)
 blosc.decompress_ptr(c, out.__array_interface__['data'][0])
 assert((in_ == out).all())
 toc = time.time()
-print "Time for compress_ptr/decompress_ptr: %.3f s" % (toc-tic,)
+print "Time for compress_ptr/decompress_ptr: %.3f s." % (toc-tic,),
+print "\tCompr ratio: %.2f" % (in_.size*in_.dtype.itemsize*1. / len(c))
 
