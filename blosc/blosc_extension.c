@@ -122,7 +122,7 @@ PyBlosc_compress(PyObject *self, PyObject *args)
     int clevel, shuffle;
 
     /* require Python string object, typesize, clevel and shuffle agrs */
-    if (!PyArg_ParseTuple(args, "s#iii:compress", &input, &nbytes,
+    if (!PyArg_ParseTuple(args, "s#nii:compress", &input, &nbytes,
                           &typesize, &clevel, &shuffle))
       return NULL;
     return compress_helper(input, nbytes,
