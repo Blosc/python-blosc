@@ -87,6 +87,11 @@ ncores = detect_number_of_cores()
 set_nthreads(ncores)
 blosclib_version = "%s (%s)" % (BLOSC_VERSION_STRING, BLOSC_VERSION_DATE)
 
+# Simple print version
+def print_version():
+    print("python-blosc: '%s', "   % __version__ +
+          "blosc: '%s' "        % blosclib_version)
+
 # Tests
 from blosc.test import run as test
 
