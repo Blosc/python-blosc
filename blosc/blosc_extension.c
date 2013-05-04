@@ -94,15 +94,12 @@ PyBlosc_compress_ptr(PyObject *self, PyObject *args)
     PyObject * input;
     void * input_ptr;
     size_t nbytes, typesize;
-    Py_ssize_t nbytes_;
     int clevel, shuffle;
 
     /* require an address, buffer length, typesize, clevel and shuffle agrs */
-    if (!PyArg_ParseTuple(args, "Oniii:compress", &input, &nbytes_,
+    if (!PyArg_ParseTuple(args, "Onnii:compress", &input, &nbytes,
                           &typesize, &clevel, &shuffle))
       return NULL;
-    /* Now we can use a cast safely here */
-    nbytes = (size_t)nbytes_;
     /*  convert to void pointer safely */
     input_ptr = PyLong_AsVoidPtr(input);
     if (input_ptr == NULL)
@@ -183,8 +180,7 @@ PyBlosc_decompress_ptr(PyObject *self, PyObject *args)
 {
     PyObject * pointer, * return_int;
     void * input, * output;
-    Py_ssize_t cbytes;
-    size_t nbytes;
+    size_t cbytes, nbytes;
 
     /* require a compressed string and a pointer  */
     if (!PyArg_ParseTuple(args, "s#O:decompress", &input, &cbytes, &pointer))
@@ -196,7 +192,7 @@ PyBlosc_decompress_ptr(PyObject *self, PyObject *args)
       return NULL;
 
     /*  fetch the uncompressed size into nbytes */
-    if (!get_nbytes(input, (size_t)cbytes, &nbytes))
+    if (!get_nbytes(input, cbytes, &nbytes))
       return NULL;
 
     /* do decompression */
@@ -223,7 +219,7 @@ PyBlosc_decompress(PyObject *self, PyObject *args)
     void *input, *output;
     size_t nbytes, cbytes;
 
-    if (!PyArg_ParseTuple(args, "s#:decompress", &input, (Py_ssize_t*)&cbytes))
+    if (!PyArg_ParseTuple(args, "s#:decompress", &input, &cbytes))
       return NULL;
 
     /*  fetch the uncompressed size into nbytes */
