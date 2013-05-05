@@ -14,7 +14,7 @@ except ImportError:
     import pickle
 
 from blosc import blosc_extension as _ext
-import blosc  # needed for running doctests from nosetests
+import blosc
 
 if sys.version_info[0] < 3:
     int_ = (int, long)
@@ -509,14 +509,29 @@ def load_tests(loader, tests, pattern):
     return tests
 
 
+def print_versions():
+    """Print all the versions of software that python-blosc relies on."""
+    import platform
+    print("-=" * 38)
+    print("python-blosc version: %s" % blosc.__version__)
+    print("Blosc version: %s" % blosc.blosclib_version)
+    print("Python version: %s" % sys.version)
+    (sysname, nodename, release, version, machine, processor) = platform.uname()
+    print("Platform: %s-%s-%s (%s)" % (sysname, release, machine, version))
+    if sysname == "Linux":
+        print("Linux dist: %s" % "-".join(platform.linux_distribution()[:-1]))
+    if not processor:
+	processor = "not recognized"
+    print("Processor: %s" % processor)
+    print("Byte-ordering: %s" % sys.byteorder)
+    print("Detected cores: %s" % blosc.detect_number_of_cores())
+    print("-=" * 38)
+
+
 if __name__ == '__main__':
     # test myself
     import doctest
-    print("Testing python-blosc version: %s [C-Blosc: %s]" %
-          (blosc.__version__, blosc.blosclib_version))
+    print_versions()
     nfail, ntests = doctest.testmod()
     if nfail == 0:
         print("All %d tests passed successfuly!" % ntests)
-
-    # detect_ncores cannot be safely tested
-    #print("ncores-->", detect_number_of_cores())

@@ -116,7 +116,9 @@ class TestCodec(unittest.TestCase):
 
 
 def run():
+    import blosc
     import blosc.toplevel
+    blosc.print_versions()
     suite = unittest.TestLoader().loadTestsFromTestCase(TestCodec)
     # If in the future we split this test file in several, the auto-discover
     # might be interesting

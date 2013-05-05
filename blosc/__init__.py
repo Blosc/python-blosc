@@ -70,6 +70,7 @@ from blosc.toplevel import (
     detect_number_of_cores,
     free_resources,
     set_nthreads,
+    print_versions,
     )
 
 # Blosc symbols that we want to export
