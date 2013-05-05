@@ -11,7 +11,7 @@ blosc: a Python package that wraps the Blosc compressor
 =======================================================
 
 The functions in this package allow compression and decompression
-using the Blosc library (http://blosc.pytables.org).
+using the Blosc library (http://blosc.org).
 
 Public variables
 ----------------
@@ -52,6 +52,9 @@ free_resources()::
 
 set_nthreads(nthreads)::
     Set the number of threads to be used during Blosc operation.
+
+print_versions()::
+    Print most relevant versions useful for reporting problems.
 
 test()::
     Run the test suite.

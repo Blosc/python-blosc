@@ -21,5 +21,5 @@ First level variables
 Top level functions
 ===================
 
-.. automodule:: blosc
+.. automodule:: blosc.toplevel
    :members:
