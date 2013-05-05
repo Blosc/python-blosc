@@ -521,7 +521,7 @@ def print_versions():
     if sysname == "Linux":
         print("Linux dist: %s" % "-".join(platform.linux_distribution()[:-1]))
     if not processor:
-	processor = "not recognized"
+        processor = "not recognized"
     print("Processor: %s" % processor)
     print("Byte-ordering: %s" % sys.byteorder)
     print("Detected cores: %s" % blosc.detect_number_of_cores())
