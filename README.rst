@@ -1,14 +1,15 @@
 blosc: a Python package that wraps the Blosc compressor
 =======================================================
 
-:Author: Francesc Alted i Abad
-:Contact: faltet@pytables.org
-:URL: http://blosc.pytables.org
+:Author: Francesc Alted
+:Authonr: Valentin Hänel
+:Contact: faltet@blosc.org
+:URL: http://blosc.org
 
 What it is
 ==========
 
-Blosc (http://blosc.pytables.org) is a high performance compressor
+Blosc (http://blosc.org) is a high performance compressor
 optimized for binary data.  It has been designed to transmit data to
 the processor cache faster than the traditional, non-compressed,
 direct memory fetch approach via a memcpy() OS call.
@@ -67,6 +68,9 @@ and ask for more docstrings in the referenced functions.
 Also, some examples are available on python-blosc wiki page:
 
 http://github.com/FrancescAlted/python-blosc/wiki
+
+A Sphinx based documentation is in the works.  Stay tuned.
+
 
 Merging Blosc sources from upstream
 ===================================

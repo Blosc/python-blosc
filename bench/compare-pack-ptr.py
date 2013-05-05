@@ -10,7 +10,7 @@ However, it uses pickle/unpickle internally, so it has to perform
 expensive in-memory copies.
 
 On the other hand, the `compress_ptr` / `uncompress_ptr` method does
-not need to do internal copies, but you have to provide a container
+not need to make internal copies, but you have to provide a container
 when doing the de-serialization.  In addition, this method is much
 closer to C Blosc, so if you are not careful enough specifying the
 length or the itemsize properly, it is very easy ending with a

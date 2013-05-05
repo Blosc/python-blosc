@@ -519,7 +519,7 @@ def print_versions():
     (sysname, nodename, release, version, machine, processor) = platform.uname()
     print("Platform: %s-%s-%s (%s)" % (sysname, release, machine, version))
     if sysname == "Linux":
-        print("Linux dist: %s" % "-".join(platform.linux_distribution()[:-1]))
+        print("Linux dist: %s" % " ".join(platform.linux_distribution()[:-1]))
     if not processor:
         processor = "not recognized"
     print("Processor: %s" % processor)
