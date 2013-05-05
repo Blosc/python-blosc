@@ -2,13 +2,14 @@
  Release notes for python-blosc 1.0.7
 ======================================
 
-:Author: Francesc Alted i Abad
-:Contact: faltet@pytables.org
-:URL: http://blosc.pytables.org
+:Author: Francesc Alted
+:Author: Valentin Hänel
+:Contact: faltet@blosc.org
+:URL: http://blosc.org
 
 
-Changes from 1.0.6 to 1.0.7
-===========================
+Changes from 1.0.6 to 1.1
+=========================
 
   #XXX version-specific blurb XXX#
 

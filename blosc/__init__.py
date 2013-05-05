@@ -2,7 +2,7 @@
 #
 #       License: MIT
 #       Created: September 22, 2010
-#       Author:  Francesc Alted - faltet@pytables.org
+#       Author:  Francesc Alted - faltet@blosc.org
 #
 ########################################################################
 

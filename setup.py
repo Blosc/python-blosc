@@ -2,7 +2,7 @@
 #
 #       License: MIT
 #       Created: September 22, 2010
-#       Author:  Francesc Alted - faltet@pytables.org
+#       Author:  Francesc Alted - faltet@blosc.org
 #
 ########################################################################
 
@@ -88,10 +88,10 @@ Blosc is a high performance compressor optimized for binary data.
 
 """,
       classifiers = filter(None, classifiers.split("\n")),
-      author = 'Francesc Alted',
-      author_email = 'faltet@pytables.org',
+      author = 'Francesc Alted, Valentin Hänel',
+      author_email = 'faltet@blosc.org',
       maintainer = 'Francesc Alted',
-      maintainer_email = 'faltet@pytables.org',
+      maintainer_email = 'faltet@blosc.org',
       url = 'http://github.com/FrancescAlted/python-blosc',
       license = 'http://www.opensource.org/licenses/mit-license.php',
       # It is better to upload manually to PyPI
