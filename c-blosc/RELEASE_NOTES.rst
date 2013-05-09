@@ -1,13 +1,24 @@
 ===============================
- Release notes for Blosc 1.2.1
+ Release notes for Blosc 1.2.2
 ===============================
 
 :Author: Francesc Alted
-:Contact: faltet@blosc.org
-:URL: http://www.blosc.org
+:Contact: francesc@continuum.io
+:URL: http://blosc.pydata.org
 
-Changes from 1.2 to 1.2.1
-=========================
+
+ Changes from 1.2.1 to 1.2.2
+============================
+
+- All important warnings removed for all tested platforms.  This will
+  allow less intrusiveness compilation experiences with applications
+  including Blosc source code.
+
+- The new web site has been set to: http://blosc.pydata.org
+
+
+ Changes from 1.2 to 1.2.1
+==========================
 
 - Fixed a problem with global lock not being initialized.  This
   affected mostly to Windows platforms.  Thanks to Christoph
