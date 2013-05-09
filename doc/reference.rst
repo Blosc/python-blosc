@@ -18,8 +18,16 @@ First level variables
     The number of cores detected.
 
 
-Top level functions
-===================
+Public functions
+================
 
-.. automodule:: blosc.toplevel
-   :members:
+.. automodule:: blosc
+   :members: compress, compress_ptr, decompress, decompress_ptr, pack_array, unpack_array
+
+
+Utilities
+=========
+
+.. automodule:: blosc
+   :members: detect_number_of_cores, free_resources, set_nthreads, print_versions, test
+
