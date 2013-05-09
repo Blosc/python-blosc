@@ -2,7 +2,7 @@ blosc: a Python package that wraps the Blosc compressor
 =======================================================
 
 :Author: Francesc Alted
-:Authonr: Valentin Hänel
+:Author: Valentin Hänel
 :Contact: faltet@blosc.org
 :URL: http://blosc.org
 
