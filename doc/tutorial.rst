@@ -91,7 +91,7 @@ are they in action::
 As you see, these are really low level functions because you should pass
 actual pointers where the data is, as well as the size and itemsize (for
 compression).  Needless to say, it is very easy to cause a segfault by passing
-incorrect paramaters to the functions (wrong pointer or wrong size).
+incorrect parameters to the functions (wrong pointer or wrong size).
 
 On the other hand, and contrarily to the `pack_array` / `unpack_array` method,
 the `compress_ptr` / `uncompress_ptr` functions do not need to make internal
