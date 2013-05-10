@@ -21,7 +21,7 @@ Let's start creating a NumPy array with 80 MB full of data::
   >>> a = np.linspace(0, 100, 1e7)
   >>> bytes_array = a.tostring()  # get a bytes stream
 
-and let's compare Blosc operation with zlib::
+and let's compare Blosc operation with `zlib`::
 
   >>> import zlib
   >>> %time zpacked = zlib.compress(bytes_array)
