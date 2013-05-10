@@ -36,24 +36,18 @@ VERSION = open('VERSION').read().strip()
 # Create the version.py file
 open('blosc/version.py', 'w').write('__version__ = "%s"\n' % VERSION)
 
-# c-blosc sources and header
-c_blosc_source_dir = os.path.join('c-blosc', 'blosc')
-c_blosc_sources = [os.path.join(c_blosc_source_dir, source)
-                   for source in ('blosc.c', 'blosclz.c', 'shuffle.c')]
-c_blosc_headers = [os.path.join(c_blosc_source_dir, header)
-                   for header in ('blosc.h', 'blosclz.h', 'shuffle.h')]
-
 # Global variables
 CFLAGS = os.environ.get('CFLAGS', '').split()
 LFLAGS = os.environ.get('LFLAGS', '').split()
-lib_dirs = []
-libs = []
-inc_dirs = [c_blosc_source_dir]
-optional_libs = []
+# Allow setting the Blosc dir if installed in the system
+BLOSC_DIR = os.environ.get('BLOSC_DIR', '')
 
-# Handle --lflags=[FLAGS] --cflags=[FLAGS]
+# Handle --blosc=[PATH] --lflags=[FLAGS] --cflags=[FLAGS]
 args = sys.argv[:]
 for arg in args:
+    if arg.find('--blosc=') == 0:
+        BLOSC_DIR = os.path.expanduser(arg.split('=')[1])
+        sys.argv.remove(arg)
     if arg.find('--lflags=') == 0:
         LFLAGS = arg.split('=')[1].split()
         sys.argv.remove(arg)
@@ -65,12 +59,29 @@ for arg in args:
 if os.name == 'posix':
     CFLAGS.append("-msse2")
 
+lib_dirs = []
+libs = []
 # Add some macros here for debugging purposes, if needed
 def_macros = []
 
+# c-blosc sources and header
+if BLOSC_DIR == '':
+    c_blosc_source_dir = os.path.join('c-blosc', 'blosc')
+    c_blosc_sources = [os.path.join(c_blosc_source_dir, source)
+                       for source in ('blosc.c', 'blosclz.c', 'shuffle.c')]
+    c_blosc_headers = [os.path.join(c_blosc_source_dir, header)
+                       for header in ('blosc.h', 'blosclz.h', 'shuffle.h')]
+    inc_dirs = [c_blosc_source_dir]
+else:
+    lib_dirs = [os.path.join(BLOSC_DIR, 'lib')]
+    libs = ['blosc']
+    inc_dirs = [os.path.join(BLOSC_DIR, 'include')]
+    c_blosc_sources = []
+    c_blosc_headers = ['blosc.h']
+
 
 classifiers = """\
-Development Status :: 4 - Beta
+Development Status :: 5 - Production
 Intended Audience :: Developers
 Intended Audience :: Information Technology
 Intended Audience :: Science/Research
@@ -80,6 +91,7 @@ Topic :: Software Development :: Libraries :: Python Modules
 Operating System :: Microsoft :: Windows
 Operating System :: Unix
 """
+
 setup(name = "blosc",
       version = VERSION,
       description = 'Blosc data compressor',

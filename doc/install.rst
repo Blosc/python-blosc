@@ -7,6 +7,10 @@ library (bar Python itself of course). Of course, if you are going to install
 from sources, you are going to need a C compiler (GCC, clang and MSVC
 2008/2010/2012 have been tested).
 
+Also, there are situations where you may want to link with an already existing
+Blosc library in your system.  You can do that too.
+
+This package supports Python 2.6, 2.7 and 3.1, 3.2 and 3.3 or higher versions.
 
 Installing from PyPI repository
 ===============================
@@ -20,14 +24,49 @@ or::
   $ pip install -U blosc
 
 
-Building from sources
-=====================
+There are diferent ways to compile python-blosc, depending if you want
+to link with an already installed Blosc library or not.
 
-Assuming that you have a C compiler installed, do::
+Building
+========
+
+There are diferent ways to compile python-blosc, depending if you want
+to link with an already installed Blosc library or not.
+
+Compiling without an installed Blosc library
+--------------------------------------------
+
+python-blosc come with the Blosc sources with it so, assuming that you
+have a C compiler installed, do::
 
     $ python setup.py build_ext --inplace
 
-This package supports Python 2.6, 2.7, 3.1, 3.2 and 3.3 or higher versions.
+That's all.  You can proceed with testing section now.
+
+Compiling with an installed Blosc library
+-----------------------------------------
+
+In case you have Blosc installed as an external library (and disregard
+the included Blosc sources) you can link with it in a couple of ways.
+
+Using an environment variable::
+
+    $ BLOSC_DIR=/usr/local     (or "set BLOSC_DIR=\blosc" on Win)
+    $ export BLOSC_DIR         (not needed on Win)
+    $ python setup.py build_ext --inplace
+
+Using a flag::
+
+    $ python setup.py build_ext --inplace --blosc=/usr/local
+
+Generating Sphinx documentation
+-------------------------------
+
+In case you want to generate the documentation locally, you will need to
+have the `Sphinx` documentation system, as well as the `numpydoc`
+extension, installed.  Then go down to `doc/` directory and do::
+
+    $ make html|latex|latexpdf
 
 Testing
 =======
