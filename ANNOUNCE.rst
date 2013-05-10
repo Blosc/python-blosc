@@ -16,6 +16,13 @@ Blosc works well for compressing numerical arrays that contains data
 with relatively low entropy, like sparse data, time series, grids with
 regular-spaced values, etc.
 
+There is also a handy command line for Blosc called Bloscpack
+(https://github.com/esc/bloscpack) that allows you to compress large
+binary datafiles on-disk.  Although the format for Bloscpack has not
+stabilized yet, it allows you to effectively use Blosc from you
+favorite shell.
+
+
 What is new?
 ============
 
