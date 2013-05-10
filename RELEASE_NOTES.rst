@@ -4,7 +4,7 @@
 
 :Author: Francesc Alted
 :Author: Valentin Hänel
-:Contact: faltet@blosc.org
+:Contact: faltet@gmail.com
 :URL: http://blosc.org
 
 

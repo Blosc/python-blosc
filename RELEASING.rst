@@ -3,7 +3,7 @@ Releasing python-blosc
 =======================
 
 :Author: Francesc Alted
-:Contact: faltet@blosc.org
+:Contact: faltet@gmail.com
 :Date: 2012-09-16
 
 

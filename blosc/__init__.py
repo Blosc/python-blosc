@@ -2,7 +2,7 @@
 #
 #       License: MIT
 #       Created: September 22, 2010
-#       Author:  Francesc Alted - faltet@blosc.org
+#       Author:  Francesc Alted - faltet@gmail.com
 #
 ########################################################################
 
