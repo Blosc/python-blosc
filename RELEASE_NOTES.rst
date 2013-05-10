@@ -1,5 +1,5 @@
 ======================================
- Release notes for python-blosc 1.0.7
+ Release notes for python-blosc 1.1
 ======================================
 
 :Author: Francesc Alted
@@ -11,7 +11,17 @@
 Changes from 1.0.6 to 1.1
 =========================
 
-  #XXX version-specific blurb XXX#
+- Added new `compress_ptr` and `decompress_ptr` functions that allows to
+  compress and decompress from/to a data pointer.  These are low level
+  calls and user must make sure that the pointer data area is safe.
+
+- Many checks on types and ranges of values have been added.  Most of
+  the calls are now much safer when passed the wrong values.
+
+- Docstrings are much improved. Also, Sphinx-based docs are available
+  now.
+
+Many thanks to Valentin Hänel for his excellent work on this release.
 
 
 Changes from 1.0.5 to 1.0.6

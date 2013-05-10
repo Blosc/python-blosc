@@ -9,10 +9,10 @@ blosc: a Python package that wraps the Blosc compressor
 What it is
 ==========
 
-Blosc (http://blosc.org) is a high performance compressor
-optimized for binary data.  It has been designed to transmit data to
-the processor cache faster than the traditional, non-compressed,
-direct memory fetch approach via a memcpy() OS call.
+Blosc (http://blosc.org) is a high performance compressor optimized for
+binary data.  It has been designed to transmit data to the processor
+cache faster than the traditional, non-compressed, direct memory fetch
+approach via a memcpy() OS call.
 
 Blosc works well for compressing numerical arrays that contains data
 with relatively low entropy, like sparse data, time series, grids with
@@ -39,8 +39,8 @@ running the doctests in ``blosc/test.py``::
     $ export PYTHONPATH=.  (not needed on Win)
     $ python blosc/test.py  (add -v for verbose mode)
 
-Or alternatively, you can use the third-party ``nosetests`` script to run both
-the doctests and the test suite::
+Or alternatively, you can use the third-party ``nosetests`` script to
+run both the doctests and the test suite::
 
     $ nosetests --with-doctest (add -v for verbose mode)
 
@@ -77,26 +77,28 @@ Merging Blosc sources from upstream
 
 We use the `subtree merge technique
 <http://git-scm.com/book/en/Git-Tools-Subtree-Merging>`_ to maintain the
-upstream Blosc sources. However, we do not use the technique exactly as listed
-in the Pro-Git book.
+upstream Blosc sources. However, we do not use the technique exactly as
+listed in the Pro-Git book.
 
-The reason is quite technical: adding the Blosc Git repository as a remote will
-also include the Blosc tags in your repository.  Since the Blosc and
-python-blosc repositories share the same tagging scheme, i.e. ``v.X.Y.Z``, we
-may have potentially conflicting tags. For example, one might want to tag
-python-blosc ``v1.2.1``, however, since Blosc already has a tag of this name,
-Git will deny you creating this. One could use the ``--no-tags`` option for
-``git fetch`` when fetching Blosc -- but alas, this would defeat the purpose.
-The tagged versions of Blosc are exactly the ones we are interested in for the
-subtree merge! So, as a compromise there is a shell script
-``subtree-merge-blosc.sh``.  This accepts a single tag as argument and does a
-plain ``git fetch``. This has the effect of fetching the commit that the
-requested tag points to, but not actually fetching that tag or any of the other
+The reason is quite technical: adding the Blosc Git repository as a
+remote will also include the Blosc tags in your repository.  Since the
+Blosc and python-blosc repositories share the same tagging scheme,
+i.e. ``v.X.Y.Z``, we may have potentially conflicting tags. For example,
+one might want to tag python-blosc ``v1.2.1``, however, since Blosc
+already has a tag of this name, Git will deny you creating this. One
+could use the ``--no-tags`` option for ``git fetch`` when fetching Blosc
+-- but alas, this would defeat the purpose.  The tagged versions of
+Blosc are exactly the ones we are interested in for the subtree merge!
+So, as a compromise there is a shell script ``subtree-merge-blosc.sh``.
+This accepts a single tag as argument and does a plain ``git
+fetch``. This has the effect of fetching the commit that the requested
+tag points to, but not actually fetching that tag or any of the other
 tags.
 
-It is not perfect and can probably be improved upon, but it does have some
-comments in the source, checks for some common errors and tries to abort as
-early as possible in case things go wrong. A sample invocation is shown below:
+It is not perfect and can probably be improved upon, but it does have
+some comments in the source, checks for some common errors and tries to
+abort as early as possible in case things go wrong. A sample invocation
+is shown below:
 
 .. code-block:: console
 
@@ -127,3 +129,10 @@ http://groups.google.es/group/blosc
 ----
 
   **Enjoy data!**
+
+
+.. Local Variables:
+.. mode: rst
+.. coding: utf-8
+.. fill-column: 72
+.. End:

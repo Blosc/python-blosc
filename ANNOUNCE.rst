@@ -1,5 +1,5 @@
 =============================
-Announcing python-blosc 1.0.7
+Announcing python-blosc 1.1
 =============================
 
 What is it?
@@ -19,7 +19,17 @@ regular-spaced values, etc.
 What is new?
 ============
 
-  #XXX version-specific blurb XXX#
+- Added new `compress_ptr` and `decompress_ptr` functions that allows to
+  compress and decompress from/to a data pointer.  These are low level
+  calls and user must make sure that the pointer data area is safe.
+
+- Many checks on types and ranges of values have been added.  Most of
+  the calls are now much safer when passed the wrong values.
+
+- Docstrings are much improved. Also, Sphinx-based docs are available
+  now.
+
+Many thanks to Valentin Hänel for his excellent work on this release.
 
 For more info, you can see the release notes in:
 
@@ -48,3 +58,10 @@ There is an official mailing list for Blosc at:
 
 blosc@googlegroups.com
 http://groups.google.es/group/blosc
+
+
+.. Local Variables:
+.. mode: rst
+.. coding: utf-8
+.. fill-column: 72
+.. End:
