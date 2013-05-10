@@ -29,6 +29,12 @@ Assuming that you have a C compiler installed, do::
 
 This package supports Python 2.6, 2.7 and 3.1 or higher versions.
 
+In case you want to generate the documentation, you will need to have
+the `Sphinx` documentation system and the `numpydoc` extension
+installed.  Then go down to `doc/` directory and do::
+
+    $ make html|latex|latexpdf
+
 Testing
 =======
 
