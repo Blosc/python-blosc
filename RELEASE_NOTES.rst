@@ -15,6 +15,10 @@ Changes from 1.0.6 to 1.1
   compress and decompress from/to a data pointer.  These are low level
   calls and user must make sure that the pointer data area is safe.
 
+- Since Blosc (the C library) already supports to be installed as an
+  standalone library (via cmake), it is also possible to link
+  python-blosc against a possible system-wide Blosc library.
+
 - Many checks on types and ranges of values have been added.  Most of
   the calls are now much safer when passed the wrong values.
 
