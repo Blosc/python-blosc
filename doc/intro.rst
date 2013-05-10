@@ -22,7 +22,7 @@ Bloscpack
 There is also a handy command line for python-blosc called Bloscpack
 (https://github.com/esc/bloscpack) that allows you to compress large
 binary datafiles on-disk.  Although the format for Bloscpack has not
-stabilized yet, it allows you to effectively use Blosc from you
+stabilized yet, it allows you to effectively use Blosc from your
 favorite shell.
 
 

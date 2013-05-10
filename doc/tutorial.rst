@@ -95,8 +95,9 @@ incorrect parameters to the functions (wrong pointer or wrong size).
 
 On the other hand, and contrarily to the `pack_array` / `unpack_array` method,
 the `compress_ptr` / `uncompress_ptr` functions do not need to make internal
-copies, but you have to provide a container when doing the de-serialization.
+copies of the data buffers, so they are extremely fast (as much as the C-Blosc
+library can be), but you have to provide a container when doing the
+de-serialization.
 
-It is up to you to decide among the convenience of `pack_array` /
+It is up to you to decide between the convenience of `pack_array` /
 `unpack_array` functions or the speed of `compress_ptr` / `uncompress_ptr`.
-

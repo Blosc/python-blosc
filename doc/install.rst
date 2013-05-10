@@ -28,9 +28,6 @@ or:
   $ pip install -U blosc
 
 
-There are different ways to compile python-blosc, depending if you want
-to link with an already installed Blosc library or not.
-
 Building
 ========
 
