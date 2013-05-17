@@ -57,6 +57,7 @@ int blosc_set_nthreads_(int);
 static int32_t init_temps_done = 0;    /* temp for compr/decompr initialized? */
 static int32_t force_blocksize = 0;    /* force the use of a blocksize? */
 static int pid = 0;                    /* the PID for this process */
+static int init_lib = 0;               /* is library initalized? */
 
 /* Global variables for threads */
 static int32_t nthreads = 1;            /* number of desired threads in pool */
@@ -1209,12 +1210,19 @@ static int init_threads(void)
   return(0);
 }
 
+void blosc_init(void) {
+  /* Init global lock  */
+  pthread_mutex_init(&global_comp_mutex, NULL);
+  init_lib = 1;
+}
+
 int blosc_set_nthreads(int nthreads_new) 
 {
   int ret;
 
-  /* Init global lock */
-  pthread_mutex_init(&global_comp_mutex, NULL);   
+  /* Check if should initialize (implementing previous 1.2.3 behaviour,
+     where calling blosc_set_nthreads was enough) */
+  if (!init_lib) blosc_init();
 
   /* Take global lock  */
   pthread_mutex_lock(&global_comp_mutex);
@@ -1332,6 +1340,12 @@ int blosc_free_resources(void)
 
 }
 
+void blosc_destroy(void) {
+  /* Free the resources */
+  blosc_free_resources();
+  /* Destroy global lock */
+  pthread_mutex_destroy(&global_comp_mutex);
+}
 
 /* Return `nbytes`, `cbytes` and `blocksize` from a compressed buffer. */
 void blosc_cbuffer_sizes(const void *cbuffer, size_t *nbytes,

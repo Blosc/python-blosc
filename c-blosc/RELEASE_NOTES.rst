@@ -1,5 +1,5 @@
 ===============================
- Release notes for Blosc 1.2.2
+ Release notes for Blosc 1.2.3
 ===============================
 
 :Author: Francesc Alted
@@ -7,8 +7,23 @@
 :URL: http://www.blosc.org
 
 
- Changes from 1.2.1 to 1.2.2
-============================
+Changes from 1.2.2 to 1.2.3
+===========================
+
+- Added a `blosc_init()` and `blosc_destroy()` so that the global lock
+  can be initialized safely.  These new functions will also allow other
+  kind of initializations/destructions in the future.
+
+  Existing applications using Blosc do not need to start using the new
+  functions right away, as long as they calling `blosc_set_nthreads()`
+  previous to anything else.  However, using them is highly recommended.
+
+  Thanks to Oscar Villellas for the init/destroy suggestion, it is a
+  nice idea!
+
+
+Changes from 1.2.1 to 1.2.2
+===========================
 
 - All important warnings removed for all tested platforms.  This will
   allow less intrusiveness compilation experiences with applications
@@ -20,12 +35,13 @@
 - The new web site has been set to: http://www.blosc.org
 
 
- Changes from 1.2 to 1.2.1
-==========================
+Changes from 1.2 to 1.2.1
+=========================
 
 - Fixed a problem with global lock not being initialized.  This
   affected mostly to Windows platforms.  Thanks to Christoph
   Gohlke for finding the cure!
+
 
 Changes from 1.1.5 to 1.2
 =========================

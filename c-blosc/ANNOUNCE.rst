@@ -1,19 +1,22 @@
 ===============================================================
- Announcing Blosc 1.2.2
+ Announcing Blosc 1.2.3
  A blocking, shuffling and lossless compression library
 ===============================================================
 
 What is new?
 ============
 
-- All important warnings removed for all tested platforms.  This will
-  allow less intrusiveness compilation experiences with applications
-  including Blosc source code.
+New `blosc_init()` and `blosc_destroy()` functions have been added so
+that the global lock can be initialized safely. These new functions
+will also allow for other kind of initializations/destructions in the
+future.
 
-- The `bench/bench.c` has been updated so that it can be compiled on
-  Windows again.
+Existing applications using Blosc do not need to start using the new
+functions right away, as long as they calling `blosc_set_nthreads()`
+previous to anything else.  However, using them is highly recommended.
 
-- The new web site has been set to: http://www.blosc.org
+Thanks to Oscar Villellas for the init/destroy suggestion, it is a
+nice idea indeed!
 
 For more info, please see the release notes in:
 
@@ -40,11 +43,11 @@ favorite shell.
 Download sources
 ================
 
-For more details on what it is, please go to main web site:
+Please go to main web site:
 
 http://www.blosc.org/
 
-The github repository is over here:
+and proceed from there.  The github repository is over here:
 
 https://github.com/FrancescAlted/blosc
 
