@@ -56,7 +56,7 @@ Tagging
 
 - Create a tag ``X.Y.Z`` from ``master``.  Use the next message::
 
-    $ git tag -a vX.Y.Z -m "Tagging version X.Y.Z"
+    $ git tag -a Release-X.Y.Z -m "Tagging version X.Y.Z"
 
 - Push the tag to the github repo::
 
