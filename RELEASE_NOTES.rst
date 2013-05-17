@@ -17,10 +17,13 @@ Changes from 1.0.6 to 1.1
 
 - Since Blosc (the C library) already supports to be installed as an
   standalone library (via cmake), it is also possible to link
-  python-blosc against a possible system-wide Blosc library.
+  python-blosc against a system Blosc library.
+
+- The Python calls to Blosc are now thread-safe (another consequence of
+  recent Blosc library supporting this at C level).
 
 - Many checks on types and ranges of values have been added.  Most of
-  the calls are now much safer when passed the wrong values.
+  the calls will now complain when passed the wrong values.
 
 - Docstrings are much improved. Also, Sphinx-based docs are available
   now.
