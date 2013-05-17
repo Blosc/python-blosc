@@ -58,17 +58,20 @@ More docs and examples are available in the documentation site:
 http://blosc.pydata.org
 
 
+Installing
+==========
+
+python-blosc is in PyPI repository, so installing it is easy:
+
+$ pip install -U blosc  # yes, you should omit the blosc- prefix
+
+
 Download sources
 ================
 
-Go to:
+The sources are managed through github services at:
 
 http://github.com/FrancescAlted/python-blosc
-
-and download the most recent release from there.
-
-Blosc and its Python wrapper are distributed using the MIT license, see
-LICENSES/BLOSC.txt for details.
 
 
 Documentation
@@ -86,6 +89,18 @@ There is an official mailing list for Blosc at:
 
 blosc@googlegroups.com
 http://groups.google.es/group/blosc
+
+
+Licenses
+========
+
+Both Blosc and its Python wrapper are distributed using the MIT license.
+See:
+
+https://github.com/FrancescAlted/python-blosc/blob/master/LICENSES
+
+for more details.
+
 
 
 .. Local Variables:
