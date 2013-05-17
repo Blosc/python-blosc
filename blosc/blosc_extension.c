@@ -49,7 +49,28 @@ static PyObject *
 PyBlosc_free_resources(PyObject *self)
 {
     blosc_free_resources();
+    return Py_None;
+}
 
+PyDoc_STRVAR(init__doc__,
+"init() -- Initialize the C-Blosc library environment.\n"
+             );
+
+static PyObject *
+PyBlosc_init(PyObject *self)
+{
+    blosc_init();
+    return Py_None;
+}
+
+PyDoc_STRVAR(destroy__doc__,
+"destroy() -- Destroy the C-Blosc library environment.\n"
+             );
+
+static PyObject *
+PyBlosc_destroy(PyObject *self)
+{
+    blosc_destroy();
     return Py_None;
 }
 
@@ -255,7 +276,11 @@ static PyMethodDef blosc_methods[] =
    free_resources__doc__},
   {"set_nthreads", (PyCFunction)PyBlosc_set_nthreads, METH_VARARGS,
    set_nthreads__doc__},
-    {NULL, NULL, 0, NULL}
+  {"init", (PyCFunction)PyBlosc_init, METH_VARARGS,
+   init__doc__},
+  {"destroy", (PyCFunction)PyBlosc_destroy, METH_VARARGS,
+   destroy__doc__},
+    {NULL, NULL, 0, NULL},
 };
 
 

@@ -29,13 +29,18 @@ from blosc.blosc_extension import (
     BLOSC_MAX_BUFFERSIZE,
     BLOSC_MAX_THREADS,
     BLOSC_MAX_TYPESIZE,
+    init,
+    destroy,
     )
 
 
 # Initialize Blosc
+init()
 ncores = detect_number_of_cores()
 set_nthreads(ncores)
 blosclib_version = "%s (%s)" % (BLOSC_VERSION_STRING, BLOSC_VERSION_DATE)
+import atexit
+atexit.register(destroy)
 
 # Tests
 from blosc.test import run as test
