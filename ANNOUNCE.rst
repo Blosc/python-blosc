@@ -47,15 +47,15 @@ What is new?
 - Docstrings are much improved. Also, Sphinx-based docs are available
   now.
 
-Many thanks to Valentin Hänel for his excellent work on this release.
+Many thanks to Valentin Hänel for his impressive work for this release.
 
 For more info, you can see the release notes in:
 
 https://github.com/FrancescAlted/python-blosc/wiki/Release-notes
 
-More docs and examples are available in the Quick User's Guide wiki page:
+More docs and examples are available in the documentation site:
 
-https://github.com/FrancescAlted/python-blosc/wiki/Quick-User's-Guide
+http://blosc.pydata.org
 
 
 Download sources
