@@ -70,7 +70,7 @@ and `unpack_array` to perform this in a handy way::
   >>> np.alltrue(a == a2)
   True
 
-Although this is an convenient way for compressing/decompresssing NumPy
+Although this is an convenient way for compressing/decompressing NumPy
 arrays, this method uses pickle/unpickle behind the scenes.  This step implies
 an additional copy, which takes both memory and time.
 
@@ -78,7 +78,7 @@ Compressing from a data pointer
 ===============================
 
 For avoiding the data copy problem in the previous section, `blosc` comes with
-a couple of lower-level functions: `compress_ptr` and `uncompress_ptr`.  Here
+a couple of lower-level functions: `compress_ptr` and `decompress_ptr`.  Here
 are they in action::
 
   >>> c = blosc.compress_ptr(a.__array_interface__['data'][0],
@@ -94,10 +94,10 @@ compression).  Needless to say, it is very easy to cause a segfault by passing
 incorrect parameters to the functions (wrong pointer or wrong size).
 
 On the other hand, and contrarily to the `pack_array` / `unpack_array` method,
-the `compress_ptr` / `uncompress_ptr` functions do not need to make internal
+the `compress_ptr` / `decompress_ptr` functions do not need to make internal
 copies of the data buffers, so they are extremely fast (as much as the C-Blosc
 library can be), but you have to provide a container when doing the
 de-serialization.
 
 It is up to you to decide between the convenience of `pack_array` /
-`unpack_array` functions or the speed of `compress_ptr` / `uncompress_ptr`.
+`unpack_array` functions or the speed of `compress_ptr` / `decompress_ptr`.
