@@ -1,10 +1,12 @@
-blosc: a Python package that wraps the Blosc compressor
-=======================================================
+blosc: a Python wrapper for the extremely fast Blosc compression library
+========================================================================
 
 :Author: Francesc Alted
 :Author: Valentin Hänel
 :Contact: faltet@gmail.com
-:URL: http://blosc.org
+:URL: http://blosc.pydata.org
+:URL: https://github.com/FrancescAlted/python-blosc
+
 
 What it is
 ==========

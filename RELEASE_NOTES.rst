@@ -5,7 +5,8 @@
 :Author: Francesc Alted
 :Author: Valentin Hänel
 :Contact: faltet@gmail.com
-:URL: http://blosc.org
+:URL: http://blosc.pydata.org
+:URL: https://github.com/FrancescAlted/python-blosc
 
 
 Changes from 1.0.6 to 1.1

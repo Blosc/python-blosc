@@ -1,16 +1,20 @@
-=============================
-Announcing python-blosc 1.1
-=============================
+================================
+Announcing python-blosc 1.1 RC1
+================================
 
 What is it?
 ===========
 
-A Python wrapper for the Blosc compression library.
+python-blosc (http://blosc.pydata.org/) is a Python wrapper for the
+Blosc compression library.
 
 Blosc (http://blosc.org) is a high performance compressor optimized for
 binary data.  It has been designed to transmit data to the processor
 cache faster than the traditional, non-compressed, direct memory fetch
-approach via a memcpy() OS call.
+approach via a memcpy() OS call.  Whether this is achieved or not
+depends of the data compressibility, the number of cores in the system,
+and other factors.  See a series of benchmarks conducted for many
+different systems: http://blosc.org/trac/wiki/SyntheticBenchmarks.
 
 Blosc works well for compressing numerical arrays that contains data
 with relatively low entropy, like sparse data, time series, grids with
@@ -53,6 +57,7 @@ More docs and examples are available in the Quick User's Guide wiki page:
 
 https://github.com/FrancescAlted/python-blosc/wiki/Quick-User's-Guide
 
+
 Download sources
 ================
 
@@ -62,8 +67,17 @@ http://github.com/FrancescAlted/python-blosc
 
 and download the most recent release from there.
 
-Blosc is distributed using the MIT license, see LICENSES/BLOSC.txt for
-details.
+Blosc and its Python wrapper are distributed using the MIT license, see
+LICENSES/BLOSC.txt for details.
+
+
+Documentation
+=============
+
+There is Sphinx-based documentation site at:
+
+http://blosc.pydata.org/
+
 
 Mailing list
 ============
