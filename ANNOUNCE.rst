@@ -30,24 +30,7 @@ favorite shell.
 What is new?
 ============
 
-- Added new `compress_ptr` and `decompress_ptr` functions that allows to
-  compress and decompress from/to a data pointer.  These are low level
-  calls and user must make sure that the pointer data area is safe.
-
-- Since Blosc (the C library) already supports to be installed as an
-  standalone library (via cmake), it is also possible to link
-  python-blosc against a system Blosc library.
-
-- The Python calls to Blosc are now thread-safe (another consequence of
-  recent Blosc library supporting this at C level).
-
-- Many checks on types and ranges of values have been added.  Most of
-  the calls will now complain when passed the wrong values.
-
-- Docstrings are much improved. Also, Sphinx-based docs are available
-  now.
-
-Many thanks to Valentin Hänel for his impressive work for this release.
+#XXX version-specific blurb XXX#
 
 For more info, you can see the release notes in:
 
@@ -63,7 +46,7 @@ Installing
 
 python-blosc is in PyPI repository, so installing it is easy:
 
-$ pip install -U blosc  # yes, you should omit the blosc- prefix
+$ pip install -U blosc  # yes, you should omit the python- prefix
 
 
 Download sources

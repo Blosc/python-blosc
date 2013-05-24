@@ -1,5 +1,5 @@
 ======================================
- Release notes for python-blosc 1.1
+ Release notes for python-blosc 1.1.1
 ======================================
 
 :Author: Francesc Alted
@@ -7,6 +7,12 @@
 :Contact: faltet@gmail.com
 :URL: http://blosc.pydata.org
 :URL: https://github.com/FrancescAlted/python-blosc
+
+
+Changes from 1.1 to 1.1.1
+=========================
+
+#XXX version-specific blurb XXX#
 
 
 Changes from 1.0.6 to 1.1
