@@ -74,8 +74,7 @@ running the doctests in ``blosc/test.py``::
     $ export PYTHONPATH=.  (not needed on Win)
     $ python blosc/test.py  (add -v for verbose mode)
 
-Or alternatively, you can use the third-party ``nosetests`` script to
-run both the doctests and the test suite::
+Or alternatively, you can use the third-party ``nosetests`` script::
 
     $ nosetests --with-doctest (add -v for verbose mode)
 
@@ -119,7 +118,7 @@ The reason is quite technical: adding the Blosc Git repository as a
 remote will also include the Blosc tags in your repository.  Since the
 Blosc and python-blosc repositories share the same tagging scheme,
 i.e. ``v.X.Y.Z``, we may have potentially conflicting tags. For example,
-one might want to tag python-blosc ``v1.2.1``, however, since Blosc
+one might want to tag python-blosc ``v1.2.3``, however, since Blosc
 already has a tag of this name, Git will deny you creating this. One
 could use the ``--no-tags`` option for ``git fetch`` when fetching Blosc
 -- but alas, this would defeat the purpose.  The tagged versions of
@@ -137,8 +136,8 @@ is shown below:
 
 .. code-block:: console
 
-    $ ./subtree-merge-blosc.sh v1.2.1
-    found remote tag: '4eda92c4dcba18849d482f5014b374d8b4b4cdfc	refs/tags/v1.2.1'
+    $ ./subtree-merge-blosc.sh v1.2.3
+    found remote tag: '4eda92c4dcba18849d482f5014b374d8b4b4cdfc	refs/tags/v1.2.3'
     warning: no common commits
     remote: Counting objects: 1558, done.
     remote: Compressing objects: 100% (606/606), done.
@@ -146,10 +145,10 @@ is shown below:
     Receiving objects: 100% (1558/1558), 468.67 KiB | 304 KiB/s, done.
     Resolving deltas: 100% (958/958), done.
     From git://github.com/FrancescAlted/blosc
-     + tag               v1.2.1     -> FETCH_HEAD
+     + tag               v1.2.3     -> FETCH_HEAD
     Squash commit -- not updating HEAD
     Automatic merge went well; stopped before committing as requested
-    [subtree-merge-blosc.sh b7a7378] subtree merge blosc v1.2.1
+    [subtree-merge-blosc.sh b7a7378] subtree merge blosc v1.2.3
      16 files changed, 60 insertions(+), 43 deletions(-)
 
 
