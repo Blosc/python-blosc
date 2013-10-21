@@ -1,5 +1,5 @@
 include MANIFEST.in
-include *.txt
+include *.txt *.rst
 include setup.py VERSION
 
 recursive-include blosc *.py *.c
