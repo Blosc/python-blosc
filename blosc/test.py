@@ -5,6 +5,12 @@ import ctypes
 import numpy
 import blosc
 
+try:
+    import numpy
+except ImportError:
+    has_numpy = False
+else:
+    has_numpy = True
 
 py3 = sys.version_info[0] == 3
 
@@ -96,6 +102,9 @@ class TestCodec(unittest.TestCase):
                 ['abc'])
 
     def test_pack_array_exceptions(self):
+        if not has_numpy:
+            self.fail('numpy not avalaible')
+
         self.assertRaises(TypeError, blosc.pack_array, 'abc')
         self.assertRaises(TypeError, blosc.pack_array, 1.0)
 
