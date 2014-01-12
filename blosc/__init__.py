@@ -49,4 +49,4 @@ from blosc.test import run as test
 __all__ = ['compress', 'compress_ptr', 'decompress', 'decompress_ptr',
            'pack_array', 'unpack_array',
            'detect_number_of_cores', 'free_resources', 'set_nthreads',
-           'print_versions', 'test']
+           'compressor_list', 'print_versions', 'test']
