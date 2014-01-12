@@ -32,6 +32,12 @@ print("Creating a large NumPy array with %d int64 elements..." % N)
 in_ = numpy.arange(N, dtype=numpy.int64)
 print(in_)
 
+tic = time.time()
+out_ = in_.copy()
+toc = time.time()
+print("Time for copy array:     %.3f s." % (toc-tic,))
+print()
+
 for cname in blosc.compressor_list():
     print("Using *** %s *** compressor" % cname)
     tic = time.time()
