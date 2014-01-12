@@ -41,6 +41,21 @@ PyBlosc_set_nthreads(PyObject *self, PyObject *args)
 }
 
 
+PyDoc_STRVAR(compressor_list__doc__,
+"compressor_list() -- Return a list of compressors available in the Blosc build.\n"
+             );
+
+static PyObject *
+PyBlosc_compressor_list(PyObject *self)
+{
+    char *list;
+
+    list = blosc_list_compressors();
+
+    return Py_BuildValue("s", list);
+}
+
+
 PyDoc_STRVAR(free_resources__doc__,
 "free_resources() -- Free possible memory temporaries and thread resources.\n"
              );
@@ -75,8 +90,8 @@ PyBlosc_destroy(PyObject *self)
 }
 
 static PyObject *
-compress_helper(void * input, size_t nbytes,
-        size_t typesize, int clevel, int shuffle){
+compress_helper(void * input, size_t nbytes, size_t typesize,
+		int clevel, int shuffle, char *cname){
 
     int cbytes;
     PyObject *output = NULL;
@@ -84,6 +99,13 @@ compress_helper(void * input, size_t nbytes,
     /* Alloc memory for compression */
     if (!(output = PyBytes_FromStringAndSize(NULL, nbytes+BLOSC_MAX_OVERHEAD)))
       return NULL;
+
+    /* Select compressor */
+    if (blosc_set_compressor(cname) < 0) {
+      /* The compressor is not available (should never happen here) */
+      blosc_error(-1, "compressor not available");
+      return NULL;
+    }
 
     /* Compress */
     Py_BEGIN_ALLOW_THREADS;
@@ -106,7 +128,7 @@ compress_helper(void * input, size_t nbytes,
 }
 
 PyDoc_STRVAR(compress_ptr__doc__,
-"compress_ptr(pointer, len, typesize, clevel, shuffle]) -- Return compressed string.\n"
+"compress_ptr(pointer, len, typesize, clevel, shuffle, cname]) -- Return compressed string.\n"
              );
 
 static PyObject *
@@ -116,20 +138,21 @@ PyBlosc_compress_ptr(PyObject *self, PyObject *args)
     void * input_ptr;
     size_t nbytes, typesize;
     int clevel, shuffle;
+    char *cname;
 
-    /* require an address, buffer length, typesize, clevel and shuffle agrs */
-    if (!PyArg_ParseTuple(args, "Onnii:compress", &input, &nbytes,
-                          &typesize, &clevel, &shuffle))
+    /* require an address, buffer length, typesize, clevel, shuffle and cname */
+    if (!PyArg_ParseTuple(args, "Onniis:compress", &input, &nbytes,
+                          &typesize, &clevel, &shuffle, &cname))
       return NULL;
     /*  convert to void pointer safely */
     input_ptr = PyLong_AsVoidPtr(input);
     if (input_ptr == NULL)
       return NULL;
-    return compress_helper(input_ptr, nbytes, typesize, clevel, shuffle);
+    return compress_helper(input_ptr, nbytes, typesize, clevel, shuffle, cname);
 }
 
 PyDoc_STRVAR(compress__doc__,
-"compress(string[, typesize, clevel, shuffle]) -- Return compressed string.\n"
+"compress(string[, typesize, clevel, shuffle, cname]) -- Return compressed string.\n"
              );
 
 static PyObject *
@@ -138,13 +161,13 @@ PyBlosc_compress(PyObject *self, PyObject *args)
     void *input;
     size_t nbytes, typesize;
     int clevel, shuffle;
+    char *cname;
 
     /* require Python string object, typesize, clevel and shuffle agrs */
-    if (!PyArg_ParseTuple(args, "s#nii:compress", &input, &nbytes,
-                          &typesize, &clevel, &shuffle))
+    if (!PyArg_ParseTuple(args, "s#niis:compress", &input, &nbytes,
+                          &typesize, &clevel, &shuffle, &cname))
       return NULL;
-    return compress_helper(input, nbytes,
-            typesize, clevel, shuffle);
+    return compress_helper(input, nbytes, typesize, clevel, shuffle, cname);
 }
 
 /*  Read blosc header from input and fetch the uncompressed size into nbytes.
@@ -276,6 +299,8 @@ static PyMethodDef blosc_methods[] =
    free_resources__doc__},
   {"set_nthreads", (PyCFunction)PyBlosc_set_nthreads, METH_VARARGS,
    set_nthreads__doc__},
+  {"compressor_list", (PyCFunction)PyBlosc_compressor_list, METH_VARARGS,
+   compressor_list__doc__},
   {"init", (PyCFunction)PyBlosc_init, METH_VARARGS,
    init__doc__},
   {"destroy", (PyCFunction)PyBlosc_destroy, METH_VARARGS,

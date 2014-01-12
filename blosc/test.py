@@ -23,6 +23,13 @@ class TestCodec(unittest.TestCase):
         d = blosc.decompress(c)
         self.assertEqual(s, d)
 
+    def test_all_compressors(self):
+        s = b'0123456789'*100
+        for cname in blosc.compressor_list():
+            c = blosc.compress(s, typesize=1, cname=cname)
+            d = blosc.decompress(c)
+            self.assertEqual(s, d)
+
     def test_set_nthreads_exceptions(self):
         self.assertRaises(ValueError, blosc.set_nthreads,
                 blosc.BLOSC_MAX_THREADS +1)

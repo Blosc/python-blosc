@@ -29,5 +29,5 @@ Utilities
 =========
 
 .. automodule:: blosc
-   :members: detect_number_of_cores, free_resources, set_nthreads, print_versions, test
+   :members: compressor_list, detect_number_of_cores, free_resources, set_nthreads, print_versions, test
 
