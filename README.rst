@@ -89,7 +89,7 @@ If curious, you may want to run a small benchmark that compares a plain
 NumPy array copy against compression through different compressors in
 your Blosc build::
 
-  $ python bench/compare-pack-ptr.py
+  $ PYTHONPATH=. python bench/compare-pack-ptr.py
 
 In case you find the results interesting, please report them back to the
 authors!
