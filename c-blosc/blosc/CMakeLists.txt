@@ -1,3 +1,36 @@
+# a simple way to detect that we are using CMAKE
+add_definitions(-DUSING_CMAKE)
+
+set(INTERNAL_LIBS ${CMAKE_SOURCE_DIR}/internal-complibs)
+
+# includes
+if(NOT DEACTIVATE_LZ4)
+    if (LZ4_FOUND)
+        include_directories( ${LZ4_INCLUDE_DIR} )
+    else(LZ4_FOUND)
+        set(LZ4_LOCAL_DIR ${INTERNAL_LIBS}/lz4-r110)
+        include_directories( ${LZ4_LOCAL_DIR} )
+    endif(LZ4_FOUND)
+endif(NOT DEACTIVATE_LZ4)
+
+if(NOT DEACTIVATE_SNAPPY)
+    if (SNAPPY_FOUND)
+        include_directories( ${SNAPPY_INCLUDE_DIR} )
+    else(SNAPPY_FOUND)
+        set(SNAPPY_LOCAL_DIR ${INTERNAL_LIBS}/snappy-1.1.1)
+        include_directories( ${SNAPPY_LOCAL_DIR} )
+    endif(SNAPPY_FOUND)
+endif(NOT DEACTIVATE_SNAPPY)
+
+if(NOT DEACTIVATE_ZLIB)
+    if (ZLIB_FOUND)
+        include_directories( ${ZLIB_INCLUDE_DIR} )
+    else(ZLIB_FOUND)
+        set(ZLIB_LOCAL_DIR ${INTERNAL_LIBS}/zlib-1.2.8)
+        include_directories( ${ZLIB_LOCAL_DIR} )
+    endif(ZLIB_FOUND)
+endif(NOT DEACTIVATE_ZLIB)
+
 # library sources
 set(SOURCES blosc.c blosclz.c shuffle.c)
 # library install directory
@@ -9,7 +42,7 @@ if(WIN32)
     # try to use the system library
     find_package(Threads)
     if(NOT Threads_FOUND)
-        message(STATUS "using the internal pthead library for win32 systems.")
+        message(STATUS "using the internal pthread library for win32 systems.")
         set(SOURCES ${SOURCES} win32/pthread.c)
     else(NOT Threads_FOUND)
         set(LIBS ${LIBS} ${CMAKE_THREAD_LIBS_INIT})
@@ -19,11 +52,38 @@ else(WIN32)
     set(LIBS ${LIBS} ${CMAKE_THREAD_LIBS_INIT})
 endif(WIN32)
 
+if(NOT DEACTIVATE_LZ4)
+    if(LZ4_FOUND)
+        set(LIBS ${LIBS} ${LZ4_LIBRARY})
+    else(LZ4_FOUND)
+        file(GLOB LZ4_FILES ${LZ4_LOCAL_DIR}/*.c)
+        set(SOURCES ${SOURCES} ${LZ4_FILES})
+    endif(LZ4_FOUND)
+endif(NOT DEACTIVATE_LZ4)
+
+if(NOT DEACTIVATE_SNAPPY)
+    if(SNAPPY_FOUND)
+        set(LIBS ${LIBS} ${SNAPPY_LIBRARY})
+    else(SNAPPY_FOUND)
+        file(GLOB SNAPPY_FILES ${SNAPPY_LOCAL_DIR}/*.cc)
+        set(SOURCES ${SOURCES} ${SNAPPY_FILES})
+    endif(SNAPPY_FOUND)
+endif(NOT DEACTIVATE_SNAPPY)
+
+if(NOT DEACTIVATE_ZLIB)
+    if(ZLIB_FOUND)
+        set(LIBS ${LIBS} ${ZLIB_LIBRARY})
+    else(ZLIB_FOUND)
+        file(GLOB ZLIB_FILES ${ZLIB_LOCAL_DIR}/*.c)
+        set(SOURCES ${SOURCES} ${ZLIB_FILES})
+    endif(ZLIB_FOUND)
+endif(NOT DEACTIVATE_ZLIB)
+
 
 # targets
 add_library(blosc_shared SHARED ${SOURCES})
 set_target_properties(blosc_shared PROPERTIES OUTPUT_NAME blosc)
-set_target_properties(blosc_shared PROPERTIES 
+set_target_properties(blosc_shared PROPERTIES
         VERSION ${version_string}
         SOVERSION ${version_string}
     )
