@@ -36,25 +36,25 @@ parameter in compression functions.  For example::
 Here it is the output of the included compare-pack-ptr.py benchmark:
 
 ```
-Creating a large NumPy array with 10000000 int64 elements...
-[      0       1       2 ..., 9999997 9999998 9999999]
-Time for copying array with numpy.copy():     0.016 s.
+Creating a large NumPy array with 10**7 int64 elements:
+  [      0       1       2 ..., 9999997 9999998 9999999]
+  Time for copying array with numpy.copy():     0.016 s
 
-Using *** blosclz *** compressor
-Time for pack_array/unpack_array:     0.068/0.053 s.    Compr ratio: 136.24
-Time for compress_ptr/decompress_ptr: 0.011/0.017 s.    Compr ratio: 136.83
-Using *** lz4 *** compressor
-Time for pack_array/unpack_array:     0.064/0.054 s.    Compr ratio: 136.73
-Time for compress_ptr/decompress_ptr: 0.008/0.020 s.    Compr ratio: 137.19
-Using *** lz4hc *** compressor
-Time for pack_array/unpack_array:     0.163/0.074 s.    Compr ratio: 164.97
-Time for compress_ptr/decompress_ptr: 0.105/0.028 s.    Compr ratio: 165.12
-Using *** snappy *** compressor
-Time for pack_array/unpack_array:     0.067/0.056 s.    Compr ratio: 20.36
-Time for compress_ptr/decompress_ptr: 0.015/0.023 s.    Compr ratio: 20.38
-Using *** zlib *** compressor
-Time for pack_array/unpack_array:     0.271/0.099 s.    Compr ratio: 406.45
-Time for compress_ptr/decompress_ptr: 0.222/0.061 s.    Compr ratio: 407.60
+Using *** blosclz *** compressor::
+  Time for pack_array/unpack_array:     0.068/0.048 s.  Compr ratio: 136.24
+  Time for compress_ptr/decompress_ptr: 0.010/0.016 s.  Compr ratio: 136.83
+Using *** lz4 *** compressor::
+  Time for pack_array/unpack_array:     0.062/0.050 s.  Compr ratio: 136.73
+  Time for compress_ptr/decompress_ptr: 0.008/0.019 s.  Compr ratio: 137.19
+Using *** lz4hc *** compressor::
+  Time for pack_array/unpack_array:     0.166/0.076 s.  Compr ratio: 164.97
+  Time for compress_ptr/decompress_ptr: 0.107/0.027 s.  Compr ratio: 165.12
+Using *** snappy *** compressor::
+  Time for pack_array/unpack_array:     0.066/0.051 s.  Compr ratio: 20.36
+  Time for compress_ptr/decompress_ptr: 0.014/0.026 s.  Compr ratio: 20.38
+Using *** zlib *** compressor::
+  Time for pack_array/unpack_array:     0.270/0.099 s.  Compr ratio: 406.45
+  Time for compress_ptr/decompress_ptr: 0.222/0.062 s.  Compr ratio: 407.60
 ```
 
 That means that Blosc in combination with LZ4 can compress at speeds

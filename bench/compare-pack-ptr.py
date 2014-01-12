@@ -20,18 +20,19 @@ import blosc
 N = 1e7
 clevel = 9
 
-print("Creating a large NumPy array with %d int64 elements..." % N)
+Nexp = numpy.log10(N)
+print("Creating a large NumPy array with 10**%d int64 elements:" % Nexp)
 in_ = numpy.arange(N, dtype=numpy.int64)
-print(in_)
+print(" ", in_)
 
 tic = time.time()
 out_ = numpy.copy(in_)
 toc = time.time()
-print("Time for copying array with numpy.copy():     %.3f s." % (toc-tic,))
+print("  Time for copying array with numpy.copy():     %.3f s" % (toc-tic,))
 print()
 
 for cname in blosc.compressor_list():
-    print("Using *** %s *** compressor" % cname)
+    print("Using *** %s *** compressor::" % cname)
     ctic = time.time()
     c = blosc.pack_array(in_, clevel=clevel, shuffle=True, cname=cname)
     ctoc = time.time()
@@ -39,7 +40,7 @@ for cname in blosc.compressor_list():
     out = blosc.unpack_array(c)
     dtoc = time.time()
     assert((in_ == out).all())
-    print("Time for pack_array/unpack_array:     %.3f/%.3f s." % \
+    print("  Time for pack_array/unpack_array:     %.3f/%.3f s." % \
           (ctoc-ctic, dtoc-dtic), end='')
     print("\tCompr ratio: %.2f" % (in_.size*in_.dtype.itemsize*1. / len(c)))
 
@@ -53,7 +54,7 @@ for cname in blosc.compressor_list():
     blosc.decompress_ptr(c, out.__array_interface__['data'][0])
     dtoc = time.time()
     assert((in_ == out).all())
-    print("Time for compress_ptr/decompress_ptr: %.3f/%.3f s." % \
+    print("  Time for compress_ptr/decompress_ptr: %.3f/%.3f s." % \
           (ctoc-ctic, dtoc-dtic), end='')
     print("\tCompr ratio: %.2f" % (in_.size*in_.dtype.itemsize*1. / len(c)))
 
