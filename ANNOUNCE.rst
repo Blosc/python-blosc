@@ -1,6 +1,74 @@
-===========================
-Announcing python-blosc 1.1 
-===========================
+=============================
+Announcing python-blosc 1.2.0
+=============================
+
+What is new?
+============
+
+This release adds support for the multiple compressors added in Blosc
+1.3 series.  The new compressors are:
+
+* lz4 (http://code.google.com/p/lz4/): A very fast
+  compressor/decompressor.  Could be thought as a replacement of the
+  original BloscLZ, but it can behave better is some scenarios.
+
+* lz4hc (http://code.google.com/p/lz4/): This is a variation of LZ4
+  that achieves much better compression ratio at the cost of being
+  much slower for compressing.  Decompression speed is unaffected (and
+  sometimes better than when using LZ4 itself!), so this is very good
+  for read-only datasets.
+
+* snappy (http://code.google.com/p/snappy/): A very fast
+  compressor/decompressor.  Could be thought as a replacement of the
+  original BloscLZ, but it can behave better is some scenarios.
+
+* zlib (http://www.zlib.net/): This is a classic.  It achieves very
+  good compression ratios, at the cost of speed.  However,
+  decompression speed is still pretty good, so it is a good candidate
+  for read-only datasets.
+
+Selecting the compressor is just a matter of specifying the new `cname`
+parameter in compression functions.  For example::
+
+  in = numpy.arange(N, dtype=numpy.int64)
+  out = blosc.pack_array(in, cname="lz4")
+
+Here it is the output of the included compare-pack-ptr.py benchmark:
+
+```
+Creating a large NumPy array with 10000000 int64 elements...
+[      0       1       2 ..., 9999997 9999998 9999999]
+Time for copy array:     0.016 s.
+
+Using *** blosclz *** compressor
+Time for pack_array/unpack_array:     0.065/0.115 s.    Compr ratio: 136.24
+Time for compress_ptr/decompress_ptr: 0.011/0.011 s.    Compr ratio: 136.83
+Using *** lz4 *** compressor
+Time for pack_array/unpack_array:     0.063/0.114 s.    Compr ratio: 136.73
+Time for compress_ptr/decompress_ptr: 0.008/0.009 s.    Compr ratio: 137.19
+Using *** lz4hc *** compressor
+Time for pack_array/unpack_array:     0.163/0.235 s.    Compr ratio: 164.97
+Time for compress_ptr/decompress_ptr: 0.105/0.106 s.    Compr ratio: 165.12
+Using *** snappy *** compressor
+Time for pack_array/unpack_array:     0.068/0.122 s.    Compr ratio: 20.36
+Time for compress_ptr/decompress_ptr: 0.015/0.015 s.    Compr ratio: 20.38
+Using *** zlib *** compressor
+Time for pack_array/unpack_array:     0.279/0.378 s.    Compr ratio: 406.45
+Time for compress_ptr/decompress_ptr: 0.223/0.224 s.    Compr ratio: 407.60
+```
+
+That means that Blosc in combination with LZ4 can compress/decompress at
+speeds that can be up to 2x faster than a pure memcpy operation.  This
+was using a laptop with a i5-3380M CPU @ 2.90GHz, but YMMV.
+
+For more info, you can have a look at the release notes in:
+
+https://github.com/FrancescAlted/python-blosc/wiki/Release-notes
+
+More docs and examples are available in the documentation site:
+
+http://blosc.pydata.org
+
 
 What is it?
 ===========
@@ -25,20 +93,6 @@ There is also a handy command line for Blosc called Bloscpack
 binary datafiles on-disk.  Although the format for Bloscpack has not
 stabilized yet, it allows you to effectively use Blosc from your
 favorite shell.
-
-
-What is new?
-============
-
-#XXX version-specific blurb XXX#
-
-For more info, you can see the release notes in:
-
-https://github.com/FrancescAlted/python-blosc/wiki/Release-notes
-
-More docs and examples are available in the documentation site:
-
-http://blosc.pydata.org
 
 
 Installing

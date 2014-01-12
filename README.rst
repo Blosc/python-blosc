@@ -82,6 +82,18 @@ Once installed, you can re-run the tests at any time with::
 
     $ python -c "import blosc; blosc.test()"
 
+Benchmarking
+============
+
+If curious, you may want to run a small benchmark that compares a plain
+NumPy array copy against compression through different compressors in
+your Blosc build::
+
+  $ python bench/compare-pack-ptr.py
+
+In case you find the results interesting, please report them back to the
+authors!
+
 Installing
 ==========
 
@@ -99,11 +111,14 @@ Please refer to docstrings.  Start by the main package::
 
 and ask for more docstrings in the referenced functions.
 
+The Sphinx based documentation is here:
+
+http://blosc.pydata.org
+
 Also, some examples are available on python-blosc wiki page:
 
 http://github.com/FrancescAlted/python-blosc/wiki
 
-A Sphinx based documentation is in the works.  Stay tuned.
 
 
 Merging Blosc sources from upstream
