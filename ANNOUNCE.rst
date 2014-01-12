@@ -38,28 +38,30 @@ Here it is the output of the included compare-pack-ptr.py benchmark:
 ```
 Creating a large NumPy array with 10000000 int64 elements...
 [      0       1       2 ..., 9999997 9999998 9999999]
-Time for copy array:     0.016 s.
+Time for copying array with numpy.copy():     0.016 s.
 
 Using *** blosclz *** compressor
-Time for pack_array/unpack_array:     0.065/0.115 s.    Compr ratio: 136.24
-Time for compress_ptr/decompress_ptr: 0.011/0.011 s.    Compr ratio: 136.83
+Time for pack_array/unpack_array:     0.068/0.053 s.    Compr ratio: 136.24
+Time for compress_ptr/decompress_ptr: 0.011/0.017 s.    Compr ratio: 136.83
 Using *** lz4 *** compressor
-Time for pack_array/unpack_array:     0.063/0.114 s.    Compr ratio: 136.73
-Time for compress_ptr/decompress_ptr: 0.008/0.009 s.    Compr ratio: 137.19
+Time for pack_array/unpack_array:     0.064/0.054 s.    Compr ratio: 136.73
+Time for compress_ptr/decompress_ptr: 0.008/0.020 s.    Compr ratio: 137.19
 Using *** lz4hc *** compressor
-Time for pack_array/unpack_array:     0.163/0.235 s.    Compr ratio: 164.97
-Time for compress_ptr/decompress_ptr: 0.105/0.106 s.    Compr ratio: 165.12
+Time for pack_array/unpack_array:     0.163/0.074 s.    Compr ratio: 164.97
+Time for compress_ptr/decompress_ptr: 0.105/0.028 s.    Compr ratio: 165.12
 Using *** snappy *** compressor
-Time for pack_array/unpack_array:     0.068/0.122 s.    Compr ratio: 20.36
-Time for compress_ptr/decompress_ptr: 0.015/0.015 s.    Compr ratio: 20.38
+Time for pack_array/unpack_array:     0.067/0.056 s.    Compr ratio: 20.36
+Time for compress_ptr/decompress_ptr: 0.015/0.023 s.    Compr ratio: 20.38
 Using *** zlib *** compressor
-Time for pack_array/unpack_array:     0.279/0.378 s.    Compr ratio: 406.45
-Time for compress_ptr/decompress_ptr: 0.223/0.224 s.    Compr ratio: 407.60
+Time for pack_array/unpack_array:     0.271/0.099 s.    Compr ratio: 406.45
+Time for compress_ptr/decompress_ptr: 0.222/0.061 s.    Compr ratio: 407.60
 ```
 
-That means that Blosc in combination with LZ4 can compress/decompress at
-speeds that can be up to 2x faster than a pure memcpy operation.  This
-was using a laptop with a i5-3380M CPU @ 2.90GHz, but YMMV.
+That means that Blosc in combination with LZ4 can compress at speeds
+that can be up to 2x faster than a pure memcpy operation.  Decompression
+is a bit slower probably because writing to memory is slower than
+reading.  This was using a laptop with a i5-3380M CPU @ 2.90GHz, but
+YMMV.
 
 For more info, you can have a look at the release notes in:
 
