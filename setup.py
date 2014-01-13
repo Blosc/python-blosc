@@ -51,7 +51,7 @@ for arg in args:
     if arg.find('--lflags=') == 0:
         LFLAGS = arg.split('=')[1].split()
         sys.argv.remove(arg)
-    elif arg.find('--cflags=') == 0:
+    if arg.find('--cflags=') == 0:
         CFLAGS = arg.split('=')[1].split()
         sys.argv.remove(arg)
 
