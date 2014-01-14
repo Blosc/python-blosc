@@ -33,11 +33,15 @@ Compiling without an installed Blosc library
 --------------------------------------------
 
 python-blosc come with the Blosc sources with it so, assuming that you
-have a C compiler installed, do::
+have a C++ compiler installed, do::
 
     $ python setup.py build_ext --inplace
 
 That's all.  You can proceed with testing section now.
+
+Note: The requirement for the C++ compiler is just for the Snappy
+dependency.  The rest of the other components of Blosc are pure C
+(including the LZ4 and Zlib libraries).
 
 Compiling with an installed Blosc library
 -----------------------------------------
