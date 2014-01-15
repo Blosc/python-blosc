@@ -22,7 +22,7 @@ Testing
 
 $ PYTHONPATH=.   (or "set PYTHONPATH=." on Win)
 $ export PYTHONPATH=.  (not needed on Win)
-$ python blosc/toplevel.py  (add -v for verbose mode)
+$ python -c "import blosc; blosc.test()"
 
 - Run the test suite in different platforms (at least Linux and
   Windows) and make sure that all tests passes.
