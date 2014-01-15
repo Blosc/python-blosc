@@ -1,5 +1,5 @@
 ======================================
- Release notes for python-blosc 1.1.1
+ Release notes for python-blosc 1.2.0
 ======================================
 
 :Author: Francesc Alted
@@ -9,10 +9,20 @@
 :URL: https://github.com/FrancescAlted/python-blosc
 
 
-Changes from 1.1 to 1.1.1
+Changes from 1.1 to 1.2.0
 =========================
 
-#XXX version-specific blurb XXX#
+This release adds support for the multiple compressors added in Blosc
+1.3 series.
+
+- Added new `cname` parameter in compression functions like
+  `compress()`, `compress_ptr()` and `pack_array()`.
+
+- Added a new utility function named `compressor_list()` that returns
+  the list of compressors supported in the Blosc build.
+
+- Updated 'bench/compare-pack-ptr.py' for comparing times of the
+  different compressors in Blosc.
 
 
 Changes from 1.0.6 to 1.1

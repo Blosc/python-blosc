@@ -33,11 +33,15 @@ Compiling without an installed Blosc library
 --------------------------------------------
 
 python-blosc come with the Blosc sources with it so, assuming that you
-have a C compiler installed, do::
+have a C++ compiler installed, do::
 
     $ python setup.py build_ext --inplace
 
 That's all.  You can proceed with testing section now.
+
+Note: The requirement for the C++ compiler is just for the Snappy
+dependency.  The rest of the other components of Blosc are pure C
+(including the LZ4 and Zlib libraries).
 
 Compiling with an installed Blosc library
 -----------------------------------------
@@ -82,6 +86,18 @@ Once installed, you can re-run the tests at any time with::
 
     $ python -c "import blosc; blosc.test()"
 
+Benchmarking
+============
+
+If curious, you may want to run a small benchmark that compares a plain
+NumPy array copy against compression through different compressors in
+your Blosc build::
+
+  $ PYTHONPATH=. python bench/compare-pack-ptr.py
+
+In case you find the results interesting, please report them back to the
+authors!
+
 Installing
 ==========
 
@@ -99,11 +115,14 @@ Please refer to docstrings.  Start by the main package::
 
 and ask for more docstrings in the referenced functions.
 
+The Sphinx based documentation is here:
+
+http://blosc.pydata.org
+
 Also, some examples are available on python-blosc wiki page:
 
 http://github.com/FrancescAlted/python-blosc/wiki
 
-A Sphinx based documentation is in the works.  Stay tuned.
 
 
 Merging Blosc sources from upstream

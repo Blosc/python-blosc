@@ -11,6 +11,7 @@ import sys, os
 
 from distutils.core import Extension
 from distutils.core import setup
+import glob
 
 ########### Check versions ##########
 
@@ -51,7 +52,7 @@ for arg in args:
     if arg.find('--lflags=') == 0:
         LFLAGS = arg.split('=')[1].split()
         sys.argv.remove(arg)
-    elif arg.find('--cflags=') == 0:
+    if arg.find('--cflags=') == 0:
         CFLAGS = arg.split('=')[1].split()
         sys.argv.remove(arg)
 
@@ -59,25 +60,33 @@ for arg in args:
 if os.name == 'posix':
     CFLAGS.append("-msse2")
 
+# Blosc sources and headers
+c_sources = ["blosc/blosc_extension.c"]
+c_depends = ['blosc.h']
+inc_dirs = []
 lib_dirs = []
 libs = []
-# Add some macros here for debugging purposes, if needed
 def_macros = []
-
-# c-blosc sources and header
-if BLOSC_DIR == '':
-    c_blosc_source_dir = os.path.join('c-blosc', 'blosc')
-    c_blosc_sources = [os.path.join(c_blosc_source_dir, source)
-                       for source in ('blosc.c', 'blosclz.c', 'shuffle.c')]
-    c_blosc_headers = [os.path.join(c_blosc_source_dir, header)
-                       for header in ('blosc.h', 'blosclz.h', 'shuffle.h')]
-    inc_dirs = [c_blosc_source_dir]
+if BLOSC_DIR != '':
+    # Using the Blosc library
+    lib_dirs += [os.path.join(BLOSC_DIR, 'lib')]
+    inc_dirs += [os.path.join(BLOSC_DIR, 'include')]
+    libs += ['blosc']
 else:
-    lib_dirs = [os.path.join(BLOSC_DIR, 'lib')]
-    libs = ['blosc']
-    inc_dirs = [os.path.join(BLOSC_DIR, 'include')]
-    c_blosc_sources = []
-    c_blosc_headers = ['blosc.h']
+    # Compiling everything from sources
+    # Blosc + BloscLZ sources
+    c_sources += glob.glob('c-blosc/blosc/*.c')
+    # LZ4 sources
+    c_sources += glob.glob('c-blosc/internal-complibs/lz4*/*.c')
+    # Snappy sources
+    c_sources += glob.glob('c-blosc/internal-complibs/snappy*/*.cc')
+    # Zlib sources
+    c_sources += glob.glob('c-blosc/internal-complibs/zlib*/*.c')
+    # Finally, add all the include dirs...
+    inc_dirs += [os.path.join('c-blosc', 'blosc')]
+    inc_dirs += glob.glob('c-blosc/internal-complibs/*')
+    # ...and the macros for all the compressors supported
+    def_macros += [('HAVE_LZ4', 1), ('HAVE_SNAPPY', 1), ('HAVE_ZLIB', 1)]
 
 
 classifiers = """\
@@ -115,8 +124,8 @@ Blosc is a high performance compressor optimized for binary data.
         Extension( "blosc.blosc_extension",
                    include_dirs=inc_dirs,
                    define_macros=def_macros,
-                   sources = ["blosc/blosc_extension.c"] + c_blosc_sources,
-                   depends = c_blosc_headers,
+                   sources = c_sources,
+                   depends = c_depends,
                    library_dirs=lib_dirs,
                    libraries=libs,
                    extra_link_args=LFLAGS,

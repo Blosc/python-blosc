@@ -95,6 +95,24 @@ def set_nthreads(nthreads):
     return _ext.set_nthreads(nthreads)
 
 
+def compressor_list():
+  """
+  compressor_list()
+
+  Returns a list of compressors available in the Blosc build.
+
+  Parameters
+  ----------
+  None
+
+  Returns
+  -------
+  out : list
+      The list of names.
+  """
+  return _ext.compressor_list().split(',')
+
+
 def free_resources():
     """
     free_resources()
@@ -125,6 +143,12 @@ def _check_clevel(clevel):
         raise ValueError("clevel can only be in the 0-9 range.")
 
 
+def _check_cname(cname):
+    list_cnames = compressor_list()
+    if cname not in list_cnames:
+        raise ValueError("cname can only be one of: %s" % list_cnames)
+
+
 def _check_typesize(typesize):
     if not 1 <= typesize <= _ext.BLOSC_MAX_TYPESIZE:
         raise ValueError("typesize can only be in the 1-%d range." %
@@ -148,8 +172,8 @@ def _check_address(address):
         raise TypeError("only int or long objects are supported as address")
 
 
-def compress(bytesobj, typesize, clevel=9, shuffle=True):
-    """compress(bytesobj, typesize[, clevel=9, shuffle=True]])
+def compress(bytesobj, typesize, clevel=9, shuffle=True, cname='blosclz'):
+    """compress(bytesobj, typesize[, clevel=9, shuffle=True, cname='blosclz']])
 
     Compress bytesobj, with a given type size.
 
@@ -165,6 +189,11 @@ def compress(bytesobj, typesize, clevel=9, shuffle=True):
     shuffle : bool (optional)
         Whether you want to activate the shuffle filter or not.
         The default is True.
+    cname : string (optional)
+        The name of the compressor used internally in Blosc.
+        It can be any of the supported by Blosc ('blosclz',
+        'lz4', 'lz4hc', 'snappy', 'zlib' and maybe others too).
+        The default is 'blosclz'.
 
     Returns
     -------
@@ -196,12 +225,14 @@ def compress(bytesobj, typesize, clevel=9, shuffle=True):
     _check_input_length('bytesobj', len(bytesobj))
     _check_typesize(typesize)
     _check_clevel(clevel)
+    _check_cname(cname)
 
-    return _ext.compress(bytesobj, typesize, clevel, shuffle)
+    return _ext.compress(bytesobj, typesize, clevel, shuffle, cname)
 
 
-def compress_ptr(address, items, typesize, clevel=9, shuffle=True):
-    """compress_ptr(address, items, typesize[, clevel=9, shuffle=True]])
+def compress_ptr(address, items, typesize, clevel=9, shuffle=True,
+                 cname='blosclz'):
+    """compress_ptr(address, items, typesize[, clevel=9, shuffle=True, cname='blosclz']])
 
     Compress the data at address with given items and typesize.
 
@@ -219,6 +250,11 @@ def compress_ptr(address, items, typesize, clevel=9, shuffle=True):
     shuffle : bool (optional)
         Whether you want to activate the shuffle filter or not.
         The default is True.
+    cname : string (optional)
+        The name of the compressor used internally in Blosc.
+        It can be any of the supported by Blosc ('blosclz',
+        'lz4', 'lz4hc', 'snappy', 'zlib' and maybe others too).
+        The default is 'blosclz'.
 
     Returns
     -------
@@ -232,7 +268,8 @@ def compress_ptr(address, items, typesize, clevel=9, shuffle=True):
     ValueError
         If items * typesize is larger than the maximum allowed buffer size.
         If typesize is not within the allowed range.
-        if clevel is not not within the allowed range.
+        If clevel is not within the allowed range.
+        If cname is not within the supported compressors.
 
     Notes
     -----
@@ -279,8 +316,9 @@ def compress_ptr(address, items, typesize, clevel=9, shuffle=True):
     _check_input_length('length', length)
     _check_typesize(typesize)
     _check_clevel(clevel)
+    _check_cname(cname)
 
-    return _ext.compress_ptr(address, length, typesize, clevel, shuffle)
+    return _ext.compress_ptr(address, length, typesize, clevel, shuffle, cname)
 
 
 def decompress(bytesobj):
@@ -398,8 +436,8 @@ def decompress_ptr(bytesobj, address):
     return _ext.decompress_ptr(bytesobj, address)
 
 
-def pack_array(array, clevel=9, shuffle=True):
-    """pack_array(array[, clevel=9, shuffle=True]])
+def pack_array(array, clevel=9, shuffle=True, cname='blosclz'):
+    """pack_array(array[, clevel=9, shuffle=True, cname='blosclz']])
 
     Pack (compress) a NumPy array.
 
@@ -413,6 +451,11 @@ def pack_array(array, clevel=9, shuffle=True):
     shuffle : bool (optional)
         Whether you want to activate the shuffle filter or not.
         The default is True.
+    cname : string (optional)
+        The name of the compressor used internally in Blosc.
+        It can be any of the supported by Blosc ('blosclz',
+        'lz4', 'lz4hc', 'snappy', 'zlib' and maybe others too).
+        The default is 'blosclz'.
 
     Returns
     -------
@@ -427,7 +470,8 @@ def pack_array(array, clevel=9, shuffle=True):
         If array.itemsize * array.size is larger than the maximum allowed
             buffer size.
         If typesize is not within the allowed range.
-        if clevel is not not within the allowed range.
+        If clevel is not within the allowed range.
+        If cname is not within the supported compressors.
 
     Examples
     --------
@@ -443,16 +487,17 @@ def pack_array(array, clevel=9, shuffle=True):
     if not (hasattr(array, 'dtype') and hasattr(array, 'shape')):
         # This does not quack like an ndarray
         raise TypeError(
-            "only NumPy ndarrays objects supported as input")
+            "only NumPy ndarray objects supported as input")
     itemsize = array.itemsize
     _check_input_length('array size', array.size*itemsize)
     _check_typesize(array.itemsize)
     _check_clevel(clevel)
+    _check_cname(cname)
 
     # Use the fastest pickle available
     pickled_array = pickle.dumps(array, pickle.HIGHEST_PROTOCOL)
     # ... and compress the pickle
-    packed_array = compress(pickled_array, itemsize, clevel, shuffle)
+    packed_array = compress(pickled_array, itemsize, clevel, shuffle, cname)
 
     return packed_array
 
@@ -515,6 +560,7 @@ def print_versions():
     print("-=" * 38)
     print("python-blosc version: %s" % blosc.__version__)
     print("Blosc version: %s" % blosc.blosclib_version)
+    print("Blosc compressors in this build: %s" % blosc.compressor_list())
     print("Python version: %s" % sys.version)
     (sysname, nodename, release, version, machine, processor) = platform.uname()
     print("Platform: %s-%s-%s (%s)" % (sysname, release, machine, version))
@@ -534,4 +580,4 @@ if __name__ == '__main__':
     print_versions()
     nfail, ntests = doctest.testmod()
     if nfail == 0:
-        print("All %d tests passed successfuly!" % ntests)
+        print("All %d tests passed successfully!" % ntests)
