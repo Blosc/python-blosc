@@ -487,7 +487,7 @@ def pack_array(array, clevel=9, shuffle=True, cname='blosclz'):
     if not (hasattr(array, 'dtype') and hasattr(array, 'shape')):
         # This does not quack like an ndarray
         raise TypeError(
-            "only NumPy ndarrays objects supported as input")
+            "only NumPy ndarray objects supported as input")
     itemsize = array.itemsize
     _check_input_length('array size', array.size*itemsize)
     _check_typesize(array.itemsize)
@@ -580,4 +580,4 @@ if __name__ == '__main__':
     print_versions()
     nfail, ntests = doctest.testmod()
     if nfail == 0:
-        print("All %d tests passed successfuly!" % ntests)
+        print("All %d tests passed successfully!" % ntests)
