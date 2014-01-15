@@ -13,22 +13,24 @@ compression through different compressors in Blosc.
 """
 
 from __future__ import print_function
-import numpy
+import numpy as np
 import time
 import blosc
 
 N = 1e7
 clevel = 9
 
-Nexp = numpy.log10(N)
+Nexp = np.log10(N)
 print("Creating a large NumPy array with 10**%d int64 elements:" % Nexp)
-in_ = numpy.arange(N, dtype=numpy.int64)
+in_ = np.arange(N, dtype=np.int64)  # the trivial linear distribution
+#in_ = np.linspace(0, 100, N)  # another linear distribution
+#in_ = np.random.random_integers(0, 100, N)  # random distribution
 print(" ", in_)
 
 tic = time.time()
-out_ = numpy.copy(in_)
+out_ = np.copy(in_)
 toc = time.time()
-print("  Time for copying array with numpy.copy():     %.3f s" % (toc-tic,))
+print("  Time for copying array with np.copy():     %.3f s" % (toc-tic,))
 print()
 
 for cname in blosc.compressor_list():
@@ -49,7 +51,7 @@ for cname in blosc.compressor_list():
                            in_.size, in_.dtype.itemsize,
                            clevel=clevel, shuffle=True, cname=cname)
     ctoc = time.time()
-    out = numpy.empty(in_.size, dtype=in_.dtype)
+    out = np.empty(in_.size, dtype=in_.dtype)
     dtic = time.time()
     blosc.decompress_ptr(c, out.__array_interface__['data'][0])
     dtoc = time.time()
