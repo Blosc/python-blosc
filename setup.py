@@ -61,8 +61,7 @@ if os.name == 'posix':
     CFLAGS.append("-msse2")
 
 # Blosc sources and headers
-c_sources = ["blosc/blosc_extension.c"]
-c_depends = ['blosc.h']
+sources = ["blosc/blosc_extension.c"]
 inc_dirs = []
 lib_dirs = []
 libs = []
@@ -75,13 +74,13 @@ if BLOSC_DIR != '':
 else:
     # Compiling everything from sources
     # Blosc + BloscLZ sources
-    c_sources += glob.glob('c-blosc/blosc/*.c')
+    sources += glob.glob('c-blosc/blosc/*.c')
     # LZ4 sources
-    c_sources += glob.glob('c-blosc/internal-complibs/lz4*/*.c')
+    sources += glob.glob('c-blosc/internal-complibs/lz4*/*.c')
     # Snappy sources
-    c_sources += glob.glob('c-blosc/internal-complibs/snappy*/*.cc')
+    sources += glob.glob('c-blosc/internal-complibs/snappy*/*.cc')
     # Zlib sources
-    c_sources += glob.glob('c-blosc/internal-complibs/zlib*/*.c')
+    sources += glob.glob('c-blosc/internal-complibs/zlib*/*.c')
     # Finally, add all the include dirs...
     inc_dirs += [os.path.join('c-blosc', 'blosc')]
     inc_dirs += glob.glob('c-blosc/internal-complibs/*')
@@ -124,8 +123,7 @@ Blosc is a high performance compressor optimized for binary data.
         Extension( "blosc.blosc_extension",
                    include_dirs=inc_dirs,
                    define_macros=def_macros,
-                   sources = c_sources,
-                   depends = c_depends,
+                   sources=sources,
                    library_dirs=lib_dirs,
                    libraries=libs,
                    extra_link_args=LFLAGS,
