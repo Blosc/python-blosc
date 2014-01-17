@@ -1,18 +1,14 @@
 ===============================================================
- Announcing Blosc 1.3.1
+ Announcing Blosc 1.3.2
  A blocking, shuffling and lossless compression library
 ===============================================================
 
 What is new?
 ============
 
-This is a bug fis release for a series of issues with the filter for
-HDF5 and, in particular, a problem in the decompression buffer size
-that made it impossible to use the blosc_filter in combination with
-other ones (e.g. fletcher32).  See
-https://github.com/PyTables/PyTables/issues/21.
-
-Thanks to Antonio Valentino for the fix!
+This is a maintenance release, where basically support for MSVC 2008
+has been added for Snappy internal sources and versioning symbols have
+been included in internal sources.
 
 For more info, please see the release notes in:
 
