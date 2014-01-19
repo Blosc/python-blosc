@@ -33,33 +33,32 @@ parameter in compression functions.  For example::
   in = numpy.arange(N, dtype=numpy.int64)
   out = blosc.pack_array(in, cname="lz4")
 
-Here it is the output of the included compress-ptr.py benchmark:
+Here it is the output of the included compress-ptr.py benchmark::
 
-```
-Creating different NumPy arrays with 10**7 int64 elements:
-  *** np.copy() **** Time for memcpy():     0.128 s
+  Creating different NumPy arrays with 10**7 int64 elements:
+    *** np.copy() **** Time for memcpy():     0.128 s
 
-*** the arange linear distribution ***
-  *** blosclz  *** Time for comp/decomp: 0.041/0.074 s.	Compr ratio: 136.83
-  *** lz4      *** Time for comp/decomp: 0.033/0.087 s.	Compr ratio: 137.19
-  *** lz4hc    *** Time for comp/decomp: 0.380/0.100 s.	Compr ratio: 165.12
-  *** snappy   *** Time for comp/decomp: 0.059/0.082 s.	Compr ratio:  20.38
-  *** zlib     *** Time for comp/decomp: 0.607/0.201 s.	Compr ratio: 407.60
+  *** the arange linear distribution ***
+    *** blosclz  *** Time for comp/decomp: 0.041/0.074 s.	Compr ratio: 136.83
+    *** lz4      *** Time for comp/decomp: 0.033/0.087 s.	Compr ratio: 137.19
+    *** lz4hc    *** Time for comp/decomp: 0.380/0.100 s.	Compr ratio: 165.12
+    *** snappy   *** Time for comp/decomp: 0.059/0.082 s.	Compr ratio:  20.38
+    *** zlib     *** Time for comp/decomp: 0.607/0.201 s.	Compr ratio: 407.60
 
-*** the linspace linear distribution ***
-  *** blosclz  *** Time for comp/decomp: 0.118/0.101 s.	Compr ratio:  10.47
-  *** lz4      *** Time for comp/decomp: 0.074/0.150 s.	Compr ratio:  13.68
-  *** lz4hc    *** Time for comp/decomp: 0.513/0.102 s.	Compr ratio:  70.84
-  *** snappy   *** Time for comp/decomp: 0.089/0.109 s.	Compr ratio:   9.74
-  *** zlib     *** Time for comp/decomp: 0.819/0.249 s.	Compr ratio:  79.11
+  *** the linspace linear distribution ***
+    *** blosclz  *** Time for comp/decomp: 0.118/0.101 s.	Compr ratio:  10.47
+    *** lz4      *** Time for comp/decomp: 0.074/0.150 s.	Compr ratio:  13.68
+    *** lz4hc    *** Time for comp/decomp: 0.513/0.102 s.	Compr ratio:  70.84
+    *** snappy   *** Time for comp/decomp: 0.089/0.109 s.	Compr ratio:   9.74
+    *** zlib     *** Time for comp/decomp: 0.819/0.249 s.	Compr ratio:  79.11
 
-*** the random distribution ***
-  *** blosclz  *** Time for comp/decomp: 0.116/0.173 s.	Compr ratio:   7.76
-  *** lz4      *** Time for comp/decomp: 0.047/0.096 s.	Compr ratio:   7.76
-  *** lz4hc    *** Time for comp/decomp: 0.414/0.120 s.	Compr ratio:   7.78
-  *** snappy   *** Time for comp/decomp: 0.058/0.086 s.	Compr ratio:   6.01
-  *** zlib     *** Time for comp/decomp: 0.926/0.244 s.	Compr ratio:   9.41
-```
+  *** the random distribution ***
+    *** blosclz  *** Time for comp/decomp: 0.116/0.173 s.	Compr ratio:   7.76
+    *** lz4      *** Time for comp/decomp: 0.047/0.096 s.	Compr ratio:   7.76
+    *** lz4hc    *** Time for comp/decomp: 0.414/0.120 s.	Compr ratio:   7.78
+    *** snappy   *** Time for comp/decomp: 0.058/0.086 s.	Compr ratio:   6.01
+    *** zlib     *** Time for comp/decomp: 0.926/0.244 s.	Compr ratio:   9.41
+
 
 That means that Blosc in combination with LZ4 can compress at speeds
 that can be up to 4x faster than a pure memcpy operation.  Decompression
