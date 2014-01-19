@@ -5,7 +5,7 @@ blosc: a Python wrapper for the extremely fast Blosc compression library
 :Author: Valentin Hänel
 :Contact: faltet@gmail.com
 :URL: http://blosc.pydata.org
-:URL: https://github.com/FrancescAlted/python-blosc
+:URL: https://github.com/ContinuumIO/python-blosc
 
 
 What it is
@@ -154,7 +154,7 @@ http://blosc.pydata.org
 
 Also, some examples are available on python-blosc wiki page:
 
-http://github.com/FrancescAlted/python-blosc/wiki
+http://github.com/ContinuumIO/python-blosc/wiki
 
 
 

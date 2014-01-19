@@ -68,7 +68,7 @@ will vary!).
 
 For more info, you can have a look at the release notes in:
 
-https://github.com/FrancescAlted/python-blosc/wiki/Release-notes
+https://github.com/ContinuumIO/python-blosc/wiki/Release-notes
 
 More docs and examples are available in the documentation site:
 
@@ -113,7 +113,7 @@ Download sources
 
 The sources are managed through github services at:
 
-http://github.com/FrancescAlted/python-blosc
+http://github.com/ContinuumIO/python-blosc
 
 
 Documentation
@@ -139,7 +139,7 @@ Licenses
 Both Blosc and its Python wrapper are distributed using the MIT license.
 See:
 
-https://github.com/FrancescAlted/python-blosc/blob/master/LICENSES
+https://github.com/ContinuumIO/python-blosc/blob/master/LICENSES
 
 for more details.
 
