@@ -28,16 +28,19 @@ or:
   $ pip install -U blosc
 
 
-Building
-========
+Building manually
+=================
 
-There are different ways to compile python-blosc, depending if you want
-to link with an already installed Blosc library or not.
+First, go to the python-blosc official repository at
+https://github.com/ContinuumIO/python-blosc and download the sources.
+
+Then, there are different ways to compile python-blosc, depending if
+you want to link with an already installed Blosc library or not.
 
 Compiling without an installed Blosc library
 --------------------------------------------
 
-python-blosc come with the Blosc sources with it so, assuming that you
+python-blosc comes with the Blosc sources with it so, assuming that you
 have a C compiler installed, do:
 
 .. code-block:: console

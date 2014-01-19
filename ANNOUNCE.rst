@@ -143,6 +143,9 @@ https://github.com/ContinuumIO/python-blosc/blob/master/LICENSES
 
 for more details.
 
+----
+
+  **Enjoy data!**
 
 
 .. Local Variables:
