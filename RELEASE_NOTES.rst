@@ -21,8 +21,8 @@ This release adds support for the multiple compressors added in Blosc
 - Added a new utility function named `compressor_list()` that returns
   the list of compressors supported in the Blosc build.
 
-- Updated 'bench/compare-pack-ptr.py' for comparing times of the
-  different compressors in Blosc.
+- Added 'bench/compress_ptr.py' for comparing times of the different
+  compressors in Blosc and NumPy.
 
 
 Changes from 1.0.6 to 1.1

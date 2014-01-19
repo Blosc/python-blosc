@@ -20,7 +20,7 @@ N = 1e7
 clevel = 9
 
 Nexp = np.log10(N)
-print("Creating different NumPy arrays with 10**%d int64 elements:" % Nexp)
+print("Creating different NumPy arrays with 10**%d int64/float64 elements:" % Nexp)
 arrays = [None]*3
 labels = [None]*3
 arrays[0] = np.arange(N, dtype=np.int64)
