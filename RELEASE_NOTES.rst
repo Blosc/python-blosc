@@ -1,5 +1,5 @@
 ======================================
- Release notes for python-blosc 1.2.0
+ Release notes for python-blosc 1.2.1
 ======================================
 
 :Author: Francesc Alted
@@ -9,8 +9,14 @@
 :URL: https://github.com/ContinuumIO/python-blosc
 
 
-Changes from 1.1 to 1.2.0
-=========================
+Changes from 1.2.0 to 1.2.1
+===========================
+
+ #XXX version-specific blurb XXX#
+
+
+Changes from 1.1.0 to 1.2.0
+===========================
 
 This release adds support for the multiple compressors added in Blosc
 1.3 series.
@@ -25,8 +31,8 @@ This release adds support for the multiple compressors added in Blosc
   compressors in Blosc and NumPy.
 
 
-Changes from 1.0.6 to 1.1
-=========================
+Changes from 1.0.6 to 1.1.0
+===========================
 
 - Added new `compress_ptr` and `decompress_ptr` functions that allows to
   compress and decompress from/to a data pointer.  These are low level

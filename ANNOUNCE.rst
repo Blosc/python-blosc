@@ -1,70 +1,11 @@
 =============================
-Announcing python-blosc 1.2.0
+Announcing python-blosc 1.2.1
 =============================
 
 What is new?
 ============
 
-This release adds support for the multiple compressors added in Blosc
-1.3 series.  The new compressors are:
-
-* lz4 (http://code.google.com/p/lz4/): A very fast
-  compressor/decompressor.  Could be thought as a replacement of the
-  original BloscLZ, but it can behave better is some scenarios.
-
-* lz4hc (http://code.google.com/p/lz4/): This is a variation of LZ4
-  that achieves much better compression ratio at the cost of being
-  much slower for compressing.  Decompression speed is unaffected (and
-  sometimes better than when using LZ4 itself!), so this is very good
-  for read-only datasets.
-
-* snappy (http://code.google.com/p/snappy/): A very fast
-  compressor/decompressor.  Could be thought as a replacement of the
-  original BloscLZ, but it can behave better is some scenarios.
-
-* zlib (http://www.zlib.net/): This is a classic.  It achieves very
-  good compression ratios, at the cost of speed.  However,
-  decompression speed is still pretty good, so it is a good candidate
-  for read-only datasets.
-
-Selecting the compressor is just a matter of specifying the new `cname`
-parameter in compression functions.  For example::
-
-  in = numpy.arange(N, dtype=numpy.int64)
-  out = blosc.pack_array(in, cname="lz4")
-
-Here it is the output of the included compress-ptr.py benchmark::
-
-  Creating different NumPy arrays with 10**7 int64/float64 elements:
-    *** np.copy() **** Time for memcpy():     0.106 s
-
-  *** the arange linear distribution ***
-    *** blosclz  *** Time for comp/decomp: 0.034/0.077 s.	Compr ratio: 136.83
-    *** lz4      *** Time for comp/decomp: 0.030/0.080 s.	Compr ratio: 137.19
-    *** lz4hc    *** Time for comp/decomp: 0.370/0.097 s.	Compr ratio: 165.12
-    *** snappy   *** Time for comp/decomp: 0.054/0.081 s.	Compr ratio:  20.38
-    *** zlib     *** Time for comp/decomp: 0.415/0.170 s.	Compr ratio: 407.60
-
-  *** the linspace linear distribution ***
-    *** blosclz  *** Time for comp/decomp: 0.112/0.094 s.	Compr ratio:  10.47
-    *** lz4      *** Time for comp/decomp: 0.063/0.084 s.	Compr ratio:  13.68
-    *** lz4hc    *** Time for comp/decomp: 0.412/0.097 s.	Compr ratio:  70.84
-    *** snappy   *** Time for comp/decomp: 0.099/0.341 s.	Compr ratio:   9.74
-    *** zlib     *** Time for comp/decomp: 0.620/0.333 s.	Compr ratio:  79.11
-
-  *** the random distribution ***
-    *** blosclz  *** Time for comp/decomp: 0.102/0.210 s.	Compr ratio:   7.76
-    *** lz4      *** Time for comp/decomp: 0.044/0.090 s.	Compr ratio:   7.76
-    *** lz4hc    *** Time for comp/decomp: 0.352/0.103 s.	Compr ratio:   7.78
-    *** snappy   *** Time for comp/decomp: 0.073/0.084 s.	Compr ratio:   6.01
-    *** zlib     *** Time for comp/decomp: 0.709/0.218 s.	Compr ratio:   9.41
-
-That means that Blosc in combination with LZ4 can compress at speeds
-that can be up to 3x faster than a pure memcpy operation.  Decompression
-is a bit slower (but still faster than memcpy()) probably because
-writing to memory is slower than reading.  This was using an Intel Core
-2 Duo at 2.13 GHz, runnng Python 3.3 and Mac OSX 10.9, but YMMV (and
-will vary!).
+ #XXX version-specific blurb XXX#
 
 For more info, you can have a look at the release notes in:
 
