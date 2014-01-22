@@ -203,7 +203,8 @@ def _check_clevel(clevel):
 def _check_cname(cname):
     list_cnames = compressor_list()
     if cname not in list_cnames:
-        raise ValueError("cname can only be one of: %s" % list_cnames)
+        raise ValueError("cname can only be one of: %s, not '%s'" %
+                         (list_cnames, cname))
 
 
 def _check_typesize(typesize):
