@@ -115,11 +115,11 @@ and `unpack_array` to perform this in a handy way::
 
   >>> a = np.linspace(0, 100, 1e7)
   >>> %time packed = blosc.pack_array(a)
-  CPU times: user 170 ms, sys: 17 ms, total: 187 ms
-  Wall time: 92 ms
+  CPU times: user 172 ms, sys: 84 ms, total: 256 ms
+  Wall time: 151 ms
   >>> %time a2 = blosc.unpack_array(packed)
-  CPU times: user 109 ms, sys: 15 ms, total: 124 ms
-  Wall time: 67.3 ms
+  CPU times: user 116 ms, sys: 60 ms, total: 176 ms
+  Wall time: 104 ms
   >>> np.alltrue(a == a2)
   True
 
@@ -135,14 +135,14 @@ For avoiding the data copy problem in the previous section, `blosc`
 comes with a couple of lower-level functions: `compress_ptr` and
 `decompress_ptr`.  Here are they in action::
 
-  >>> c = blosc.compress_ptr(a.__array_interface__['data'][0], a.size,
-                             a.dtype.itemsize, 9, True, 'lz4')
-  CPU times: user 65 ms, sys: 3 ms, total: 68 ms
-  Wall time: 19.2 ms
+  >>> %time c = blosc.compress_ptr(a.__array_interface__['data'][0], a.size,
+                             a.dtype.itemsize, 9, True)
+  CPU times: user 144 ms, sys: 0 ns, total: 144 ms
+  Wall time: 37.2 ms
   >>> a2 = numpy.empty(a.size, dtype=a.dtype)
-  >>> blosc.decompress_ptr(c, a2.__array_interface__['data'][0])
-  CPU times: user 49 ms, sys: 0 ns, total: 49 ms
-  Wall time: 14.5 ms
+  >>> %time blosc.decompress_ptr(c, a2.__array_interface__['data'][0])
+  CPU times: user 80 ms, sys: 0 ns, total: 80 ms
+  Wall time: 24.9 ms
   80000000L
   >>> (a == a2).all()
   True
