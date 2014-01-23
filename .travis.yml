@@ -20,5 +20,7 @@ install:
 script:
   - mkdir empty
   - cd empty
-  - python -c "import blosc; blosc.test()"
+  - python -c"import blosc; blosc.print_versions()"
+  - nosetests blosc
+
 
