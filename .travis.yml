@@ -1,18 +1,24 @@
 language: python
 
-virtualenv:
-  system_site_packages: true
-
 python:
-  - "2.6"
-  - "2.7"
-  - "3.2"
-  - "3.3"
+  - 2.6
+  - 2.7
+  - 3.2
+  - 3.3
 
 before_install:
-    - sudo apt-get update -qq
-    - sudo apt-get install -qq python3-numpy
-    - if [[ $TRAVIS_PYTHON_VERSION == '3.3' ]]; then pip install -U numpy>=1.4.1 --use-mirrors; fi
-    - pip install -r requirements.txt --use-mirrors
+  - uname -a
+  - free -m
+  - df -h
+  - ulimit -a
+  - pip install -q --use-mirrors numpy
+  - python -V
 
-script: python -c 'import blosc; blosc.test()'
+install:
+  - pip install .
+
+script:
+  - mkdir empty
+  - cd empty
+  - python -c "import blosc; blosc.test()"
+
