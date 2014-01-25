@@ -25,9 +25,9 @@ arrays = [None]*3
 labels = [None]*3
 arrays[0] = np.arange(N, dtype=np.int64)
 labels[0] = "the arange linear distribution"
-arrays[1] = np.linspace(0, 100, N)
+arrays[1] = np.linspace(0, 1000, N)
 labels[1] = "the linspace linear distribution"
-arrays[2] = np.random.random_integers(0, 100, N)
+arrays[2] = np.random.random_integers(0, 1000, N)
 labels[2] = "the random distribution"
 
 tic = time.time()
