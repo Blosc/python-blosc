@@ -32,7 +32,7 @@ Building manually
 =================
 
 First, go to the python-blosc official repository at
-https://github.com/ContinuumIO/python-blosc and download the sources.
+https://github.com/Blosc/python-blosc and download the sources.
 
 Then, there are different ways to compile python-blosc, depending if
 you want to link with an already installed Blosc library or not.

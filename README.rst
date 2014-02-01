@@ -4,8 +4,9 @@ blosc: a Python wrapper for the extremely fast Blosc compression library
 :Author: Francesc Alted
 :Author: Valentin Hänel
 :Contact: faltet@gmail.com
+:Contact: valentin@haenel.co
+:URL: https://github.com/Blosc/python-blosc
 :URL: http://blosc.pydata.org
-:URL: https://github.com/ContinuumIO/python-blosc
 
 
 What it is
@@ -20,8 +21,8 @@ Blosc works well for compressing numerical arrays that contains data
 with relatively low entropy, like sparse data, time series, grids with
 regular-spaced values, etc.
 
-This is a Python package that wraps it.  python-blosc supports 2.6, 2.7
-and 3.1, 3.2, 3.3 or higher versions.
+python-blosc a Python package that wraps Blosc.  python-blosc supports
+Python 2.6, 2.7 and 3.1, 3.2, 3.3 or higher versions.
 
 Building
 ========
@@ -150,11 +151,11 @@ and ask for more docstrings in the referenced functions.
 
 The Sphinx based documentation is here:
 
-http://blosc.pydata.org
+http://www.blosc.org
 
 Also, some examples are available on python-blosc wiki page:
 
-http://github.com/ContinuumIO/python-blosc/wiki
+http://github.com/blosc/python-blosc/wiki
 
 
 
