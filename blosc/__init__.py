@@ -27,8 +27,11 @@ from blosc.toplevel import (
     )
 
 # Dictionaries for the maps between compressor codes and names
-name2code = dict((name, name_to_code(name)) for name in compressor_list())
+cnames = compressor_list()
+name2code = dict((name, name_to_code(name)) for name in cnames)
 code2name = dict((code, name) for name, code in name2code.items())
+# Map for compression libraries and versions
+clib_versions = dict(clib_info(name) for name in cnames)
 
 # Blosc symbols that we want to export
 from blosc.blosc_extension import (

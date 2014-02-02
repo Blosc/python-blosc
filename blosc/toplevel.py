@@ -99,7 +99,7 @@ def compressor_list():
   """
   compressor_list()
 
-  Returns a list of compressors available in library.
+  Returns a list of compressors available in C library.
 
   Parameters
   ----------
@@ -155,7 +155,7 @@ def clib_info(cname):
   """
   clib_info(cname)
 
-  Return info for compression libraries in library.
+  Return info for compression libraries in C library.
 
   Parameters
   ----------
@@ -617,16 +617,10 @@ def print_versions():
     print("-=" * 38)
     print("python-blosc version: %s" % blosc.__version__)
     print("Blosc version: %s" % blosc.blosclib_version)
-    clist = blosc.compressor_list()
-    print("Compressors available: %s" % clist)
+    print("Compressors available: %s" % blosc.cnames)
     print("Compressor library versions:")
-    clibs = []
-    for cname in clist:
-        clib, lversion = blosc.clib_info(cname)
-        if clib in clibs:
-            continue
-        clibs.append(clib)
-        print("  %s: %s" % (clib, lversion))
+    for clib in sorted(blosc.clib_versions.keys()):
+        print("  %s: %s" % (clib, blosc.clib_versions[clib]))
     print("Python version: %s" % sys.version)
     (sysname, nodename, release, version, machine, processor) = platform.uname()
     print("Platform: %s-%s-%s (%s)" % (sysname, release, machine, version))

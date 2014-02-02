@@ -13,6 +13,14 @@ First level variables
 
     The version of the Blosc C library.
 
+.. py:attribute:: clib_versions
+
+    A map for the versions of the compression libraries included in C library.
+
+.. py:attribute:: cnames
+
+    The list of compressors included in C library.
+
 .. py:attribute:: code2name
 
     A map between compressor codes and its names.
