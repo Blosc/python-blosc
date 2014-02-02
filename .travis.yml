@@ -23,4 +23,3 @@ script:
   - python -c"import blosc; blosc.print_versions()"
   - nosetests blosc
 
-
