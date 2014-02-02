@@ -197,7 +197,7 @@ is shown below:
     remote: Total 1558 (delta 958), reused 1528 (delta 932)
     Receiving objects: 100% (1558/1558), 468.67 KiB | 304 KiB/s, done.
     Resolving deltas: 100% (958/958), done.
-    From git://github.com/FrancescAlted/blosc
+    From git://github.com/Blosc/c-blosc
      + tag               v1.2.3     -> FETCH_HEAD
     Squash commit -- not updating HEAD
     Automatic merge went well; stopped before committing as requested

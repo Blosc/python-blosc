@@ -9,7 +9,7 @@
 # * Should probably check working tree and index are clean.
 
 # configure remote
-remote="git://github.com/FrancescAlted/blosc.git"
+remote="git://github.com/Blosc/c-blosc.git"
 
 # check argument
 if [ -z "$1" ] ; then
