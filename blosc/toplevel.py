@@ -99,7 +99,7 @@ def compressor_list():
   """
   compressor_list()
 
-  Returns a list of compressors available in the Blosc build.
+  Returns a list of compressors available in library.
 
   Parameters
   ----------
@@ -111,6 +111,63 @@ def compressor_list():
       The list of names.
   """
   return _ext.compressor_list().split(',')
+
+
+def code_to_name(code):
+  """
+  code_to_name(code)
+
+  Return the compressor name of a compressor code.
+
+  Parameters
+  ----------
+  code : int
+      The compressor code.
+
+  Returns
+  -------
+  out : string
+      The compressor name.
+  """
+  return _ext.code_to_name(code)
+
+
+def name_to_code(name):
+  """
+  name_to_code(name)
+
+  Return the compressor code of a compressor name.
+
+  Parameters
+  ----------
+  name : string
+      The compressor name.
+
+  Returns
+  -------
+  out : int
+      The compressor code.
+  """
+  return _ext.name_to_code(name)
+
+
+def clib_info(cname):
+  """
+  clib_info(cname)
+
+  Return info for compression libraries in library.
+
+  Parameters
+  ----------
+  cname : string
+      The compressor name.
+
+  Returns
+  -------
+  out : tuple
+      The associated library name and version.
+  """
+  return _ext.clib_info(cname)
 
 
 def free_resources():
@@ -560,7 +617,16 @@ def print_versions():
     print("-=" * 38)
     print("python-blosc version: %s" % blosc.__version__)
     print("Blosc version: %s" % blosc.blosclib_version)
-    print("Blosc compressors in this build: %s" % blosc.compressor_list())
+    clist = blosc.compressor_list()
+    print("Compressors available: %s" % clist)
+    print("Compressor library versions:")
+    clibs = []
+    for cname in clist:
+        clib, lversion = blosc.clib_info(cname)
+        if clib in clibs:
+            continue
+        clibs.append(clib)
+        print("  %s: %s" % (clib, lversion))
     print("Python version: %s" % sys.version)
     (sysname, nodename, release, version, machine, processor) = platform.uname()
     print("Platform: %s-%s-%s (%s)" % (sysname, release, machine, version))

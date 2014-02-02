@@ -20,8 +20,15 @@ from blosc.toplevel import (
     free_resources,
     set_nthreads,
     compressor_list,
+    code_to_name,
+    name_to_code,
+    clib_info,
     print_versions,
     )
+
+# Dictionaries for the maps between compressor codes and names
+name2code = dict((name, name_to_code(name)) for name in compressor_list())
+code2name = dict((code, name) for name, code in name2code.items())
 
 # Blosc symbols that we want to export
 from blosc.blosc_extension import (
@@ -49,4 +56,5 @@ from blosc.test import run as test
 __all__ = ['compress', 'compress_ptr', 'decompress', 'decompress_ptr',
            'pack_array', 'unpack_array',
            'detect_number_of_cores', 'free_resources', 'set_nthreads',
-           'compressor_list', 'print_versions', 'test']
+           'compressor_list', 'clib_info',
+           'print_versions', 'test']

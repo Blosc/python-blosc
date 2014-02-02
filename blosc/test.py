@@ -23,6 +23,13 @@ class TestCodec(unittest.TestCase):
         d = blosc.decompress(c)
         self.assertEqual(s, d)
 
+    def test_maps(self):
+        cnames = sorted(blosc.compressor_list())
+        cnames2 = sorted(blosc.name2code.keys())
+        self.assertEqual(cnames, cnames2)
+        cnames3 = sorted(blosc.code2name.values())
+        self.assertEqual(cnames, cnames3)
+
     def test_all_compressors(self):
         s = b'0123456789'*100
         for cname in blosc.compressor_list():

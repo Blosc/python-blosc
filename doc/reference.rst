@@ -7,11 +7,19 @@ First level variables
 
 .. py:attribute:: __version__
 
-    The version of the carray package.
+    The version of the blosc package.
 
 .. py:attribute:: blosclib_version
 
     The version of the Blosc C library.
+
+.. py:attribute:: code2name
+
+    A map between compressor codes and its names.
+
+.. py:attribute:: name2code
+
+    A map between compressor names and its codes.
 
 .. py:attribute:: ncores
 
@@ -29,5 +37,5 @@ Utilities
 =========
 
 .. automodule:: blosc
-   :members: compressor_list, detect_number_of_cores, free_resources, set_nthreads, print_versions, test
+   :members: clib_info, compressor_list, detect_number_of_cores, free_resources, set_nthreads, print_versions, test
 

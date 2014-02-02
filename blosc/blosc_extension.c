@@ -56,6 +56,68 @@ PyBlosc_compressor_list(PyObject *self)
 }
 
 
+PyDoc_STRVAR(code_to_name__doc__,
+"code_to_name() -- Return the compressor name of a compressor code.\n"
+             );
+
+static PyObject *
+PyBlosc_code_to_name(PyObject *self, PyObject *args)
+{
+    int code;
+    char *name;
+
+    if (!PyArg_ParseTuple(args, "i:code_to_name", &code))
+      return NULL;
+
+    if (blosc_compcode_to_compname(code, &name) < 0)
+      return NULL;
+
+    return Py_BuildValue("s", name);
+}
+
+
+PyDoc_STRVAR(name_to_code__doc__,
+"name_to_code() -- Return the compressor code of a compressor name.\n"
+             );
+
+static PyObject *
+PyBlosc_name_to_code(PyObject *self, PyObject *args)
+{
+    int code;
+    char *name;
+
+    if (!PyArg_ParseTuple(args, "s:name_to_code", &name))
+      return NULL;
+    
+    code = blosc_compname_to_compcode(name);
+    if (code < 0)
+      return NULL;
+
+    return Py_BuildValue("i", code);
+}
+
+
+PyDoc_STRVAR(clib_info__doc__,
+"clib_info() -- Return info for compression libraries in the current build.\n"
+             );
+
+static PyObject *
+PyBlosc_clib_info(PyObject *self, PyObject *args)
+{
+    char *cname;
+    char *clib;
+    char *version;
+
+    if (!PyArg_ParseTuple(args, "s:clib_info", &cname))
+      return NULL;
+    
+    if (blosc_get_complib_info(cname, &clib, &version) < 0)
+      return NULL;
+
+    return Py_BuildValue("(s, s)", clib, version);
+}
+
+
 PyDoc_STRVAR(free_resources__doc__,
 "free_resources() -- Free possible memory temporaries and thread resources.\n"
              );
@@ -301,6 +363,12 @@ static PyMethodDef blosc_methods[] =
    set_nthreads__doc__},
   {"compressor_list", (PyCFunction)PyBlosc_compressor_list, METH_VARARGS,
    compressor_list__doc__},
+  {"code_to_name", (PyCFunction)PyBlosc_code_to_name, METH_VARARGS,
+   code_to_name__doc__},
+  {"name_to_code", (PyCFunction)PyBlosc_name_to_code, METH_VARARGS,
+   name_to_code__doc__},
+  {"clib_info", (PyCFunction)PyBlosc_clib_info, METH_VARARGS,
+   clib_info__doc__},
   {"init", (PyCFunction)PyBlosc_init, METH_VARARGS,
    init__doc__},
   {"destroy", (PyCFunction)PyBlosc_destroy, METH_VARARGS,
