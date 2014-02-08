@@ -96,78 +96,99 @@ def set_nthreads(nthreads):
 
 
 def compressor_list():
-  """
-  compressor_list()
+    """
+    compressor_list()
 
-  Returns a list of compressors available in C library.
+    Returns a list of compressors available in C library.
 
-  Parameters
-  ----------
-  None
+    Parameters
+    ----------
+    None
 
-  Returns
-  -------
-  out : list
-      The list of names.
-  """
-  return _ext.compressor_list().split(',')
+    Returns
+    -------
+    out : list
+        The list of names.
+    """
+    return _ext.compressor_list().split(',')
 
 
 def code_to_name(code):
-  """
-  code_to_name(code)
+    """
+    code_to_name(code)
 
-  Return the compressor name of a compressor code.
+    Return the compressor name of a compressor code.
 
-  Parameters
-  ----------
-  code : int
-      The compressor code.
+    Parameters
+    ----------
+    code : int
+        The compressor code.
 
-  Returns
-  -------
-  out : string
-      The compressor name.
-  """
-  return _ext.code_to_name(code)
+    Returns
+    -------
+    out : str
+        The compressor name.
+    """
+    return _ext.code_to_name(code)
 
 
 def name_to_code(name):
-  """
-  name_to_code(name)
+    """
+    name_to_code(name)
 
-  Return the compressor code of a compressor name.
+    Return the compressor code of a compressor name.
 
-  Parameters
-  ----------
-  name : string
-      The compressor name.
+    Parameters
+    ----------
+    name : str
+        The compressor name.
 
-  Returns
-  -------
-  out : int
-      The compressor code.
-  """
-  return _ext.name_to_code(name)
+    Returns
+    -------
+    out : int
+        The compressor code.
+    """
+    return _ext.name_to_code(name)
 
 
 def clib_info(cname):
-  """
-  clib_info(cname)
+    """
+    clib_info(cname)
 
-  Return info for compression libraries in C library.
+    Return info for compression libraries in C library.
 
-  Parameters
-  ----------
-  cname : string
-      The compressor name.
+    Parameters
+    ----------
+    cname : str
+        The compressor name.
 
-  Returns
-  -------
-  out : tuple
-      The associated library name and version.
-  """
-  return _ext.clib_info(cname)
+    Returns
+    -------
+    out : tuple
+        The associated library name and version.
+    """
+    return _ext.clib_info(cname)
+
+
+def get_clib(bytesobj):
+    """
+    get_clib(bytesobj)
+
+    Return the name of the compression library for Blosc `bytesobj` buffer.
+
+    Parameters
+    ----------
+    bytesobj : str / bytes
+        The compressed buffer.
+
+    Returns
+    -------
+    out : str
+        The name of the compression library.
+    """
+    _check_bytesobj(bytesobj)
+
+    return _ext.get_clib(bytesobj)
 
 
 def free_resources():

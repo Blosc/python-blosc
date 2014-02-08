@@ -45,5 +45,5 @@ Utilities
 =========
 
 .. automodule:: blosc
-   :members: clib_info, compressor_list, detect_number_of_cores, free_resources, set_nthreads, print_versions, test
+   :members: clib_info, compressor_list, detect_number_of_cores, free_resources, get_clib, set_nthreads, print_versions, test
 

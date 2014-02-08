@@ -88,7 +88,7 @@ PyBlosc_name_to_code(PyObject *self, PyObject *args)
 
     if (!PyArg_ParseTuple(args, "s:name_to_code", &name))
       return NULL;
-    
+
     code = blosc_compname_to_compcode(name);
     if (code < 0)
       return NULL;
@@ -110,7 +110,7 @@ PyBlosc_clib_info(PyObject *self, PyObject *args)
 
     if (!PyArg_ParseTuple(args, "s:clib_info", &cname))
       return NULL;
-    
+
     if (blosc_get_complib_info(cname, &clib, &version) < 0)
       return NULL;
 
@@ -190,7 +190,7 @@ compress_helper(void * input, size_t nbytes, size_t typesize,
 }
 
 PyDoc_STRVAR(compress_ptr__doc__,
-"compress_ptr(pointer, len, typesize, clevel, shuffle, cname]) -- Return compressed string.\n"
+"compress_ptr(pointer, len, typesize[, clevel, shuffle, cname]) -- Return compressed string.\n"
              );
 
 static PyObject *
@@ -214,7 +214,7 @@ PyBlosc_compress_ptr(PyObject *self, PyObject *args)
 }
 
 PyDoc_STRVAR(compress__doc__,
-"compress(string[, typesize, clevel, shuffle, cname]) -- Return compressed string.\n"
+"compress(string, typesize[, clevel, shuffle, cname]) -- Return compressed string.\n"
              );
 
 static PyObject *
@@ -230,6 +230,24 @@ PyBlosc_compress(PyObject *self, PyObject *args)
                           &typesize, &clevel, &shuffle, &cname))
       return NULL;
     return compress_helper(input, nbytes, typesize, clevel, shuffle, cname);
+}
+
+PyDoc_STRVAR(get_clib__doc__,
+"get_clib(string) -- Return the name of the compression library for Blosc buffer.\n"
+             );
+
+static PyObject *
+PyBlosc_get_clib(PyObject *self, PyObject *args)
+{
+    void *input;
+    size_t cbytes;
+    char *clib;
+
+    /* require Python string object, typesize, clevel and shuffle agrs */
+    if (!PyArg_ParseTuple(args, "s#:get_clib", &input, &cbytes))
+      return NULL;
+    clib = blosc_cbuffer_complib(input);
+    return Py_BuildValue("s", clib);
 }
 
 /*  Read blosc header from input and fetch the uncompressed size into nbytes.
@@ -369,6 +387,8 @@ static PyMethodDef blosc_methods[] =
    name_to_code__doc__},
   {"clib_info", (PyCFunction)PyBlosc_clib_info, METH_VARARGS,
    clib_info__doc__},
+  {"get_clib", (PyCFunction)PyBlosc_get_clib, METH_VARARGS,
+   get_clib__doc__},
   {"init", (PyCFunction)PyBlosc_init, METH_VARARGS,
    init__doc__},
   {"destroy", (PyCFunction)PyBlosc_destroy, METH_VARARGS,
