@@ -1,10 +1,19 @@
 ===============================
- Release notes for Blosc 1.3.2
+ Release notes for Blosc 1.3.3
 ===============================
 
 :Author: Francesc Alted
 :Contact: faltet@gmail.com
 :URL: http://www.blosc.org
+
+
+Changes from 1.3.2 to 1.3.3
+===========================
+
+* Updated to LZ4 1.1.3 (improved speed for 32-bit platforms).
+
+* Added a new `blosc_cbuffer_complib()` for getting the compression
+  library for a compressed buffer.
 
 
 Changes from 1.3.1 to 1.3.2
