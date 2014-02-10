@@ -21,13 +21,9 @@ First level variables
 
     The list of compressors included in C library.
 
-.. py:attribute:: code2name
+.. py:attribute:: cname2clib
 
-    A map between compressor codes and its names.
-
-.. py:attribute:: name2code
-
-    A map between compressor names and its codes.
+    A map between compressor names and its libraries (or formats).
 
 .. py:attribute:: ncores
 
