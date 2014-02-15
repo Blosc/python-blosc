@@ -36,8 +36,8 @@ Packaging
 
   Do a quick check that the tarball is sane.
 
-- Make the binary packages for supported Python versions (2.6 and 2.7
-  currently).  Check that installer works correctly.
+- Make the binary packages for supported Python versions (2.6, 2.7,
+  3.2, 3.3, 3.4 currently).  Check that installer works correctly.
 
 Uploading
 ---------
