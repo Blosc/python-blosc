@@ -41,7 +41,9 @@ Compiling without an installed Blosc library
 --------------------------------------------
 
 python-blosc come with the Blosc sources with it so, assuming that you
-have a C++ compiler installed, do::
+have a C++ compiler installed, do:
+
+.. code-block:: console
 
     $ python setup.py build_ext --inplace
 
@@ -57,13 +59,17 @@ Compiling with an installed Blosc library
 In case you have Blosc installed as an external library (and disregard
 the included Blosc sources) you can link with it in a couple of ways.
 
-Using an environment variable::
+Using an environment variable:
+
+.. code-block:: console
 
     $ BLOSC_DIR=/usr/local     (or "set BLOSC_DIR=\blosc" on Win)
     $ export BLOSC_DIR         (not needed on Win)
     $ python setup.py build_ext --inplace
 
-Using a flag::
+Using a flag:
+
+.. code-block:: console
 
     $ python setup.py build_ext --inplace --blosc=/usr/local
 
@@ -72,7 +78,9 @@ Generating Sphinx documentation
 
 In case you want to generate the documentation locally, you will need to
 have the `Sphinx` documentation system, as well as the `numpydoc`
-extension, installed.  Then go down to `doc/` directory and do::
+extension, installed.  Then go down to `doc/` directory and do:
+
+.. code-block:: console
 
     $ make html|latex|latexpdf
 
@@ -80,17 +88,23 @@ Testing
 =======
 
 After compiling, you can quickly check that the package is sane by
-running the doctests in ``blosc/test.py``::
+running the doctests in ``blosc/test.py``:
+
+.. code-block:: console
 
     $ PYTHONPATH=.   (or "set PYTHONPATH=." on Win)
     $ export PYTHONPATH=.  (not needed on Win)
     $ python blosc/test.py  (add -v for verbose mode)
 
-Or alternatively, you can use the third-party ``nosetests`` script::
+Or alternatively, you can use the third-party ``nosetests`` script:
+
+.. code-block:: console
 
     $ nosetests --with-doctest (add -v for verbose mode)
 
-Once installed, you can re-run the tests at any time with::
+Once installed, you can re-run the tests at any time with:
+
+.. code-block:: console
 
     $ python -c "import blosc; blosc.test()"
 
@@ -99,7 +113,9 @@ Benchmarking
 
 If curious, you may want to run a small benchmark that compares a plain
 NumPy array copy against compression through different compressors in
-your Blosc build::
+your Blosc build:
+
+.. code-block:: console
 
   $ PYTHONPATH=. python bench/compress_ptr.py
 
@@ -142,14 +158,18 @@ to the authors!
 Installing
 ==========
 
-Install it as a typical Python package::
+Install it as a typical Python package:
+
+.. code-block:: console
 
     $ python setup.py install
 
 Documentation
 =============
 
-Please refer to docstrings.  Start by the main package::
+Please refer to docstrings.  Start by the main package:
+
+.. code-block:: pycon
 
     >>> import blosc
     >>> help(blosc)
