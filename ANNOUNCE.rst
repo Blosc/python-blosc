@@ -5,7 +5,13 @@ Announcing python-blosc 1.2.1
 What is new?
 ============
 
- #XXX version-specific blurb XXX#
+- Updated to c-blosc 1.3.3.
+
+- Added a new `cname2clib` map for programatically determine the library
+  associated to a compressor.
+
+- New `get_clib(cbuffer)` that tells which compression library format
+  has been used to created the compressed `cbuffer`.
 
 For more info, you can have a look at the release notes in:
 

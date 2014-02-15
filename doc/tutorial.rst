@@ -157,16 +157,18 @@ On the other hand, and contrarily to the `pack_array` / `unpack_array`
 method, the `compress_ptr` / `decompress_ptr` functions do not need to
 make internal copies of the data buffers, so they are extremely fast
 (as much as the C-Blosc library can be), but you have to provide a
-container when doing the de-serialization. 
+container when doing the de-serialization.
+
 
 Packing NumPy arrays with Bloscpack
 ===================================
 
-While `pack_array` / `unpack_array` has been designed for convenience and
-`compress_ptr` / `decompress_ptr` has been designed for speed there is also a
-third option that combines the best of both worlds: `Bloscpack
-<https://github.com/esc/bloscpack>`_. Since version 0.4.0, Bloscpack is able to
-natively  `de/serialize NumPy arrays <https://github.com/esc/bloscpack#numpy>`_::
+While `pack_array` / `unpack_array` have been designed for convenience
+and `compress_ptr` / `decompress_ptr` have been designed for speed
+there is also a third option that combines the best of both worlds:
+`Bloscpack <https://github.com/esc/bloscpack>`_. Since version 0.4.0,
+Bloscpack is able to natively `de/serialize NumPy arrays
+<https://github.com/esc/bloscpack#numpy>`_::
 
   >>> import bloscpack as bp
   >>> %time bp_packed = bp.pack_ndarray_str(a)
