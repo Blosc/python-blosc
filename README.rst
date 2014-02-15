@@ -77,8 +77,8 @@ Generating Sphinx documentation
 -------------------------------
 
 In case you want to generate the documentation locally, you will need to
-have the `Sphinx` documentation system, as well as the `numpydoc`
-extension, installed.  Then go down to `doc/` directory and do:
+have the Sphinx documentation system, as well as the numpydoc
+extension, installed.  Then go down to ``doc/`` directory and do:
 
 .. code-block:: console
 
@@ -149,7 +149,7 @@ vary!)::
 
 That means that Blosc in combination with LZ4 can compress at speeds
 that can be up to 3x faster than a pure memcpy operation.  Decompression
-is a bit slower (but still faster than memcpy()) probably because
+is a bit slower (but still faster than ``memcpy()``) probably because
 writing to memory is slower than reading.
 
 In case you find your onw results interesting, please report them back
