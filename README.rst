@@ -8,7 +8,7 @@ blosc: a Python wrapper for the extremely fast Blosc compression library
 :URL: https://github.com/Blosc/python-blosc
 :URL: http://blosc.pydata.org
 :Travis CI: |travis|
-:PyPi: |pypi| |version|
+:PyPi: |version| |pypi|
 
 .. |travis| image:: https://travis-ci.org/Blosc/python-blosc.png?branch=master
         :target: https://travis-ci.org/Blosc/python-blosc
