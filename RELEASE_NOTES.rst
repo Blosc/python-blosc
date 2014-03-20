@@ -10,10 +10,12 @@
 :URL: https://github.com/Blosc/python-blosc
 
 
-Changes from 1.2.0 to 1.2.1
+Changes from 1.2.1 to 1.2.2
 ===========================
 
- #XXX version-specific blurb XXX#
+- Updated to c-blosc 1.3.4.  This fixed a false buffer overrun
+  condition.  This bug made c-blosc (and hence python-blosc) to fail,
+  even if the failure was not real.
 
 
 Changes from 1.2.0 to 1.2.1

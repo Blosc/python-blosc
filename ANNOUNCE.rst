@@ -5,7 +5,9 @@ Announcing python-blosc 1.2.2
 What is new?
 ============
 
- #XXX version-specific blurb XXX#
+Updated to c-blosc 1.3.4.  This fixed a false buffer overrun condition.
+This bug made c-blosc (and hence python-blosc) to fail, even if the
+failure was not real.
 
 For more info, you can have a look at the release notes in:
 
