@@ -1,10 +1,19 @@
-===============================
- Release notes for Blosc 1.3.3
-===============================
+================================
+ Release notes for c-blosc 1.3.4
+================================
 
 :Author: Francesc Alted
 :Contact: faltet@gmail.com
 :URL: http://www.blosc.org
+
+
+Changes from 1.3.3 to 1.3.4
+===========================
+
+* Fixed a false buffer overrun condition.  This bug made c-blosc to
+  fail, even if the failure was not real.
+
+* Fixed the type of a buffer string.
 
 
 Changes from 1.3.2 to 1.3.3
