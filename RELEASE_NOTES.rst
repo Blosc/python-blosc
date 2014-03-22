@@ -1,5 +1,5 @@
 ======================================
- Release notes for python-blosc 1.2.3
+ Release notes for python-blosc 1.2.4
 ======================================
 
 :Author: Francesc Alted
@@ -8,6 +8,12 @@
 :Contact: valentin@haenel.co
 :URL: http://blosc.pydata.org
 :URL: https://github.com/Blosc/python-blosc
+
+
+Changes from 1.2.3 to 1.2.4
+===========================
+
+#XXX version-specific blurb XXX#
 
 
 Changes from 1.2.2 to 1.2.3
