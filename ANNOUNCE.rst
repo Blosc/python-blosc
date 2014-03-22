@@ -5,7 +5,9 @@ Announcing python-blosc 1.2.3
 What is new?
 ============
 
- #XXX version-specific blurb XXX#
+This is a pure maintenance release bringing an update to c-blosc 1.3.5.
+This removed a 'pointer from integer without a cast' compiler warning
+due to a bad macro definition.
 
 For more info, you can have a look at the release notes in:
 

@@ -13,7 +13,8 @@
 Changes from 1.2.2 to 1.2.3
 ===========================
 
- #XXX version-specific blurb XXX#
+- Updated to c-blosc 1.3.5.  This removed a 'pointer from integer
+  without a cast' compiler warning due to a bad macro definition.
 
 
 Changes from 1.2.1 to 1.2.2
