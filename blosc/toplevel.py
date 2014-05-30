@@ -299,6 +299,9 @@ def compress(bytesobj, typesize, clevel=9, shuffle=True, cname='blosclz'):
     >>> c_bytesobj = blosc.compress(a_bytesobj, typesize=4)
     >>> len(c_bytesobj) < len(a_bytesobj)
     True
+    >>> c_bytesobj = blosc.compress(buffer(a_bytesobj), typesize=4)
+    >>> len(c_bytesobj) < len(a_bytesobj)
+    True
 
     """
 
