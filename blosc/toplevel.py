@@ -260,7 +260,7 @@ def compress(bytesobj, typesize, clevel=9, shuffle=True, cname='blosclz'):
 
     Parameters
     ----------
-    bytesobj : str / bytes
+    bytesobj : str / bytes / buffer
         The data to be compressed.
     typesize : int
         The data type size.
