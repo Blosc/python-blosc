@@ -412,7 +412,7 @@ def decompress(bytesobj):
 
     Parameters
     ----------
-    bytesobj : str / bytes
+    bytesobj : str / bytes / buffer
         The data to be decompressed.
 
     Returns
@@ -438,6 +438,8 @@ def decompress(bytesobj):
     >>> b"" == blosc.decompress(blosc.compress(b"", 1))
     True
     >>> b"1"*7 == blosc.decompress(blosc.compress(b"1"*7, 8))
+    True
+    >>> b"1"*7 == blosc.decompress(buffer(blosc.compress(b"1"*7, 8)))
     True
 
     """
