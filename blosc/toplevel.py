@@ -18,8 +18,10 @@ import blosc
 
 if sys.version_info[0] < 3:
     int_ = (int, long)
+    bytes_ = (bytes, buffer)
 else:
     int_ = (int,)
+    bytes_ = (bytes,)
 
 
 def detect_number_of_cores():
@@ -235,8 +237,8 @@ def _check_typesize(typesize):
 
 
 def _check_bytesobj(bytesobj):
-    if not isinstance(bytesobj, bytes):
-        raise TypeError("only string (2.x) or bytes (3.x) objects"
+    if not isinstance(bytesobj, bytes_):
+        raise TypeError("only string/buffer (2.x) or bytes (3.x) objects"
                         "supported as input")
 
 
