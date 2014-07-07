@@ -13,7 +13,8 @@
 Changes from 1.2.3 to 1.2.4
 ===========================
 
-#XXX version-specific blurb XXX#
+- Updated to c-blosc 1.4.0.  This added support for non-Intel
+  architectures, most specially those not supporting unaligned access.
 
 
 Changes from 1.2.2 to 1.2.3

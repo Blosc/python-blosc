@@ -27,6 +27,7 @@ $ python -c "import blosc; blosc.test()"
 - Run the test suite in different platforms (at least Linux and
   Windows) and make sure that all tests passes.
 
+
 Packaging
 ---------
 
@@ -36,14 +37,9 @@ Packaging
 
   Do a quick check that the tarball is sane.
 
-- Make the binary packages for supported Python versions (2.6, 2.7,
-  3.2, 3.3, 3.4 currently).  Check that installer works correctly.
 
 Uploading
 ---------
-
-- Go to the downloads section of the python-blosc project in github
-  and upload the source tarball and the binary packages.
 
 - Register and upload it also in the PyPi repository::
 
