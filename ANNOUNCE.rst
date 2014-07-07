@@ -38,9 +38,11 @@ regular-spaced values, etc.
 python-blosc (http://python-blosc.blosc.org/) is the Python wrapper for
 the Blosc compression library.
 
-There is also a handy command line and Python library for Blosc called
-Bloscpack (https://github.com/Blosc/bloscpack) that allows you to
-compress large binary datafiles on-disk.
+There is also a handy tool called Bloscpack
+(https://github.com/Blosc/bloscpack) which builds on Blosc. It features
+a commmand line interface allows you to compress large binary datafiles
+on-disk and a Python API that has built-in support for serializing and
+deserializing Numpy arrays.
 
 
 Installing
