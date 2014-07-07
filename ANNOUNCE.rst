@@ -5,9 +5,7 @@ Announcing python-blosc 1.2.4
 What is new?
 ============
 
-This is a maintenance release, where included c-blosc sources have been
-updated to 1.4.0.  This added support for non-Intel architectures, most
-specially those not supporting unaligned access.
+  #XXX version-specific blurb XXX#
 
 For more info, you can have a look at the release notes in:
 
