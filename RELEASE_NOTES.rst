@@ -6,7 +6,7 @@
 :Author: Valentin Hänel
 :Contact: faltet@gmail.com
 :Contact: valentin@haenel.co
-:URL: http://blosc.pydata.org
+:URL: http://python-blosc.blosc.org
 :URL: https://github.com/Blosc/python-blosc
 
 

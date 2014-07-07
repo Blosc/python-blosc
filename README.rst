@@ -6,7 +6,7 @@ blosc: a Python wrapper for the extremely fast Blosc compression library
 :Contact: faltet@gmail.com
 :Contact: valentin@haenel.co
 :URL: https://github.com/Blosc/python-blosc
-:URL: http://blosc.pydata.org
+:URL: http://python-blosc.blosc.org
 :Travis CI: |travis|
 :PyPi: |version| |pypi|
 

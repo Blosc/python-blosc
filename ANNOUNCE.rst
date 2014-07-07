@@ -15,32 +15,34 @@ https://github.com/Blosc/python-blosc/wiki/Release-notes
 
 More docs and examples are available in the documentation site:
 
-http://blosc.pydata.org
+http://python-blosc.blosc.org
 
 
 What is it?
 ===========
 
-python-blosc (http://blosc.pydata.org/) is a Python wrapper for the
-Blosc compression library.
+Blosc (http://www.blosc.org) is a high performance compressor
+optimized for binary data.  It has been designed to transmit data to
+the processor cache faster than the traditional, non-compressed,
+direct memory fetch approach via a memcpy() OS call.
 
-Blosc (http://blosc.org) is a high performance compressor optimized for
-binary data.  It has been designed to transmit data to the processor
-cache faster than the traditional, non-compressed, direct memory fetch
-approach via a memcpy() OS call.  Whether this is achieved or not
-depends of the data compressibility, the number of cores in the system,
-and other factors.  See a series of benchmarks conducted for many
-different systems: http://blosc.org/trac/wiki/SyntheticBenchmarks.
+Blosc is the first compressor that is meant not only to reduce the size
+of large datasets on-disk or in-memory, but also to accelerate object
+manipulations that are memory-bound
+(http://www.blosc.org/docs/StarvingCPUs.pdf).  See
+http://www.blosc.org/synthetic-benchmarks.html for some benchmarks on
+how much speed it can achieve in some datasets.
 
 Blosc works well for compressing numerical arrays that contains data
 with relatively low entropy, like sparse data, time series, grids with
 regular-spaced values, etc.
 
-There is also a handy command line for Blosc called Bloscpack
-(https://github.com/esc/bloscpack) that allows you to compress large
-binary datafiles on-disk.  Although the format for Bloscpack has not
-stabilized yet, it allows you to effectively use Blosc from your
-favorite shell.
+python-blosc (http://python-blosc.blosc.org/) is the Python wrapper for
+the Blosc compression library.
+
+There is also a handy command line and Python library for Blosc called
+Bloscpack (https://github.com/Blosc/bloscpack) that allows you to
+compress large binary datafiles on-disk.
 
 
 Installing
@@ -64,7 +66,7 @@ Documentation
 
 There is Sphinx-based documentation site at:
 
-http://blosc.pydata.org/
+http://python-blosc.blosc.org/
 
 
 Mailing list
