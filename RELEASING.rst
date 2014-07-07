@@ -28,8 +28,8 @@ $ python -c "import blosc; blosc.test()"
   Windows) and make sure that all tests passes.
 
 
-Updating documentation site (gh-pages)
---------------------------------------
+Updating the documentation site
+-------------------------------
 
 * Go to the doc directory in the *master* branch::
 
@@ -44,18 +44,18 @@ Updating documentation site (gh-pages)
   $ rm -rf _build/html
   $ make html
 
-* Checkout the gh-pages and copy the new version of the manual::
+* Make a backup and upload the files in the doc site (xodo)::
 
-  $ cd ..
-  $ git checkout gh-pages
-  $ cp -r doc/_build/html/ python-blosc-manual
-  $ git diff # just check that the version is actually the new one
-  $ git commit -a -m"Uploading new version of the manual"
-  $ git push
+  $ export UPSTREAM="/home/blosc/srv/www/python-blosc.blosc.org"
+  $ ssh blosc@xodo.blosc.org "mv $UPSTREAM/docs/html $UPSTREAM/docs/html.bck"
+  $ scp -r _build/html blosc@xodo.blosc.org:$UPSTREAM/docs
 
-* Done.  Go back to master branch before proceeding further::
+* Check that the new manual is accessible in http://python-blosc.blosc.org
 
-  $ git checkout master
+* If everything is fine, remove the backup of the previous manual::
+
+  $ ssh blosc@xodo.blosc.org "rm -r $UPSTREAM/docs/html.bck"
+
 
 Packaging
 ---------
