@@ -169,24 +169,13 @@ Install it as a typical Python package:
 Documentation
 =============
 
-Please refer to docstrings.  Start by the main package:
-
-.. code-block:: pycon
-
-    >>> import blosc
-    >>> help(blosc)
-
-and ask for more docstrings in the referenced functions.
-
 The Sphinx based documentation is here:
 
-http://www.blosc.org
+http://python-blosc.blosc.org
 
 Also, some examples are available on python-blosc wiki page:
 
 http://github.com/blosc/python-blosc/wiki
-
-
 
 Merging Blosc sources from upstream
 ===================================
@@ -232,7 +221,6 @@ is shown below:
     Automatic merge went well; stopped before committing as requested
     [subtree-merge-blosc.sh b7a7378] subtree merge blosc v1.2.3
      16 files changed, 60 insertions(+), 43 deletions(-)
-
 
 Mailing list
 ============
