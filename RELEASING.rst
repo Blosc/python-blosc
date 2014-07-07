@@ -15,6 +15,7 @@ Preliminaries
 
 * Check that ``VERSION`` file contains the correct number.
 
+
 Testing
 -------
 
@@ -28,12 +29,11 @@ $ python -c "import blosc; blosc.test()"
   Windows) and make sure that all tests passes.
 
 
-Updating the documentation site
--------------------------------
+Updating the online documentation site
+--------------------------------------
 
-* Go to the doc directory in the *master* branch::
+* Go to the doc directory::
 
-  $ git checkout master
   $ cd doc
 
 * Make sure that the `version`/`release` variables are updated in
@@ -56,6 +56,10 @@ Updating the documentation site
 
   $ ssh blosc@xodo.blosc.org "rm -r $UPSTREAM/docs/html.bck"
 
+* Go up to the root directory for further proceeding with packging::
+
+  $ cd ..
+
 
 Packaging
 ---------
@@ -75,6 +79,7 @@ Uploading
     $ python setup.py sdist upload
     $ python setup.py register
 
+
 Tagging
 -------
 
@@ -86,6 +91,7 @@ Tagging
 
     $ git push --tags
 
+
 Announcing
 ----------
 
@@ -96,6 +102,7 @@ Announcing
 * Send an announcement to the blosc, numpy list and python-announce
   lists.  Use the ``ANNOUNCE.rst`` file as skeleton (or possibly as the
   definitive version).
+
 
 Post-release actions
 --------------------
