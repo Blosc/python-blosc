@@ -13,7 +13,9 @@
 Changes from 1.2.4 to 1.2.5
 ===========================
 
-  #XXX version-specific blurb XXX#
+- Updated to c-blosc 1.4.1.  The update only affects to blosc_getitem()
+  but this is not exposed in python-blosc.  But updating it here does
+  not bother anyway.
 
 
 Changes from 1.2.3 to 1.2.4
