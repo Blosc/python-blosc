@@ -40,9 +40,10 @@ the Blosc compression library.
 
 There is also a handy tool built on Blosc called Bloscpack
 (https://github.com/Blosc/bloscpack). It features a commmand line
-interface that allows you to compress large binary datafiles on-disk and
-a Python API that has built-in support for serializing and deserializing
-Numpy arrays.
+interface that allows you to compress large binary datafiles on-disk.
+It also comes with a Python API that has built-in support for
+serializing and deserializing Numpy arrays both on-disk and in-memory at
+speeds that are competitive with regular Pickle/cPickle machinery.
 
 
 Installing
