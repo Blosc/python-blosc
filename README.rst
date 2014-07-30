@@ -122,7 +122,7 @@ your Blosc build:
   $ PYTHONPATH=. python bench/compress_ptr.py
 
 Just to wet you appetite, here are the results for an Intel Core 2 Duo
-at 2.13 GHz, runnng Python 3.3 and Mac OSX 10.9, but YMMV (and will
+at 2.13 GHz, running Python 3.3 and Mac OSX 10.9, but YMMV (and will
 vary!)::
 
   Creating different NumPy arrays with 10**7 int64/float64 elements:
@@ -154,7 +154,7 @@ that can be up to 3x faster than a pure memcpy operation.  Decompression
 is a bit slower (but still faster than ``memcpy()``) probably because
 writing to memory is slower than reading.
 
-In case you find your onw results interesting, please report them back
+In case you find your own results interesting, please report them back
 to the authors!
 
 Installing
