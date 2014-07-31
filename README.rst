@@ -1,5 +1,5 @@
-blosc: a Python wrapper for the extremely fast Blosc compression library
-========================================================================
+python-blosc: a Python wrapper for the extremely fast Blosc compression library
+===============================================================================
 
 :Author: Francesc Alted
 :Author: Valentin Hänel
