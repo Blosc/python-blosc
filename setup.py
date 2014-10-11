@@ -8,7 +8,6 @@
 ########################################################################
 
 import sys, os
-import re, platform
 
 from distutils.core import Extension
 from distutils.core import setup
@@ -58,7 +57,7 @@ for arg in args:
         sys.argv.remove(arg)
 
 # Add -msse2 flag for optimizing shuffle in Blosc
-if os.name == 'posix' and re.match("i.86", platform.machine()) != None:
+if os.name == 'posix':
     CFLAGS.append("-msse2")
 
 # Blosc sources and headers
