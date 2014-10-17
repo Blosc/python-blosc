@@ -56,10 +56,6 @@ for arg in args:
         CFLAGS = arg.split('=')[1].split()
         sys.argv.remove(arg)
 
-# Add -msse2 flag for optimizing shuffle in Blosc
-if os.name == 'posix':
-    CFLAGS.append("-msse2")
-
 # Blosc sources and headers
 sources = ["blosc/blosc_extension.c"]
 inc_dirs = []
