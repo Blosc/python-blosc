@@ -8,6 +8,7 @@
 ########################################################################
 
 import sys, os
+import re, platform
 
 from distutils.core import Extension
 from distutils.core import setup
@@ -83,6 +84,10 @@ else:
     # ...and the macros for all the compressors supported
     def_macros += [('HAVE_LZ4', 1), ('HAVE_SNAPPY', 1), ('HAVE_ZLIB', 1)]
 
+# Add -msse2 flag for optimizing shuffle in Blosc
+# (only necessary for 32-bit Intel architectures)
+if os.name == 'posix' and re.match("i.86", platform.machine()) != None:
+     CFLAGS.append("-msse2")
 
 classifiers = """\
 Development Status :: 5 - Production/Stable
