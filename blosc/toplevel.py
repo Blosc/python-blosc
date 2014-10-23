@@ -95,6 +95,18 @@ def set_nthreads(nthreads):
     return _ext.set_nthreads(nthreads)
 
 
+def set_blocksize(blocksize):
+    """
+
+    Examples
+    --------
+
+    >>> blosc.set_blocksize(512)
+
+    """
+
+    _ext.set_blocksize(blocksize)
+
 def compressor_list():
     """
     compressor_list()
