@@ -19,6 +19,7 @@ from blosc.toplevel import (
     detect_number_of_cores,
     free_resources,
     set_nthreads,
+    set_blocksize,
     compressor_list,
     code_to_name,
     name_to_code,

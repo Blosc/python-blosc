@@ -41,6 +41,25 @@ PyBlosc_set_nthreads(PyObject *self, PyObject *args)
 }
 
 
+PyDoc_STRVAR(set_blocksize__doc__,
+"set_blocksize(blocksize) -- Force the use of a specific blocksize.  \n\
+If 0, an automatic blocksize will be used (the default).\n"
+             );
+
+static PyObject *
+PyBlosc_set_blocksize(PyObject *self, PyObject *args)
+{
+    Py_ssize_t blocksize;
+
+    if (!PyArg_ParseTuple(args, "n:set_blocksize", &blocksize))
+      return NULL;
+
+    blosc_set_blocksize(blocksize);
+
+    return Py_None;
+}
+
+
 PyDoc_STRVAR(compressor_list__doc__,
 "compressor_list() -- Return a list of compressors available in the Blosc build.\n"
              );
@@ -379,6 +398,8 @@ static PyMethodDef blosc_methods[] =
    free_resources__doc__},
   {"set_nthreads", (PyCFunction)PyBlosc_set_nthreads, METH_VARARGS,
    set_nthreads__doc__},
+  {"set_blocksize", (PyCFunction)PyBlosc_set_blocksize, METH_VARARGS,
+   set_blocksize__doc__},
   {"compressor_list", (PyCFunction)PyBlosc_compressor_list, METH_VARARGS,
    compressor_list__doc__},
   {"code_to_name", (PyCFunction)PyBlosc_code_to_name, METH_VARARGS,

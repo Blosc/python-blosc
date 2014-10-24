@@ -95,6 +95,26 @@ def set_nthreads(nthreads):
     return _ext.set_nthreads(nthreads)
 
 
+def set_blocksize(blocksize):
+    """set_blocksize(blocksize)
+
+    Force the use of a specific blocksize.  If 0, an automatic
+    blocksize will be used (the default).
+
+    Notes
+    -----
+
+    This is a low-level function and is recommened for expert users only.
+
+    Examples
+    --------
+
+    >>> blosc.set_blocksize(512)
+
+    """
+
+    _ext.set_blocksize(blocksize)
+
 def compressor_list():
     """
     compressor_list()
