@@ -13,10 +13,16 @@
 Changes from 1.2.4 to 1.2.5
 ===========================
 
-- Updated to c-blosc 1.4.1.  The update only affects to blosc_getitem()
+- Updated to c-blosc 1.4.1.  The update only affects to `blosc_getitem()`
   but this is not exposed in python-blosc.  But updating it here does
   not bother anyway.
 
+- Added wrapper for the expert function `set_blocksize`. (#72 @esc)
+
+- Fix setup.py to allow compilation on posix architectures without SSE2. (#70
+  @andreas-schwab)
+
+- Various miscellaneous fixes.
 
 Changes from 1.2.3 to 1.2.4
 ===========================
