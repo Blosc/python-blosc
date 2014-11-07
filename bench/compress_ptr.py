@@ -34,7 +34,7 @@ t0 = time.time()
 out_ = ctypes.memmove(out_.__array_interface__['data'][0],
                       in_.__array_interface__['data'][0], N*8)
 tcpy = time.time() - t0
-print("  *** ctypes.memmove() **** Time for memcpy():\t%.3f s\t(%.2f GB/s)" % (
+print("  *** ctypes.memmove() *** Time for memcpy():\t%.3f s\t(%.2f GB/s)" % (
     tcpy, (N*8 / tcpy) / 2**30))
 
 print("\nTimes for compressing/decompressing with clevel=%d and %d threads" % (
