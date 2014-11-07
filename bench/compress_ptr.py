@@ -15,39 +15,43 @@ from __future__ import print_function
 import numpy as np
 import time
 import blosc
+import ctypes
 
-N = 1e7
+N = int(1e8)
 clevel = 9
 
 Nexp = np.log10(N)
-print("Creating different NumPy arrays with 10**%d int64/float64 elements:" % Nexp)
-arrays = [None]*3
-labels = [None]*3
-arrays[0] = np.arange(N, dtype=np.int64)
-labels[0] = "the arange linear distribution"
-arrays[1] = np.linspace(0, 1000, N)
-labels[1] = "the linspace linear distribution"
-arrays[2] = np.random.random_integers(0, 1000, N)
-labels[2] = "the random distribution"
+print("Creating NumPy arrays with 10**%d int64/float64 elements:" % Nexp)
+arrays = ((np.arange(N, dtype=np.int64), "the arange linear distribution"),
+          (np.linspace(0, 1000, N), "the linspace linear distribution"),
+          (np.random.random_integers(0, 1000, N), "the random distribution")
+          )
 
-tic = time.time()
-out_ = np.copy(arrays[0])
-toc = time.time()
-print("  *** np.copy() **** Time for memcpy():     %.3f s" % (toc-tic,))
+in_ = arrays[0][0]
+out_ = np.empty(in_.size, dtype=in_.dtype)
+t0 = time.time()
+#out_ = np.copy(in_)
+out_ = ctypes.memmove(out_.__array_interface__['data'][0],
+                      in_.__array_interface__['data'][0], N*8)
+tcpy = time.time() - t0
+print("  *** np.copy() **** Time for memcpy():\t%.3f s\t(%.2f GB/s)" % (
+    tcpy, (N*8 / tcpy) / 2**30))
 
-for (in_, label) in zip(arrays, labels):
+print("\nTimes for compressing/decompressing with clevel=%d and %d threads" % (
+    clevel, blosc.ncores))
+for (in_, label) in arrays:
     print("\n*** %s ***" % label)
     for cname in blosc.compressor_list():
-        ctic = time.time()
+        t0 = time.time()
         c = blosc.compress_ptr(in_.__array_interface__['data'][0],
                                in_.size, in_.dtype.itemsize,
                                clevel=clevel, shuffle=True, cname=cname)
-        ctoc = time.time()
+        tc = time.time() - t0
         out = np.empty(in_.size, dtype=in_.dtype)
-        dtic = time.time()
+        t0 = time.time()
         blosc.decompress_ptr(c, out.__array_interface__['data'][0])
-        dtoc = time.time()
+        td = time.time() - t0
         assert((in_ == out).all())
-        print("  *** %-8s *** Time for comp/decomp: %.3f/%.3f s." % \
-              (cname, ctoc-ctic, dtoc-dtic), end='')
-        print("\tCompr ratio: %6.2f" % (in_.size*in_.dtype.itemsize*1. / len(c)))
+        print("  *** %-8s *** %6.3f s (%.2f GB/s) / %5.3f s (%.2f GB/s)" % (
+            cname, tc, ((N*8 / tc) / 2**30), td, ((N*8 / td) / 2**30)), end='')
+        print("\tCompr. ratio: %5.1fx" % (N*8. / len(c)))
