@@ -322,7 +322,7 @@ def compress(bytesobj, typesize, clevel=9, shuffle=True, cname='blosclz'):
 
     """
 
-    _check_bytesobj(bytesobj)
+    #_check_bytesobj(bytesobj)
     _check_input_length('bytesobj', len(bytesobj))
     _check_typesize(typesize)
     _check_clevel(clevel)
