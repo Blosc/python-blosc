@@ -189,11 +189,9 @@ compress_helper(void * input, size_t nbytes, size_t typesize,
     }
 
     /* Compress */
-    Py_BEGIN_ALLOW_THREADS;
     cbytes = blosc_compress(clevel, shuffle, typesize, nbytes,
                             input, PyBytes_AS_STRING(output),
                             nbytes+BLOSC_MAX_OVERHEAD);
-    Py_END_ALLOW_THREADS;
     if (cbytes < 0) {
       blosc_error(cbytes, "while compressing data");
       Py_XDECREF(output);
@@ -302,9 +300,7 @@ decompress_helper(void * input, size_t nbytes, void * output)
     int err;
 
     /* Do the decompression */
-    Py_BEGIN_ALLOW_THREADS;
     err = blosc_decompress(input, output, nbytes);
-    Py_END_ALLOW_THREADS;
 
     if (err < 0 || err != (int)nbytes) {
       blosc_error(err, "while decompressing data");
