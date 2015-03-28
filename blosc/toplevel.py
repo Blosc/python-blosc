@@ -256,7 +256,7 @@ def _check_typesize(typesize):
 
 def _check_bytesobj(bytesobj):
     if not isinstance(bytesobj, bytes):
-        raise TypeError("only string (2.x) or bytes (3.x) objects"
+        raise TypeError("only string (2.x) or bytes (3.x) objects "
                         "supported as input")
 
 
