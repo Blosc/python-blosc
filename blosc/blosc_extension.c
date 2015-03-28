@@ -237,16 +237,22 @@ PyDoc_STRVAR(compress__doc__,
 static PyObject *
 PyBlosc_compress(PyObject *self, PyObject *args)
 {
+    Py_buffer view;
+    PyObject *output;
     void *input;
     size_t nbytes, typesize;
     int clevel, shuffle;
     char *cname;
 
     /* require Python string object, typesize, clevel and shuffle agrs */
-    if (!PyArg_ParseTuple(args, "s#niis:compress", &input, &nbytes,
+    if (!PyArg_ParseTuple(args, "s*niis:compress", &view,
                           &typesize, &clevel, &shuffle, &cname))
       return NULL;
-    return compress_helper(input, nbytes, typesize, clevel, shuffle, cname);
+    nbytes = view.len;
+    input = view.buf;
+    output = compress_helper(input, nbytes, typesize, clevel, shuffle, cname);
+    PyBuffer_Release(&view);
+    return output;
 }
 
 PyDoc_STRVAR(get_clib__doc__,
