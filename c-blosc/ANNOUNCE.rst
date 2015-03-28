@@ -1,18 +1,14 @@
 ===============================================================
- Announcing c-blosc 1.5.2
+ Announcing c-blosc 1.5.3
  A blocking, shuffling and lossless compression library
 ===============================================================
 
 What is new?
 ============
 
-This is a maintenance release.  Basically, the new
-blosc_compress_ctx() / blosc_decompress_ctx() are used now inside the
-HDF5 compressor for allowing operation in multiprocess scenarios.
-See: https://github.com/PyTables/PyTables/issues/412
-
-The drawback of this quick fix is that the Blosc filter will be only
-able to use a single thread until another solution can be devised.
+This is a maintenance release.  There is better support for MSVC
+compilers, and it has been fixed an issue when changing the number of
+threads in the same process.
 
 For more info, please see the release notes in:
 
