@@ -18,8 +18,10 @@ import blosc
 
 if sys.version_info[0] < 3:
     int_ = (int, long)
+    bytes_ = (bytes, buffer)
 else:
     int_ = (int,)
+    bytes_ = (bytes,)
 
 
 def detect_number_of_cores():
@@ -255,8 +257,8 @@ def _check_typesize(typesize):
 
 
 def _check_bytesobj(bytesobj):
-    if not isinstance(bytesobj, bytes):
-        raise TypeError("only string (2.x) or bytes (3.x) objects"
+    if not isinstance(bytesobj, bytes_):
+        raise TypeError("only string/buffer (2.x) or bytes (3.x) objects"
                         "supported as input")
 
 
@@ -278,7 +280,7 @@ def compress(bytesobj, typesize, clevel=9, shuffle=True, cname='blosclz'):
 
     Parameters
     ----------
-    bytesobj : str / bytes
+    bytesobj : str / bytes / buffer
         The data to be compressed.
     typesize : int
         The data type size.
@@ -315,6 +317,9 @@ def compress(bytesobj, typesize, clevel=9, shuffle=True, cname='blosclz'):
     >>> a = array.array('i', range(1000*1000))
     >>> a_bytesobj = a.tostring()
     >>> c_bytesobj = blosc.compress(a_bytesobj, typesize=4)
+    >>> len(c_bytesobj) < len(a_bytesobj)
+    True
+    >>> c_bytesobj = blosc.compress(buffer(a_bytesobj), typesize=4)
     >>> len(c_bytesobj) < len(a_bytesobj)
     True
 
@@ -427,7 +432,7 @@ def decompress(bytesobj):
 
     Parameters
     ----------
-    bytesobj : str / bytes
+    bytesobj : str / bytes / buffer
         The data to be decompressed.
 
     Returns
@@ -453,6 +458,8 @@ def decompress(bytesobj):
     >>> b"" == blosc.decompress(blosc.compress(b"", 1))
     True
     >>> b"1"*7 == blosc.decompress(blosc.compress(b"1"*7, 8))
+    True
+    >>> b"1"*7 == blosc.decompress(buffer(blosc.compress(b"1"*7, 8)))
     True
 
     """
