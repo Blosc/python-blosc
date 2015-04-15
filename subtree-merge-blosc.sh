@@ -12,7 +12,7 @@
 #
 # License: WTFPL (do what the fuck you want public license)
 
-version=0.10
+version=0.12
 
 # configure remote
 remote="git://github.com/Blosc/c-blosc.git"
@@ -68,7 +68,7 @@ git fetch $remote $blosc_tag_long || exit 1
 # subtree merge it
 git merge --squash -s subtree FETCH_HEAD || exit 1
 # if this doesn't work you could use:
-# git merge -Xsubtree=c-blosc -Xtheirs FETCH_HEAD || exit 1
+# git merge --squash -Xsubtree=c-blosc -Xtheirs FETCH_HEAD || exit 1
 if git diff --staged --quiet ; then
     fatal "nothing new to be committed"
 else
