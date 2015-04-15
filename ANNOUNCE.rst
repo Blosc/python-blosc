@@ -1,24 +1,11 @@
 =============================
-Announcing python-blosc 1.2.4
+Announcing python-blosc 1.2.6
 =============================
 
 What is new?
 ============
 
-This release contains support for Blosc v1.5.4 including changed to how the GIL
-is kept. This was required because Blosc was refactored in the v1.5.x line to
-remove global variables and to use context objects instead. As such, it became
-necessary to keep the GIL while calling Blosc from Python code that uses the
-multiprocessing module.
-
-In addition, is now possible to change the blocksize used by Blosc using
-``set_blocksize``. When using this however, bear in mind that the blocksize has
-been finely tuned to be a good default value and that randomly messing with
-this value may have unforeseen and unpredictable consequences on the
-performance of Blosc.
-
-Additionally, we can now compile on Posix architectures, thanks again to
-Andreas Schwab for that one.
+  #XXX version-specific blurb XXX#
 
 For more info, you can have a look at the release notes in:
 
@@ -112,3 +99,4 @@ for more details.
 .. coding: utf-8
 .. fill-column: 72
 .. End:
+.. vim: set tw=72:
