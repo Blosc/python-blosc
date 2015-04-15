@@ -112,3 +112,4 @@ for more details.
 .. coding: utf-8
 .. fill-column: 72
 .. End:
+.. vim: set tw=72:
