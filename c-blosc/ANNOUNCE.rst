@@ -1,14 +1,14 @@
 ===============================================================
- Announcing c-blosc 1.5.3
+ Announcing c-blosc 1.5.4
  A blocking, shuffling and lossless compression library
 ===============================================================
 
 What is new?
 ============
 
-This is a maintenance release.  There is better support for MSVC
-compilers, and it has been fixed an issue when changing the number of
-threads in the same process.
+Besides several small enhancements and a leak fix, this release
+includes a dynamically loadable HDF5 filter plugin (hdf5 directory) as
+well as an update to LZ4 1.6.0 (from 1.5.0).
 
 For more info, please see the release notes in:
 
