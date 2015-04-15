@@ -19,11 +19,11 @@ Preliminaries
 Testing
 -------
 
-* After compiling, run:
+* After compiling, run::
 
-$ PYTHONPATH=.   (or "set PYTHONPATH=." on Win)
-$ export PYTHONPATH=.  (not needed on Win)
-$ python -c "import blosc; blosc.test()"
+  $ PYTHONPATH=.   (or "set PYTHONPATH=." on Win)
+  $ export PYTHONPATH=.  (not needed on Win)
+  $ python -c "import blosc; blosc.test()"
 
 * Run the test suite in different platforms (at least Linux and
   Windows) and make sure that all tests passes.
@@ -64,11 +64,11 @@ Updating the online documentation site
 Packaging
 ---------
 
-* Make the tarball with the command:
+* Make the tarball with the command::
 
   $ python setup.py sdist
 
-  Do a quick check that the tarball is sane.
+Do a quick check that the tarball is sane.
 
 
 Uploading
@@ -77,7 +77,6 @@ Uploading
 * Register and upload it also in the PyPi repository::
 
     $ python setup.py sdist upload
-    $ python setup.py register
 
 
 Tagging

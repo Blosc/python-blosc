@@ -36,7 +36,7 @@ Python 2.6, 2.7 and 3.1, 3.2, 3.3 or higher versions.
 Building
 ========
 
-There are diferent ways to compile python-blosc, depending if you want
+There are different ways to compile python-blosc, depending if you want
 to link with an already installed Blosc library or not.
 
 Compiling without an installed Blosc library
