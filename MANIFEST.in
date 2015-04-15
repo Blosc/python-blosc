@@ -1,7 +1,0 @@
-include MANIFEST.in
-include *.txt *.rst
-include setup.py VERSION
-
-recursive-include blosc *.py *.c
-recursive-include c-blosc *.c *.h *.cpp *.hpp
-recursive-include LICENSES *

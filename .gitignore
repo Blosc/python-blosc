@@ -1,5 +1,1 @@
-blosc/blosc_extension.so
-blosc/version.py
-build/
-doc/_build/
-*~
+*.exe
