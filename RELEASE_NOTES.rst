@@ -9,6 +9,10 @@
 :URL: http://python-blosc.blosc.org
 :URL: https://github.com/Blosc/python-blosc
 
+Changes from 1.2.4 to 1.2.6
+===========================
+
+- pass
 
 Changes from 1.2.4 to 1.2.5
 ===========================
