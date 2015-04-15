@@ -1,10 +1,22 @@
 ================================
- Release notes for c-blosc 1.5.3
+ Release notes for c-blosc 1.5.4
 ================================
 
 :Author: Francesc Alted
 :Contact: francesc@blosc.org
 :URL: http://www.blosc.org
+
+
+Changes from 1.5.3 to 1.5.4
+===========================
+
+* Updated to LZ4 1.6.0 (r128).
+
+* Fix resource leak in t_blosc.  Jack Pappas.
+
+* Better checks during testing.  Jack Pappas.
+
+* Dynamically loadable HDF5 filter plugin. Kiyo Masui.
 
 
 Changes from 1.5.2 to 1.5.3
