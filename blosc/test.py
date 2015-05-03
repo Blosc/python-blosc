@@ -43,6 +43,15 @@ class TestCodec(unittest.TestCase):
         self.assertRaises(ValueError, blosc.set_nthreads,
                 blosc.BLOSC_MAX_THREADS +1)
 
+    def test_compress_input_types(self):
+        expected = blosc.compress(b'0123456789', typesize=1)
+
+        self.assertEqual(expected, blosc.compress('0123456789', typesize=1))
+        self.assertEqual(expected, blosc.compress(r'0123456789', typesize=1))
+        self.assertEqual(expected, blosc.compress(u'0123456789', typesize=1))
+        self.assertEqual(expected, blosc.compress(memoryview('0123456789'), typesize=1))
+
+
     def test_compress_exceptions(self):
         s = b'0123456789'
 
