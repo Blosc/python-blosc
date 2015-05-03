@@ -16,8 +16,6 @@ except ImportError:
 else:
     has_numpy = True
 
-py3 = sys.version_info[0] == 3
-
 
 class TestCodec(unittest.TestCase):
 
@@ -46,11 +44,7 @@ class TestCodec(unittest.TestCase):
                 blosc.BLOSC_MAX_THREADS +1)
 
     def test_compress_exceptions(self):
-        rs = '0123456789'
         s = b'0123456789'
-
-        if py3:
-            self.assertRaises(TypeError, blosc.compress, rs, typesize=1)
 
         self.assertRaises(ValueError, blosc.compress, s, typesize=0)
         self.assertRaises(ValueError, blosc.compress, s,
