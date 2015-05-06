@@ -1,13 +1,11 @@
 =============================
-Announcing python-blosc 1.2.7
+Announcing python-blosc 1.2.8
 =============================
 
 What is new?
 ============
 
-Updated to use c-blosc v1.6.1.  Although that this supports AVX2, it is
-not enabled in python-blosc because we still need a way to devise how to
-detect AVX2 in the underlying platform.
+#XXX version-specific blurb XXX#
 
 For more info, you can have a look at the release notes in:
 

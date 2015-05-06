@@ -1,5 +1,5 @@
 ======================================
- Release notes for python-blosc 1.2.7
+ Release notes for python-blosc 1.2.8
 ======================================
 
 :Author: Francesc Alted
@@ -8,6 +8,12 @@
 :Contact: valentin@haenel.co
 :URL: http://python-blosc.blosc.org
 :URL: https://github.com/Blosc/python-blosc
+
+
+Changes from 1.2.7 to 1.2.8
+===========================
+
+#XXX version-specific blurb XXX#
 
 
 Changes from 1.2.5 to 1.2.7
