@@ -18,7 +18,7 @@ import blosc
 import ctypes
 
 N = int(1e8)
-clevel = 9
+clevel = 5
 
 Nexp = np.log10(N)
 print("Creating NumPy arrays with 10**%d int64/float64 elements:" % Nexp)

@@ -17,8 +17,8 @@ import numpy as np
 import time
 import blosc
 
-N = 1e7
-clevel = 9
+N = 1e8
+clevel = 5
 
 Nexp = np.log10(N)
 print("Creating a large NumPy array with 10**%d int64 elements:" % Nexp)
