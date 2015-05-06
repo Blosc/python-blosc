@@ -1,5 +1,5 @@
 ======================================
- Release notes for python-blosc 1.2.5
+ Release notes for python-blosc 1.2.6
 ======================================
 
 :Author: Francesc Alted
@@ -9,10 +9,14 @@
 :URL: http://python-blosc.blosc.org
 :URL: https://github.com/Blosc/python-blosc
 
-Changes from 1.2.4 to 1.2.6
+
+Changes from 1.2.5 to 1.2.6
 ===========================
 
-- pass
+- Updated to c-blosc v1.6.1.  Although that this supports AVX2, it is
+  not enabled in python-blosc because we still need a way to devise how
+  to detect AVX2 in the underlying platform.
+
 
 Changes from 1.2.4 to 1.2.5
 ===========================
@@ -27,6 +31,7 @@ Changes from 1.2.4 to 1.2.5
 - Don't release the GIL on compression/decompression (#77 @esc)
 
 - Various miscellaneous fixes.
+
 
 Changes from 1.2.3 to 1.2.4
 ===========================

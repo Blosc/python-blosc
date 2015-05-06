@@ -107,7 +107,7 @@ Post-release actions
 --------------------
 
 * Edit ``VERSION`` in master to increment the version to the next
-  minor one (i.e. X.Y.Z --> X.Y.(Z+1).dev).
+  minor one (i.e. X.Y.Z --> X.Y.(Z+1).dev0).
 
 * Also, update the `version` and `release` variables in doc/conf.py.
 
