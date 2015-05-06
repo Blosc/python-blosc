@@ -1,5 +1,5 @@
 /*********************************************************************
-  Blosc - Blocked Suffling and Compression Library
+  Blosc - Blocked Shuffling and Compression Library
 
   Author: Francesc Alted <francesc@blosc.org>
   Creation date: 2009-05-20
@@ -32,6 +32,7 @@
 
 #if defined(_WIN32) && !defined(__MINGW32__)
   #include <windows.h>
+  #include <malloc.h>
 
   /* stdint.h only available in VS2010 (VC++ 16.0) and newer */
   #if defined(_MSC_VER) && _MSC_VER < 1600
@@ -48,7 +49,7 @@
   #include <inttypes.h>
 #endif  /* _WIN32 */
 
-#if defined(_WIN32)
+#if defined(_WIN32) && !defined(__GNUC__)
   #include "win32/pthread.h"
   #include "win32/pthread.c"
 #else
@@ -198,18 +199,19 @@ static uint8_t *my_malloc(size_t size)
   void *block = NULL;
   int res = 0;
 
+/* Do an alignment to 32 bytes because AVX2 is supported */
 #if __STDC_VERSION__ >= 201112L
   /* C11 aligned allocation. 'size' must be a multiple of the alignment. */
-  block = aligned_alloc(16, size);
+  block = aligned_alloc(32, size);
 #elif defined(_WIN32)
   /* A (void *) cast needed for avoiding a warning with MINGW :-/ */
-  block = (void *)_aligned_malloc(size, 16);
+  block = (void *)_aligned_malloc(size, 32);
 #elif defined __APPLE__
   /* Mac OS X guarantees 16-byte alignment in small allocs */
   block = malloc(size);
 #elif _POSIX_C_SOURCE >= 200112L || _XOPEN_SOURCE >= 600
   /* Platform does have an implementation of posix_memalign */
-  res = posix_memalign(&block, 16, size);
+  res = posix_memalign(&block, 32, size);
 #else
   block = malloc(size);
 #endif  /* _WIN32 */
@@ -834,8 +836,8 @@ static int32_t compute_blocksize(struct blosc_context* context, int32_t clevel, 
       blocksize = MIN_BUFFERSIZE;
     }
   }
-  else if (nbytes >= L1*4) {
-    blocksize = L1 * 4;
+  else if (nbytes >= L1 * typesize) {
+    blocksize = L1 * typesize;
 
     /* For Zlib, increase the block sizes in a factor of 8 because it
        is meant for compression large blocks (it shows a big overhead
@@ -896,17 +898,10 @@ static int32_t compute_blocksize(struct blosc_context* context, int32_t clevel, 
     blocksize = blocksize / typesize * typesize;
   }
 
-  /* blocksize must not exceed (64 KB * typesize) in order to allow
-     BloscLZ to achieve better compression ratios (the ultimate reason
-     for this is that hash_log in BloscLZ cannot be larger than 15) */
-  if ((context->compcode == BLOSC_BLOSCLZ) && (blocksize / typesize) > 64*KB) {
-    blocksize = 64 * KB * typesize;
-  }
-
   return blocksize;
 }
 
-int initialize_context_compression(struct blosc_context* context,
+static int initialize_context_compression(struct blosc_context* context,
                           int clevel,
                           int doshuffle,
                           size_t typesize,
@@ -969,7 +964,7 @@ int initialize_context_compression(struct blosc_context* context,
   return 1;
 }
 
-int write_compression_header(struct blosc_context* context, int clevel, int doshuffle)
+static int write_compression_header(struct blosc_context* context, int clevel, int doshuffle)
 {
   int32_t compcode;
 

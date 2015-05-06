@@ -1,10 +1,52 @@
 ================================
- Release notes for c-blosc 1.5.4
+ Release notes for c-blosc 1.6.1
 ================================
 
 :Author: Francesc Alted
 :Contact: francesc@blosc.org
 :URL: http://www.blosc.org
+
+
+Changes from 1.6.0 to 1.6.1
+===========================
+
+* Support for *runtime* detection of AVX2 and SSE2 SIMD instructions.
+  These changes make it possible to compile one single binary that
+  runs on a system that supports SSE2 or AVX2 (or neither), so the
+  redistribution problem is fixed (see #101).  Thanks to Julian Taylor
+  and Jack Pappas.
+
+* Added support for MinGW and TDM-GCC compilers for Windows.  Thanks
+  to yasushima-gd.
+
+* Fixed a bug in blosclz that could potentially overwrite an area
+  beyond the output buffer.  See #113.
+
+* New computation for blocksize so that larger typesizes (> 8 bytes)
+  would benefit of much better compression ratios.  Speed is not
+  penalized too much.
+
+* New parametrization of the hash table for blosclz codec.  This
+  allows better compression in many scenarios, while slightly
+  increasing the speed.
+
+
+Changes from 1.5.4 to 1.6.0
+===========================
+
+* Support for AVX2 is here!  The benchmarks with a 4-core Intel
+  Haswell machine tell that both compression and decompression are
+  accelerated around a 10%, reaching peaks of 9.6 GB/s during
+  compression and 26 GB/s during decompression (memcpy() speed for
+  this machine is 7.5 GB/s for writes and 11.7 GB/s for reads).  Many
+  thanks to @littlezhou for this nice work.
+
+* Support for HPET (high precision timers) for the `bench` program.
+  This is particularly important for microbenchmarks like bench is
+  doing; since they take so little time to run, the granularity of a
+  less-accurate timer may account for a significant portion of the
+  runtime of the benchmark itself, skewing the results.  Thanks to
+  Jack Pappas.
 
 
 Changes from 1.5.3 to 1.5.4

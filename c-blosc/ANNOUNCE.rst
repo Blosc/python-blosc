@@ -1,14 +1,21 @@
 ===============================================================
- Announcing c-blosc 1.5.4
+ Announcing c-blosc 1.6.1
  A blocking, shuffling and lossless compression library
 ===============================================================
 
 What is new?
 ============
 
-Besides several small enhancements and a leak fix, this release
-includes a dynamically loadable HDF5 filter plugin (hdf5 directory) as
-well as an update to LZ4 1.6.0 (from 1.5.0).
+Fixed a subtle, but long-standing bug in the blosclz codec that could
+potentially overwrite an area beyond the output buffer.
+
+Support for *runtime* detection of AVX2 and SSE2 SIMD instructions,
+allowing running AVX2 capable c-blosc libraries to run on machines
+with no AVX2 available (will use SSE2 instead).
+
+Finally, a new blocksize computation allows for better compression
+ratios for larger typesizes (> 8 bytes), without not penalizing the
+speed too much (at least on modern CPUs).
 
 For more info, please see the release notes in:
 
@@ -18,20 +25,15 @@ https://github.com/Blosc/c-blosc/wiki/Release-notes
 What is it?
 ===========
 
-Blosc (http://www.blosc.org) is a high performance compressor
+Blosc (http://www.blosc.org) is a high performance meta-compressor
 optimized for binary data.  It has been designed to transmit data to
 the processor cache faster than the traditional, non-compressed,
 direct memory fetch approach via a memcpy() OS call.
 
-Blosc is the first compressor (that I'm aware of) that is meant not
-only to reduce the size of large datasets on-disk or in-memory, but
-also to accelerate object manipulations that are memory-bound.
-
-Blosc has a Python wrapper called python-blosc
-(https://github.com/Blosc/python-blosc) with a high-performance
-interface to NumPy too.  There is also a handy command line for Blosc
-called Bloscpack (https://github.com/Blosc/bloscpack) that allows you to
-compress large binary datafiles on-disk.
+Blosc has internal support for different compressors like its internal
+BloscLZ, but also LZ4, LZ4HC, Snappy and Zlib.  This way these can
+automatically leverage the multithreading and pre-filtering
+(shuffling) capabilities that comes with Blosc for free.
 
 
 Download sources

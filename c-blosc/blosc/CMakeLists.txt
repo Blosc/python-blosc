@@ -32,7 +32,17 @@ if(NOT DEACTIVATE_ZLIB)
 endif(NOT DEACTIVATE_ZLIB)
 
 # library sources
-set(SOURCES blosc.c blosclz.c shuffle.c)
+set(SOURCES blosc.c blosclz.c shuffle-generic.c)
+if(COMPILER_SUPPORT_SSE2)
+    message(STATUS "Adding run-time support for SSE2.")
+    set(SOURCES ${SOURCES} shuffle-sse2.c)
+endif(COMPILER_SUPPORT_SSE2)
+if(COMPILER_SUPPORT_AVX2)
+    message(STATUS "Adding run-time support for AVX2.")
+    set(SOURCES ${SOURCES} shuffle-avx2.c)
+endif(COMPILER_SUPPORT_AVX2)
+set(SOURCES ${SOURCES} shuffle.c)
+
 # library install directory
 set(lib_dir lib${LIB_SUFFIX})
 set(version_string ${BLOSC_VERSION_MAJOR}.${BLOSC_VERSION_MINOR}.${BLOSC_VERSION_PATCH})
@@ -88,8 +98,40 @@ set_target_properties(blosc_shared PROPERTIES
         SOVERSION 1  # Change this when an ABI change happens
     )
 if (MSVC)
-	set_target_properties (blosc_shared PROPERTIES COMPILE_FLAGS -DDLL_EXPORT=TRUE)
+	set_target_properties (blosc_shared PROPERTIES COMPILE_FLAGS -DBLOSC_DLL_EXPORT=TRUE)
 endif(MSVC)
+
+if(COMPILER_SUPPORT_SSE2)
+    if (MSVC)
+        # MSVC targets SSE2 by default on 64-bit configurations, but not 32-bit configurations.
+        if (${CMAKE_SIZEOF_VOID_P} EQUAL 4)
+            set_source_files_properties(shuffle-sse2.c PROPERTIES COMPILE_FLAGS "/arch:SSE2")
+        endif (${CMAKE_SIZEOF_VOID_P} EQUAL 4)
+    else (MSVC)
+        set_source_files_properties(shuffle-sse2.c PROPERTIES COMPILE_FLAGS -msse2)
+    endif (MSVC)
+
+    # Define a symbol for the shuffle-dispatch implementation
+    # so it knows SSE2 is supported even though that file is
+    # compiled without SSE2 support (for portability).
+    set_property(
+        SOURCE shuffle.c
+        APPEND PROPERTY COMPILE_DEFINITIONS SHUFFLE_SSE2_ENABLED)
+endif(COMPILER_SUPPORT_SSE2)
+if(COMPILER_SUPPORT_AVX2)
+    if (MSVC)
+        set_source_files_properties(shuffle-avx2.c PROPERTIES COMPILE_FLAGS "/arch:AVX2")
+    else (MSVC)
+        set_source_files_properties(shuffle-avx2.c PROPERTIES COMPILE_FLAGS -mavx2)
+    endif (MSVC)
+
+    # Define a symbol for the shuffle-dispatch implementation
+    # so it knows AVX2 is supported even though that file is
+    # compiled without AVX2 support (for portability).
+    set_property(
+        SOURCE shuffle.c
+        APPEND PROPERTY COMPILE_DEFINITIONS SHUFFLE_AVX2_ENABLED)
+endif(COMPILER_SUPPORT_AVX2)
 target_link_libraries(blosc_shared ${LIBS})
 
 if(BUILD_STATIC)
