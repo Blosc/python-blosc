@@ -1,5 +1,5 @@
 ======================================
- Release notes for python-blosc 1.2.6
+ Release notes for python-blosc 1.2.7
 ======================================
 
 :Author: Francesc Alted
@@ -10,7 +10,7 @@
 :URL: https://github.com/Blosc/python-blosc
 
 
-Changes from 1.2.5 to 1.2.6
+Changes from 1.2.5 to 1.2.7
 ===========================
 
 - Updated to c-blosc v1.6.1.  Although that this supports AVX2, it is

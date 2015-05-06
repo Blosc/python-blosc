@@ -1,5 +1,5 @@
 =============================
-Announcing python-blosc 1.2.6
+Announcing python-blosc 1.2.7
 =============================
 
 What is new?
