@@ -51,7 +51,7 @@ Installing
 
 python-blosc is in PyPI repository, so installing it is easy:
 
-$ pip install -U blosc  # yes, you should omit the python- prefix
+$ pip install -U blosc  # yes, you must omit the 'python-' prefix
 
 
 Download sources
