@@ -100,7 +100,7 @@ Development Status :: 5 - Production/Stable
 Intended Audience :: Developers
 Intended Audience :: Information Technology
 Intended Audience :: Science/Research
-License :: OSI Approved :: BSD License
+License :: OSI Approved :: MIT License
 Programming Language :: Python
 Topic :: Software Development :: Libraries :: Python Modules
 Topic :: System :: Archiving :: Compression
