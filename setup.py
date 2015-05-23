@@ -14,8 +14,8 @@ import platform
 import re
 import sys
 
-from distutils.core import Extension
-from distutils.core import setup
+from setuptools import Extension
+from setuptools import setup
 import glob
 
 ########### Check versions ##########
