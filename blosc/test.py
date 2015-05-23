@@ -1,7 +1,12 @@
 from __future__ import division
 import sys
-import unittest
 import ctypes
+
+try:
+    import unittest2 as unittest
+except ImportError:
+    import unittest
+
 import blosc
 
 try:

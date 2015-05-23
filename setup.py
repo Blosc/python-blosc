@@ -35,6 +35,10 @@ elif sys.version_info[0] == 3:
 else:
     exit_with_error("You need Python 2.6/3.1 or greater to install blosc!")
 
+tests_require = ['numpy']
+if sys.version_info[:2] < (2, 7):
+    tests_require += ['unittest2']
+
 ########### End of checks ##########
 
 
@@ -139,7 +143,7 @@ Blosc is a high performance compressor optimized for binary data.
                    extra_link_args=LFLAGS,
                    extra_compile_args=CFLAGS ),
         ],
-      tests_require=['numpy'],
+      tests_require=tests_require,
       packages = ['blosc'],
 
 )
