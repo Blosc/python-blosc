@@ -7,14 +7,19 @@
 #
 ########################################################################
 
-import sys, os
-import re, platform
+# flake8: noqa
+
+import os
+import platform
+import re
+import sys
 
 from distutils.core import Extension
 from distutils.core import setup
 import glob
 
 ########### Check versions ##########
+
 
 def exit_with_error(message):
     print('ERROR: %s' % message)
