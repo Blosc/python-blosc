@@ -90,6 +90,11 @@ class TestCodec(unittest.TestCase):
         self.assertRaises(TypeError, blosc.compress, 1.0, 1)
         self.assertRaises(TypeError, blosc.compress, ['abc'], 1)
 
+        if PY3X:
+            # Python 3 doesn't support unicode
+            self.assertRaises(ValueError, blosc.compress,
+                              '0123456789', typesize=0)
+
         # This is trying to create a buffer of 2 GB!
         #self.assertRaises(ValueError, blosc.compress,
         #        'a' * (blosc.BLOSC_MAX_BUFFERSIZE+1), typesize=1)
