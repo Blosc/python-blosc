@@ -307,7 +307,8 @@ def compress(bytesobj, typesize, clevel=9, shuffle=True, cname='blosclz'):
     ValueError
         If bytesobj is too long.
         If typesize is not within the allowed range.
-        if clevel is not not within the allowed range.
+        If clevel is not within the allowed range.
+        If cname is not a valid codec.
 
     Examples
     --------
