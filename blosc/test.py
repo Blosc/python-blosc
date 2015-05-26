@@ -2,6 +2,12 @@ from __future__ import division
 import sys
 import ctypes
 
+# version number hack
+vi = sys.version_info
+PY26 = vi[0] == 2 and vi[1] == 6
+PY27 = vi[0] == 2 and vi[1] == 7
+PY3X = vi[0] == 3
+
 try:
     import unittest2 as unittest
 except ImportError:
