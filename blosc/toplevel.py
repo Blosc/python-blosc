@@ -303,7 +303,7 @@ def compress(bytesobj, typesize, clevel=9, shuffle=True, cname='blosclz'):
     Raises
     ------
     TypeError
-        If bytesobj doesn't support the buffer interface
+        If bytesobj doesn't support the buffer interface.
     ValueError
         If bytesobj is too long.
         If typesize is not within the allowed range.

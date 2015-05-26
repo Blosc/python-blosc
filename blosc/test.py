@@ -54,7 +54,6 @@ class TestCodec(unittest.TestCase):
         # assume the expected answer was compressed from bytes
         expected = blosc.compress(b'0123456789', typesize=1)
 
-        self.assertEqual(expected, blosc.compress(r'0123456789', typesize=1))
         if not PY3X:
             # Python 3 can't compress unicode
             self.assertEqual(expected, blosc.compress(u'0123456789', typesize=1))
