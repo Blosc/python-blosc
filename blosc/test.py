@@ -51,17 +51,27 @@ class TestCodec(unittest.TestCase):
 
     def test_compress_input_types(self):
         import numpy as np
+        # assume the expected answer was compressed from bytes
         expected = blosc.compress(b'0123456789', typesize=1)
 
+        # Various types of 'string'
         self.assertEqual(expected, blosc.compress('0123456789', typesize=1))
         self.assertEqual(expected, blosc.compress(r'0123456789', typesize=1))
         self.assertEqual(expected, blosc.compress(u'0123456789', typesize=1))
+
+        # now for all the things that support the buffer interface
+        if not PY3X:
+            # Python 3 no longer has the buffer
+            self.assertEqual(expected, blosc.compress(
+                buffer(b'0123456789'), typesize=1))
         if not PY26:
             # memoryview doesn't exist on Python 2.6
-            self.assertEqual(expected, blosc.compress(memoryview('0123456789'), typesize=1))
-        self.assertEqual(expected, blosc.compress(buffer('0123456789'), typesize=1))
-        self.assertEqual(expected, blosc.compress(bytearray('0123456789'), typesize=1))
-        self.assertEqual(expected, blosc.compress(np.array(['0123456789']), typesize=1))
+            self.assertEqual(expected, blosc.compress(
+                memoryview(b'0123456789'), typesize=1))
+        self.assertEqual(expected, blosc.compress(
+            bytearray(b'0123456789'), typesize=1))
+        self.assertEqual(expected, blosc.compress(
+            np.array([b'0123456789']), typesize=1))
 
 
 
