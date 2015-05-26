@@ -237,16 +237,33 @@ PyDoc_STRVAR(compress__doc__,
 static PyObject *
 PyBlosc_compress(PyObject *self, PyObject *args)
 {
+    Py_buffer view;
+    PyObject *output;
     void *input;
     size_t nbytes, typesize;
     int clevel, shuffle;
-    char *cname;
+    char *cname, *format;
 
-    /* require Python string object, typesize, clevel and shuffle agrs */
-    if (!PyArg_ParseTuple(args, "s#niis:compress", &input, &nbytes,
-                          &typesize, &clevel, &shuffle, &cname))
-      return NULL;
-    return compress_helper(input, nbytes, typesize, clevel, shuffle, cname);
+    /* Accept some kind of input followed by
+     * typesize, clevel, shuffle and cname */
+    #if PY_MAJOR_VERSION <= 2
+        /* s* : bytes like object including unicode and anything that supports
+         * the buffer interface */
+        format = "s*niis:compress";
+    #elif PY_MAJOR_VERSION >= 3
+        /* y* :bytes like object EXCLUDING unicode and anything that supports
+         * the buffer interface. This is the recommended way to accept binary
+         * data in Python 3. */
+        format = "y*niis:compress";
+    #endif
+    if (!PyArg_ParseTuple(args, format , &view,
+                        &typesize, &clevel, &shuffle, &cname))
+    return NULL;
+    nbytes = view.len;
+    input = view.buf;
+    output = compress_helper(input, nbytes, typesize, clevel, shuffle, cname);
+    PyBuffer_Release(&view);
+    return output;
 }
 
 PyDoc_STRVAR(get_clib__doc__,

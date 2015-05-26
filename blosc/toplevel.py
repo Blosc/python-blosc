@@ -279,7 +279,7 @@ def compress(bytesobj, typesize, clevel=9, shuffle=True, cname='blosclz'):
 
     Parameters
     ----------
-    bytesobj : str / bytes
+    bytesobj : bytes-like object (supporting the buffer interface)
         The data to be compressed.
     typesize : int
         The data type size.
@@ -303,7 +303,7 @@ def compress(bytesobj, typesize, clevel=9, shuffle=True, cname='blosclz'):
     Raises
     ------
     TypeError
-        If bytesobj is not of type bytes or string.
+        If bytesobj doesn't support the buffer interface.
     ValueError
         If bytesobj is too long.
         If typesize is not within the allowed range.
@@ -322,7 +322,6 @@ def compress(bytesobj, typesize, clevel=9, shuffle=True, cname='blosclz'):
 
     """
 
-    _check_bytesobj(bytesobj)
     _check_input_length('bytesobj', len(bytesobj))
     _check_typesize(typesize)
     _check_clevel(clevel)

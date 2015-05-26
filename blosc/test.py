@@ -2,9 +2,15 @@ from __future__ import division
 import sys
 import ctypes
 
-try:
+# version number hack
+vi = sys.version_info
+PY26 = vi[0] == 2 and vi[1] == 6
+PY27 = vi[0] == 2 and vi[1] == 7
+PY3X = vi[0] == 3
+
+if PY26:
     import unittest2 as unittest
-except ImportError:
+else:
     import unittest
 
 import blosc
@@ -15,8 +21,6 @@ except ImportError:
     has_numpy = False
 else:
     has_numpy = True
-
-py3 = sys.version_info[0] == 3
 
 
 class TestCodec(unittest.TestCase):
@@ -45,12 +49,36 @@ class TestCodec(unittest.TestCase):
         self.assertRaises(ValueError, blosc.set_nthreads,
                 blosc.BLOSC_MAX_THREADS +1)
 
-    def test_compress_exceptions(self):
-        rs = '0123456789'
-        s = b'0123456789'
+    def test_compress_input_types(self):
+        import numpy as np
+        # assume the expected answer was compressed from bytes
+        expected = blosc.compress(b'0123456789', typesize=1)
 
-        if py3:
-            self.assertRaises(TypeError, blosc.compress, rs, typesize=1)
+        if not PY3X:
+            # Python 3 can't compress unicode
+            self.assertEqual(expected, blosc.compress(u'0123456789', typesize=1))
+            # And the basic string is unicode
+            self.assertEqual(expected, blosc.compress('0123456789', typesize=1))
+
+        # now for all the things that support the buffer interface
+        if not PY3X:
+            # Python 3 no longer has the buffer
+            self.assertEqual(expected, blosc.compress(
+                buffer(b'0123456789'), typesize=1))
+        if not PY26:
+            # memoryview doesn't exist on Python 2.6
+            self.assertEqual(expected, blosc.compress(
+                memoryview(b'0123456789'), typesize=1))
+
+        self.assertEqual(expected, blosc.compress(
+            bytearray(b'0123456789'), typesize=1))
+        self.assertEqual(expected, blosc.compress(
+            np.array([b'0123456789']), typesize=1))
+
+
+
+    def test_compress_exceptions(self):
+        s = b'0123456789'
 
         self.assertRaises(ValueError, blosc.compress, s, typesize=0)
         self.assertRaises(ValueError, blosc.compress, s,
@@ -61,6 +89,11 @@ class TestCodec(unittest.TestCase):
 
         self.assertRaises(TypeError, blosc.compress, 1.0, 1)
         self.assertRaises(TypeError, blosc.compress, ['abc'], 1)
+
+        if PY3X:
+            # Python 3 doesn't support unicode
+            self.assertRaises(ValueError, blosc.compress,
+                              '0123456789', typesize=0)
 
         # This is trying to create a buffer of 2 GB!
         #self.assertRaises(ValueError, blosc.compress,
