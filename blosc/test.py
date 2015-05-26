@@ -8,9 +8,9 @@ PY26 = vi[0] == 2 and vi[1] == 6
 PY27 = vi[0] == 2 and vi[1] == 7
 PY3X = vi[0] == 3
 
-try:
+if PY26:
     import unittest2 as unittest
-except ImportError:
+else:
     import unittest
 
 import blosc
