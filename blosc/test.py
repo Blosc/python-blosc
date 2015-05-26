@@ -54,10 +54,12 @@ class TestCodec(unittest.TestCase):
         # assume the expected answer was compressed from bytes
         expected = blosc.compress(b'0123456789', typesize=1)
 
-        # Various types of 'string'
-        self.assertEqual(expected, blosc.compress('0123456789', typesize=1))
         self.assertEqual(expected, blosc.compress(r'0123456789', typesize=1))
-        self.assertEqual(expected, blosc.compress(u'0123456789', typesize=1))
+        if not PY3X:
+            # Python 3 can't compress unicode
+            self.assertEqual(expected, blosc.compress(u'0123456789', typesize=1))
+            # And the basic string is unicode
+            self.assertEqual(expected, blosc.compress('0123456789', typesize=1))
 
         # now for all the things that support the buffer interface
         if not PY3X:
@@ -68,6 +70,7 @@ class TestCodec(unittest.TestCase):
             # memoryview doesn't exist on Python 2.6
             self.assertEqual(expected, blosc.compress(
                 memoryview(b'0123456789'), typesize=1))
+
         self.assertEqual(expected, blosc.compress(
             bytearray(b'0123456789'), typesize=1))
         self.assertEqual(expected, blosc.compress(
