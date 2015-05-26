@@ -95,9 +95,11 @@ class TestCodec(unittest.TestCase):
             self.assertRaises(ValueError, blosc.compress,
                               '0123456789', typesize=0)
 
-        # This is trying to create a buffer of 2 GB!
-        # self.assertRaises(ValueError, blosc.compress,
-        #        'a' * (blosc.BLOSC_MAX_BUFFERSIZE+1), typesize=1)
+        # Create a simple mock to avoid having to create a buffer of 2 GB
+        class LenMock(object):
+            def __len__(self):
+                return blosc.BLOSC_MAX_BUFFERSIZE+1
+        self.assertRaises(ValueError, blosc.compress, LenMock(), typesize=1)
 
     def test_compress_ptr_exceptions(self):
         # Make sure we do have a valid address, to reduce the chance of a
