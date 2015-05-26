@@ -115,6 +115,7 @@ def set_blocksize(blocksize):
 
     _ext.set_blocksize(blocksize)
 
+
 def compressor_list():
     """
     compressor_list()
