@@ -1,7 +1,12 @@
 from __future__ import division
 import sys
-import unittest
 import ctypes
+
+try:
+    import unittest2 as unittest
+except ImportError:
+    import unittest
+
 import blosc
 
 try:
@@ -114,11 +119,8 @@ class TestCodec(unittest.TestCase):
         self.assertRaises(TypeError, blosc.decompress_ptr, c,
                 ['abc'])
 
+    @unittest.skipIf(not has_numpy, "Numpy not available")
     def test_pack_array_exceptions(self):
-        if not has_numpy:
-            # If NumPy is not installed, better return silently...
-            #self.fail('numpy not avalaible')
-            return
 
         self.assertRaises(TypeError, blosc.pack_array, 'abc')
         self.assertRaises(TypeError, blosc.pack_array, 1.0)

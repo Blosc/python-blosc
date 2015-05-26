@@ -14,7 +14,7 @@ before_install:
   - ulimit -a
   - pip install -q --use-mirrors numpy
   - python -V
-
+  - if [[ $TRAVIS_PYTHON_VERSION == '2.6' ]] ; then  pip install unittest2; fi
 install:
   - pip install .
 
