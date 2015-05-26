@@ -56,7 +56,9 @@ class TestCodec(unittest.TestCase):
         self.assertEqual(expected, blosc.compress('0123456789', typesize=1))
         self.assertEqual(expected, blosc.compress(r'0123456789', typesize=1))
         self.assertEqual(expected, blosc.compress(u'0123456789', typesize=1))
-        self.assertEqual(expected, blosc.compress(memoryview('0123456789'), typesize=1))
+        if not PY26:
+            # memoryview doesn't exist on Python 2.6
+            self.assertEqual(expected, blosc.compress(memoryview('0123456789'), typesize=1))
         self.assertEqual(expected, blosc.compress(buffer('0123456789'), typesize=1))
         self.assertEqual(expected, blosc.compress(bytearray('0123456789'), typesize=1))
         self.assertEqual(expected, blosc.compress(np.array(['0123456789']), typesize=1))
