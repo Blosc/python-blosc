@@ -90,6 +90,9 @@ class TestCodec(unittest.TestCase):
         self.assertRaises(TypeError, blosc.compress, 1.0, 1)
         self.assertRaises(TypeError, blosc.compress, ['abc'], 1)
 
+        self.assertRaises(ValueError, blosc.compress, 'abc',
+                          typesize = 1, cname='foo')
+
         if PY3X:
             # Python 3 doesn't support unicode
             self.assertRaises(ValueError, blosc.compress,
