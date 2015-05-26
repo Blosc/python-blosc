@@ -47,7 +47,7 @@ class TestCodec(unittest.TestCase):
 
     def test_set_nthreads_exceptions(self):
         self.assertRaises(ValueError, blosc.set_nthreads,
-                blosc.BLOSC_MAX_THREADS +1)
+                          blosc.BLOSC_MAX_THREADS + 1)
 
     def test_compress_input_types(self):
         import numpy as np
@@ -56,9 +56,11 @@ class TestCodec(unittest.TestCase):
 
         if not PY3X:
             # Python 3 can't compress unicode
-            self.assertEqual(expected, blosc.compress(u'0123456789', typesize=1))
+            self.assertEqual(expected,
+                             blosc.compress(u'0123456789', typesize=1))
             # And the basic string is unicode
-            self.assertEqual(expected, blosc.compress('0123456789', typesize=1))
+            self.assertEqual(expected,
+                             blosc.compress('0123456789', typesize=1))
 
         # now for all the things that support the buffer interface
         if not PY3X:
@@ -75,14 +77,12 @@ class TestCodec(unittest.TestCase):
         self.assertEqual(expected, blosc.compress(
             np.array([b'0123456789']), typesize=1))
 
-
-
     def test_compress_exceptions(self):
         s = b'0123456789'
 
         self.assertRaises(ValueError, blosc.compress, s, typesize=0)
         self.assertRaises(ValueError, blosc.compress, s,
-                typesize=blosc.BLOSC_MAX_TYPESIZE+1)
+                          typesize=blosc.BLOSC_MAX_TYPESIZE+1)
 
         self.assertRaises(ValueError, blosc.compress, s, typesize=1, clevel=-1)
         self.assertRaises(ValueError, blosc.compress, s, typesize=1, clevel=10)
@@ -96,7 +96,7 @@ class TestCodec(unittest.TestCase):
                               '0123456789', typesize=0)
 
         # This is trying to create a buffer of 2 GB!
-        #self.assertRaises(ValueError, blosc.compress,
+        # self.assertRaises(ValueError, blosc.compress,
         #        'a' * (blosc.BLOSC_MAX_BUFFERSIZE+1), typesize=1)
 
     def test_compress_ptr_exceptions(self):
@@ -110,24 +110,24 @@ class TestCodec(unittest.TestCase):
         address = ctypes.addressof(array)
 
         self.assertRaises(ValueError, blosc.compress_ptr, address, items,
-                typesize=-1)
+                          typesize=-1)
         self.assertRaises(ValueError, blosc.compress_ptr, address, items,
-                typesize=blosc.BLOSC_MAX_TYPESIZE+1)
+                          typesize=blosc.BLOSC_MAX_TYPESIZE+1)
 
         self.assertRaises(ValueError, blosc.compress_ptr, address, items,
-                typesize=typesize, clevel=-1)
+                          typesize=typesize, clevel=-1)
         self.assertRaises(ValueError, blosc.compress_ptr, address, items,
-                typesize=typesize, clevel=10)
+                          typesize=typesize, clevel=10)
 
         self.assertRaises(TypeError, blosc.compress_ptr, 1.0, items,
-                typesize=typesize)
+                          typesize=typesize)
         self.assertRaises(TypeError, blosc.compress_ptr, ['abc'], items,
-                typesize=typesize)
+                          typesize=typesize)
 
         self.assertRaises(ValueError, blosc.compress_ptr, address, -1,
-                typesize=typesize)
+                          typesize=typesize)
         self.assertRaises(ValueError, blosc.compress_ptr, address,
-                blosc.BLOSC_MAX_BUFFERSIZE+1, typesize=typesize)
+                          blosc.BLOSC_MAX_BUFFERSIZE+1, typesize=typesize)
 
     def test_decompress_exceptions(self):
         self.assertRaises(TypeError, blosc.decompress, 1.0)
@@ -143,14 +143,12 @@ class TestCodec(unittest.TestCase):
         out_array = ctypes.create_string_buffer(items*typesize)
 
         self.assertRaises(TypeError, blosc.decompress_ptr, 1.0,
-                ctypes.addressof(out_array))
+                          ctypes.addressof(out_array))
         self.assertRaises(TypeError, blosc.decompress_ptr, ['abc'],
-                ctypes.addressof(out_array))
+                          ctypes.addressof(out_array))
 
-        self.assertRaises(TypeError, blosc.decompress_ptr, c,
-                1.0)
-        self.assertRaises(TypeError, blosc.decompress_ptr, c,
-                ['abc'])
+        self.assertRaises(TypeError, blosc.decompress_ptr, c, 1.0)
+        self.assertRaises(TypeError, blosc.decompress_ptr, c, ['abc'])
 
     @unittest.skipIf(not has_numpy, "Numpy not available")
     def test_pack_array_exceptions(self):
@@ -164,8 +162,8 @@ class TestCodec(unittest.TestCase):
         self.assertRaises(ValueError, blosc.pack_array, one, clevel=10)
 
         # use stride trick to make an array that looks like a huge one
-        ones = numpy.lib.stride_tricks.as_strided(one, shape=(1,items),
-                strides=(8,0))[0]
+        ones = numpy.lib.stride_tricks.as_strided(one, shape=(1, items),
+                                                  strides=(8, 0))[0]
 
         # This should always raise an error
         self.assertRaises(ValueError, blosc.pack_array, ones)
