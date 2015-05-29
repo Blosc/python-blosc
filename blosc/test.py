@@ -177,7 +177,7 @@ class TestCodec(unittest.TestCase):
         self.assertRaises(TypeError, blosc.unpack_array, 1.0)
 
 
-def run():
+def run(verbosity=2):
     import blosc
     import blosc.toplevel
     blosc.print_versions()
@@ -187,7 +187,7 @@ def run():
 
     # suite = unittest.TestLoader().discover(start_dir='.', pattern='test*.py')
     suite.addTests(unittest.TestLoader().loadTestsFromModule(blosc.toplevel))
-    unittest.TextTestRunner(verbosity=2).run(suite)
+    assert unittest.TextTestRunner(verbosity=verbosity).run(suite).wasSuccessful()
 
 
 if __name__ == '__main__':
