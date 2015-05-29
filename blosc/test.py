@@ -187,7 +187,7 @@ def run(verbosity=2):
 
     # suite = unittest.TestLoader().discover(start_dir='.', pattern='test*.py')
     suite.addTests(unittest.TestLoader().loadTestsFromModule(blosc.toplevel))
-    unittest.TextTestRunner(verbosity=verbosity).run(suite)
+    assert unittest.TextTestRunner(verbosity=verbosity).run(suite).wasSuccessful()
 
 
 if __name__ == '__main__':
