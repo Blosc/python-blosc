@@ -91,7 +91,7 @@ class TestCodec(unittest.TestCase):
         self.assertRaises(TypeError, blosc.compress, ['abc'], 1)
 
         self.assertRaises(ValueError, blosc.compress, 'abc',
-                          typesize = 1, cname='foo')
+                          typesize=1, cname='foo')
 
         if PY3X:
             # Python 3 doesn't support unicode
@@ -187,7 +187,8 @@ def run(verbosity=2):
 
     # suite = unittest.TestLoader().discover(start_dir='.', pattern='test*.py')
     suite.addTests(unittest.TestLoader().loadTestsFromModule(blosc.toplevel))
-    assert unittest.TextTestRunner(verbosity=verbosity).run(suite).wasSuccessful()
+    assert unittest.TextTestRunner(verbosity=verbosity).\
+        run(suite).wasSuccessful()
 
 
 if __name__ == '__main__':
