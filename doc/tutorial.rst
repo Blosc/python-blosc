@@ -104,6 +104,40 @@ you can expect similar results.  However, 'lz4hc' is variation of
 'lz4' that typically spends more time compressing for a better
 compression ratio, so it is very good for read-only data.
 
+Supporting the buffer interface
+===============================
+
+As of version 1.2.8 python-blosc supports compressing and decompressing from
+any bytes-like object that supports the buffer-interface: this includes
+`buffer`, `memoryview` and `bytearray`::
+
+    >>> input_bytes = b"abcdefghijklmnopqrstuvwxyz"
+
+    >>> blosc.compress(input_bytes, typesize=1)
+    '\x02\x01\x03\x01\x1a\x00\x00\x00\x1a\x00\x00\x00*\x00\x00\x00abcdefghijklmnopqrstuvwxyz'
+
+    >>> blosc.compress(memoryview(input_bytes), typesize=1)
+    '\x02\x01\x03\x01\x1a\x00\x00\x00\x1a\x00\x00\x00*\x00\x00\x00abcdefghijklmnopqrstuvwxyz'
+
+    >>> blosc.compress(bytearray(input_bytes), typesize=1)
+    '\x02\x01\x03\x01\x1a\x00\x00\x00\x1a\x00\x00\x00*\x00\x00\x00abcdefghijklmnopqrstuvwxyz'
+
+    >>> compressed = blosc.compress(input_bytes, typesize=1)
+
+    >>> blosc.decompress(compressed)
+    'abcdefghijklmnopqrstuvwxyz'
+
+    >>> blosc.decompress(memoryview(compressed))
+    'abcdefghijklmnopqrstuvwxyz'
+
+    >>> blosc.decompress(bytearray(compressed))
+    'abcdefghijklmnopqrstuvwxyz'
+
+Note however, that there are subtle differences between Python 2.x and 3.x.
+For example, in Python 2.x we can compress/decompress both `str` and `unicode`
+types, whereas in Python 3.x we can only compress 'binary' data which does
+*not* include `unicode`.
+
 
 Packaging NumPy arrays
 ======================
