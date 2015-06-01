@@ -258,7 +258,7 @@ PyBlosc_compress(PyObject *self, PyObject *args)
     #endif
     if (!PyArg_ParseTuple(args, format , &view,
                         &typesize, &clevel, &shuffle, &cname))
-    return NULL;
+        return NULL;
     nbytes = view.len;
     input = view.buf;
     output = compress_helper(input, nbytes, typesize, clevel, shuffle, cname);
