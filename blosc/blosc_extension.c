@@ -172,7 +172,7 @@ PyBlosc_destroy(PyObject *self)
 
 static PyObject *
 compress_helper(void * input, size_t nbytes, size_t typesize,
-		int clevel, int shuffle, char *cname){
+                int clevel, int shuffle, char *cname){
 
     int cbytes;
     PyObject *output = NULL;
