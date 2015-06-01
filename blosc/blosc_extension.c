@@ -371,13 +371,28 @@ PyDoc_STRVAR(decompress__doc__,
 static PyObject *
 PyBlosc_decompress(PyObject *self, PyObject *args)
 {
+    Py_buffer view;
     PyObject *result_str;
     void *input, *output;
     size_t nbytes, cbytes;
+    char *format;
+    /* Accept some kind of input */
+    #if PY_MAJOR_VERSION <= 2
+        /* s* : bytes like object including unicode and anything that supports
+         * the buffer interface */
+        format = "s*:decompress";
+    #elif PY_MAJOR_VERSION >= 3
+        /* y* :bytes like object EXCLUDING unicode and anything that supports
+         * the buffer interface. This is the recommended way to accept binary
+         * data in Python 3. */
+        format = "y*:decompress";
+    #endif
 
-    if (!PyArg_ParseTuple(args, "s#:decompress", &input, &cbytes))
+    if (!PyArg_ParseTuple(args, format, &view))
       return NULL;
 
+    cbytes = view.len;
+    input = view.buf;
     /*  fetch the uncompressed size into nbytes */
     if (!get_nbytes(input, cbytes, &nbytes))
       return NULL;
