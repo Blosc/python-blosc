@@ -458,8 +458,6 @@ def decompress(bytesobj):
 
     """
 
-    _check_bytesobj(bytesobj)
-
     return _ext.decompress(bytesobj)
 
 

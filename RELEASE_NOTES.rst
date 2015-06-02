@@ -14,8 +14,8 @@ Changes from 1.2.7 to 1.2.8
 ===========================
 
 - Support bytes-like objects that support the buffer interface as input to
-  ``compress``. On Python 2.x this includes unicode, on Python 3.x it doesn't.
-  (#80 @esc)
+  ``compress`` and ``decompress``. On Python 2.x this includes unicode, on
+  Python 3.x it doesn't.  (#80 #94 @esc)
 
 - Various miscellaneous fixes and improvements.
 
