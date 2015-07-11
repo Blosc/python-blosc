@@ -5,7 +5,12 @@ Announcing python-blosc 1.2.8
 What is new?
 ============
 
-#XXX version-specific blurb XXX#
+With this version, python-blosc can take any bytes-like objetcs that
+support the buffer interface as input. This includes `bytearray` and
+`memoryview` objects. In Python 3.x only bytes-like objects are accepted
+and this does **not** include unicode objects, i.e. the `str` type.
+Design-wise, this approach was chosen since it mimicks the behaviour of
+the `zlib` module in Python 3.x
 
 For more info, you can have a look at the release notes in:
 
