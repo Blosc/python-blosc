@@ -211,7 +211,7 @@ class TestCodec(unittest.TestCase):
             freemem = psutil.virtual_memory().available
             for _ in range(repeats):
                 operation()
-            return (psutil.virtual_memory().available - freemem) >= threshold
+            return (psutil.virtual_memory().available - freemem) >= -threshold
 
         def compress():
             blosc.compress(x, 1, clevel=0)
