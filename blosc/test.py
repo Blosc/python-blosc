@@ -1,6 +1,8 @@
 from __future__ import division
 import sys
 import ctypes
+import blosc
+from array import array
 
 # version number hack
 vi = sys.version_info
@@ -13,14 +15,17 @@ if PY26:
 else:
     import unittest
 
-import blosc
-
 try:
     import numpy
 except ImportError:
     has_numpy = False
 else:
     has_numpy = True
+
+try:
+    import psutil
+except ImportError:
+    psutil = None
 
 
 class TestCodec(unittest.TestCase):
@@ -193,6 +198,41 @@ class TestCodec(unittest.TestCase):
 
     def test_unpack_array_exceptions(self):
         self.assertRaises(TypeError, blosc.unpack_array, 1.0)
+
+    @unittest.skipIf(not psutil, "Psutil not available, cannot test for leaks")
+    def test_no_leaks(self):
+
+        threshold = 1000000
+        x = 'aj lkajfldkfjaoiur 0983 5t93h308 ajlkf n fsfhahtey8 haiuoyajkah ' * threshold
+        array_type = b'c' if PY3X else 'c'
+        a = array(array_type, x)
+
+        def leaks(operation, repeats=3):
+            freemem = psutil.virtual_memory().available
+            for _ in range(repeats):
+                operation()
+            return (psutil.virtual_memory().available - freemem) >= threshold
+
+        def compress():
+            blosc.compress(x, 1)
+
+        def compress_ptr():
+            b, _ = a.buffer_info()
+            blosc.compress_ptr(b, len(a), 1)
+
+        def decompress():
+            cx = blosc.compress(x, 1)
+            blosc.decompress(cx)
+
+        def decompress_ptr():
+            b, _ = a.buffer_info()
+            cx = blosc.compress_ptr(b, len(a), 1)
+            blosc.decompress_ptr(cx, b)
+
+        self.assertFalse(leaks(compress), msg='compress leaks memory')
+        self.assertFalse(leaks(compress_ptr), msg='compress_ptr leaks memory')
+        self.assertFalse(leaks(decompress), msg='decompress leaks memory')
+        self.assertFalse(leaks(decompress_ptr), msg='decompress_ptr leaks memory')
 
 
 def run(verbosity=2):
