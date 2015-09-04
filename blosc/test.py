@@ -1,5 +1,6 @@
 from __future__ import division
 import sys
+import gc
 import ctypes
 import blosc
 from array import array
@@ -208,9 +209,11 @@ class TestCodec(unittest.TestCase):
         a = array(array_type, x)
 
         def leaks(operation, repeats=3):
+            gc.collect()
             freemem = psutil.virtual_memory().available
             for _ in range(repeats):
                 operation()
+            gc.collect()
             return (psutil.virtual_memory().available - freemem) >= -threshold
 
         def compress():
