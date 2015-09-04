@@ -204,7 +204,7 @@ class TestCodec(unittest.TestCase):
 
         threshold = 50000000
         x = 'a' * 10 * threshold
-        array_type = b'c' if PY3X else 'c'
+        array_type = 'u' if PY3X else b'c'
         a = array(array_type, x)
 
         def leaks(operation, repeats=3):
