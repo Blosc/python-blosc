@@ -202,8 +202,8 @@ class TestCodec(unittest.TestCase):
     @unittest.skipIf(not psutil, "Psutil not available, cannot test for leaks")
     def test_no_leaks(self):
 
-        threshold = 1000000
-        x = 'aj lkajfldkfjaoiur 0983 5t93h308 ajlkf n fsfhahtey8 haiuoyajkah ' * threshold
+        threshold = 50000000
+        x = 'a' * 10 * threshold
         array_type = b'c' if PY3X else 'c'
         a = array(array_type, x)
 
