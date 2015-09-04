@@ -3,7 +3,6 @@ import sys
 import gc
 import ctypes
 import blosc
-from array import array
 
 # version number hack
 vi = sys.version_info
@@ -203,34 +202,35 @@ class TestCodec(unittest.TestCase):
     @unittest.skipIf(not psutil, "Psutil not available, cannot test for leaks")
     def test_no_leaks(self):
 
-        threshold = 1000000
-        x = 'a' * 10 * threshold  # N.B. trivially compressible, use clevel=0
-        array_type = 'u' if PY3X else b'c'
-        a = array(array_type, x)
+        num_elements = 10000000
+        typesize = 8
+        data = [float(i) for i in range(num_elements)]  # ~76MB
+        Array = ctypes.c_double * num_elements
+        array = Array(*data)
+        address = ctypes.addressof(array)
 
         def leaks(operation, repeats=3):
             gc.collect()
-            freemem = psutil.virtual_memory().available
+            freemem_before = psutil.virtual_memory().available
             for _ in range(repeats):
                 operation()
             gc.collect()
-            return (psutil.virtual_memory().available - freemem) >= -threshold
+            freemen_after = psutil.virtual_memory().available
+            return (freemem_before - freemen_after) >= num_elements
 
         def compress():
-            blosc.compress(x, 1, clevel=0)
+            blosc.compress(array, typesize, clevel=0)
 
         def compress_ptr():
-            b, _ = a.buffer_info()
-            blosc.compress_ptr(b, len(a), 1, clevel=0)
+            blosc.compress_ptr(address, num_elements, typesize, clevel=0)
 
         def decompress():
-            cx = blosc.compress(x, 1, clevel=0)
+            cx = blosc.compress(array, typesize, clevel=0)
             blosc.decompress(cx)
 
         def decompress_ptr():
-            b, _ = a.buffer_info()
-            cx = blosc.compress_ptr(b, len(a), 1, clevel=0)
-            blosc.decompress_ptr(cx, b)
+            cx = blosc.compress_ptr(address, num_elements, typesize, clevel=0)
+            blosc.decompress_ptr(cx, address)
 
         self.assertFalse(leaks(compress), msg='compress leaks memory')
         self.assertFalse(leaks(compress_ptr), msg='compress_ptr leaks memory')
