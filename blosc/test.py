@@ -202,8 +202,8 @@ class TestCodec(unittest.TestCase):
     @unittest.skipIf(not psutil, "Psutil not available, cannot test for leaks")
     def test_no_leaks(self):
 
-        threshold = 50000000
-        x = 'a' * 10 * threshold
+        threshold = 1000000
+        x = 'a' * 10 * threshold  # N.B. trivially compressible, use clevel=0
         array_type = 'u' if PY3X else b'c'
         a = array(array_type, x)
 
@@ -214,19 +214,19 @@ class TestCodec(unittest.TestCase):
             return (psutil.virtual_memory().available - freemem) >= threshold
 
         def compress():
-            blosc.compress(x, 1)
+            blosc.compress(x, 1, clevel=0)
 
         def compress_ptr():
             b, _ = a.buffer_info()
-            blosc.compress_ptr(b, len(a), 1)
+            blosc.compress_ptr(b, len(a), 1, clevel=0)
 
         def decompress():
-            cx = blosc.compress(x, 1)
+            cx = blosc.compress(x, 1, clevel=0)
             blosc.decompress(cx)
 
         def decompress_ptr():
             b, _ = a.buffer_info()
-            cx = blosc.compress_ptr(b, len(a), 1)
+            cx = blosc.compress_ptr(b, len(a), 1, clevel=0)
             blosc.decompress_ptr(cx, b)
 
         self.assertFalse(leaks(compress), msg='compress leaks memory')
