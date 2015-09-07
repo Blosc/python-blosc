@@ -17,6 +17,9 @@ Changes from 1.2.7 to 1.2.8
   ``compress`` and ``decompress``. On Python 2.x this includes unicode, on
   Python 3.x it doesn't.  (#80 #94 @esc)
 
+- Fix a memory leak in ``decompress``.
+  Add (non deterministic) tests to catch memory leaks. (#102 #103 @sdvillal)
+
 - Various miscellaneous fixes and improvements.
 
 Changes from 1.2.5 to 1.2.7
