@@ -232,10 +232,14 @@ class TestCodec(unittest.TestCase):
             cx = blosc.compress_ptr(address, num_elements, typesize, clevel=0)
             blosc.decompress_ptr(cx, address)
 
-        self.assertFalse(leaks(compress), msg='compress leaks memory')
-        self.assertFalse(leaks(compress_ptr), msg='compress_ptr leaks memory')
-        self.assertFalse(leaks(decompress), msg='decompress leaks memory')
-        self.assertFalse(leaks(decompress_ptr), msg='decompress_ptr leaks memory')
+        self.assertFalse(leaks(compress),
+                         msg='compress seems to leak memory (maybe repeat this test?)')
+        self.assertFalse(leaks(compress_ptr),
+                         msg='compress_ptr seems to leak memory (maybe repeat this test?)')
+        self.assertFalse(leaks(decompress),
+                         msg='decompress seems to leak memory (maybe repeat this test?)')
+        self.assertFalse(leaks(decompress_ptr),
+                         msg='decompress_ptr seems to leak memory (maybe repeat this test?)')
 
 
 def run(verbosity=2):
