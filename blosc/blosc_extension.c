@@ -394,20 +394,27 @@ PyBlosc_decompress(PyObject *self, PyObject *args)
     cbytes = view.len;
     input = view.buf;
     /*  fetch the uncompressed size into nbytes */
-    if (!get_nbytes(input, cbytes, &nbytes))
+    if (!get_nbytes(input, cbytes, &nbytes)){
+      PyBuffer_Release(&view);
       return NULL;
+    }
 
     /* Book memory for the result */
-    if (!(result_str = PyBytes_FromStringAndSize(NULL, (Py_ssize_t)nbytes)))
+    if (!(result_str = PyBytes_FromStringAndSize(NULL, (Py_ssize_t)nbytes))){
+      PyBuffer_Release(&view);
       return NULL;
+    }
+
     output = PyBytes_AS_STRING(result_str);
 
     /*  do decompression */
     if (!decompress_helper(input, nbytes, output)){
       Py_XDECREF(result_str);
+      PyBuffer_Release(&view);
       return NULL;
     }
 
+    PyBuffer_Release(&view);
     return result_str;
 }
 

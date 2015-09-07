@@ -3,3 +3,4 @@ blosc/version.py
 build/
 doc/_build/
 *~
+*.pyc

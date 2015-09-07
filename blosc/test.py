@@ -1,6 +1,8 @@
 from __future__ import division
 import sys
+import gc
 import ctypes
+import blosc
 
 # version number hack
 vi = sys.version_info
@@ -13,14 +15,17 @@ if PY26:
 else:
     import unittest
 
-import blosc
-
 try:
     import numpy
 except ImportError:
     has_numpy = False
 else:
     has_numpy = True
+
+try:
+    import psutil
+except ImportError:
+    psutil = None
 
 
 class TestCodec(unittest.TestCase):
@@ -193,6 +198,48 @@ class TestCodec(unittest.TestCase):
 
     def test_unpack_array_exceptions(self):
         self.assertRaises(TypeError, blosc.unpack_array, 1.0)
+
+    @unittest.skipIf(not psutil, "Psutil not available, cannot test for leaks")
+    def test_no_leaks(self):
+
+        num_elements = 10000000
+        typesize = 8
+        data = [float(i) for i in range(num_elements)]  # ~76MB
+        Array = ctypes.c_double * num_elements
+        array = Array(*data)
+        address = ctypes.addressof(array)
+
+        def leaks(operation, repeats=3):
+            gc.collect()
+            freemem_before = psutil.virtual_memory().available
+            for _ in range(repeats):
+                operation()
+            gc.collect()
+            freemen_after = psutil.virtual_memory().available
+            return (freemem_before - freemen_after) >= num_elements
+
+        def compress():
+            blosc.compress(array, typesize, clevel=0)
+
+        def compress_ptr():
+            blosc.compress_ptr(address, num_elements, typesize, clevel=0)
+
+        def decompress():
+            cx = blosc.compress(array, typesize, clevel=0)
+            blosc.decompress(cx)
+
+        def decompress_ptr():
+            cx = blosc.compress_ptr(address, num_elements, typesize, clevel=0)
+            blosc.decompress_ptr(cx, address)
+
+        self.assertFalse(leaks(compress),
+                         msg='compress seems to leak memory (maybe repeat this test?)')
+        self.assertFalse(leaks(compress_ptr),
+                         msg='compress_ptr seems to leak memory (maybe repeat this test?)')
+        self.assertFalse(leaks(decompress),
+                         msg='decompress seems to leak memory (maybe repeat this test?)')
+        self.assertFalse(leaks(decompress_ptr),
+                         msg='decompress_ptr seems to leak memory (maybe repeat this test?)')
 
 
 def run(verbosity=2):
