@@ -414,7 +414,7 @@ PyBlosc_decompress(PyObject *self, PyObject *args)
       return NULL;
     }
 
-    PyBuffer_Release(&view);
+    // PyBuffer_Release(&view);
     return result_str;
 }
 
