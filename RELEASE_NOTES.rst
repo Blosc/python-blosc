@@ -18,7 +18,7 @@ Changes from 1.2.7 to 1.2.8
   Python 3.x it doesn't.  (#80 #94 @esc)
 
 - Fix a memory leak in ``decompress``.
-  Add (non deterministic) tests to catch memory leaks. (#102 #103 @sdvillal)
+  Add tests to catch memory leaks. (#102 #103 #104 @sdvillal)
 
 - Various miscellaneous fixes and improvements.
 
