@@ -5,7 +5,18 @@ Announcing python-blosc 1.2.8
 What is new?
 ============
 
-#XXX version-specific blurb XXX#
+This is a maintenance release.  Internal c-blosc has been upgraded to
+1.7.0 (although new bitshuffle support has not been made public, as it
+seems not ready for production yet).
+
+Also, there is support for bytes-like objects that support the buffer
+interface as input to ``compress`` and ``decompress``. On Python 2.x
+this includes unicode, on Python 3.x it doesn't.  Thanks to Valentin
+Haenel.
+
+Finally, a memory leak in ``decompress```has been hunted and fixed.  And
+new tests have been added to catch possible leaks in the future.  Thanks
+to Santi Villalba.
 
 For more info, you can have a look at the release notes in:
 
