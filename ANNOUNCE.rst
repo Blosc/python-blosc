@@ -20,7 +20,7 @@ to Santi Villalba.
 
 For more info, you can have a look at the release notes in:
 
-https://github.com/Blosc/python-blosc/wiki/Release-notes
+https://github.com/Blosc/python-blosc/blob/master/RELEASE_NOTES.rst
 
 More docs and examples are available in the documentation site:
 

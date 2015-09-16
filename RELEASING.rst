@@ -94,10 +94,6 @@ Tagging
 Announcing
 ----------
 
-* Update the release notes in the python-blosc site:
-
-  https://github.com/Blosc/python-blosc/wiki/Release-notes
-
 * Send an announcement to the blosc, numpy list and python-announce
   lists.  Use the ``ANNOUNCE.rst`` file as skeleton (or possibly as the
   definitive version).
