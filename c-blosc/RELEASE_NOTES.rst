@@ -1,10 +1,79 @@
-================================
- Release notes for c-blosc 1.6.1
-================================
+=================================
+ Release notes for c-blosc 1.7.0
+=================================
 
 :Author: Francesc Alted
 :Contact: francesc@blosc.org
 :URL: http://www.blosc.org
+
+
+Changes from 1.6.1 to 1.7.0
+===========================
+
+* Added a new 'bitshuffle' filter so that the shuffle takes place at a
+  bit level and not just at a byte one, which is what it does the
+  previous 'shuffle' filter.
+
+  For activating this new bit-level filter you only have to pass the
+  symbol BLOSC_BITSHUFFLE to `blosc_compress()`.  For the previous
+  byte-level one, pass BLOSC_SHUFFLE.  For disabling the shuffle, pass
+  BLOSC_NOSHUFFLE.
+
+  This is a port of the existing filter in
+  https://github.com/kiyo-masui/bitshuffle.  Thanks to Kiyo Masui for
+  changing the license and allowing its inclusion here.
+
+* New acceleration mode for LZ4 and BloscLZ codecs that enters in
+  operation with complevel < 9.  This allows for an important boost in
+  speed with minimal compression ratio loss.  Francesc Alted.
+
+* LZ4 codec updated to 1.7.0 (r130).
+
+* PREFER_EXTERNAL_COMPLIBS cmake option has been removed and replaced
+  by the more fine grained PREFER_EXTERNAL_LZ4, PREFER_EXTERNAL_SNAPPY
+  and PREFER_EXTERNAL_ZLIB.  In order to allow the use of the new API
+  introduced in LZ4 1.7.0, PREFER_EXTERNAL_LZ4 has been set to OFF by
+  default, whereas PREFER_EXTERNAL_SNAPPY and PREFER_EXTERNAL_ZLIB
+  continues to be ON.
+
+* Implemented SSE2 shuffle support for buffers containing a number of
+  elements which is not a multiple of (typesize * vectorsize).  Jack
+  Pappas.
+
+* Added SSE2 shuffle/unshuffle routines for types larger than 16
+  bytes.  Jack Pappas.
+
+* 'test_basic' suite has been split in components for a much better
+  granularity on what's a possibly failing test.  Also, lots of new
+  tests have been added.  Jack Pappas.
+
+* Fixed compilation on non-Intel archs (tested on ARM).  Zbyszek
+  Szmek.
+
+* Modifyied cmake files in order to inform that AVX2 on Visual Studio
+  is supported only in 2013 update 2 and higher.
+
+* Added a replacement for stdbool.h for Visual Studio < 2013.
+
+* blosclz codec adds Win64/Intel as a platform supporting unaligned
+  addressing.  That leads to a speed-up of 2.2x in decompression.
+
+* New blosc_get_version_string() function for retrieving the version
+  of the c-blosc library.  Useful when linking with dynamic libraries
+  and one want to know its version.
+
+* New example (win-dynamic-linking.c) that shows how to link a Blosc
+  DLL dynamically in run-time (Windows only).
+
+* The `context.threads_started` is initialized now when decompressing.
+  This could cause crashes in case you decompressed before compressing
+  (e.g. directly deserializing blosc buffers).  @atchouprakov.
+
+* The HDF5 filter has been removed from c-blosc and moved into its own
+  repo at: https://github.com/Blosc/hdf5
+
+* The MS Visual Studio 2008 has been tested with c-blosc for ensuring
+  compatibility with extensions for Python 2.6 and up.
 
 
 Changes from 1.6.0 to 1.6.1

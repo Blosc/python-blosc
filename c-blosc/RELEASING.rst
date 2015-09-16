@@ -20,9 +20,9 @@ Testing
 
 Create a new build/ directory, change into it and issue::
 
-  $ cmake -DBUILD_HDF5_FILTER=TRUE ..
-  $ make
-  $ make test
+  $ cmake ..
+  $ cmake --build .
+  $ ctest
 
 To actually test Blosc the hard way, look at the end of:
 

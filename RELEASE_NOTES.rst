@@ -13,6 +13,10 @@
 Changes from 1.2.7 to 1.2.8
 ===========================
 
+- Updated to c-blosc v1.7.0.  However, the new bitshuffle filter has not
+  been made public because recent reports say that it seems too green for
+  production.
+
 - Support bytes-like objects that support the buffer interface as input to
   ``compress`` and ``decompress``. On Python 2.x this includes unicode, on
   Python 3.x it doesn't.  (#80 #94 @esc)

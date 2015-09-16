@@ -16,6 +16,7 @@
 #define SHUFFLE_GENERIC_H
 
 #include "shuffle-common.h"
+#include <stdlib.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -23,14 +24,72 @@ extern "C" {
 
 /**
   Generic (non-hardware-accelerated) shuffle routine.
+  This is the pure element-copying nested loop. It is used by the
+  generic shuffle implementation and also by the vectorized shuffle
+  implementations to process any remaining elements in a block which
+  is not a multiple of (type_size * vector_size).
 */
-BLOSC_DLL_EXPORT void shuffle_generic(const size_t bytesoftype, const size_t blocksize,
+static void shuffle_generic_inline(const size_t type_size,
+    const size_t vectorizable_blocksize, const size_t blocksize,
+    const uint8_t* const _src, uint8_t* const _dest)
+{
+  size_t i, j;
+  /* Calculate the number of elements in the block. */
+  const size_t neblock_quot = blocksize / type_size;
+  const size_t neblock_rem = blocksize % type_size;
+  const size_t vectorizable_elements = vectorizable_blocksize / type_size;
+
+
+  /* Non-optimized shuffle */
+  for (j = 0; j < type_size; j++) {
+    for (i = vectorizable_elements; i < (size_t)neblock_quot; i++) {
+      _dest[j*neblock_quot+i] = _src[i*type_size+j];
+    }
+  }
+
+  /* Copy any leftover bytes in the block without shuffling them. */
+  memcpy(_dest + (blocksize - neblock_rem), _src + (blocksize - neblock_rem), neblock_rem);
+}
+
+/**
+  Generic (non-hardware-accelerated) unshuffle routine.
+  This is the pure element-copying nested loop. It is used by the
+  generic unshuffle implementation and also by the vectorized unshuffle
+  implementations to process any remaining elements in a block which
+  is not a multiple of (type_size * vector_size).
+*/
+static void unshuffle_generic_inline(const size_t type_size,
+  const size_t vectorizable_blocksize, const size_t blocksize,
+  const uint8_t* const _src, uint8_t* const _dest)
+{
+  size_t i, j;
+
+  /* Calculate the number of elements in the block. */
+  const size_t neblock_quot = blocksize / type_size;
+  const size_t neblock_rem = blocksize % type_size;
+  const size_t vectorizable_elements = vectorizable_blocksize / type_size;
+
+  /* Non-optimized unshuffle */
+  for (i = vectorizable_elements; i < (size_t)neblock_quot; i++) {
+    for (j = 0; j < type_size; j++) {
+      _dest[i*type_size+j] = _src[j*neblock_quot+i];
+    }
+  }
+
+  /* Copy any leftover bytes in the block without unshuffling them. */
+  memcpy(_dest + (blocksize - neblock_rem), _src + (blocksize - neblock_rem), neblock_rem);
+}
+
+/**
+  Generic (non-hardware-accelerated) shuffle routine.
+*/
+BLOSC_NO_EXPORT void shuffle_generic(const size_t bytesoftype, const size_t blocksize,
                                       const uint8_t* const _src, uint8_t* const _dest);
 
 /**
   Generic (non-hardware-accelerated) unshuffle routine.
 */
-BLOSC_DLL_EXPORT void unshuffle_generic(const size_t bytesoftype, const size_t blocksize,
+BLOSC_NO_EXPORT void unshuffle_generic(const size_t bytesoftype, const size_t blocksize,
                                         const uint8_t* const _src, uint8_t* const _dest);
 
 #ifdef __cplusplus

@@ -10,28 +10,22 @@
 
 #include <limits.h>
 #include <stdlib.h>
+#include "blosc-export.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#ifdef BLOSC_DLL_EXPORT
-    #undef BLOSC_DLL_EXPORT
-	#define BLOSC_DLL_EXPORT __declspec(dllexport)
-#else
-    #undef BLOSC_DLL_EXPORT
-	#define BLOSC_DLL_EXPORT
-#endif
-
 /* Version numbers */
 #define BLOSC_VERSION_MAJOR    1    /* for major interface/format changes  */
-#define BLOSC_VERSION_MINOR    6    /* for minor interface/format changes  */
-#define BLOSC_VERSION_RELEASE  1    /* for tweaks, bug-fixes, or development */
+#define BLOSC_VERSION_MINOR    7    /* for minor interface/format changes  */
+#define BLOSC_VERSION_RELEASE  0    /* for tweaks, bug-fixes, or development */
 
-#define BLOSC_VERSION_STRING   "1.6.1"  /* string version.  Sync with above! */
+#define BLOSC_VERSION_STRING   "1.7.0"  /* string version.  Sync with above! */
 #define BLOSC_VERSION_REVISION "$Rev$"   /* revision version */
-#define BLOSC_VERSION_DATE     "$Date:: 2015-05-06 #$"    /* date version */
+#define BLOSC_VERSION_DATE     "$Date:: 2015-07-05 #$"    /* date version */
 
-#define BLOSCLZ_VERSION_STRING "1.0.4"   /* the internal compressor version */
+#define BLOSCLZ_VERSION_STRING "1.0.5"   /* the internal compressor version */
 
 /* The *_FORMAT symbols should be just 1-byte long */
 #define BLOSC_VERSION_FORMAT    2   /* Blosc format version, starting at 1 */
@@ -53,9 +47,15 @@ extern "C" {
 /* The maximum number of threads (for some static arrays) */
 #define BLOSC_MAX_THREADS 256
 
+/* Codes for shuffling (see blosc_compress) */
+#define BLOSC_NOSHUFFLE   0  /* no shuffle */
+#define BLOSC_SHUFFLE 1      /* byte-wise shuffle */
+#define BLOSC_BITSHUFFLE  2  /* bit-wise shuffle */
+
 /* Codes for internal flags (see blosc_cbuffer_metainfo) */
-#define BLOSC_DOSHUFFLE 0x1
-#define BLOSC_MEMCPYED  0x2
+#define BLOSC_DOSHUFFLE    0x1	/* byte-wise shuffle */
+#define BLOSC_MEMCPYED     0x2	/* plain copy */
+#define BLOSC_DOBITSHUFFLE 0x4  /* bit-wise shuffle */
 
 /* Codes for the different compressors shipped with Blosc */
 #define BLOSC_BLOSCLZ   0
@@ -109,7 +109,7 @@ extern "C" {
   which case you should *exclusively* use the
   blosc_compress_ctx()/blosc_decompress_ctx() pair (see below).
   */
-BLOSC_DLL_EXPORT void blosc_init(void);
+BLOSC_EXPORT void blosc_init(void);
 
 
 /**
@@ -119,7 +119,7 @@ BLOSC_DLL_EXPORT void blosc_init(void);
   unless you have not used blosc_init() before (see blosc_init()
   above).
   */
-BLOSC_DLL_EXPORT void blosc_destroy(void);
+BLOSC_EXPORT void blosc_destroy(void);
 
 
 /**
@@ -131,8 +131,9 @@ BLOSC_DLL_EXPORT void blosc_destroy(void);
   between 0 (no compression) and 9 (maximum compression).
 
   `doshuffle` specifies whether the shuffle compression preconditioner
-  should be applied or not.  0 means not applying it and 1 means
-  applying it.
+  should be applied or not.  BLOSC_NOSHUFFLE means not applying it,
+  BLOSC_SHUFFLE means applying it at a byte level and BLOSC_BITSHUFFLE
+  at a bit level (slower but may achieve better entropy alignment).
 
   `typesize` is the number of bytes for the atomic type in binary
   `src` buffer.  This is mainly useful for the shuffle preconditioner.
@@ -156,9 +157,9 @@ BLOSC_DLL_EXPORT void blosc_destroy(void);
   should never happen.  If you see this, please report it back
   together with the buffer data causing this and compression settings.
   */
-BLOSC_DLL_EXPORT int blosc_compress(int clevel, int doshuffle, size_t typesize,
-                                    size_t nbytes, const void *src, void *dest,
-                                    size_t destsize);
+BLOSC_EXPORT int blosc_compress(int clevel, int doshuffle, size_t typesize,
+				size_t nbytes, const void *src, void *dest,
+				size_t destsize);
 
 
 /**
@@ -180,10 +181,10 @@ BLOSC_DLL_EXPORT int blosc_compress(int clevel, int doshuffle, size_t typesize,
   should never happen.  If you see this, please report it back
   together with the buffer data causing this and compression settings.
 */
-BLOSC_DLL_EXPORT int blosc_compress_ctx(int clevel, int doshuffle, size_t typesize,
-                                        size_t nbytes, const void* src, void* dest,
-                                        size_t destsize, const char* compressor,
-                                        size_t blocksize, int numinternalthreads);
+BLOSC_EXPORT int blosc_compress_ctx(int clevel, int doshuffle, size_t typesize,
+				    size_t nbytes, const void* src, void* dest,
+				    size_t destsize, const char* compressor,
+				    size_t blocksize, int numinternalthreads);
 
 /**
   Decompress a block of compressed data in `src`, put the result in
@@ -198,7 +199,7 @@ BLOSC_DLL_EXPORT int blosc_compress_ctx(int clevel, int doshuffle, size_t typesi
   output buffer is not large enough, then 0 (zero) or a negative value
   will be returned instead.
 */
-BLOSC_DLL_EXPORT int blosc_decompress(const void *src, void *dest, size_t destsize);
+BLOSC_EXPORT int blosc_decompress(const void *src, void *dest, size_t destsize);
 
 
 /**
@@ -218,7 +219,7 @@ BLOSC_DLL_EXPORT int blosc_decompress(const void *src, void *dest, size_t destsi
   output buffer is not large enough, then 0 (zero) or a negative value
   will be returned instead.
 */
-BLOSC_DLL_EXPORT int blosc_decompress_ctx(const void *src, void *dest,
+BLOSC_EXPORT int blosc_decompress_ctx(const void *src, void *dest,
                                           size_t destsize, int numinternalthreads);
 
 /**
@@ -229,7 +230,7 @@ BLOSC_DLL_EXPORT int blosc_decompress_ctx(const void *src, void *dest,
   Returns the number of bytes copied to `dest` or a negative value if
   some error happens.
   */
-BLOSC_DLL_EXPORT int blosc_getitem(const void *src, int start, int nitems, void *dest);
+BLOSC_EXPORT int blosc_getitem(const void *src, int start, int nitems, void *dest);
 
 
 /**
@@ -240,7 +241,7 @@ BLOSC_DLL_EXPORT int blosc_getitem(const void *src, int start, int nitems, void 
 
   Returns the previous number of threads.
   */
-BLOSC_DLL_EXPORT int blosc_set_nthreads(int nthreads);
+BLOSC_EXPORT int blosc_set_nthreads(int nthreads);
 
 
 /**
@@ -252,7 +253,7 @@ BLOSC_DLL_EXPORT int blosc_set_nthreads(int nthreads);
   for it in this build, it returns a -1.  Else it returns the code for
   the compressor (>=0).
   */
-BLOSC_DLL_EXPORT int blosc_set_compressor(const char* compname);
+BLOSC_EXPORT int blosc_set_compressor(const char* compname);
 
 
 /**
@@ -262,7 +263,7 @@ BLOSC_DLL_EXPORT int blosc_set_compressor(const char* compname);
   for it in this build, -1 is returned.  Else, the compressor code is
   returned.
  */
-BLOSC_DLL_EXPORT int blosc_compcode_to_compname(int compcode, char **compname);
+BLOSC_EXPORT int blosc_compcode_to_compname(int compcode, char **compname);
 
 
 /**
@@ -271,7 +272,7 @@ BLOSC_DLL_EXPORT int blosc_compcode_to_compname(int compcode, char **compname);
   If the compressor name is not recognized, or there is not support
   for it in this build, -1 is returned instead.
  */
-BLOSC_DLL_EXPORT int blosc_compname_to_compcode(const char *compname);
+BLOSC_EXPORT int blosc_compname_to_compcode(const char *compname);
 
 
 /**
@@ -285,7 +286,14 @@ BLOSC_DLL_EXPORT int blosc_compname_to_compcode(const char *compname);
 
   This function should always succeed.
   */
-BLOSC_DLL_EXPORT char* blosc_list_compressors(void);
+BLOSC_EXPORT char* blosc_list_compressors(void);
+
+/**
+  Return the version of blosc in string format.
+
+  Useful for dynamic libraries.
+*/
+BLOSC_EXPORT char* blosc_get_version_string(void);
 
 
 /**
@@ -302,7 +310,7 @@ BLOSC_DLL_EXPORT char* blosc_list_compressors(void);
   If the compressor is supported, it returns the code for the library
   (>=0).  If it is not supported, this function returns -1.
   */
-BLOSC_DLL_EXPORT int blosc_get_complib_info(char *compname, char **complib, char **version);
+BLOSC_EXPORT int blosc_get_complib_info(char *compname, char **complib, char **version);
 
 
 /**
@@ -311,7 +319,7 @@ BLOSC_DLL_EXPORT int blosc_get_complib_info(char *compname, char **complib, char
   problems releasing the resources, it returns a negative number, else
   it returns 0.
   */
-BLOSC_DLL_EXPORT int blosc_free_resources(void);
+BLOSC_EXPORT int blosc_free_resources(void);
 
 
 /**
@@ -325,8 +333,8 @@ BLOSC_DLL_EXPORT int blosc_free_resources(void);
 
   This function should always succeed.
   */
-BLOSC_DLL_EXPORT void blosc_cbuffer_sizes(const void *cbuffer, size_t *nbytes,
-                                          size_t *cbytes, size_t *blocksize);
+BLOSC_EXPORT void blosc_cbuffer_sizes(const void *cbuffer, size_t *nbytes,
+				      size_t *cbytes, size_t *blocksize);
 
 
 /**
@@ -337,14 +345,15 @@ BLOSC_DLL_EXPORT void blosc_cbuffer_sizes(const void *cbuffer, size_t *nbytes,
     * bit 0: whether the shuffle filter has been applied or not
     * bit 1: whether the internal buffer is a pure memcpy or not
 
-  You can use the `BLOSC_DOSHUFFLE` and `BLOSC_MEMCPYED` symbols for
-  extracting the interesting bits (e.g. ``flags & BLOSC_DOSHUFFLE``
-  says whether the buffer is shuffled or not).
+  You can use the `BLOSC_DOSHUFFLE`, `BLOSC_DOBITSHUFFLE` and
+  `BLOSC_MEMCPYED` symbols for extracting the interesting bits
+  (e.g. ``flags & BLOSC_DOSHUFFLE`` says whether the buffer is
+  byte-shuffled or not).
 
   This function should always succeed.
   */
-BLOSC_DLL_EXPORT void blosc_cbuffer_metainfo(const void *cbuffer, size_t *typesize,
-                                             int *flags);
+BLOSC_EXPORT void blosc_cbuffer_metainfo(const void *cbuffer, size_t *typesize,
+					 int *flags);
 
 
 /**
@@ -354,7 +363,7 @@ BLOSC_DLL_EXPORT void blosc_cbuffer_metainfo(const void *cbuffer, size_t *typesi
 
   This function should always succeed.
   */
-BLOSC_DLL_EXPORT void blosc_cbuffer_versions(const void *cbuffer, int *version,
+BLOSC_EXPORT void blosc_cbuffer_versions(const void *cbuffer, int *version,
                                              int *versionlz);
 
 
@@ -363,7 +372,7 @@ BLOSC_DLL_EXPORT void blosc_cbuffer_versions(const void *cbuffer, int *version,
 
   This function should always succeed.
   */
-BLOSC_DLL_EXPORT char *blosc_cbuffer_complib(const void *cbuffer);
+BLOSC_EXPORT char *blosc_cbuffer_complib(const void *cbuffer);
 
 
 
@@ -378,7 +387,7 @@ BLOSC_DLL_EXPORT char *blosc_cbuffer_complib(const void *cbuffer);
   Force the use of a specific blocksize.  If 0, an automatic
   blocksize will be used (the default).
   */
-BLOSC_DLL_EXPORT void blosc_set_blocksize(size_t blocksize);
+BLOSC_EXPORT void blosc_set_blocksize(size_t blocksize);
 
 #ifdef __cplusplus
 }

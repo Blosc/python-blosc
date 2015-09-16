@@ -1,21 +1,30 @@
 ===============================================================
- Announcing c-blosc 1.6.1
- A blocking, shuffling and lossless compression library
+ Announcing c-blosc 1.7.0
+ A blocking, shuffling and lossless compression library for C
 ===============================================================
 
 What is new?
 ============
 
-Fixed a subtle, but long-standing bug in the blosclz codec that could
-potentially overwrite an area beyond the output buffer.
+This is a quite big release introducing some exciting new features:
 
-Support for *runtime* detection of AVX2 and SSE2 SIMD instructions,
-allowing running AVX2 capable c-blosc libraries to run on machines
-with no AVX2 available (will use SSE2 instead).
+* A new 'bitshuffle' filter is here.  This is similar that the
+  existing 'shuffle' filter, but the shuffle takes place at bit level,
+  and not at byte level.  With it you can expect higher compression
+  ratios but still having pretty good speed.  For more info, see:
+  http://blosc.org/blog/new-bitshuffle-filter.html
 
-Finally, a new blocksize computation allows for better compression
-ratios for larger typesizes (> 8 bytes), without not penalizing the
-speed too much (at least on modern CPUs).
+* Implemented a new acceleration mode for LZ4 (updated to 1.7.0) and
+  BloscLZ codecs that enters in operation with all compression levels
+  except for the highest (9).  This allows for an important boost in
+  speed with minimal compression ratio loss.
+
+* Jack Pappas made great contributions allowing SSE2 operation in more
+  scenarios (like types larger than 16 bytes or buffers not being a
+  multiple of typesize * vectorsize).  Another contribution is a much
+  more comprehensive test suite for SSE2 and AVX2 operation.
+
+* Zbyszek Szmek fixed compilation on non-Intel archs (tested on ARM).
 
 For more info, please see the release notes in:
 
@@ -33,7 +42,7 @@ direct memory fetch approach via a memcpy() OS call.
 Blosc has internal support for different compressors like its internal
 BloscLZ, but also LZ4, LZ4HC, Snappy and Zlib.  This way these can
 automatically leverage the multithreading and pre-filtering
-(shuffling) capabilities that comes with Blosc for free.
+(shuffling) capabilities that comes with Blosc.
 
 
 Download sources

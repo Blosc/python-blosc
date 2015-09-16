@@ -89,8 +89,9 @@ struct blosc_context {
   const uint8_t* src;
   uint8_t* dest;                  /* The current pos in the destination buffer */
   uint8_t* header_flags;          /* Flags for header.  Currently booked:
-                                    - 0: shuffled?
-                                    - 1: memcpy'ed? */
+                                    - 0: byte-shuffled?
+                                    - 1: memcpy'ed?
+                                    - 2: bit-shuffled? */
   int32_t sourcesize;             /* Number of bytes in source buffer (or uncompressed bytes in compressed file) */
   int32_t nblocks;                /* Number of total blocks in buffer */
   int32_t leftover;               /* Extra bytes at end of buffer */
@@ -156,7 +157,7 @@ int blosc_release_threadpool(struct blosc_context* context);
   rc = pthread_barrier_wait(&CONTEXT_PTR->barr_init); \
   if (rc != 0 && rc != PTHREAD_BARRIER_SERIAL_THREAD) { \
     printf("Could not wait on barrier (init): %d\n", rc); \
-    return((RET_VAL));				  \
+    return((RET_VAL));                            \
   }
 #else
 #define WAIT_INIT(RET_VAL, CONTEXT_PTR)   \
@@ -177,10 +178,10 @@ int blosc_release_threadpool(struct blosc_context* context);
   rc = pthread_barrier_wait(&CONTEXT_PTR->barr_finish); \
   if (rc != 0 && rc != PTHREAD_BARRIER_SERIAL_THREAD) { \
     printf("Could not wait on barrier (finish)\n"); \
-    return((RET_VAL));				    \
+    return((RET_VAL));                              \
   }
 #else
-#define WAIT_FINISH(RET_VAL, CONTEXT_PTR)			    \
+#define WAIT_FINISH(RET_VAL, CONTEXT_PTR)                           \
   pthread_mutex_lock(&CONTEXT_PTR->count_threads_mutex); \
   if (CONTEXT_PTR->count_threads > 0) { \
     CONTEXT_PTR->count_threads--; \
@@ -200,7 +201,7 @@ static uint8_t *my_malloc(size_t size)
   int res = 0;
 
 /* Do an alignment to 32 bytes because AVX2 is supported */
-#if __STDC_VERSION__ >= 201112L
+#if _ISOC11_SOURCE
   /* C11 aligned allocation. 'size' must be a multiple of the alignment. */
   block = aligned_alloc(32, size);
 #elif defined(_WIN32)
@@ -313,7 +314,7 @@ static char *clibcode_to_clibname(int clibcode)
   if (clibcode == BLOSC_LZ4_LIB) return BLOSC_LZ4_LIBNAME;
   if (clibcode == BLOSC_SNAPPY_LIB) return BLOSC_SNAPPY_LIBNAME;
   if (clibcode == BLOSC_ZLIB_LIB) return BLOSC_ZLIB_LIBNAME;
-  return NULL;			/* should never happen */
+  return NULL;                  /* should never happen */
 }
 
 
@@ -395,11 +396,11 @@ return code;
 
 #if defined(HAVE_LZ4)
 static int lz4_wrap_compress(const char* input, size_t input_length,
-                             char* output, size_t maxout)
+                             char* output, size_t maxout, int accel)
 {
   int cbytes;
-  cbytes = LZ4_compress_limitedOutput(input, output, (int)input_length,
-                                      (int)maxout);
+  cbytes = LZ4_compress_fast(input, output, (int)input_length, (int)maxout,
+                             accel);
   return cbytes;
 }
 
@@ -411,7 +412,7 @@ static int lz4hc_wrap_compress(const char* input, size_t input_length,
     return -1;   /* input larger than 1 GB is not supported */
   /* clevel for lz4hc goes up to 16, at least in LZ4 1.1.3 */
   cbytes = LZ4_compressHC2_limitedOutput(input, output, (int)input_length,
-					 (int)maxout, clevel*2-1);
+                                         (int)maxout, clevel*2-1);
   return cbytes;
 }
 
@@ -463,7 +464,7 @@ static int zlib_wrap_compress(const char* input, size_t input_length,
   int status;
   uLongf cl = maxout;
   status = compress2(
-	     (Bytef*)output, &cl, (Bytef*)input, (uLong)input_length, clevel);
+             (Bytef*)output, &cl, (Bytef*)input, (uLong)input_length, clevel);
   if (status != Z_OK){
     return 0;
   }
@@ -485,9 +486,35 @@ static int zlib_wrap_decompress(const char* input, size_t compressed_length,
 
 #endif /*  HAVE_ZLIB */
 
+/* Compute acceleration for blosclz */
+static int get_accel(const struct blosc_context* context) {
+  int32_t clevel = context->clevel;
+  int32_t typesize = context->typesize;
+
+  if (clevel == 9) {
+    return 1;
+  }
+  if (context->compcode == BLOSC_BLOSCLZ) {
+    /* Compute the power of 2. See:
+     * http://www.exploringbinary.com/ten-ways-to-check-if-an-integer-is-a-power-of-two-in-c/
+     */
+    int32_t tspow2 = ((typesize != 0) && !(typesize & (typesize - 1)));
+    if (tspow2 && typesize < 32) {
+      return 32;
+    }
+  }
+  else if (context->compcode == BLOSC_LZ4) {
+    /* This acceleration setting based on discussions held in:
+     * https://groups.google.com/forum/#!topic/lz4c/zosy90P8MQw
+     */
+    return (10 - clevel);
+  }
+  return 1;
+}
+
 /* Shuffle & compress a single block */
-static int blosc_c(const struct blosc_context* context, int32_t blocksize, int32_t leftoverblock,
-                   int32_t ntbytes, int32_t maxbytes,
+static int blosc_c(const struct blosc_context* context, int32_t blocksize,
+                   int32_t leftoverblock, int32_t ntbytes, int32_t maxbytes,
                    const uint8_t *src, uint8_t *dest, uint8_t *tmp)
 {
   int32_t j, neblock, nsplits;
@@ -495,17 +522,28 @@ static int blosc_c(const struct blosc_context* context, int32_t blocksize, int32
   int32_t ctbytes = 0;              /* number of compressed bytes in block */
   int32_t maxout;
   int32_t typesize = context->typesize;
-  const uint8_t *_tmp;
+  const uint8_t *_tmp = src;
   char *compname;
+  int accel;
+  int bscount;
 
-  if ((*(context->header_flags) & BLOSC_DOSHUFFLE) && (typesize > 1)) {
-    /* Shuffle this block (this makes sense only if typesize > 1) */
-    shuffle(typesize, blocksize, src, tmp);
-    _tmp = tmp;
+  if (typesize > 1) {
+    /* Shuffling only makes sense if typesize > 1 */
+    if (*(context->header_flags) & BLOSC_DOSHUFFLE) {
+      shuffle(typesize, blocksize, src, tmp);
+      _tmp = tmp;
+    }
+    /* We don't allow more than 1 filter at the same time (yet) */
+    else if (*(context->header_flags) & BLOSC_DOBITSHUFFLE) {
+      bscount = bitshuffle(typesize, blocksize, src, tmp, dest);
+      if (bscount < 0)
+        return bscount;
+      _tmp = tmp;
+    }
   }
-  else {
-    _tmp = src;
-  }
+
+  /* Calculate acceleration for different compressors */
+  accel = get_accel(context);
 
   /* Compress for each shuffled slice split for this block. */
   /* If typesize is too large, neblock is too small or we are in a
@@ -537,12 +575,12 @@ static int blosc_c(const struct blosc_context* context, int32_t blocksize, int32
     }
     if (context->compcode == BLOSC_BLOSCLZ) {
       cbytes = blosclz_compress(context->clevel, _tmp+j*neblock, neblock,
-                                dest, maxout);
+                                dest, maxout, accel);
     }
     #if defined(HAVE_LZ4)
     else if (context->compcode == BLOSC_LZ4) {
       cbytes = lz4_wrap_compress((char *)_tmp+j*neblock, (size_t)neblock,
-                                 (char *)dest, (size_t)maxout);
+                                 (char *)dest, (size_t)maxout, accel);
     }
     else if (context->compcode == BLOSC_LZ4HC) {
       cbytes = lz4hc_wrap_compress((char *)_tmp+j*neblock, (size_t)neblock,
@@ -605,16 +643,15 @@ static int blosc_d(struct blosc_context* context, int32_t blocksize, int32_t lef
   int32_t cbytes;                /* number of compressed bytes in split */
   int32_t ctbytes = 0;           /* number of compressed bytes in block */
   int32_t ntbytes = 0;           /* number of uncompressed bytes in block */
-  uint8_t *_tmp;
+  uint8_t *_tmp = dest;
   int32_t typesize = context->typesize;
   int32_t compcode;
   char *compname;
+  int bscount;
 
-  if ((*(context->header_flags) & BLOSC_DOSHUFFLE) && (typesize > 1)) {
+  if ((typesize > 1) && ((*(context->header_flags) & BLOSC_DOSHUFFLE) || \
+                         (*(context->header_flags) & BLOSC_DOBITSHUFFLE))) {
     _tmp = tmp;
-  }
-  else {
-    _tmp = dest;
   }
 
   compcode = (*(context->header_flags) & 0xe0) >> 5;
@@ -680,18 +717,14 @@ static int blosc_d(struct blosc_context* context, int32_t blocksize, int32_t lef
     ntbytes += nbytes;
   } /* Closes j < nsplits */
 
-  if ((*(context->header_flags) & BLOSC_DOSHUFFLE) && (typesize > 1)) {
-    if ((uintptr_t)dest % 16 == 0) {
-      /* 16-bytes aligned dest.  SSE2 unshuffle will work. */
+  if (typesize > 1) {
+    if (*(context->header_flags) & BLOSC_DOSHUFFLE) {
       unshuffle(typesize, blocksize, tmp, dest);
     }
-    else {
-      /* dest is not aligned.  Use tmp2, which is aligned, and copy. */
-      unshuffle(typesize, blocksize, tmp, tmp2);
-      if (tmp2 != dest) {
-        /* Copy only when dest is not tmp2 (e.g. not blosc_getitem())  */
-        memcpy(dest, tmp2, blocksize);
-      }
+    else if (*(context->header_flags) & BLOSC_DOBITSHUFFLE) {
+      bscount = bitunshuffle(typesize, blocksize, tmp, dest, tmp2);
+      if (bscount < 0)
+        return bscount;
     }
   }
 
@@ -732,8 +765,9 @@ static int serial_blosc(struct blosc_context* context)
       }
       else {
         /* Regular compression */
-        cbytes = blosc_c(context, bsize, leftoverblock, ntbytes, context->destsize,
-                         context->src+j*context->blocksize, context->dest+ntbytes, tmp);
+        cbytes = blosc_c(context, bsize, leftoverblock, ntbytes,
+                         context->destsize, context->src+j*context->blocksize,
+                         context->dest+ntbytes, tmp);
         if (cbytes == 0) {
           ntbytes = 0;              /* uncompressible data */
           break;
@@ -872,21 +906,6 @@ static int32_t compute_blocksize(struct blosc_context* context, int32_t clevel, 
       blocksize *= 2;
     }
   }
-  else if (nbytes > (16 * 16))  {
-      /* align to typesize to make use of vectorized shuffles */
-      if (typesize == 2) {
-          blocksize -= blocksize % (16 * 2);
-      }
-      else if (typesize == 4) {
-          blocksize -= blocksize % (16 * 4);
-      }
-      else if (typesize == 8) {
-          blocksize -= blocksize % (16 * 8);
-      }
-      else if (typesize == 16) {
-          blocksize -= blocksize % (16 * 16);
-      }
-  }
 
   /* Check that blocksize is not too large */
   if (blocksize > (int32_t)nbytes) {
@@ -942,8 +961,8 @@ static int initialize_context_compression(struct blosc_context* context,
   }
 
   /* Shuffle */
-  if (doshuffle != 0 && doshuffle != 1) {
-    fprintf(stderr, "`shuffle` parameter must be either 0 or 1!\n");
+  if (doshuffle != 0 && doshuffle != 1 && doshuffle != 2) {
+    fprintf(stderr, "`shuffle` parameter must be either 0, 1 or 2!\n");
     return -10;
   }
 
@@ -1034,12 +1053,17 @@ static int write_compression_header(struct blosc_context* context, int clevel, i
     *(context->header_flags) |= BLOSC_MEMCPYED;
   }
 
-  if (doshuffle == 1) {
-    /* Shuffle is active */
-    *(context->header_flags) |= BLOSC_DOSHUFFLE;          /* bit 0 set to one in flags */
+  if (doshuffle == BLOSC_SHUFFLE) {
+    /* Byte-shuffle is active */
+    *(context->header_flags) |= BLOSC_DOSHUFFLE;     /* bit 0 set to one in flags */
   }
 
-  *(context->header_flags) |= compcode << 5;              /* compressor format start at bit 5 */
+  if (doshuffle == BLOSC_BITSHUFFLE) {
+    /* Bit-shuffle is active */
+    *(context->header_flags) |= BLOSC_DOBITSHUFFLE;  /* bit 2 set to one in flags */
+  }
+
+  *(context->header_flags) |= compcode << 5;      /* compressor format start at bit 5 */
 
   return 1;
 }
@@ -1140,10 +1164,10 @@ int blosc_compress(int clevel, int doshuffle, size_t typesize, size_t nbytes,
 }
 
 int blosc_run_decompression_with_context(struct blosc_context* context,
-				    const void* src,
-				    void* dest,
-				    size_t destsize,
-				    int numinternalthreads)
+                                         const void* src,
+                                         void* dest,
+                                         size_t destsize,
+                                         int numinternalthreads)
 {
   uint8_t version;
   uint8_t versionlz;
@@ -1214,10 +1238,11 @@ int blosc_run_decompression_with_context(struct blosc_context* context,
 
 /* The public routine for decompression with context. */
 int blosc_decompress_ctx(const void *src, void *dest, size_t destsize,
-			 int numinternalthreads)
+                         int numinternalthreads)
 {
   struct blosc_context context;
   int result = blosc_run_decompression_with_context(&context, src, dest, destsize, numinternalthreads);
+  context.threads_started = 0;
 
   if (numinternalthreads > 1)
   {
@@ -1666,6 +1691,13 @@ char* blosc_list_compressors(void)
   strcat(ret, ","); strcat(ret, BLOSC_ZLIB_COMPNAME);
 #endif /*  HAVE_ZLIB */
   compressors_list_done = 1;
+  return ret;
+}
+
+char* blosc_get_version_string(void)
+{
+  static char ret[256];
+  strcpy(ret, BLOSC_VERSION_STRING);
   return ret;
 }
 

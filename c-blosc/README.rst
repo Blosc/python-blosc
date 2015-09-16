@@ -5,6 +5,16 @@
 :Author: Francesc Alted
 :Contact: francesc@blosc.org
 :URL: http://www.blosc.org
+:Travis CI: |travis|
+
+.. |travis| image:: https://travis-ci.org/Blosc/c-blosc.svg?branch=master
+        :target: https://travis-ci.org/Blosc/c-blosc
+
+:Appveyor: |appveyor|
+
+.. |appveyor| image:: https://ci.appveyor.com/api/projects/status/gccmb03j8ghbj0ig/branch/master?svg=true
+        :target: https://ci.appveyor.com/project/FrancescAlted/c-blosc/branch/master
+
 
 What is it?
 ===========
@@ -123,11 +133,6 @@ In the `examples/ directory
 <https://github.com/Blosc/c-blosc/tree/master/examples>`_ you can find
 more hints on how to link your app with Blosc.
 
-A simple usage example is the benchmark in the bench/bench.c file.
-Another example for using Blosc as a generic HDF5 filter is in the
-`hdf5/ directory
-<https://github.com/Blosc/c-blosc/tree/master/hdf5>`_.
-
 I have not tried to compile this with compilers other than GCC, clang,
 MINGW, Intel ICC or MSVC yet. Please report your experiences with your
 own platforms.
@@ -198,9 +203,9 @@ Build, test and install Blosc:
 
 .. code-block:: console
 
-  $ make
-  $ make test
-  $ make install
+  $ cmake --build .
+  $ ctest
+  $ cmake --build . --target install
 
 The static and dynamic version of the Blosc library, together with
 header files, will be installed into the specified
@@ -235,13 +240,12 @@ effectively means that you can be confident in having a complete
 support for all the supported compression libraries in all supported
 platforms.
 
-If you want to force Blosc to use the included compression sources
-instead of trying to find the libraries in the system first, you can
-switch off the PREFER_EXTERNAL_COMPLIBS CMake option:
+If you want to force Blosc to use external libraries instead of
+the included compression sources:
 
 .. code-block:: console
 
-  $ cmake -DPREFER_EXTERNAL_COMPLIBS=OFF ..
+  $ cmake -DPREFER_EXTERNAL_LZ4=ON ..
 
 You can also disable support for some compression libraries:
 
@@ -277,8 +281,10 @@ https://github.com/Blosc/bloscpack
 Filter for HDF5
 ===============
 
-For those that want to use Blosc as a filter in the HDF5 library,
-there is a sample implementation in the hdf5/ directory.
+For those who want to use Blosc as a filter in the HDF5 library,
+there is a sample implementation in the blosc/hdf5 project in:
+
+https://github.com/Blosc/hdf5
 
 Mailing list
 ============
