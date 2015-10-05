@@ -13,8 +13,8 @@ python-blosc: a Python wrapper for the extremely fast Blosc compression library
 
 .. |travis| image:: https://travis-ci.org/Blosc/python-blosc.png?branch=master
         :target: https://travis-ci.org/Blosc/python-blosc
-.. |appveyor| image:: https://ci.appveyor.com/api/projects/status/github/esc/python-blosc 
-        :target: https://ci.appveyor.com/project/esc/python-blosc/branch/master 
+.. |appveyor| image:: https://ci.appveyor.com/api/projects/status/github/FrancescAlted/python-blosc
+        :target: https://ci.appveyor.com/project/FrancescAlted/python-blosc/branch/master
 .. |pypi| image:: https://pypip.in/d/blosc/badge.png
         :target: https://pypi.python.org/pypi/blosc
 .. |version| image:: https://pypip.in/v/blosc/badge.png
