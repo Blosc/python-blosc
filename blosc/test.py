@@ -185,7 +185,7 @@ class TestCodec(unittest.TestCase):
         self.assertRaises(TypeError, blosc.pack_array, 'abc')
         self.assertRaises(TypeError, blosc.pack_array, 1.0)
 
-        items = (blosc.BLOSC_MAX_BUFFERSIZE / 8) + 1
+        items = (blosc.BLOSC_MAX_BUFFERSIZE // 8) + 1
         one = numpy.ones(1, dtype=numpy.int64)
         self.assertRaises(ValueError, blosc.pack_array, one, clevel=-1)
         self.assertRaises(ValueError, blosc.pack_array, one, clevel=10)
