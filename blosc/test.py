@@ -101,6 +101,28 @@ class TestCodec(unittest.TestCase):
         self.assertEqual(expected, blosc.decompress(bytearray(compressed)))
         self.assertEqual(expected, blosc.decompress(np.array([compressed])))
 
+    def test_decompress_input_types_as_bytearray(self):
+        import numpy as np
+        # assume the expected answer was compressed from bytes
+        expected = bytearray(b'0123456789')
+        compressed = blosc.compress(expected, typesize=1)
+
+        # now for all the things that support the buffer interface
+        if not PY3X:
+            # Python 3 no longer has the buffer
+            self.assertEqual(expected, blosc.decompress(buffer(compressed),
+                                                        as_bytearray=True))
+        if not PY26:
+            # memoryview doesn't exist on Python 2.6
+            self.assertEqual(expected,
+                             blosc.decompress(memoryview(compressed),
+                                              as_bytearray=True))
+
+        self.assertEqual(expected, blosc.decompress(bytearray(compressed),
+                                                    as_bytearray=True))
+        self.assertEqual(expected, blosc.decompress(np.array([compressed]),
+                                                    as_bytearray=True))
+
     def test_compress_exceptions(self):
         s = b'0123456789'
 

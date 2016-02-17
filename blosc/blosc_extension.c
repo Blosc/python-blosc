@@ -365,8 +365,9 @@ PyBlosc_decompress_ptr(PyObject *self, PyObject *args)
 }
 
 PyDoc_STRVAR(decompress__doc__,
-"decompress(string) -- Return decompressed string.\n"
-             );
+"decompress(string, as_bytearray) -- Return decompressed string.\n\n"
+"If as_bytearray is True then the returned data will be a mutable\n"
+"bytearray object instead of bytes");
 
 static PyObject *
 PyBlosc_decompress(PyObject *self, PyObject *args)
@@ -376,20 +377,27 @@ PyBlosc_decompress(PyObject *self, PyObject *args)
     void *input, *output;
     size_t nbytes, cbytes;
     char *format;
+    int as_bytearray;
     /* Accept some kind of input */
     #if PY_MAJOR_VERSION <= 2
+        PyObject *as_bytearray_obj = NULL;
         /* s* : bytes like object including unicode and anything that supports
-         * the buffer interface */
-        format = "s*:decompress";
+         * the buffer interface. We cannot use p in python 2 so we will
+         * create an object to hold the predicate. */
+        if (!PyArg_ParseTuple(args, "s*O:decompress", &view, &as_bytearray_obj))
+            return NULL;
+
+        if ((as_bytearray = PyObject_IsTrue(as_bytearray_obj)) < 0) {
+            /* failed to convert predicate to bool */
+            return NULL;
+        }
     #elif PY_MAJOR_VERSION >= 3
         /* y* :bytes like object EXCLUDING unicode and anything that supports
          * the buffer interface. This is the recommended way to accept binary
          * data in Python 3. */
-        format = "y*:decompress";
+        if (!PyArg_ParseTuple(args, "y*p:decompress", &view, &as_bytearray))
+            return NULL;
     #endif
-
-    if (!PyArg_ParseTuple(args, format, &view))
-      return NULL;
 
     cbytes = view.len;
     input = view.buf;
@@ -399,13 +407,24 @@ PyBlosc_decompress(PyObject *self, PyObject *args)
       return NULL;
     }
 
-    /* Book memory for the result */
-    if (!(result_str = PyBytes_FromStringAndSize(NULL, (Py_ssize_t)nbytes))){
-      PyBuffer_Release(&view);
-      return NULL;
+    #define branch(from_string_and_size, as_string)                     \
+        /* Book memory for the result */                                \
+        if (!(result_str = from_string_and_size(NULL, (Py_ssize_t)nbytes))){ \
+          PyBuffer_Release(&view);                                      \
+          return NULL;                                                  \
+        }                                                               \
+                                                                        \
+        output = as_string(result_str);                                 \
+        (void)NULL
+
+    if (as_bytearray) {
+        branch(PyByteArray_FromStringAndSize, PyByteArray_AS_STRING);
+    }
+    else {
+        branch(PyBytes_FromStringAndSize, PyBytes_AS_STRING);
     }
 
-    output = PyBytes_AS_STRING(result_str);
+    #undef branch
 
     /*  do decompression */
     if (!decompress_helper(input, nbytes, output)){
