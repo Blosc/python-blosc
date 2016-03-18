@@ -421,7 +421,7 @@ def compress_ptr(address, items, typesize, clevel=9, shuffle=True,
     return _ext.compress_ptr(address, length, typesize, clevel, shuffle, cname)
 
 
-def decompress(bytesobj):
+def decompress(bytesobj, as_bytearray=False):
     """decompress(bytesobj)
 
     Decompresses a bytesobj compressed object.
@@ -430,11 +430,16 @@ def decompress(bytesobj):
     ----------
     bytesobj : str / bytes
         The data to be decompressed.
+    as_bytearray : bool, optional
+        If this flag is True then the return type will be a bytearray object
+        instead of a bytesobject.
 
     Returns
     -------
-    out : str / bytes
+    out : str / bytes or bytearray
         The decompressed data in form of a Python str / bytes object.
+        If as_bytearray is True then this will be a bytearray object, otherwise
+        this will be a str/ bytes object.
 
     Raises
     ------
@@ -455,10 +460,13 @@ def decompress(bytesobj):
     True
     >>> b"1"*7 == blosc.decompress(blosc.compress(b"1"*7, 8))
     True
+    >>> type(blosc.decompress(blosc.compress(b"1"*7, 8),
+    ...                                      as_bytearray=True)) is bytearray
+    True
 
     """
 
-    return _ext.decompress(bytesobj)
+    return _ext.decompress(bytesobj, as_bytearray)
 
 
 def decompress_ptr(bytesobj, address):
@@ -637,7 +645,7 @@ def unpack_array(packed_array):
     _check_bytesobj(packed_array)
 
     # First decompress the pickle
-    pickled_array = _ext.decompress(packed_array)
+    pickled_array = _ext.decompress(packed_array, False)
     # ... and unpickle
     array = pickle.loads(pickled_array)
 
