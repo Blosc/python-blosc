@@ -17,6 +17,9 @@ Changes from 1.2.8 to 1.2.9
   so that a mutable bytearray will be returned instead of a bytes one
   (inmutable).  PR #107.  Thanks to Joe Jevnik.
 
+- Vendored C-Blosc library downgraded to 1.4.5 in order to be able to use
+  VS2008 compiler that is needed for Python 2 on Windows platform.
+
 
 Changes from 1.2.7 to 1.2.8
 ===========================
