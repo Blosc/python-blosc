@@ -13,7 +13,9 @@
 Changes from 1.2.8 to 1.2.9
 ===========================
 
-#XXX version-specific blurb XXX#
+- Added a new `as_bytearray=False` parameter to the `decompress()` function
+  so that a mutable bytearray will be returned instead of a bytes one
+  (inmutable).  PR #107.  Thanks to Joe Jevnik.
 
 
 Changes from 1.2.7 to 1.2.8
