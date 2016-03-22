@@ -17,11 +17,10 @@
 static PyObject *BloscError;
 
 static void
-blosc_error(int err, char *msg)
+blosc_error(int err, const char *msg)
 {
   PyErr_Format(BloscError, "Error %d %s", err, msg);
 }
-
 
 PyDoc_STRVAR(set_nthreads__doc__,
 "set_nthreads(nthreads) -- Initialize a pool of threads for Blosc operation.\n"
@@ -56,7 +55,7 @@ PyBlosc_set_blocksize(PyObject *self, PyObject *args)
 
     blosc_set_blocksize(blocksize);
 
-    return Py_None;
+    Py_RETURN_NONE;
 }
 
 
@@ -145,7 +144,7 @@ static PyObject *
 PyBlosc_free_resources(PyObject *self)
 {
     blosc_free_resources();
-    return Py_None;
+    Py_RETURN_NONE;
 }
 
 PyDoc_STRVAR(init__doc__,
@@ -156,7 +155,7 @@ static PyObject *
 PyBlosc_init(PyObject *self)
 {
     blosc_init();
-    return Py_None;
+    Py_RETURN_NONE;
 }
 
 PyDoc_STRVAR(destroy__doc__,
@@ -167,7 +166,7 @@ static PyObject *
 PyBlosc_destroy(PyObject *self)
 {
     blosc_destroy();
-    return Py_None;
+    Py_RETURN_NONE;
 }
 
 static PyObject *
@@ -175,7 +174,7 @@ compress_helper(void * input, size_t nbytes, size_t typesize,
                 int clevel, int shuffle, char *cname){
 
     int cbytes;
-    PyObject *output = NULL;
+    PyObject *output;
 
     /* Alloc memory for compression */
     if (!(output = PyBytes_FromStringAndSize(NULL, nbytes+BLOSC_MAX_OVERHEAD)))
@@ -185,6 +184,7 @@ compress_helper(void * input, size_t nbytes, size_t typesize,
     if (blosc_set_compressor(cname) < 0) {
       /* The compressor is not available (should never happen here) */
       blosc_error(-1, "compressor not available");
+      Py_DECREF(output);
       return NULL;
     }
 
@@ -194,7 +194,7 @@ compress_helper(void * input, size_t nbytes, size_t typesize,
                             nbytes+BLOSC_MAX_OVERHEAD);
     if (cbytes < 0) {
       blosc_error(cbytes, "while compressing data");
-      Py_XDECREF(output);
+      Py_DECREF(output);
       return NULL;
     }
 
@@ -242,7 +242,8 @@ PyBlosc_compress(PyObject *self, PyObject *args)
     void *input;
     size_t nbytes, typesize;
     int clevel, shuffle;
-    char *cname, *format;
+    char *cname;
+    const char *format;
 
     /* Accept some kind of input followed by
      * typesize, clevel, shuffle and cname */
@@ -319,8 +320,15 @@ decompress_helper(void * input, size_t nbytes, void * output)
     /* Do the decompression */
     err = blosc_decompress(input, output, nbytes);
 
-    if (err < 0 || err != (int)nbytes) {
+    if (err < 0) {
       blosc_error(err, "while decompressing data");
+      return 0;
+    }
+    else if (err != (int)nbytes) {
+      PyErr_Format(BloscError,
+                   "expected %d bytes of decompressed data, got %d",
+                   (int) nbytes,
+                   err);
       return 0;
     }
     return 1;
@@ -334,7 +342,7 @@ PyDoc_STRVAR(decompress_ptr__doc__,
 static PyObject *
 PyBlosc_decompress_ptr(PyObject *self, PyObject *args)
 {
-    PyObject * pointer, * return_int;
+    PyObject * pointer;
     void * input, * output;
     size_t cbytes, nbytes;
 
@@ -359,9 +367,7 @@ PyBlosc_decompress_ptr(PyObject *self, PyObject *args)
      *  decompress_helper above has checked that the number of bytes written
      *  was indeed nbytes.
      *  */
-    return_int = PyLong_FromSize_t(nbytes);
-    Py_INCREF(return_int);
-    return return_int;
+    return PyLong_FromSize_t(nbytes);
 }
 
 PyDoc_STRVAR(decompress__doc__,
@@ -376,7 +382,6 @@ PyBlosc_decompress(PyObject *self, PyObject *args)
     PyObject *result_str;
     void *input, *output;
     size_t nbytes, cbytes;
-    char *format;
     int as_bytearray;
     /* Accept some kind of input */
     #if PY_MAJOR_VERSION <= 2
