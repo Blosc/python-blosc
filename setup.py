@@ -94,6 +94,10 @@ else:
     inc_dirs += glob.glob('c-blosc/internal-complibs/*')
     # ...and the macros for all the compressors supported
     def_macros += [('HAVE_LZ4', 1), ('HAVE_SNAPPY', 1), ('HAVE_ZLIB', 1)]
+    if os.name == 'nt':
+        # Windows always should have support for SSE2
+        # (present in all x86/amd64 architectures since 2003)
+        def_macros += [('__SSE2__', 1)]
 
 if os.name == 'posix':
     if re.match("i.86|x86", platform.machine()) is not None:
