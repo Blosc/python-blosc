@@ -35,6 +35,10 @@ Changes from 1.2.8 to 1.3.0
   functions.  This usually behaves well for 4-bytes typesizes too.
   Nevertheless, it is advised to use the actual typesize.
 
+- The maximum number of threads to use by default is set to 4 (less if
+  less cores are detected).  Feel free to use more or less threads
+  depending on the resources you want to use for compression.
+
 
 Changes from 1.2.7 to 1.2.8
 ===========================

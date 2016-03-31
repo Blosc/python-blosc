@@ -57,8 +57,11 @@ clib_versions = dict(clib_info(name) for name in cnames)
 
 # Initialize Blosc
 init()
-ncores = detect_number_of_cores()
-set_nthreads(ncores)
+nthreads = ncores = detect_number_of_cores()
+# Protection against too many cores
+if nthreads > 4:
+    nthreads = 4
+set_nthreads(nthreads)
 blosclib_version = "%s (%s)" % (VERSION_STRING, VERSION_DATE)
 import atexit
 atexit.register(destroy)

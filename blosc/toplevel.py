@@ -683,7 +683,8 @@ def print_versions():
         processor = "not recognized"
     print("Processor: %s" % processor)
     print("Byte-ordering: %s" % sys.byteorder)
-    print("Detected cores: %s" % blosc.detect_number_of_cores())
+    print("Detected cores: %s" % blosc.ncores)
+    print("Number of threads to use by default: %s" % blosc.nthreads)
     print("-=" * 38)
 
 
