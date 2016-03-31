@@ -249,13 +249,13 @@ class TestCodec(unittest.TestCase):
             return (used_mem_after - used_mem_before) >= num_elements
 
         def compress():
-            blosc.compress(array, typesize, clevel=0)
+            blosc.compress(array, typesize, clevel=1)
 
         def compress_ptr():
             blosc.compress_ptr(address, num_elements, typesize, clevel=0)
 
         def decompress():
-            cx = blosc.compress(array, typesize, clevel=0)
+            cx = blosc.compress(array, typesize, clevel=1)
             blosc.decompress(cx)
 
         def decompress_ptr():
