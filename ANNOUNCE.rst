@@ -1,20 +1,11 @@
 =============================
-Announcing python-blosc 1.3.0
+Announcing python-blosc 1.3.1
 =============================
 
 What is new?
 ============
 
-There is support for newest C-Blosc.  As such, C-Blosc 1.8.0 is being
-distributed internally.  Support for the new `BITSHUFFLE` filter,
-allowing for more compression ratios in many cases, at the expense of
-some slowdown.  For details see:
-
-http://python-blosc.blosc.org/tutorial.html#using-different-filters
-
-You can also run some benchmarks including different codecs and filters:
-
-https://github.com/Blosc/python-blosc/blob/master/bench/compress_ptr.py
+  #XXX version-specific blurb XXX#
 
 For more info, you can have a look at the release notes in:
 
