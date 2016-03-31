@@ -31,6 +31,10 @@ Changes from 1.2.8 to 1.3.0
     BLOSC_MAX_THREADS -> MAX_THREADS,
     BLOSC_MAX_TYPESIZE -> MAX_TYPESIZE,
 
+- The `typesize` parameter is set by default to 8 in compression
+  functions.  This usually behaves well for 4-bytes typesizes too.
+  Nevertheless, it is advised to use the actual typesize.
+
 
 Changes from 1.2.7 to 1.2.8
 ===========================

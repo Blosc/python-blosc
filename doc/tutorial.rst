@@ -68,7 +68,7 @@ multi-threading and shuffling machinery.
 The examples above where using the default 'blosclz' compressor.  Here
 there is another example using 'zlib'::
 
-  >>> %time bpacked = blosc.compress(bytes_array, typesize=8, cname='zlib')
+  >>> %time bpacked = blosc.compress(bytes_array, cname='zlib')
   CPU times: user 1.09 s, sys: 15 ms, total: 1.1 s
   Wall time: 290 ms   # ~ 275 MB/s and 18x faster than plain zlib
 
@@ -113,7 +113,7 @@ more efficiently or not, depending on your datasets.
 
 Here it is an example using the `SHUFFLE` filter::
 
-  >>> %time bpacked = blosc.compress(bytes_array, typesize=8, shuffle=blosc.SHUFFLE)
+  >>> %time bpacked = blosc.compress(bytes_array, shuffle=blosc.SHUFFLE)
   CPU times: user 240 ms, sys: 4 ms, total: 244 ms
   Wall time: 67.1 ms
 
@@ -122,7 +122,7 @@ Here it is an example using the `SHUFFLE` filter::
 
 Here there is another example using `BITSHUFFLE`::
 
-  >>> %time bpacked = blosc.compress(bytes_array, typesize=8, shuffle=blosc.BITSHUFFLE)
+  >>> %time bpacked = blosc.compress(bytes_array, shuffle=blosc.BITSHUFFLE)
   CPU times: user 344 ms, sys: 0 ns, total: 344 ms
   Wall time: 95.8 ms
 
@@ -131,7 +131,7 @@ Here there is another example using `BITSHUFFLE`::
 
 You can also deactivate filters completely with `NOSHUFFLE`::
 
-  >>> %time bpacked = blosc.compress(bytes_array, typesize=8, shuffle=blosc.NOSHUFFLE)
+  >>> %time bpacked = blosc.compress(bytes_array, shuffle=blosc.NOSHUFFLE)
   CPU times: user 344 ms, sys: 0 ns, total: 344 ms
   Wall time: 95.8 ms
 

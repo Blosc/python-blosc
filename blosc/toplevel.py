@@ -272,9 +272,9 @@ def _check_address(address):
         raise TypeError("only int or long objects are supported as address")
 
 
-def compress(bytesobj, typesize, clevel=9,
+def compress(bytesobj, typesize=8, clevel=9,
              shuffle=blosc.SHUFFLE, cname='blosclz'):
-    """compress(bytesobj, typesize[, clevel=9, shuffle=blosc.SHUFFLE, cname='blosclz']])
+    """compress(bytesobj[, typesize=8, clevel=9, shuffle=blosc.SHUFFLE, cname='blosclz']])
 
     Compress bytesobj, with a given type size.
 
@@ -332,9 +332,9 @@ def compress(bytesobj, typesize, clevel=9,
     return _ext.compress(bytesobj, typesize, clevel, shuffle, cname)
 
 
-def compress_ptr(address, items, typesize, clevel=9,
+def compress_ptr(address, items, typesize=8, clevel=9,
                  shuffle=blosc.SHUFFLE, cname='blosclz'):
-    """compress_ptr(address, items, typesize[, clevel=9, shuffle=blosc.SHUFFLE, cname='blosclz']])
+    """compress_ptr(address, items[, typesize=8, clevel=9, shuffle=blosc.SHUFFLE, cname='blosclz']])
 
     Compress the data at address with given items and typesize.
 
@@ -407,7 +407,7 @@ def compress_ptr(address, items, typesize, clevel=9,
     >>> d = blosc.decompress(c)
     >>> import struct
     >>> ans = [struct.unpack('d', d[i:i+typesize])[0] \
-            for i in range(0,items*typesize,typesize)]
+            for i in range(0, items*typesize, typesize)]
     >>> data == ans
     True
     """
@@ -531,7 +531,7 @@ def decompress_ptr(bytesobj, address):
     >>> nbytes = blosc.decompress_ptr(c, ctypes.addressof(out_array))
     >>> import struct
     >>> ans = [struct.unpack('d', out_array[i:i+typesize])[0] \
-            for i in range(0,items*typesize,typesize)]
+            for i in range(0, items*typesize, typesize)]
     >>> data == ans
     True
     >>> nbytes == items * typesize
