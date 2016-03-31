@@ -60,7 +60,7 @@ class TestCodec(unittest.TestCase):
 
     def test_set_nthreads_exceptions(self):
         self.assertRaises(ValueError, blosc.set_nthreads,
-                          blosc.BLOSC_MAX_THREADS + 1)
+                          blosc.MAX_THREADS + 1)
 
     def test_compress_input_types(self):
         import numpy as np
@@ -135,7 +135,7 @@ class TestCodec(unittest.TestCase):
 
         self.assertRaises(ValueError, blosc.compress, s, typesize=0)
         self.assertRaises(ValueError, blosc.compress, s,
-                          typesize=blosc.BLOSC_MAX_TYPESIZE+1)
+                          typesize=blosc.MAX_TYPESIZE+1)
 
         self.assertRaises(ValueError, blosc.compress, s, typesize=1, clevel=-1)
         self.assertRaises(ValueError, blosc.compress, s, typesize=1, clevel=10)
@@ -154,7 +154,7 @@ class TestCodec(unittest.TestCase):
         # Create a simple mock to avoid having to create a buffer of 2 GB
         class LenMock(object):
             def __len__(self):
-                return blosc.BLOSC_MAX_BUFFERSIZE+1
+                return blosc.MAX_BUFFERSIZE+1
         self.assertRaises(ValueError, blosc.compress, LenMock(), typesize=1)
 
     def test_compress_ptr_exceptions(self):
@@ -170,7 +170,7 @@ class TestCodec(unittest.TestCase):
         self.assertRaises(ValueError, blosc.compress_ptr, address, items,
                           typesize=-1)
         self.assertRaises(ValueError, blosc.compress_ptr, address, items,
-                          typesize=blosc.BLOSC_MAX_TYPESIZE+1)
+                          typesize=blosc.MAX_TYPESIZE+1)
 
         self.assertRaises(ValueError, blosc.compress_ptr, address, items,
                           typesize=typesize, clevel=-1)
@@ -185,7 +185,7 @@ class TestCodec(unittest.TestCase):
         self.assertRaises(ValueError, blosc.compress_ptr, address, -1,
                           typesize=typesize)
         self.assertRaises(ValueError, blosc.compress_ptr, address,
-                          blosc.BLOSC_MAX_BUFFERSIZE+1, typesize=typesize)
+                          blosc.MAX_BUFFERSIZE+1, typesize=typesize)
 
     def test_decompress_exceptions(self):
         self.assertRaises(TypeError, blosc.decompress, 1.0)
@@ -214,7 +214,7 @@ class TestCodec(unittest.TestCase):
         self.assertRaises(TypeError, blosc.pack_array, 'abc')
         self.assertRaises(TypeError, blosc.pack_array, 1.0)
 
-        items = (blosc.BLOSC_MAX_BUFFERSIZE // 8) + 1
+        items = (blosc.MAX_BUFFERSIZE // 8) + 1
         one = numpy.ones(1, dtype=numpy.int64)
         self.assertRaises(ValueError, blosc.pack_array, one, clevel=-1)
         self.assertRaises(ValueError, blosc.pack_array, one, clevel=10)

@@ -88,9 +88,9 @@ def set_nthreads(nthreads):
     2
 
     """
-    if nthreads > _ext.BLOSC_MAX_THREADS:
+    if nthreads > blosc.MAX_THREADS:
         raise ValueError("the number of threads cannot be larger than %d" %
-                         _ext.BLOSC_MAX_THREADS)
+                         blosc.MAX_THREADS)
 
     return _ext.set_nthreads(nthreads)
 
@@ -250,9 +250,9 @@ def _check_cname(cname):
 
 
 def _check_typesize(typesize):
-    if not 1 <= typesize <= _ext.BLOSC_MAX_TYPESIZE:
+    if not 1 <= typesize <= blosc.MAX_TYPESIZE:
         raise ValueError("typesize can only be in the 1-%d range." %
-                         _ext.BLOSC_MAX_TYPESIZE)
+                         blosc.MAX_TYPESIZE)
 
 
 def _check_bytesobj(bytesobj):
@@ -262,9 +262,9 @@ def _check_bytesobj(bytesobj):
 
 
 def _check_input_length(input_name, input_len):
-    if input_len > _ext.BLOSC_MAX_BUFFERSIZE:
+    if input_len > blosc.MAX_BUFFERSIZE:
         raise ValueError("%s cannot be larger than %d bytes" %
-                         (input_name, _ext.BLOSC_MAX_BUFFERSIZE))
+                         (input_name, blosc.MAX_BUFFERSIZE))
 
 
 def _check_address(address):

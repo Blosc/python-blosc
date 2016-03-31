@@ -14,7 +14,8 @@ Changes from 1.2.8 to 1.3.0
 ===========================
 
 - Internal C-Blosc version bumped to 1.8.0.  As consequence, support for
-  BITSHUFFLE is here.
+  BITSHUFFLE is here.  For activating it, just pass `blosc.BITSHUFFLE`
+  to the `shuffle` parameter of compression functions.
 
 - Added a new `as_bytearray=False` parameter to the `decompress()` function
   so that a mutable bytearray will be returned instead of a bytes one
@@ -22,6 +23,13 @@ Changes from 1.2.8 to 1.3.0
 
 - The '__all__' variable has been removed from the module.  I consider
   this good practice to avoid things like "from blosc import *".
+
+- For consistency, the next symbols have been renamed:
+    BLOSC_VERSION_STRING -> VERSION_STRING,
+    BLOSC_VERSION_DATE -> VERSION_DATE,
+    BLOSC_MAX_BUFFERSIZE -> MAX_BUFFERSIZE,
+    BLOSC_MAX_THREADS -> MAX_THREADS,
+    BLOSC_MAX_TYPESIZE -> MAX_TYPESIZE,
 
 
 Changes from 1.2.7 to 1.2.8

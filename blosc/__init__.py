@@ -11,11 +11,11 @@ from blosc.version import __version__
 
 # Blosc C symbols that we want to export
 from blosc.blosc_extension import (
-    BLOSC_VERSION_STRING,
-    BLOSC_VERSION_DATE,
-    BLOSC_MAX_BUFFERSIZE,
-    BLOSC_MAX_THREADS,
-    BLOSC_MAX_TYPESIZE,
+    BLOSC_VERSION_STRING as VERSION_STRING,
+    BLOSC_VERSION_DATE as VERSION_DATE,
+    BLOSC_MAX_BUFFERSIZE as MAX_BUFFERSIZE,
+    BLOSC_MAX_THREADS as MAX_THREADS,
+    BLOSC_MAX_TYPESIZE as MAX_TYPESIZE,
     BLOSC_NOSHUFFLE as NOSHUFFLE,
     BLOSC_SHUFFLE as SHUFFLE,
     BLOSC_BITSHUFFLE as BITSHUFFLE,
@@ -54,7 +54,7 @@ clib_versions = dict(clib_info(name) for name in cnames)
 init()
 ncores = detect_number_of_cores()
 set_nthreads(ncores)
-blosclib_version = "%s (%s)" % (BLOSC_VERSION_STRING, BLOSC_VERSION_DATE)
+blosclib_version = "%s (%s)" % (VERSION_STRING, VERSION_DATE)
 import atexit
 atexit.register(destroy)
 
