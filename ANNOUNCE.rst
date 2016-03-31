@@ -1,11 +1,14 @@
 =============================
-Announcing python-blosc 1.2.9
+Announcing python-blosc 1.3.0
 =============================
 
 What is new?
 ============
 
-#XXX version-specific blurb XXX#
+There is support for newest C-Blosc.  As such, C-Blosc 1.8.0 is being
+distributed internally.  Support for the new `BITSHUFFLE` filter,
+allowing for more compression ratios in many cases, at the expense of
+some slowdown.
 
 For more info, you can have a look at the release notes in:
 
