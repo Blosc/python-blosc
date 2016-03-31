@@ -51,6 +51,13 @@ class TestCodec(unittest.TestCase):
             d = blosc.decompress(c)
             self.assertEqual(s, d)
 
+    def test_all_filters(self):
+        s = b'0123456789'*100
+        for filter in [blosc.NOSHUFFLE, blosc.SHUFFLE, blosc.BITSHUFFLE]:
+            c = blosc.compress(s, typesize=1, shuffle=filter)
+            d = blosc.decompress(c)
+            self.assertEqual(s, d)
+
     def test_set_nthreads_exceptions(self):
         self.assertRaises(ValueError, blosc.set_nthreads,
                           blosc.BLOSC_MAX_THREADS + 1)

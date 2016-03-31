@@ -9,6 +9,20 @@
 
 from blosc.version import __version__
 
+# Blosc C symbols that we want to export
+from blosc.blosc_extension import (
+    BLOSC_VERSION_STRING,
+    BLOSC_VERSION_DATE,
+    BLOSC_MAX_BUFFERSIZE,
+    BLOSC_MAX_THREADS,
+    BLOSC_MAX_TYPESIZE,
+    BLOSC_NOSHUFFLE as NOSHUFFLE,
+    BLOSC_SHUFFLE as SHUFFLE,
+    BLOSC_BITSHUFFLE as BITSHUFFLE,
+    init,
+    destroy,
+    )
+
 from blosc.toplevel import (
     compress,
     compress_ptr,
@@ -35,17 +49,6 @@ cname2clib = dict((name, clib_info(name)[0]) for name in cnames)
 # Map for compression libraries and versions
 clib_versions = dict(clib_info(name) for name in cnames)
 
-# Blosc symbols that we want to export
-from blosc.blosc_extension import (
-    BLOSC_VERSION_STRING,
-    BLOSC_VERSION_DATE,
-    BLOSC_MAX_BUFFERSIZE,
-    BLOSC_MAX_THREADS,
-    BLOSC_MAX_TYPESIZE,
-    init,
-    destroy,
-    )
-
 
 # Initialize Blosc
 init()
@@ -62,4 +65,4 @@ __all__ = ['compress', 'compress_ptr', 'decompress', 'decompress_ptr',
            'pack_array', 'unpack_array',
            'detect_number_of_cores', 'free_resources', 'set_nthreads',
            'compressor_list', 'clib_info', 'get_clib',
-           'print_versions', 'test']
+           'print_versions', 'test', 'NOSHUFFLE', 'SHUFFLE', 'BITSHUFFLE']

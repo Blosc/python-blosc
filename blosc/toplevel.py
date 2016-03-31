@@ -272,8 +272,9 @@ def _check_address(address):
         raise TypeError("only int or long objects are supported as address")
 
 
-def compress(bytesobj, typesize, clevel=9, shuffle=True, cname='blosclz'):
-    """compress(bytesobj, typesize[, clevel=9, shuffle=True, cname='blosclz']])
+def compress(bytesobj, typesize, clevel=9,
+             shuffle=blosc.SHUFFLE, cname='blosclz'):
+    """compress(bytesobj, typesize[, clevel=9, shuffle=blosc.SHUFFLE, cname='blosclz']])
 
     Compress bytesobj, with a given type size.
 
@@ -286,9 +287,10 @@ def compress(bytesobj, typesize, clevel=9, shuffle=True, cname='blosclz'):
     clevel : int (optional)
         The compression level from 0 (no compression) to 9
         (maximum compression).  The default is 9.
-    shuffle : bool (optional)
-        Whether you want to activate the shuffle filter or not.
-        The default is True.
+    shuffle : int (optional)
+        The shuffle filter to be activated.  Allowed values are
+        blosc.NOSHUFFLE, blosc.SHUFFLE and blosc.BITSHUFFLE.  The
+        default is blosc.SHUFFLE.
     cname : string (optional)
         The name of the compressor used internally in Blosc.
         It can be any of the supported by Blosc ('blosclz',
@@ -330,9 +332,9 @@ def compress(bytesobj, typesize, clevel=9, shuffle=True, cname='blosclz'):
     return _ext.compress(bytesobj, typesize, clevel, shuffle, cname)
 
 
-def compress_ptr(address, items, typesize, clevel=9, shuffle=True,
-                 cname='blosclz'):
-    """compress_ptr(address, items, typesize[, clevel=9, shuffle=True, cname='blosclz']])
+def compress_ptr(address, items, typesize, clevel=9,
+                 shuffle=blosc.SHUFFLE, cname='blosclz'):
+    """compress_ptr(address, items, typesize[, clevel=9, shuffle=blosc.SHUFFLE, cname='blosclz']])
 
     Compress the data at address with given items and typesize.
 
@@ -347,9 +349,10 @@ def compress_ptr(address, items, typesize, clevel=9, shuffle=True,
     clevel : int (optional)
         The compression level from 0 (no compression) to 9
         (maximum compression).  The default is 9.
-    shuffle : bool (optional)
-        Whether you want to activate the shuffle filter or not.
-        The default is True.
+    shuffle : int (optional)
+        The shuffle filter to be activated.  Allowed values are
+        blosc.NOSHUFFLE, blosc.SHUFFLE and blosc.BITSHUFFLE.  The
+        default is blosc.SHUFFLE.
     cname : string (optional)
         The name of the compressor used internally in Blosc.
         It can be any of the supported by Blosc ('blosclz',
@@ -542,8 +545,8 @@ def decompress_ptr(bytesobj, address):
     return _ext.decompress_ptr(bytesobj, address)
 
 
-def pack_array(array, clevel=9, shuffle=True, cname='blosclz'):
-    """pack_array(array[, clevel=9, shuffle=True, cname='blosclz']])
+def pack_array(array, clevel=9, shuffle=blosc.SHUFFLE, cname='blosclz'):
+    """pack_array(array[, clevel=9, shuffle=blosc.SHUFFLE, cname='blosclz']])
 
     Pack (compress) a NumPy array.
 
@@ -554,9 +557,10 @@ def pack_array(array, clevel=9, shuffle=True, cname='blosclz'):
     clevel : int (optional)
         The compression level from 0 (no compression) to 9
         (maximum compression).  The default is 9.
-    shuffle : bool (optional)
-        Whether you want to activate the shuffle filter or not.
-        The default is True.
+    shuffle : int (optional)
+        The shuffle filter to be activated.  Allowed values are
+        blosc.NOSHUFFLE, blosc.SHUFFLE and blosc.BITSHUFFLE.  The
+        default is blosc.SHUFFLE.
     cname : string (optional)
         The name of the compressor used internally in Blosc.
         It can be any of the supported by Blosc ('blosclz',
