@@ -20,6 +20,9 @@ Changes from 1.2.8 to 1.3.0
   so that a mutable bytearray will be returned instead of a bytes one
   (inmutable).  PR #107.  Thanks to Joe Jevnik.
 
+- The '__all__' variable has been removed from the module.  I consider
+  this good practice to avoid things like "from blosc import *".
+
 
 Changes from 1.2.7 to 1.2.8
 ===========================

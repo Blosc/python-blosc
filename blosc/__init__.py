@@ -60,9 +60,3 @@ atexit.register(destroy)
 
 # Tests
 from blosc.test import run as test
-
-__all__ = ['compress', 'compress_ptr', 'decompress', 'decompress_ptr',
-           'pack_array', 'unpack_array',
-           'detect_number_of_cores', 'free_resources', 'set_nthreads',
-           'compressor_list', 'clib_info', 'get_clib',
-           'print_versions', 'test', 'NOSHUFFLE', 'SHUFFLE', 'BITSHUFFLE']
