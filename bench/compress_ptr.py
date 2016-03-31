@@ -42,16 +42,17 @@ print("\nTimes for compressing/decompressing with clevel=%d and %d threads" % (
 for (in_, label) in arrays:
     print("\n*** %s ***" % label)
     for cname in blosc.compressor_list():
-        t0 = time.time()
-        c = blosc.compress_ptr(in_.__array_interface__['data'][0],
-                               in_.size, in_.dtype.itemsize,
-                               clevel=clevel, shuffle=True, cname=cname)
-        tc = time.time() - t0
-        out = np.empty(in_.size, dtype=in_.dtype)
-        t0 = time.time()
-        blosc.decompress_ptr(c, out.__array_interface__['data'][0])
-        td = time.time() - t0
-        assert((in_ == out).all())
-        print("  *** %-8s *** %6.3f s (%.2f GB/s) / %5.3f s (%.2f GB/s)" % (
-            cname, tc, ((N*8 / tc) / 2**30), td, ((N*8 / td) / 2**30)), end='')
-        print("\tCompr. ratio: %5.1fx" % (N*8. / len(c)))
+        for filter in [blosc.NOSHUFFLE, blosc.SHUFFLE, blosc.BITSHUFFLE]:
+            t0 = time.time()
+            c = blosc.compress_ptr(in_.__array_interface__['data'][0],
+                                   in_.size, in_.dtype.itemsize,
+                                   clevel=clevel, shuffle=filter, cname=cname)
+            tc = time.time() - t0
+            out = np.empty(in_.size, dtype=in_.dtype)
+            t0 = time.time()
+            blosc.decompress_ptr(c, out.__array_interface__['data'][0])
+            td = time.time() - t0
+            assert((in_ == out).all())
+            print("  *** %-8s, %-10s *** %6.3f s (%.2f GB/s) / %5.3f s (%.2f GB/s)" % (
+                cname, blosc.filters[filter], tc, ((N*8 / tc) / 2**30), td, ((N*8 / td) / 2**30)), end='')
+            print("\tCompr. ratio: %5.1fx" % (N*8. / len(c)))

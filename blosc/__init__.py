@@ -23,6 +23,11 @@ from blosc.blosc_extension import (
     destroy,
     )
 
+# Translation of filters to strings
+filters = {NOSHUFFLE: "noshuffle",
+           SHUFFLE: "shuffle",
+           BITSHUFFLE: "bitshuffle"}
+
 from blosc.toplevel import (
     compress,
     compress_ptr,
