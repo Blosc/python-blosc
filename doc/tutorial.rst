@@ -58,11 +58,11 @@ to decompress?  Well, it is exactly the same way than Zlib::
   Wall time: 36.3 ms   # ~ 2.2 GB/s and ~ 10x times faster than zlib
 
 
-Using different compressors inside Blosc
-========================================
+Using different compressors
+===========================
 
-Since Blosc 1.3.0, you can use different compressors inside it.  That
-allows for these compressors to leverage Blosc powerful
+Since C-Blosc 1.3.0, you can use different compressors inside it.
+That allows for these compressors to leverage Blosc powerful
 multi-threading and shuffling machinery.
 
 The examples above where using the default 'blosclz' compressor.  Here
@@ -103,6 +103,46 @@ You can play with other compressors too, like 'lz4', 'lz4hc' and
 you can expect similar results.  However, 'lz4hc' is variation of
 'lz4' that typically spends more time compressing for a better
 compression ratio, so it is very good for read-only data.
+
+Using different filters
+=======================
+
+Since python-blosc 1.3.0, you can use different filters too: `SHUFFLE`
+and `BITSHUFLE`.  These allow the integrated compressors to compress
+more efficiently or not, depending on your datasets.
+
+Here it is an example using the `SHUFFLE` filter::
+
+  >>> %time bpacked = blosc.compress(bytes_array, typesize=8, shuffle=blosc.SHUFFLE)
+  CPU times: user 240 ms, sys: 4 ms, total: 244 ms
+  Wall time: 67.1 ms
+
+  >>> len(bpacked)
+  6986533
+
+Here there is another example using `BITSHUFFLE`::
+
+  >>> %time bpacked = blosc.compress(bytes_array, typesize=8, shuffle=blosc.BITSHUFFLE)
+  CPU times: user 344 ms, sys: 0 ns, total: 344 ms
+  Wall time: 95.8 ms
+
+  >>> len(bpacked)
+  5942257     #  ~ 1.3x smaller than blosclz/shuffle
+
+You can also deactivate filters completely with `NOSHUFFLE`::
+
+  >>> %time bpacked = blosc.compress(bytes_array, typesize=8, shuffle=blosc.NOSHUFFLE)
+  CPU times: user 344 ms, sys: 0 ns, total: 344 ms
+  Wall time: 95.8 ms
+
+  >>> len(bpacked)
+  74323591     #  just a 7% of compression wrt the original buffer
+
+So you have quite a bit of flexibility on choosing different codecs
+and filters inside Blosc.  Depending on the dataset you have and the
+requeriments of performance, you may want to experiment a bit before
+sticking with your preferred ones.
+
 
 Supporting the buffer interface
 ===============================
@@ -200,9 +240,9 @@ Packing NumPy arrays with Bloscpack
 While `pack_array` / `unpack_array` have been designed for convenience
 and `compress_ptr` / `decompress_ptr` have been designed for speed
 there is also a third option that combines the best of both worlds:
-`Bloscpack <https://github.com/esc/bloscpack>`_. Since version 0.4.0,
+`Bloscpack <https://github.com/Blosc/bloscpack>`_. Since version 0.4.0,
 Bloscpack is able to natively `de/serialize NumPy arrays
-<https://github.com/esc/bloscpack#numpy>`_::
+<https://github.com/Blosc/bloscpack#numpy>`_::
 
   >>> import bloscpack as bp
   >>> %time bp_packed = bp.pack_ndarray_str(a)
