@@ -23,6 +23,13 @@ from blosc.blosc_extension import (
     destroy,
     )
 
+# Restored old symbols for backward compatibility with pre 1.3.0
+BLOSC_VERSION_STRING = VERSION_STRING
+BLOSC_VERSION_DATE = VERSION_DATE
+BLOSC_MAX_BUFFERSIZE = MAX_BUFFERSIZE
+BLOSC_MAX_THREADS = MAX_THREADS
+BLOSC_MAX_TYPESIZE = MAX_TYPESIZE
+
 # Translation of filters to strings
 filters = {NOSHUFFLE: "noshuffle",
            SHUFFLE: "shuffle",

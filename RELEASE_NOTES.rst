@@ -16,6 +16,16 @@ Changes from 1.3.0 to 1.3.1
 - Added a protection to avoid using BITSHUFLE with C-Blosc < 1.8.0.
 
 
+- Restored old symbols for backward compatibility with pre 1.3.0:
+    BLOSC_VERSION_STRING
+    BLOSC_VERSION_DATE
+    BLOSC_MAX_BUFFERSIZE
+    BLOSC_MAX_THREADS
+    BLOSC_MAX_TYPESIZE
+  However, these are considered deprecated and should be replaced by
+  libraries using python-blosc by the ones without the BLOSC_ prefix.
+
+
 Changes from 1.2.8 to 1.3.0
 ===========================
 
