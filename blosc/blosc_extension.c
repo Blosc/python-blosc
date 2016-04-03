@@ -200,9 +200,11 @@ compress_helper(void * input, size_t nbytes, size_t typesize,
 
     /* Attempt to resize, if it's much smaller, a copy is required. */
     if (_PyBytes_Resize(&output, cbytes) < 0){
-        /* the memory exception will have been set, hopefully */
-        return NULL;
+      /* the memory exception will have been set, hopefully */
+      Py_DECREF(output);
+      return NULL;
     }
+
     return output;
 }
 
