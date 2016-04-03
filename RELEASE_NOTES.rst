@@ -13,7 +13,7 @@
 Changes from 1.3.0 to 1.3.1
 ===========================
 
-#XXX version-specific blurb XXX#
+- Added a protection to avoid using BITSHUFLE with C-Blosc < 1.8.0.
 
 
 Changes from 1.2.8 to 1.3.0

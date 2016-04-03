@@ -8,6 +8,7 @@
 
 import os
 import sys
+from distutils.version import LooseVersion
 try:
     import cPickle as pickle
 except ImportError:
@@ -237,6 +238,16 @@ def free_resources():
     _ext.free_resources()
 
 
+def _check_shuffle(shuffle):
+    if shuffle not in [blosc.NOSHUFFLE, blosc.SHUFFLE, blosc.BITSHUFFLE]:
+        raise ValueError("shuffle can only be one of NOSHUFFLE, SHUFFLE"
+                         " and BITSHUFFLE.")
+    if (shuffle == blosc.BITSHUFFLE and
+        LooseVersion(blosc.blosclib_version) < LooseVersion("1.8.0")):
+        raise ValueError("You need C-Blosc 1.8.0 or higher for using"
+                         " BITSHUFFLE.")
+
+
 def _check_clevel(clevel):
     if not 0 <= clevel <= 9:
         raise ValueError("clevel can only be in the 0-9 range.")
@@ -326,6 +337,7 @@ def compress(bytesobj, typesize=8, clevel=9, shuffle=blosc.SHUFFLE,
 
     _check_input_length('bytesobj', len(bytesobj))
     _check_typesize(typesize)
+    _check_shuffle(shuffle)
     _check_clevel(clevel)
     _check_cname(cname)
 
@@ -418,6 +430,7 @@ def compress_ptr(address, items, typesize=8, clevel=9, shuffle=blosc.SHUFFLE,
     length = items * typesize
     _check_input_length('length', length)
     _check_typesize(typesize)
+    _check_shuffle(shuffle)
     _check_clevel(clevel)
     _check_cname(cname)
 
@@ -601,6 +614,7 @@ def pack_array(array, clevel=9, shuffle=blosc.SHUFFLE, cname='blosclz'):
     itemsize = array.itemsize
     _check_input_length('array size', array.size*itemsize)
     _check_typesize(array.itemsize)
+    _check_shuffle(shuffle)
     _check_clevel(clevel)
     _check_cname(cname)
 

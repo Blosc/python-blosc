@@ -2,6 +2,7 @@ from __future__ import division
 import sys
 import gc
 import os
+from distutils.version import LooseVersion
 import ctypes
 import blosc
 
@@ -53,8 +54,12 @@ class TestCodec(unittest.TestCase):
 
     def test_all_filters(self):
         s = b'0123456789'*100
-        for filter in [blosc.NOSHUFFLE, blosc.SHUFFLE, blosc.BITSHUFFLE]:
-            c = blosc.compress(s, typesize=1, shuffle=filter)
+        filters = [blosc.NOSHUFFLE, blosc.SHUFFLE]
+        # BITFILTER only works properly from 1.8.0 on
+        if LooseVersion(blosc.blosclib_version) >= LooseVersion("1.8.0"):
+            filters.append(blosc.BITSHUFFLE)
+        for filter_ in filters:
+            c = blosc.compress(s, typesize=1, shuffle=filter_)
             d = blosc.decompress(c)
             self.assertEqual(s, d)
 
