@@ -13,9 +13,9 @@
 Changes from 1.3.0 to 1.3.1
 ===========================
 
-- Use the -O1 flag for compiling the included C-Blosc sources.  This
-  represents slower performance, but fixes the nasty issue #110.  Also,
-  it prints a warning for using an external C-Blosc library.
+- Use the -O1 flag for compiling the included C-Blosc sources on Linux.
+  This represents slower performance, but fixes the nasty issue #110.
+  Also, it prints a warning for using an external C-Blosc library.
 
 - Added a protection to avoid using BITSHUFLE with C-Blosc < 1.8.0.
 
