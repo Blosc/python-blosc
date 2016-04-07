@@ -217,6 +217,7 @@ Mailing list
 Discussion about this module is welcome in the Blosc list:
 
 blosc@googlegroups.com
+
 http://groups.google.es/group/blosc
 
 ----
