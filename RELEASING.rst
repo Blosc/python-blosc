@@ -88,6 +88,7 @@ Tagging
 
 * Push the tag to the github repo::
 
+    $ git push
     $ git push --tags
 
 
@@ -95,8 +96,8 @@ Announcing
 ----------
 
 * Send an announcement to the blosc, numpy list and python-announce
-  lists.  Use the ``ANNOUNCE.rst`` file as skeleton (or possibly as the
-  definitive version).
+  lists.  Use the ``ANNOUNCE.rst`` file as skeleton (or possibly as
+  the definitive version).
 
 
 Post-release actions

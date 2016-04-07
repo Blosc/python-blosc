@@ -5,14 +5,7 @@ Announcing python-blosc 1.3.1
 What is new?
 ============
 
-This is an important release in terms of stability.  Now, the -O1 flag
-for compiling the included C-Blosc sources on Linux.  This represents
-slower performance, but fixes the nasty issue #110.  In case maximum
-speed is needed, please `compile python-blosc with an external C-Blosc
-library <https://github.com/Blosc/python-blosc#compiling-with-an-installed-blosc-library-recommended)>`_.
-
-Also, symbols like BLOSC_MAX_BUFFERSIZE have been replaced for allowing
-backward compatibility with python-blosc 1.2.x series.
+#XXX version-specific blurb XXX#
 
 For whetting your appetite, look at some benchmarks here:
 
@@ -52,20 +45,13 @@ serializing and deserializing Numpy arrays both on-disk and in-memory at
 speeds that are competitive with regular Pickle/cPickle machinery.
 
 
-Download sources
-================
+Sources repository
+==================
 
-The sources and documentations are managed through github services at:
+The sources and documentation are managed through github services at:
 
 http://github.com/Blosc/python-blosc
 
-
-Documentation
-=============
-
-There is and online Sphinx-based documentation site at:
-
-http://python-blosc.blosc.org/
 
 
 ----

@@ -1,6 +1,6 @@
-======================================
- Release notes for python-blosc 1.3.1
-======================================
+================================
+ Release notes for python-blosc
+================================
 
 :Author: Francesc Alted
 :Author: Valentin Hänel
@@ -8,6 +8,12 @@
 :Contact: valentin@haenel.co
 :URL: http://python-blosc.blosc.org
 :URL: https://github.com/Blosc/python-blosc
+
+
+Changes from 1.3.1 to 1.3.2
+===========================
+
+#XXX version-specific blurb XXX#
 
 
 Changes from 1.3.0 to 1.3.1
