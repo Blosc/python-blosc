@@ -17,6 +17,9 @@ Changes from 1.3.0 to 1.3.1
   This represents slower performance, but fixes the nasty issue #110.
   Also, it prints a warning for using an external C-Blosc library.
 
+- Internal C-Blosc version bumped to 1.8.1 for better compatibility
+  with gcc 5.3.1 in forthcoming Ubuntu Xenial.
+
 - Added a protection to avoid using BITSHUFLE with C-Blosc < 1.8.0.
 
 - Restored old symbols for backward compatibility with pre 1.3.0:
