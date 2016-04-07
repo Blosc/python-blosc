@@ -5,7 +5,12 @@ Announcing python-blosc 1.3.1
 What is new?
 ============
 
-  #XXX version-specific blurb XXX#
+This is an important release in terms of stability.  Now, the -O1 flag
+for compiling the included C-Blosc sources on Linux.  This represents
+slower performance, but fixes the nasty issue #110.  In case maximum
+speed is needed, please compile python-blosc with an external C-Blosc
+library.  Also, symbols like BLOSC_MAX_BUFFERSIZE have been replaced for
+allowing backward compatibility with python-blosc 1.2.x series.
 
 For more info, you can have a look at the release notes in:
 
