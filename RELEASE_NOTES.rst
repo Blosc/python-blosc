@@ -13,7 +13,8 @@
 Changes from 1.3.1 to 1.3.2
 ===========================
 
-#XXX version-specific blurb XXX#
+- Fixed the version of the include C-Blosc library (should be 1.8.1 not
+  1.8.2.dev).
 
 
 Changes from 1.3.0 to 1.3.1

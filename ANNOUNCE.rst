@@ -1,11 +1,12 @@
 =============================
-Announcing python-blosc 1.3.1
+Announcing python-blosc 1.3.2
 =============================
 
 What is new?
 ============
 
-#XXX version-specific blurb XXX#
+Small maintenance release fixing the version of the include C-Blosc
+library (should be 1.8.1 not 1.8.2.dev).
 
 For whetting your appetite, look at some benchmarks here:
 
