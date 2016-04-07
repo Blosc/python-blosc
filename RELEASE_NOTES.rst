@@ -10,6 +10,12 @@
 :URL: https://github.com/Blosc/python-blosc
 
 
+Changes from 1.3.2 to 1.3.3
+===========================
+
+#XXX version-specific blurb XXX#
+
+
 Changes from 1.3.1 to 1.3.2
 ===========================
 
