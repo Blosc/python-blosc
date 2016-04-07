@@ -42,27 +42,17 @@ Building
 There are different ways to compile python-blosc, depending if you want
 to link with an already installed Blosc library or not.
 
-Compiling without an installed Blosc library
---------------------------------------------
+Compiling with an installed Blosc library (recommended)
+-------------------------------------------------------
 
-python-blosc come with the Blosc sources with it so, assuming that you
-have a C++ compiler installed, do:
+Python and Blosc-powered extensions have a difficult relationship when
+compiled using GCC, so this is why using an external C-Blosc library is
+recommended for maximum performance (for details, see
+https://github.com/Blosc/python-blosc/issues/110).
 
-.. code-block:: console
-
-    $ python setup.py build_ext --inplace
-
-That's all.  You can proceed with testing section now.
-
-Note: The requirement for the C++ compiler is just for the Snappy
-dependency.  The rest of the other components of Blosc are pure C
-(including the LZ4 and Zlib libraries).
-
-Compiling with an installed Blosc library
------------------------------------------
-
-In case you have Blosc installed as an external library (and disregard
-the included Blosc sources) you can link with it in a couple of ways.
+Go to https://github.com/Blosc/c-blosc/releases and download and install
+the C-Blosc library.  Then, you can tell python-blosc where is the
+C-Blosc library in a couple of ways:
 
 Using an environment variable:
 
@@ -78,16 +68,24 @@ Using a flag:
 
     $ python setup.py build_ext --inplace --blosc=/usr/local
 
-Generating Sphinx documentation
--------------------------------
+Compiling without an installed Blosc library
+--------------------------------------------
 
-In case you want to generate the documentation locally, you will need to
-have the Sphinx documentation system, as well as the numpydoc
-extension, installed.  Then go down to ``doc/`` directory and do:
+*Warning:* This way of compiling is discouraged for performance reasons.
+See the previous section.
+
+python-blosc also comes with the Blosc sources with it so, assuming that
+you have a C++ compiler installed, do:
 
 .. code-block:: console
 
-    $ make html|latex|latexpdf
+    $ python setup.py build_ext --inplace
+
+That's all.  You can proceed with testing section now.
+
+Note: The requirement for the C++ compiler is just for the Snappy
+dependency.  The rest of the other components of Blosc are pure C
+(including the LZ4 and Zlib libraries).
 
 Testing
 =======
@@ -124,38 +122,65 @@ your Blosc build:
 
   $ PYTHONPATH=. python bench/compress_ptr.py
 
-Just to wet you appetite, here are the results for an Intel Core 2 Duo
-at 2.13 GHz, running Python 3.3 and Mac OSX 10.9, but YMMV (and will
-vary!)::
+Just to wet you appetite, here are the results for an Intel E3-1240 v3 @
+3.40GHz, running Python 2.7 and Gentoo Base System release 2.2, but YMMV
+(and will vary!)::
 
-  Creating different NumPy arrays with 10**7 int64/float64 elements:
-    *** np.copy() **** Time for memcpy():     0.106 s
+    Creating NumPy arrays with 10**8 int64/float64 elements:
+      *** ctypes.memmove() *** Time for memcpy():   0.295 s (2.53 GB/s)
 
-  *** the arange linear distribution ***
-    *** blosclz  *** Time for comp/decomp: 0.034/0.077 s.	Compr ratio: 136.83
-    *** lz4      *** Time for comp/decomp: 0.030/0.080 s.	Compr ratio: 137.19
-    *** lz4hc    *** Time for comp/decomp: 0.370/0.097 s.	Compr ratio: 165.12
-    *** snappy   *** Time for comp/decomp: 0.054/0.081 s.	Compr ratio:  20.38
-    *** zlib     *** Time for comp/decomp: 0.415/0.170 s.	Compr ratio: 407.60
+    Times for compressing/decompressing with clevel=5 and 8 threads
 
-  *** the linspace linear distribution ***
-    *** blosclz  *** Time for comp/decomp: 0.112/0.094 s.	Compr ratio:  10.47
-    *** lz4      *** Time for comp/decomp: 0.063/0.084 s.	Compr ratio:  13.68
-    *** lz4hc    *** Time for comp/decomp: 0.412/0.097 s.	Compr ratio:  70.84
-    *** snappy   *** Time for comp/decomp: 0.099/0.341 s.	Compr ratio:   9.74
-    *** zlib     *** Time for comp/decomp: 0.620/0.333 s.	Compr ratio:  79.11
+    *** the arange linear distribution ***
+      *** blosclz , noshuffle  ***  0.455 s (1.64 GB/s) / 0.087 s (8.58 GB/s)       Compr. ratio:   1.0x
+      *** blosclz , shuffle    ***  0.108 s (6.93 GB/s) / 0.075 s (10.00 GB/s)      Compr. ratio:  57.1x
+      *** blosclz , bitshuffle ***  0.120 s (6.19 GB/s) / 0.107 s (6.97 GB/s)       Compr. ratio:  74.0x
+      *** lz4     , noshuffle  ***  0.342 s (2.18 GB/s) / 0.212 s (3.52 GB/s)       Compr. ratio:   2.0x
+      *** lz4     , shuffle    ***  0.078 s (9.54 GB/s) / 0.093 s (8.02 GB/s)       Compr. ratio:  58.6x
+      *** lz4     , bitshuffle ***  0.116 s (6.41 GB/s) / 0.135 s (5.53 GB/s)       Compr. ratio:  52.5x
+      *** lz4hc   , noshuffle  ***  8.142 s (0.09 GB/s) / 0.212 s (3.52 GB/s)       Compr. ratio:   2.0x
+      *** lz4hc   , shuffle    ***  0.140 s (5.33 GB/s) / 0.092 s (8.06 GB/s)       Compr. ratio: 137.2x
+      *** lz4hc   , bitshuffle ***  1.572 s (0.47 GB/s) / 0.142 s (5.25 GB/s)       Compr. ratio: 208.9x
+      *** snappy  , noshuffle  ***  0.381 s (1.95 GB/s) / 0.244 s (3.06 GB/s)       Compr. ratio:   2.0x
+      *** snappy  , shuffle    ***  0.073 s (10.25 GB/s) / 0.136 s (5.48 GB/s)      Compr. ratio:  17.4x
+      *** snappy  , bitshuffle ***  0.126 s (5.92 GB/s) / 0.177 s (4.22 GB/s)       Compr. ratio:  18.2x
+      *** zlib    , noshuffle  ***  5.298 s (0.14 GB/s) / 0.401 s (1.86 GB/s)       Compr. ratio:   5.3x
+      *** zlib    , shuffle    ***  0.974 s (0.76 GB/s) / 0.393 s (1.90 GB/s)       Compr. ratio: 237.3x
+      *** zlib    , bitshuffle ***  1.026 s (0.73 GB/s) / 0.444 s (1.68 GB/s)       Compr. ratio: 305.4x
 
-  *** the random distribution ***
-    *** blosclz  *** Time for comp/decomp: 0.102/0.210 s.	Compr ratio:   7.76
-    *** lz4      *** Time for comp/decomp: 0.044/0.090 s.	Compr ratio:   7.76
-    *** lz4hc    *** Time for comp/decomp: 0.352/0.103 s.	Compr ratio:   7.78
-    *** snappy   *** Time for comp/decomp: 0.073/0.084 s.	Compr ratio:   6.01
-    *** zlib     *** Time for comp/decomp: 0.709/0.218 s.	Compr ratio:   9.41
+    *** the linspace linear distribution ***
+      *** blosclz , noshuffle  ***  0.434 s (1.72 GB/s) / 0.088 s (8.45 GB/s)       Compr. ratio:   1.0x
+      *** blosclz , shuffle    ***  0.298 s (2.50 GB/s) / 0.090 s (8.32 GB/s)       Compr. ratio:   2.0x
+      *** blosclz , bitshuffle ***  0.476 s (1.56 GB/s) / 0.166 s (4.50 GB/s)       Compr. ratio:   2.8x
+      *** lz4     , noshuffle  ***  0.219 s (3.41 GB/s) / 0.088 s (8.45 GB/s)       Compr. ratio:   1.0x
+      *** lz4     , shuffle    ***  0.190 s (3.92 GB/s) / 0.112 s (6.63 GB/s)       Compr. ratio:   3.2x
+      *** lz4     , bitshuffle ***  0.248 s (3.00 GB/s) / 0.149 s (5.00 GB/s)       Compr. ratio:   4.9x
+      *** lz4hc   , noshuffle  ***  2.797 s (0.27 GB/s) / 0.211 s (3.53 GB/s)       Compr. ratio:   1.2x
+      *** lz4hc   , shuffle    ***  0.528 s (1.41 GB/s) / 0.085 s (8.78 GB/s)       Compr. ratio:  24.1x
+      *** lz4hc   , bitshuffle ***  2.918 s (0.26 GB/s) / 0.131 s (5.71 GB/s)       Compr. ratio:  35.0x
+      *** snappy  , noshuffle  ***  0.088 s (8.49 GB/s) / 0.087 s (8.61 GB/s)       Compr. ratio:   1.0x
+      *** snappy  , shuffle    ***  0.235 s (3.16 GB/s) / 0.176 s (4.24 GB/s)       Compr. ratio:   4.2x
+      *** snappy  , bitshuffle ***  0.317 s (2.35 GB/s) / 0.198 s (3.76 GB/s)       Compr. ratio:   6.1x
+      *** zlib    , noshuffle  ***  6.569 s (0.11 GB/s) / 0.718 s (1.04 GB/s)       Compr. ratio:   1.6x
+      *** zlib    , shuffle    ***  1.313 s (0.57 GB/s) / 0.339 s (2.20 GB/s)       Compr. ratio:  27.0x
+      *** zlib    , bitshuffle ***  1.348 s (0.55 GB/s) / 0.380 s (1.96 GB/s)       Compr. ratio:  35.2x
 
-That means that Blosc in combination with LZ4 can compress at speeds
-that can be up to 3x faster than a pure memcpy operation.  Decompression
-is a bit slower (but still faster than ``memcpy()``) probably because
-writing to memory is slower than reading.
+    *** the random distribution ***
+      *** blosclz , noshuffle  ***  0.517 s (1.44 GB/s) / 0.087 s (8.60 GB/s)       Compr. ratio:   1.0x
+      *** blosclz , shuffle    ***  0.212 s (3.52 GB/s) / 0.070 s (10.62 GB/s)      Compr. ratio:   3.9x
+      *** blosclz , bitshuffle ***  0.181 s (4.13 GB/s) / 0.104 s (7.16 GB/s)       Compr. ratio:   6.1x
+      *** lz4     , noshuffle  ***  0.373 s (2.00 GB/s) / 0.149 s (5.00 GB/s)       Compr. ratio:   2.1x
+      *** lz4     , shuffle    ***  0.135 s (5.52 GB/s) / 0.101 s (7.36 GB/s)       Compr. ratio:   4.5x
+      *** lz4     , bitshuffle ***  0.129 s (5.77 GB/s) / 0.138 s (5.39 GB/s)       Compr. ratio:   6.1x
+      *** lz4hc   , noshuffle  ***  4.684 s (0.16 GB/s) / 0.101 s (7.36 GB/s)       Compr. ratio:   3.2x
+      *** lz4hc   , shuffle    ***  3.223 s (0.23 GB/s) / 0.101 s (7.37 GB/s)       Compr. ratio:   5.4x
+      *** lz4hc   , bitshuffle ***  0.429 s (1.74 GB/s) / 0.139 s (5.36 GB/s)       Compr. ratio:   6.2x
+      *** snappy  , noshuffle  ***  0.461 s (1.62 GB/s) / 0.257 s (2.90 GB/s)       Compr. ratio:   2.2x
+      *** snappy  , shuffle    ***  0.166 s (4.49 GB/s) / 0.160 s (4.66 GB/s)       Compr. ratio:   4.3x
+      *** snappy  , bitshuffle ***  0.136 s (5.48 GB/s) / 0.167 s (4.45 GB/s)       Compr. ratio:   5.0x
+      *** zlib    , noshuffle  ***  5.383 s (0.14 GB/s) / 0.499 s (1.49 GB/s)       Compr. ratio:   3.9x
+      *** zlib    , shuffle    ***  2.903 s (0.26 GB/s) / 0.408 s (1.83 GB/s)       Compr. ratio:   6.1x
+      *** zlib    , bitshuffle ***  1.403 s (0.53 GB/s) / 0.433 s (1.72 GB/s)
 
 In case you find your own results interesting, please report them back
 to the authors!
