@@ -9,10 +9,14 @@ link_directories(${PROJECT_BINARY_DIR}/blosc)
 foreach(source ${SOURCES})
     get_filename_component(target ${source} NAME_WE)
 
-    # test_nolock will be enabled only for Unix
-    if(target STREQUAL test_nolock AND WIN32)
-        message("Skipping ${target} on Windows systems")
-        continue()
+    # test_nolock and test_noinit will be enabled only for Unix
+    if(WIN32)
+        if (target STREQUAL test_nolock OR
+            target STREQUAL test_noinit OR
+            target STREQUAL test_compressor)
+            message("Skipping ${target} on Windows systems")
+            continue()
+        endif()
     endif()
 
     # test_compressor will be enabled only when LZ4 support is in
@@ -45,6 +49,11 @@ foreach(source ${SOURCES})
 
     # have to copy dlls for Visual Studio
     if(MSVC)
+        if(MSVC_VERSION EQUAL 1500)
+            # This is an attempt to make VS2008 work, but no luck...
+            # https://cmake.org/pipermail/cmake/2014-October/058777.html
+            SET(Configuration "Release")
+        endif()
         add_custom_command(
             TARGET      ${target}
             POST_BUILD
