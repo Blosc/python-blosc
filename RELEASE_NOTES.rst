@@ -18,6 +18,8 @@ Changes from 1.3.2 to 1.3.3
 - C-Blosc do not segfaults anymore, so -O1 flag on Linux is not the
   default anymore.
 
+- SSE2 and AVX2 are now auto-discovered so the internal C-Blosc will be
+  compiled with maximum optimization on processors supporting them.
 
 Changes from 1.3.1 to 1.3.2
 ===========================

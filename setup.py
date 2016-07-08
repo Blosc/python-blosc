@@ -18,7 +18,8 @@ import sys
 
 from setuptools import Extension
 from setuptools import setup
-import glob
+from glob import glob
+import cpuinfo
 
 ########### Check versions ##########
 
@@ -81,35 +82,35 @@ if BLOSC_DIR != '':
     libs += ['blosc']
 else:
     # Compiling everything from included C-Blosc sources
-
-    # We still have to figure out how to detect AVX2 in Python,
-    # so use the external library is AVX2 is desired.
-    sources += [f for f in glob.glob('c-blosc/blosc/*.c') if 'avx2' not in f]
-    # LZ4 sources
-    sources += glob.glob('c-blosc/internal-complibs/lz4*/*.c')
-    # Snappy sources
-    sources += glob.glob('c-blosc/internal-complibs/snappy*/*.cc')
-    # Zlib sources
-    sources += glob.glob('c-blosc/internal-complibs/zlib*/*.c')
-    # Finally, add all the include dirs...
+    sources += [f for f in glob('c-blosc/blosc/*.c')
+                if 'avx2' not in f and 'sse2' not in f]
+    sources += glob('c-blosc/internal-complibs/lz4*/*.c')
+    sources += glob('c-blosc/internal-complibs/snappy*/*.cc')
+    sources += glob('c-blosc/internal-complibs/zlib*/*.c')
     inc_dirs += [os.path.join('c-blosc', 'blosc')]
-    inc_dirs += glob.glob('c-blosc/internal-complibs/*')
-    # ...and the macros for all the compressors supported
+    inc_dirs += glob('c-blosc/internal-complibs/*')
     def_macros += [('HAVE_LZ4', 1), ('HAVE_SNAPPY', 1), ('HAVE_ZLIB', 1)]
 
-    if os.name == 'posix':
-        if re.match("i.86", platform.machine()) is not None:
-            # Add -msse2 flag for optimizing shuffle in Blosc
-            # (only necessary for 32-bit Intel architectures)
-            CFLAGS.append("-msse2")
-    elif os.name == 'nt':
-        # Windows always should have support for SSE2
-        # (present in all x86/amd64 architectures since 2003)
-        def_macros += [('__SSE2__', 1)]
-
-    if re.match("i.86|x86", platform.machine()) is not None:
-        # Always enable SSE2 for AMD/Intel machines
-        def_macros += [('SHUFFLE_SSE2_ENABLED', 1)]
+    # Guess SSE2 or AVX2 capabilities
+    cpu_info = cpuinfo.get_cpu_info()
+    # SSE2
+    if 'sse2' in cpu_info['flags']:
+        print('SSE2 detected')
+        CFLAGS.append('-DSHUFFLE_SSE2_ENABLED')
+        sources += [f for f in glob('c-blosc/blosc/*.c') if 'sse2' in f]
+        if os.name == 'posix':
+            CFLAGS.append('-msse2')
+        elif os.name == 'nt':
+            def_macros += [('__SSE2__', 1)]
+    # AVX2
+    if 'avx2' in cpu_info['flags']:
+        print('AVX2 detected')
+        CFLAGS.append('-DSHUFFLE_AVX2_ENABLED')
+        sources += [f for f in glob('c-blosc/blosc/*.c') if 'avx2' in f]
+        if os.name == 'posix':
+            CFLAGS.append('-mavx2')
+        elif os.name == 'nt':
+            def_macros += [('__AVX2__', 1)]
 
 classifiers = """\
 Development Status :: 5 - Production/Stable

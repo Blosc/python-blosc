@@ -1,6 +1,6 @@
 include MANIFEST.in
 include *.txt *.rst
-include setup.py VERSION
+include setup.py cpuinfo.py VERSION
 
 recursive-include blosc *.py *.c
 recursive-include c-blosc *.c *.h *.cpp *.hpp
