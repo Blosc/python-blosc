@@ -13,8 +13,8 @@ before_install:
   - free -m
   - df -h
   - ulimit -a
-  - pip install -q --use-mirrors numpy
-  - pip install -q --use-mirrors psutil
+  - pip install -q numpy
+  - pip install -q psutil
   - python -V
   - if [[ $TRAVIS_PYTHON_VERSION == '2.6' ]] ; then  pip install unittest2; fi
 install:
