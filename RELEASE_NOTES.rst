@@ -15,6 +15,9 @@ Changes from 1.3.2 to 1.3.3
 
 - Internal C-Blosc sources updated to 1.9.3.
 
+- C-Blosc do not segfaults anymore, so -O1 flag on Linux is not the
+  default anymore.
+
 
 Changes from 1.3.1 to 1.3.2
 ===========================

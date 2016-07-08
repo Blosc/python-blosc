@@ -82,13 +82,6 @@ if BLOSC_DIR != '':
 else:
     # Compiling everything from included C-Blosc sources
 
-    # Warn about the convenience to use the shared library
-    print("*******************************************************\n"
-          "**Warning:** Compiling with included C-Blosc sources.  \n"
-          "For performance reasons, consider to use the --blosc   \n"
-          "flag for passing an external C-Blosc library location. \n"
-          "*******************************************************\n")
-
     # We still have to figure out how to detect AVX2 in Python,
     # so use the external library is AVX2 is desired.
     sources += [f for f in glob.glob('c-blosc/blosc/*.c') if 'avx2' not in f]
@@ -103,11 +96,6 @@ else:
     inc_dirs += glob.glob('c-blosc/internal-complibs/*')
     # ...and the macros for all the compressors supported
     def_macros += [('HAVE_LZ4', 1), ('HAVE_SNAPPY', 1), ('HAVE_ZLIB', 1)]
-
-    if platform.system() == "Linux":
-        # Compiling with more than -O2 can cause segfaults; see:
-        # https://github.com/Blosc/python-blosc/issues/110
-        CFLAGS.append('-O1')
 
     if os.name == 'posix':
         if re.match("i.86", platform.machine()) is not None:
@@ -152,8 +140,8 @@ Blosc is a high performance compressor optimized for binary data.
       classifiers = filter(None, classifiers.split("\n")),
       author = 'Francesc Alted, Valentin Hänel',
       author_email = 'faltet@gmail.com, valentin@haenel.co',
-      maintainer = 'Francesc Alted, Valentin Hänel',
-      maintainer_email = 'faltet@gmail.com, valentin@haenel.co',
+      maintainer = 'Francesc Alted',
+      maintainer_email = 'faltet@gmail.com',
       url = 'http://github.com/blosc/python-blosc',
       license = 'http://www.opensource.org/licenses/mit-license.php',
       platforms = ['any'],
