@@ -10,16 +10,21 @@ environment:
       PYTHON_VERSION: "2.7.8"
       PYTHON_ARCH: "32"
 
-    - PYTHON: "C:\\Python27-x64"
-      PYTHON_VERSION: "2.7.8"
-      PYTHON_ARCH: "64"
+    # 64-bit versions have to be tested only at the end (AppVeyor issue)
+    # - PYTHON: "C:\\Python27-x64"
+    #   PYTHON_VERSION: "2.7.8"
+    #   PYTHON_ARCH: "64"
 
     - PYTHON: "C:\\Python34"
       PYTHON_VERSION: "3.4.1"
       PYTHON_ARCH: "32"
 
-    - PYTHON: "C:\\Python34-x64"
-      PYTHON_VERSION: "3.4.1"
+    - PYTHON: "C:\\Python35"
+      PYTHON_VERSION: "3.5.2"
+      PYTHON_ARCH: "32"
+
+    - PYTHON: "C:\\Python35-x64"
+      PYTHON_VERSION: "3.5.2"
       PYTHON_ARCH: "64"
 
 install:
@@ -47,7 +52,7 @@ install:
   - "%CMD_IN_ENV% pip install --timeout=60 -r appveyor/requirements.txt"
   - "%CMD_IN_ENV% python setup.py bdist_wheel bdist_wininst"
 
-  # Install the genreated wheel package to test it
+  # Install the generated wheel package to test it
   - "pip install --pre --no-index --find-links dist/ blosc"
 
 build: false
