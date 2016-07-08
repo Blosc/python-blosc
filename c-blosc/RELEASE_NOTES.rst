@@ -7,6 +7,43 @@
 :URL: http://www.blosc.org
 
 
+Changes from 1.9.2 to 1.9.3
+===========================
+
+- Reverted a mistake introduced in 1.7.1.  At that time, bit-shuffling
+  was enabled for typesize == 1 (i.e. strings), but the change also
+  included byte-shuffling accidentally.  This only affected performance,
+  but in a quite bad way (a copy was needed).  This has been fixed and
+  byte-shuffling is not active when typesize == 1 anymore.
+
+
+Changes from 1.9.1 to 1.9.2
+===========================
+
+- Check whether Blosc is actually initialized before blosc_init(),
+  blosc_destroy() and blosc_free_resources().  This makes the library
+  more resistant to different initialization cycles
+  (e.g. https://github.com/stevengj/Blosc.jl/issues/19).
+
+
+Changes from 1.9.0 to 1.9.1
+===========================
+
+- The internal copies when clevel=0 are made now via memcpy().  At the
+  beginning of C-Blosc development, benchmarks where saying that the
+  internal, multi-threaded copies inside C-Blosc were faster than
+  memcpy(), but 6 years later, memcpy() made greats strides in terms
+  of efficiency.  With this, you should expect an slight speed
+  advantage (10% ~ 20%) when C-Blosc is used as a replacement of
+  memcpy() (which should not be the most common scenario out there).
+
+- Added a new DEACTIVATE_AVX2 cmake option to explicitly disable AVX2
+  at build-time.  Thanks to James Bird.
+
+- The ``make -jN`` for parallel compilation should work now.  Thanks
+  to James Bird.
+
+
 Changes from 1.8.1 to 1.9.0
 ===========================
 

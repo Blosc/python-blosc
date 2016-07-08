@@ -13,7 +13,7 @@
 Changes from 1.3.2 to 1.3.3
 ===========================
 
-- Internal C-Blosc sources updated to 1.9.0.
+- Internal C-Blosc sources updated to 1.9.3.
 
 
 Changes from 1.3.1 to 1.3.2

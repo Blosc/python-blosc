@@ -1,21 +1,17 @@
 ===============================================================
- Announcing c-blosc 1.9.0
+ Announcing c-blosc 1.9.3
  A blocking, shuffling and lossless compression library for C
 ===============================================================
 
 What is new?
 ============
 
-This release adds the possibility to use environment variables
-(BLOSC_NTHREADS, BLOSC_CLEVEL, BLOSC_COMPRESSOR, BLOSC_SHUFFLE and
-BLOSC_TYPESIZE) to change Blosc internal paramaters without the need
-to touch applications using Blosc.  In addition, setting the
-BLOSC_NOLOCK environment variable makes Blosc to not use internal
-locks at all, which is interesting for multi-threaded applications.
-
-Also, a handful of functions (blosc_get_nthreads(),
-blosc_get_compressor(), blosc_get_blocksize()) for getting info of
-internal parameters have been added.
+This is a maintenance release for reverting a mistake introduced in
+1.7.1. At that time, bit-shuffling was enabled for typesize == 1 (i.e.
+strings), but the change also included byte-shuffling accidentally. This
+only affected performance, but in a quite bad way (a copy was needed).
+This has been fixed and byte-shuffling is not active anymore when
+typesize == 1.
 
 For more info, please see the release notes in:
 
