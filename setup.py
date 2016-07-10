@@ -33,10 +33,10 @@ if sys.version_info[0] == 2:
     if sys.version_info[1] < 6:
         exit_with_error("You need Python 2.6 or greater to install blosc!")
 elif sys.version_info[0] == 3:
-    if sys.version_info[1] < 1:
-        exit_with_error("You need Python 3.1 or greater to install blosc!")
+    if sys.version_info[1] < 3:
+        exit_with_error("You need Python 3.3 or greater to install blosc!")
 else:
-    exit_with_error("You need Python 2.6/3.1 or greater to install blosc!")
+    exit_with_error("You need Python 2.6/3.3 or greater to install blosc!")
 
 tests_require = ['numpy']
 if sys.version_info[:2] < (2, 7):
