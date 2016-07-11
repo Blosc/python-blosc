@@ -16,16 +16,6 @@ regular-spaced values, etc.
 
 This is a Python package that wraps it.
 
-Bloscpack
----------
-
-There is also a handy command line for python-blosc called Bloscpack
-(https://github.com/Blosc/bloscpack) that allows you to compress large
-binary datafiles on-disk.  Although the format for Bloscpack has not
-stabilized yet, it allows you to effectively use Blosc from your
-favorite shell.
-
-
 Mailing list
 ============
 

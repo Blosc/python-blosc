@@ -12,6 +12,7 @@ refer to the :ref:`reference` section.
 Most of the times in this tutorial have been obtained using a VM with 2 cores
 on top of a Intel(R) Core(TM) i5-3380M CPU @ 2.90GHz.
 
+
 Compressing and decompressing with `blosc`
 ==========================================
 
@@ -19,127 +20,147 @@ Let's start creating a NumPy array with 80 MB full of data::
 
   >>> import numpy as np
   >>> a = np.linspace(0, 100, 1e7)
-  >>> bytes_array = a.tostring()  # get a bytes stream
+  >>> bytes_array = a.tostring()  # get an array of bytes
 
 and let's compare Blosc operation with `zlib` (please note that we are
 using IPython for leveraging its timing capabilities)::
 
   >>> import zlib
-  >>>%time zpacked = zlib.compress(bytes_array)
-  CPU times: user 5.17 s, sys: 14 ms, total: 5.19 s
-  Wall time: 5.2 s    # ~ 15 MB/s
+  >>> %timeit zlib.compress(bytes_array)
+  1 loops, best of 3: 4.65 s per loop   # ~ 17 MB/s
   >>> import blosc
-  >>> %time bpacked = blosc.compress(bytes_array, typesize=8)
-  CPU times: user 125 ms, sys: 0 ns, total: 125 ms
-  Wall time: 38.8 ms  # ~ 2.0 GB/s and 130x faster than zlib
-  >>> %time acp = a.copy()   # a direct copy using memcpy() behind the scenes
-  CPU times: user 15 ms, sys: 8 ms, total: 23 ms
-  Wall time: 22.6 ms  # ~ 3.5 GB/s, just a 1.7x faster than Blosc
+  >>> %timeit blosc.compress(bytes_array, typesize=8)
+  100 loops, best of 3: 17.7 ms per loop # ~ 4.5 GB/s and 260x faster than zlib
 
-Now, see at the compression ratios::
+but Blosc can use different codecs under the hood. Let's try the LZ4 codec
+(instead of the BloscLZ which is the default)::
 
-  >>> len(zpacked)
+  >>> %timeit blosc.compress(bytes_array, typesize=8, cname='lz4')
+  100 loops, best of 3: 8.77 ms per loop  # ~ 9.1 GB/s and 530x faster than zlib
+
+It is important to note that this is quite more than the speed of a memcpy()
+in this machine::
+
+  >>> %timeit a.copy()
+  10 loops, best of 3: 27.2 ms per loop  # ~ 2.9 GB/s
+
+which means that both BloscLZ and LZ4 codecs can be faster than memcpy(),
+just as the Blosc slogan promises.
+
+Curiously enough, Blosc comes with the ZLib codec too, and it is fast::
+
+  >>> %timeit blosc.compress(bytes_array, typesize=8, cname='zlib')
+  10 loops, best of 3: 139 ms per loop  # ~ 580 MB/s and 33x faster than zlib
+
+The reason why the internal Zlib codec in Blosc is faster than the 'naked'
+one is that Blosc splits the data to compress in smaller blocks that are
+more friendly to the caches in modern CPUs.
+
+Now, let's have a look at the compression ratios::
+
+  >>> zpacked = zlib.compress(bytes_array); len(zpacked)
   52994692
-  >>> len(bytes_array) / float(len(zpacked))
-  1.5095851486409242   # zlib achieves a 1.5x compression ratio
-  >>> len(bpacked)
-  7641156
-  >>> len(bytes_array) / float(len(bpacked))
-  10.469620041784253   # blosc reaches more than 10x compression ratio
+  >>> round(len(bytes_array) / float(len(zpacked)), 3)
+  1.51     # zlib achieves a 1.5x compression ratio
 
-Wow, looks like Blosc is very efficient compressing binary data.  How
-to decompress?  Well, it is exactly the same way than Zlib::
+  >>> blzpacked = blosc.compress(bytes_array, typesize=8, cname='blosclz'); len(blzpacked)
+  6986533
+  >>> round(len(bytes_array) / float(len(blzpacked)), 3)
+  11.451   # BloscLZ codec reaches more than 11x compression ratio
 
-  >>> %time bytes_array2 = zlib.decompress(zpacked)
-  CPU times: user 345 ms, sys: 9 ms, total: 354 ms
-  Wall time: 354 ms   # ~ 225 MB/s
-  >>> %time bytes_array2 = blosc.decompress(bpacked)
-  CPU times: user 82 ms, sys: 10 ms, total: 92 ms
-  Wall time: 36.3 ms   # ~ 2.2 GB/s and ~ 10x times faster than zlib
+  >>> lz4packed = blosc.compress(bytes_array, typesize=8, cname='lz4'); len(lz4packed)
+  3716015
+  >>> round(len(bytes_array) / float(len(lz4packed)), 3)
+  21.528   # LZ4 codec reaches more than 21x compression ratio
 
+Wow, looks like Blosc, with its different codecs, is very efficient
+compressing binary data. It is important to note that the codecs alone are
+not the only responsible for high compression ratios. See what a naked LZ4
+codec can do on the same string::
 
-Using different compressors
-===========================
+  >>> import lz4
+  >>> lz4_packed = lz4.compress(bytes_array); len(lz4_packed)
+  80309133
+  >>> round(len(bytes_array) / float(len(lz4_packed)), 3)
+  0.996
 
-Since C-Blosc 1.3.0, you can use different compressors inside it.
-That allows for these compressors to leverage Blosc powerful
-multi-threading and shuffling machinery.
+That is, the naked LZ4 codec cannot compress the array of bytes at all,
+whereas through Blosc LZ4 can compress quite a lot. In fact, this difference
+in compression also happens with ZLib::
 
-The examples above where using the default 'blosclz' compressor.  Here
-there is another example using 'zlib'::
+  >>> zlibpacked = blosc.compress(bytes_array, typesize=8, cname='zlib'); len(zlibpacked)
+  875274
+  >>> round(len(zpacked) / float(len(zlibpacked)), 3)
+  60.546   # ZLib codec reaches 60x more compression than naked ZLib
 
-  >>> %time bpacked = blosc.compress(bytes_array, cname='zlib')
-  CPU times: user 1.09 s, sys: 15 ms, total: 1.1 s
-  Wall time: 290 ms   # ~ 275 MB/s and 18x faster than plain zlib
+The explanation for this apparently shocking result is that Blosc uses
+filters ('shuffle' and 'bitshuffle' currently, but the list can increase
+more in the future) prior to the compression stage and these allow in
+general for better compression ratios when using binary data.
 
-So, by using Zlib inside Blosc we can make it work at speeds that are
-up to 18x faster than plain Zlib.  How that can be?  Well, as said
-before, Blosc has efficient machinery for dealing with binary data
-(shuffling) and leveraging multithreading.  In addition, it uses block
-sizes for compressing data that are typically smaller than Zlib, so
-the cost for compressing is further reduced.
+How about decompression?::
 
-In terms of compression ratio, 'zlib' inside Blosc behaves very well
-too::
+  >>> %timeit zlib.decompress(zpacked)
+  1 loops, best of 3: 275 ms per loop  # ~ 290 MB/s
+  >>> %timeit blosc.decompress(blzpacked)
+  100 loops, best of 3: 17.3 ms per loop  # ~ 4.3 GB/s and 16x faster than zlib
+  >>> %timeit blosc.decompress(lz4packed)
+  10 loops, best of 3: 41.9 ms per loop  # ~ 1.9 GB/s and 6.5x faster than zlib
+  >>> %timeit blosc.decompress(zlibpacked)
+  10 loops, best of 3: 40.7 ms per loop  # ~ 2.0 GB/S and 6.8x faster than zlib
 
-  >>> len(bpacked)
-  1011304     #  ~ 7.5x smaller than blosclz and ~ 50x than plain zlib
+Here we see a couple of things:
 
-So, 'zlib' here can do a much better job than 'blosclz', although at
-the expenses of being slower (7.5x).
+* All the internal codecs in Blosc are way faster than naked ZLib
 
-Decompression speed is pretty good too::
+* The fastest codec for decompressing here is BloscLZ (remember that LZ4 was
+  the fastest for compression).
 
-  >>> %time bytes_array2 = blosc.decompress(bpacked)
-  CPU times: user 209 ms, sys: 9 ms, total: 218 ms
-  Wall time: 67.6 ms  # ~ 1.2 GB/s and 5x faster than plain zlib
+So please note that there is not a single codec that wins in all areas
+(compression ratio, compression speed and decompression speed). Every codec
+has its pro's and con's, and it is up to the user to choose whatever fits
+better to him (hint: there is no replacement for experimentation).
 
-So, when mixing Zlib and Blosc, we can easily achieve decompression
-speeds above 1 GB/s, which is quite impressive for a relatively slow
-compressor like Zlib.
+Finally, here it is the way to discover all the internal codecs inside Blosc:
 
-You can play with other compressors too, like 'lz4', 'lz4hc' and
-'snappy'. 'lz4' and snappy are in the same class than 'blosclz', so
-you can expect similar results.  However, 'lz4hc' is variation of
-'lz4' that typically spends more time compressing for a better
-compression ratio, so it is very good for read-only data.
+  >>> blosc.cnames
+  ['blosclz', 'lz4', 'lz4hc', 'snappy', 'zlib']
+
 
 Using different filters
 =======================
 
-Since python-blosc 1.3.0, you can use different filters too: `SHUFFLE`
-and `BITSHUFLE`.  These allow the integrated compressors to compress
-more efficiently or not, depending on your datasets.
+In the same way that you can use different codecs inside Blosc, you can use
+different filters too (currently `SHUFFLE` and `BITSHUFLE`). These allow the
+integrated compressors to compress more efficiently or not, depending on
+your datasets.
 
 Here it is an example using the `SHUFFLE` filter::
 
   >>> %time bpacked = blosc.compress(bytes_array, shuffle=blosc.SHUFFLE)
-  CPU times: user 240 ms, sys: 4 ms, total: 244 ms
-  Wall time: 67.1 ms
-
+  CPU times: user 112 ms, sys: 4 ms, total: 116 ms
+  Wall time: 29.9 ms
   >>> len(bpacked)
-  6986533
+      6986533
 
 Here there is another example using `BITSHUFFLE`::
 
   >>> %time bpacked = blosc.compress(bytes_array, shuffle=blosc.BITSHUFFLE)
-  CPU times: user 344 ms, sys: 0 ns, total: 344 ms
-  Wall time: 95.8 ms
-
+  CPU times: user 120 ms, sys: 8 ms, total: 128 ms
+  Wall time: 32.9 ms
   >>> len(bpacked)
-  5942257     #  ~ 1.3x smaller than blosclz/shuffle
+  5942257     #  ~ 1.2x smaller than blosclz/shuffle
 
 You can also deactivate filters completely with `NOSHUFFLE`::
 
   >>> %time bpacked = blosc.compress(bytes_array, shuffle=blosc.NOSHUFFLE)
-  CPU times: user 344 ms, sys: 0 ns, total: 344 ms
-  Wall time: 95.8 ms
-
+  CPU times: user 416 ms, sys: 8 ms, total: 424 ms
+  Wall time: 107 ms
   >>> len(bpacked)
-  74323591     #  just a 7% of compression wrt the original buffer
+  74323591    #  just a 7% of compression wrt the original buffer
 
-So you have quite a bit of flexibility on choosing different codecs
-and filters inside Blosc.  Depending on the dataset you have and the
+So you have quite a bit of flexibility on choosing different codecs and
+filters inside Blosc. Again, depending on the dataset you have and the
 requeriments of performance, you may want to experiment a bit before
 sticking with your preferred ones.
 
@@ -147,31 +168,24 @@ sticking with your preferred ones.
 Supporting the buffer interface
 ===============================
 
-As of version 1.2.8 python-blosc supports compressing and decompressing from
-any bytes-like object that supports the buffer-interface: this includes
-`buffer`, `memoryview` and `bytearray`::
+python-blosc supports compressing and decompressing from any bytes-like
+object that supports the buffer-interface: this includes `buffer`,
+`memoryview` and `bytearray`::
 
-    >>> input_bytes = b"abcdefghijklmnopqrstuvwxyz"
-
-    >>> blosc.compress(input_bytes, typesize=1)
-    '\x02\x01\x03\x01\x1a\x00\x00\x00\x1a\x00\x00\x00*\x00\x00\x00abcdefghijklmnopqrstuvwxyz'
-
-    >>> blosc.compress(memoryview(input_bytes), typesize=1)
-    '\x02\x01\x03\x01\x1a\x00\x00\x00\x1a\x00\x00\x00*\x00\x00\x00abcdefghijklmnopqrstuvwxyz'
-
-    >>> blosc.compress(bytearray(input_bytes), typesize=1)
-    '\x02\x01\x03\x01\x1a\x00\x00\x00\x1a\x00\x00\x00*\x00\x00\x00abcdefghijklmnopqrstuvwxyz'
-
-    >>> compressed = blosc.compress(input_bytes, typesize=1)
-
-    >>> blosc.decompress(compressed)
-    'abcdefghijklmnopqrstuvwxyz'
-
-    >>> blosc.decompress(memoryview(compressed))
-    'abcdefghijklmnopqrstuvwxyz'
-
-    >>> blosc.decompress(bytearray(compressed))
-    'abcdefghijklmnopqrstuvwxyz'
+  >>> input_bytes = b"abcdefghijklmnopqrstuvwxyz"
+  >>> blosc.compress(input_bytes, typesize=1)
+  '\x02\x01\x03\x01\x1a\x00\x00\x00\x1a\x00\x00\x00*\x00\x00\x00abcdefghijklmnopqrstuvwxyz'
+  >>> blosc.compress(memoryview(input_bytes), typesize=1)
+  '\x02\x01\x03\x01\x1a\x00\x00\x00\x1a\x00\x00\x00*\x00\x00\x00abcdefghijklmnopqrstuvwxyz'
+  >>> blosc.compress(bytearray(input_bytes), typesize=1)
+  '\x02\x01\x03\x01\x1a\x00\x00\x00\x1a\x00\x00\x00*\x00\x00\x00abcdefghijklmnopqrstuvwxyz'
+  >>> compressed = blosc.compress(input_bytes, typesize=1)
+  >>> blosc.decompress(compressed)
+  'abcdefghijklmnopqrstuvwxyz'
+  >>> blosc.decompress(memoryview(compressed))
+  'abcdefghijklmnopqrstuvwxyz'
+  >>> blosc.decompress(bytearray(compressed))
+  'abcdefghijklmnopqrstuvwxyz'
 
 Note however, that there are subtle differences between Python 2.x and 3.x.
 For example, in Python 2.x we can compress/decompress both `str` and `unicode`
@@ -188,14 +202,11 @@ the final container for decompression?  `blosc` comes with the `pack_array`
 and `unpack_array` to perform this in a handy way::
 
   >>> a = np.linspace(0, 100, 1e7)
-  >>> %time packed = blosc.pack_array(a)
-  CPU times: user 172 ms, sys: 84 ms, total: 256 ms
-  Wall time: 151 ms
-  >>> %time a2 = blosc.unpack_array(packed)
-  CPU times: user 116 ms, sys: 60 ms, total: 176 ms
-  Wall time: 104 ms
-  >>> np.alltrue(a == a2)
-  True
+  >>> packed = blosc.pack_array(a)
+  >>> %timeit blosc.pack_array(a)
+  10 loops, best of 3: 104 ms per loop  # ~ 770 MB/s
+  >>> %timeit blosc.unpack_array(packed)
+  10 loops, best of 3: 76.3 ms per loop  # ~ 1 GB/s
 
 Although this is a convenient way for compressing/decompressing NumPy
 arrays, this method uses pickle/unpickle behind the scenes.  This step
@@ -209,15 +220,12 @@ For avoiding the data copy problem in the previous section, `blosc`
 comes with a couple of lower-level functions: `compress_ptr` and
 `decompress_ptr`.  Here are they in action::
 
-  >>> %time c = blosc.compress_ptr(a.__array_interface__['data'][0], a.size,
-                             a.dtype.itemsize, 9, True)
-  CPU times: user 144 ms, sys: 0 ns, total: 144 ms
-  Wall time: 37.2 ms
-  >>> a2 = numpy.empty(a.size, dtype=a.dtype)
-  >>> %time blosc.decompress_ptr(c, a2.__array_interface__['data'][0])
-  CPU times: user 80 ms, sys: 0 ns, total: 80 ms
-  Wall time: 24.9 ms
-  80000000L
+  >>> c = blosc.compress_ptr(a.__array_interface__['data'][0], a.size, a.dtype.itemsize, 9, True)
+  >>> %timeit blosc.compress_ptr(a.__array_interface__['data'][0], a.size, a.dtype.itemsize, 9, True)
+  10 loops, best of 3: 17.8 ms per loop   # ~ 4.5 GB/s
+  >>> a2 = np.empty(a.size, dtype=a.dtype)
+  >>> %timeit blosc.decompress_ptr(c, a2.__array_interface__['data'][0])
+  100 loops, best of 3: 11 ms per loop   #  ~ 7.3 GB/s
   >>> (a == a2).all()
   True
 
@@ -232,24 +240,3 @@ method, the `compress_ptr` / `decompress_ptr` functions do not need to
 make internal copies of the data buffers, so they are extremely fast
 (as much as the C-Blosc library can be), but you have to provide a
 container when doing the de-serialization.
-
-
-Packing NumPy arrays with Bloscpack
-===================================
-
-While `pack_array` / `unpack_array` have been designed for convenience
-and `compress_ptr` / `decompress_ptr` have been designed for speed
-there is also a third option that combines the best of both worlds:
-`Bloscpack <https://github.com/Blosc/bloscpack>`_. Since version 0.4.0,
-Bloscpack is able to natively `de/serialize NumPy arrays
-<https://github.com/Blosc/bloscpack#numpy>`_::
-
-  >>> import bloscpack as bp
-  >>> %time bp_packed = bp.pack_ndarray_str(a)
-  CPU times: user 152 ms, sys: 20 ms, total: 172 ms
-  Wall time: 76.8 ms
-  >>> %time bp_unpacked  = unpack_ndarray_str(bp_packed)
-  CPU times: user 100 ms, sys: 8 ms, total: 108 ms
-  Wall time: 58 ms
-  >>> (a == bp_unpacked).all()
-  True

@@ -5,23 +5,17 @@ Installation
 python-blosc comes with C Blosc sources, so it does not depend on any other
 library (bar Python itself of course). Of course, if you are going to install
 from sources, you are going to need a C compiler (GCC, clang and MSVC
-2008/2010/2012 have been tested).
+2008/2010/2012/2015 have been tested).
 
 Also, there are situations where you may want to link with an already existing
 Blosc library in your system.  You can do that too.
 
-This package supports Python 2.6, 2.7 and 3.1, 3.2 and 3.3 or higher versions.
+This package supports Python 2.6, 2.7 and 3.3 or higher versions.
 
 Installing from PyPI repository
 ===============================
 
 Do:
-
-.. code-block:: console
-
-  $ easy_install -U blosc
-
-or:
 
 .. code-block:: console
 
@@ -34,7 +28,7 @@ Building manually
 First, go to the python-blosc official repository at
 https://github.com/Blosc/python-blosc and download the sources.
 
-Then, there are different ways to compile python-blosc, depending if
+Then, there are different ways to compile python-blosc, depending on whether
 you want to link with an already installed Blosc library or not.
 
 Compiling without an installed Blosc library
@@ -113,4 +107,3 @@ Install it as a typical Python package:
 .. code-block:: console
 
     $ python setup.py install
-
