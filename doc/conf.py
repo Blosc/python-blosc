@@ -247,3 +247,14 @@ texinfo_documents = [
 
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {'http://docs.python.org/': None}
+
+# This is needed for the RTFD that cannot create extensions
+from mock import Mock as MagicMock
+
+class Mock(MagicMock):
+    @classmethod
+    def __getattr__(cls, name):
+            return Mock()
+
+MOCK_MODULES = ['numpy', 'blosc.blosc_extension']
+sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
