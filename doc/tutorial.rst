@@ -47,7 +47,8 @@ in this machine::
 which means that both BloscLZ and LZ4 codecs can be faster than memcpy(),
 just as the Blosc slogan promises.
 
-Curiously enough, Blosc comes with the ZLib codec too, and it is fast::
+Blosc also comes with the ZLib codec too, and it actually runs faster than
+the naked zlib::
 
   >>> %timeit blosc.compress(bytes_array, typesize=8, cname='zlib')
   10 loops, best of 3: 139 ms per loop  # ~ 580 MB/s and 33x faster than zlib
@@ -94,6 +95,11 @@ in compression also happens with ZLib::
   >>> round(len(zpacked) / float(len(zlibpacked)), 3)
   60.546   # ZLib codec reaches 60x more compression than naked ZLib
 
+Here it is a plot with the different compression ratios achieved:
+
+.. image:: cratio-blosc-codecs.png
+   :scale: 75 %
+
 The explanation for this apparently shocking result is that Blosc uses
 filters (`SHUFFLE` and `BITSHUFFLE` currently, but the list can increase
 more in the future) prior to the compression stage and these allow in
@@ -117,9 +123,10 @@ Here we see a couple of things:
 * The fastest codec for decompressing here is BloscLZ (remember that LZ4 was
   the fastest for compression).
 
-The next plot summarizes the benchmarks above:
+The next plots summarize the benchmarks above:
 
 .. image:: speed-blosc-codecs.png
+   :scale: 75 %
 
 These results should reinforce the idea that there is not a single codec
 that wins in all areas (compression ratio, compression speed and
