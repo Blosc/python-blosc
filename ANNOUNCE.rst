@@ -5,9 +5,7 @@ Announcing python-blosc 1.3.3
 What is new?
 ============
 
-This is a maintenance release that updates internal C-Blosc sources to
-1.9.3 and uses default compiler optimization (maximum) because the latest
-C-Blosc do not segfaults anymore with this setting.
+#XXX version-specific blurb XXX#
 
 For whetting your appetite, look at some benchmarks here:
 

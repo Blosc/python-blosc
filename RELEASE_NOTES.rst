@@ -10,6 +10,11 @@
 :URL: https://github.com/Blosc/python-blosc
 
 
+Changes from 1.3.3 to 1.3.4
+===========================
+
+#XXX version-specific blurb XXX#
+
 Changes from 1.3.2 to 1.3.3
 ===========================
 
@@ -20,6 +25,7 @@ Changes from 1.3.2 to 1.3.3
 
 - SSE2 and AVX2 are now auto-discovered so the internal C-Blosc will be
   compiled with maximum optimization on processors supporting them.
+
 
 Changes from 1.3.1 to 1.3.2
 ===========================
