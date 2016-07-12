@@ -53,8 +53,9 @@ Curiously enough, Blosc comes with the ZLib codec too, and it is fast::
   10 loops, best of 3: 139 ms per loop  # ~ 580 MB/s and 33x faster than zlib
 
 The reason why the internal Zlib codec in Blosc is faster than the 'naked'
-one is that Blosc splits the data to compress in smaller blocks that are
-more friendly to the caches in modern CPUs.
+one is 1) that Blosc can use multithreading (using 8 threads here) and 2)
+that Blosc splits the data to compress in smaller blocks that are more
+friendly to the caches in modern CPUs.
 
 Now, let's have a look at the compression ratios::
 
@@ -73,10 +74,10 @@ Now, let's have a look at the compression ratios::
   >>> round(len(bytes_array) / float(len(lz4packed)), 3)
   21.528   # LZ4 codec reaches more than 21x compression ratio
 
-Wow, looks like Blosc, with its different codecs, is very efficient
-compressing binary data. It is important to note that the codecs alone are
-not the only responsible for high compression ratios. See what a naked LZ4
-codec can do on the same string::
+Here we can see how Blosc, with its different codecs, is very efficient
+compressing this kind of binary data. It is important to note that the
+codecs alone are not the only responsible for high compression ratios. See
+what a naked LZ4 codec can do on the same string::
 
   >>> import lz4
   >>> lz4_packed = lz4.compress(bytes_array); len(lz4_packed)
@@ -94,7 +95,7 @@ in compression also happens with ZLib::
   60.546   # ZLib codec reaches 60x more compression than naked ZLib
 
 The explanation for this apparently shocking result is that Blosc uses
-filters ('shuffle' and 'bitshuffle' currently, but the list can increase
+filters (`SHUFFLE` and `BITSHUFFLE` currently, but the list can increase
 more in the future) prior to the compression stage and these allow in
 general for better compression ratios when using binary data.
 
@@ -116,16 +117,24 @@ Here we see a couple of things:
 * The fastest codec for decompressing here is BloscLZ (remember that LZ4 was
   the fastest for compression).
 
-So please note that there is not a single codec that wins in all areas
-(compression ratio, compression speed and decompression speed). Every codec
-has its pro's and con's, and it is up to the user to choose whatever fits
-better to him (hint: there is no replacement for experimentation).
+The next plot summarizes the benchmarks above:
 
-Finally, here it is the way to discover all the internal codecs inside Blosc:
+.. image:: speed-blosc-codecs.png
+
+These results should reinforce the idea that there is not a single codec
+that wins in all areas (compression ratio, compression speed and
+decompression speed) and each has its pro's and con's. It is up to the user
+to choose whatever fits better to him (hint: there is no replacement for
+experimentation).
+
+Finally, here it is the way to discover all the internal codecs inside your
+Blosc package::
 
   >>> blosc.cnames
   ['blosclz', 'lz4', 'lz4hc', 'snappy', 'zlib']
 
+*Note*: the actual list of codecs may change depening on how you have
+compiled the underlying C-Blosc library.
 
 Using different filters
 =======================
@@ -141,7 +150,7 @@ Here it is an example using the `SHUFFLE` filter::
   CPU times: user 112 ms, sys: 4 ms, total: 116 ms
   Wall time: 29.9 ms
   >>> len(bpacked)
-      6986533
+  6986533
 
 Here there is another example using `BITSHUFFLE`::
 
@@ -161,8 +170,8 @@ You can also deactivate filters completely with `NOSHUFFLE`::
 
 So you have quite a bit of flexibility on choosing different codecs and
 filters inside Blosc. Again, depending on the dataset you have and the
-requeriments of performance, you may want to experiment a bit before
-sticking with your preferred ones.
+requeriments on performance, you may want to experiment a bit before
+sticking with your preferred one.
 
 
 Supporting the buffer interface
