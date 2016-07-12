@@ -123,7 +123,7 @@ Here we see a couple of things:
 * The fastest codec for decompressing here is BloscLZ (remember that LZ4 was
   the fastest for compression).
 
-The next plots summarize the benchmarks above:
+The next plot summarizes the speed benchmarks above:
 
 .. image:: speed-blosc-codecs.png
    :scale: 75 %
