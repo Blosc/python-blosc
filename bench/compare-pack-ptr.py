@@ -19,8 +19,10 @@ import blosc
 
 N = 1e8
 clevel = 5
-
 Nexp = np.log10(N)
+
+blosc.print_versions()
+
 print("Creating a large NumPy array with 10**%d int64 elements:" % Nexp)
 in_ = np.arange(N, dtype=np.int64)  # the trivial linear distribution
 #in_ = np.linspace(0, 100, N)  # another linear distribution
@@ -59,4 +61,3 @@ for cname in blosc.compressor_list():
     print("  Time for compress_ptr/decompress_ptr: %.3f/%.3f s." % \
           (ctoc-ctic, dtoc-dtic), end='')
     print("\tCompr ratio: %.2f" % (in_.size*in_.dtype.itemsize*1. / len(c)))
-

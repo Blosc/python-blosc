@@ -13,7 +13,11 @@
 Changes from 1.3.3 to 1.3.4
 ===========================
 
-#XXX version-specific blurb XXX#
+- Internal C-Blosc sources updated to 1.10.0.
+
+- Benchmarks updated for a Skylake processor (Xeon E3-1245 v5 @
+  3.50GHz).
+
 
 Changes from 1.3.2 to 1.3.3
 ===========================

@@ -19,8 +19,10 @@ import ctypes
 
 N = int(1e8)
 clevel = 5
-
 Nexp = np.log10(N)
+
+blosc.print_versions()
+
 print("Creating NumPy arrays with 10**%d int64/float64 elements:" % Nexp)
 arrays = ((np.arange(N, dtype=np.int64), "the arange linear distribution"),
           (np.linspace(0, 1000, N), "the linspace linear distribution"),

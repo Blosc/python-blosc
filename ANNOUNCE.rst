@@ -1,11 +1,16 @@
 =============================
-Announcing python-blosc 1.3.3
+Announcing python-blosc 1.4.0
 =============================
 
 What is new?
 ============
 
-#XXX version-specific blurb XXX#
+Support for Zstd codec has arrived to python-blosc! Zstd is a new
+compression library that typicall achieves better compression ratios
+than Zlib, and with better speeds too. We can read about how it works
+with Blosc in the recent blog at:
+
+http://blosc.org/blog/zstd-has-just-landed-in-blosc.html
 
 For whetting your appetite, look at some benchmarks here:
 

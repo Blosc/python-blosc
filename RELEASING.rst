@@ -15,6 +15,10 @@ Preliminaries
 
 * Check that ``VERSION`` file contains the correct number.
 
+* Commit the changes::
+
+  $ git commit -a -m"Getting ready for release X.Y.Z"
+
 
 Testing
 -------
