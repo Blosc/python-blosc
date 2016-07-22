@@ -85,7 +85,7 @@ That's all.  You can proceed with testing section now.
 
 Note: The requirement for the C++ compiler is just for the Snappy
 dependency.  The rest of the other components of Blosc are pure C
-(including the LZ4 and Zlib libraries).
+(including the LZ4, Zstd and Zlib libraries).
 
 Testing
 =======

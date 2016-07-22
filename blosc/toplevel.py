@@ -303,10 +303,10 @@ def compress(bytesobj, typesize=8, clevel=9, shuffle=blosc.SHUFFLE,
         blosc.NOSHUFFLE, blosc.SHUFFLE and blosc.BITSHUFFLE.  The
         default is blosc.SHUFFLE.
     cname : string (optional)
-        The name of the compressor used internally in Blosc.
-        It can be any of the supported by Blosc ('blosclz',
-        'lz4', 'lz4hc', 'snappy', 'zlib' and maybe others too).
-        The default is 'blosclz'.
+        The name of the compressor used internally in Blosc. It can be
+        any of the supported by Blosc ('blosclz', 'lz4', 'lz4hc',
+        'snappy', 'zlib', 'zstd' and maybe others too). The default is
+        'blosclz'.
 
     Returns
     -------
@@ -366,10 +366,10 @@ def compress_ptr(address, items, typesize=8, clevel=9, shuffle=blosc.SHUFFLE,
         blosc.NOSHUFFLE, blosc.SHUFFLE and blosc.BITSHUFFLE.  The
         default is blosc.SHUFFLE.
     cname : string (optional)
-        The name of the compressor used internally in Blosc.
-        It can be any of the supported by Blosc ('blosclz',
-        'lz4', 'lz4hc', 'snappy', 'zlib' and maybe others too).
-        The default is 'blosclz'.
+        The name of the compressor used internally in Blosc. It can be
+        any of the supported by Blosc ('blosclz', 'lz4', 'lz4hc',
+        'snappy', 'zlib', 'zstd' and maybe others too). The default is
+        'blosclz'.
 
     Returns
     -------
@@ -575,10 +575,10 @@ def pack_array(array, clevel=9, shuffle=blosc.SHUFFLE, cname='blosclz'):
         blosc.NOSHUFFLE, blosc.SHUFFLE and blosc.BITSHUFFLE.  The
         default is blosc.SHUFFLE.
     cname : string (optional)
-        The name of the compressor used internally in Blosc.
-        It can be any of the supported by Blosc ('blosclz',
-        'lz4', 'lz4hc', 'snappy', 'zlib' and maybe others too).
-        The default is 'blosclz'.
+        The name of the compressor used internally in Blosc. It can be
+        any of the supported by Blosc ('blosclz', 'lz4', 'lz4hc',
+        'snappy', 'zlib', 'zstd' and maybe others too). The default is
+        'blosclz'.
 
     Returns
     -------
