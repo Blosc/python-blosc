@@ -238,7 +238,7 @@ http://github.com/blosc/python-blosc/wiki
 Lastly, here is the `recording
 <https://www.youtube.com/watch?v=rilU44j_wUU&list=PLNkWzv63CorW83NY3U93gUar645jTXpJF&index=15>`_
 and the `slides
-<http://slides.zetatech.org/haenel-ep14-compress-me-stupid.pdf>`_ from the talk
+<http://www.blosc.org/docs/haenel-ep14-compress-me-stupid.pdf>`_ from the talk
 "Compress me stupid" at the EuroPython 2014.
 
 Mailing list
