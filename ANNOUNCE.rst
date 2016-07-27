@@ -1,14 +1,21 @@
 =============================
-Announcing python-blosc 1.4.0
+Announcing python-blosc 1.4.1
 =============================
 
 What is new?
 ============
 
-Support for Zstd codec has arrived to python-blosc! Zstd is a new
-compression library that typicall achieves better compression ratios
-than Zlib, and with better speeds too. We can read about how it works
-with Blosc in the recent blog at:
+This is a maintenance release fixing some issues in C11 compiler
+detection that affected Mac OSX.
+
+Also, in 1.4.0 support for Zstd has been introduced for first time, and
+so far the experience with it is really pleasant. As an example, see how
+Blosc + Zstd can collaborate compressing images delivering pretty
+impressive compression ratios and extremely fast decompression:
+
+https://github.com/Cyan4973/zstd/issues/256
+
+There is also a blog about what you can expect of it in:
 
 http://blosc.org/blog/zstd-has-just-landed-in-blosc.html
 

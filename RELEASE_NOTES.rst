@@ -10,7 +10,15 @@
 :URL: https://github.com/Blosc/python-blosc
 
 
-Changes from 1.3.3 to 1.3.4
+Changes from 1.4.0 to 1.4.1
+===========================
+
+- Internal C-Blosc sources updated to 1.10.1.  This fixes an outstanding issue
+  with the clang compiler.  For details, see:
+  https://github.com/Blosc/bloscpack/issues/50.
+
+
+Changes from 1.3.3 to 1.4.0
 ===========================
 
 - Internal C-Blosc sources updated to 1.10.0.
