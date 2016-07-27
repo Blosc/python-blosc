@@ -113,8 +113,7 @@ Post-release actions
 * Also, update the `version` and `release` variables in doc/conf.py.
 
 * Create new headers for adding new features in ``RELEASE_NOTES.rst``
-  and empty the release-specific information in ``ANNOUNCE.rst`` and
-  add this place-holder instead:
+  add this place-holder:
 
   #XXX version-specific blurb XXX#
 
