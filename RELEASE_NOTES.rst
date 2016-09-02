@@ -10,7 +10,7 @@
 :URL: https://github.com/Blosc/python-blosc
 
 
-Changes from 1.4.1 to 1.4.2
+Changes from 1.4.1 to 1.4.3
 ===========================
 
 - Internal C-Blosc sources updated to 1.11.0. Among other things, this
