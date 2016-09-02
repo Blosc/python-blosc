@@ -5,7 +5,7 @@ Announcing python-blosc 1.4.3
 What is new?
 ============
 
-This is a maintenance release for updating C-Blosc to 1.11.1.
+This is a maintenance release for updating C-Blosc to 1.11.0.
 
 Also, in 1.4.0 support for Zstd has been introduced for first time, and
 so far the experience with it is really pleasant. As an example, see how
