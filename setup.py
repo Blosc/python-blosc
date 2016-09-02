@@ -141,7 +141,7 @@ setup(name = "blosc",
 Blosc is a high performance compressor optimized for binary data.
 
 """,
-      classifiers = filter(None, classifiers.split("\n")),
+      classifiers = [c for c in classifiers.split("\n") if c],
       author = 'Francesc Alted, Valentin Hänel',
       author_email = 'faltet@gmail.com, valentin@haenel.co',
       maintainer = 'Francesc Alted',
