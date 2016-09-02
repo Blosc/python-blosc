@@ -7,6 +7,28 @@
 :URL: http://www.blosc.org
 
 
+Changes from 1.10.2 to 1.11.0
+=============================
+
+- Internal Zstd codec upgraded to 1.0.0.
+
+- New block size computation inherited from C-Blosc2. Benchmarks are saying that
+  this benefits mainly to LZ4, LZ4HC, Zlib and Zstd codecs, both in speed and in
+  compression ratios (although YMMV for your case).
+
+- Added the @rpath flag in Mac OSX for shared libraries.  Fixes #175.
+
+- Added a fix for VS2008 discovered in: https://github.com/PyTables/PyTables/pull/569/files#diff-953cf824ebfea7208d2a2e312d9ccda2L126
+
+- License changed from MIT to 3-clause BSD style.
+
+
+Changes from 1.10.1 to 1.10.2
+=============================
+
+- Force the use of --std=gnu99 when using gcc.  Fixes #174.
+
+
 Changes from 1.10.0 to 1.10.1
 =============================
 

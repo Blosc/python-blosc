@@ -13,7 +13,9 @@
 Changes from 1.4.1 to 1.4.2
 ===========================
 
-#XXX version-specific blurb XXX#
+- Internal C-Blosc sources updated to 1.11.0. Among other things, this
+  updates the internal Zstd codec to version 1.0.0 (i.e. it is
+  officially apt for production usage!).
 
 
 Changes from 1.4.0 to 1.4.1

@@ -177,6 +177,11 @@ if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
         "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
 endif()
 
+if(APPLE)
+  # enable @rpath in the install name for any shared library being built.  See #175.
+  set(CMAKE_MACOSX_RPATH TRUE)
+endif()
+
 # Based on the target system's processor and the compiler being used,
 # set build variables indicating which hardware features can be targeted
 # by the compiler. Note we DO NOT check which hardware features are supported
@@ -189,6 +194,8 @@ if(CMAKE_SYSTEM_PROCESSOR STREQUAL i386 OR
    CMAKE_SYSTEM_PROCESSOR STREQUAL amd64 OR
    CMAKE_SYSTEM_PROCESSOR STREQUAL AMD64)
     if(CMAKE_C_COMPILER_ID STREQUAL GNU)
+        # We need C99 (GNU99 more exactly)
+        SET(CMAKE_C_FLAGS "-std=gnu99")
         set(COMPILER_SUPPORT_SSE2 TRUE)
         if(CMAKE_C_COMPILER_VERSION VERSION_GREATER 4.7 OR CMAKE_C_COMPILER_VERSION VERSION_EQUAL 4.7)
             set(COMPILER_SUPPORT_AVX2 TRUE)

@@ -91,6 +91,7 @@ else:
     inc_dirs += [os.path.join('c-blosc', 'blosc')]
     inc_dirs += glob('c-blosc/internal-complibs/*')
     inc_dirs += glob('c-blosc/internal-complibs/zstd*/common')
+    inc_dirs += glob('c-blosc/internal-complibs/zstd*')
     def_macros += [('HAVE_LZ4', 1), ('HAVE_SNAPPY', 1), ('HAVE_ZLIB', 1), ('HAVE_ZSTD', 1)]
 
     # Guess SSE2 or AVX2 capabilities
