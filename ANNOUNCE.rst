@@ -1,12 +1,11 @@
 =============================
-Announcing python-blosc 1.4.1
+Announcing python-blosc 1.4.2
 =============================
 
 What is new?
 ============
 
-This is a maintenance release fixing some issues in C11 compiler
-detection that affected Mac OSX.
+This is a maintenance release for updating C-Blosc to 1.11.0.
 
 Also, in 1.4.0 support for Zstd has been introduced for first time, and
 so far the experience with it is really pleasant. As an example, see how
