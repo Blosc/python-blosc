@@ -13,7 +13,7 @@
 Changes from 1.4.3 to 1.4.4
 ===========================
 
-#XXX version-specific blurb XXX#
+- Updated to C-Blosc 1.11.1.  Fixes #115.
 
 
 Changes from 1.4.1 to 1.4.3
