@@ -1,5 +1,5 @@
 /*********************************************************************
-  Blosc - Blocked Suffling and Compression Library
+  Blosc - Blocked Shuffling and Compression Library
 
       License: MIT
       Created: September 22, 2010
@@ -8,12 +8,11 @@
   See LICENSES/BLOSC.txt for details about copyright and rights to use.
 **********************************************************************/
 
-
 #define PY_SSIZE_T_CLEAN   /* allows Py_ssize_t in s# format for parsing arguments */
 #include "Python.h"
 #include "blosc.h"
 
-
+static int RELEASEGIL;     
 static PyObject *BloscError;
 
 static void
@@ -56,6 +55,24 @@ PyBlosc_set_blocksize(PyObject *self, PyObject *args)
   blosc_set_blocksize(blocksize);
 
   Py_RETURN_NONE;
+}
+
+PyDoc_STRVAR(set_releasegil__doc__,
+"set_releasegil( gilstate ) -- Whether to release GIL (True) or not (False) during c-blosc calls.\n"
+             );
+
+static PyObject *
+PyBlosc_set_releasegil(PyObject *self, PyObject *args)
+{
+  int gilstate, old_gilstate;
+
+  if (!PyArg_ParseTuple(args, "i:gilstate", &gilstate))
+    return NULL;
+
+  old_gilstate = RELEASEGIL;
+  RELEASEGIL = gilstate;
+
+  return Py_BuildValue("i", old_gilstate);
 }
 
 
@@ -175,6 +192,9 @@ compress_helper(void * input, size_t nbytes, size_t typesize,
 
   int cbytes;
   PyObject *output;
+  char *output_ptr;
+  PyThreadState *_save = NULL;
+
 
   /* Alloc memory for compression */
   if (!(output = PyBytes_FromStringAndSize(NULL, nbytes+BLOSC_MAX_OVERHEAD)))
@@ -189,15 +209,31 @@ compress_helper(void * input, size_t nbytes, size_t typesize,
   }
 
   /* Compress */
+  // RAM: we could easier add a int nogil to the function arguments to avoid 
+  // this overhead when it's not needed?
+  // The NumPy macros are at:
+  // https://github.com/numpy/numpy/blob/master/numpy/core/include/numpy/ndarraytypes.h
+  output_ptr = PyBytes_AS_STRING(output);
+  if( RELEASEGIL )
+  { 
+     _save = PyEval_SaveThread();
+  }
   cbytes = blosc_compress(clevel, shuffle, typesize, nbytes,
-			  input, PyBytes_AS_STRING(output),
+			  input, output_ptr,
 			  nbytes+BLOSC_MAX_OVERHEAD);
+  if( RELEASEGIL )
+  { 
+     PyEval_RestoreThread(_save);
+    _save = NULL;
+  }
+     
   if (cbytes < 0) {
     blosc_error(cbytes, "while compressing data");
     Py_DECREF(output);
     return NULL;
   }
-
+  
+  
   /* Attempt to resize, if it's much smaller, a copy is required. */
   if (_PyBytes_Resize(&output, cbytes) < 0){
     /* the memory exception will have been set, hopefully */
@@ -318,10 +354,21 @@ static int
 decompress_helper(void * input, size_t nbytes, void * output)
 {
   int err;
+  PyThreadState *_save = NULL;
 
+  
   /* Do the decompression */
+  if( RELEASEGIL )
+  { 
+     _save = PyEval_SaveThread();
+  }
   err = blosc_decompress(input, output, nbytes);
-
+  if( RELEASEGIL )
+  { 
+     PyEval_RestoreThread(_save);
+    _save = NULL;
+  }
+  
   if (err < 0) {
     blosc_error(err, "while decompressing data");
     return 0;
@@ -461,6 +508,8 @@ static PyMethodDef blosc_methods[] =
    set_nthreads__doc__},
   {"set_blocksize", (PyCFunction)PyBlosc_set_blocksize, METH_VARARGS,
    set_blocksize__doc__},
+  {"set_releasegil", (PyCFunction)PyBlosc_set_releasegil, METH_VARARGS,
+   set_releasegil__doc__},
   {"compressor_list", (PyCFunction)PyBlosc_compressor_list, METH_VARARGS,
    compressor_list__doc__},
   {"code_to_name", (PyCFunction)PyBlosc_code_to_name, METH_VARARGS,
