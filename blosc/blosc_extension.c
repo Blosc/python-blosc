@@ -193,7 +193,7 @@ compress_helper(void * input, size_t nbytes, size_t typesize,
   int cbytes;
   PyObject *output;
   char *output_ptr;
-  PyThreadState *_save = NULL;
+  
 
 
   /* Alloc memory for compression */
@@ -209,24 +209,31 @@ compress_helper(void * input, size_t nbytes, size_t typesize,
   }
 
   /* Compress */
-  // RAM: we could easier add a int nogil to the function arguments to avoid 
-  // this overhead when it's not needed?
-  // The NumPy macros are at:
-  // https://github.com/numpy/numpy/blob/master/numpy/core/include/numpy/ndarraytypes.h
+  // RAM: I don't think this macro requires the Python interpreter but let's leave it outside
   output_ptr = PyBytes_AS_STRING(output);
+
   if( RELEASEGIL )
   { 
-     _save = PyEval_SaveThread();
+    // RAM: Run with GIL released, tiny overhead penalty from this (although it
+    // may be significant for smaller chunks.) 
+    PyThreadState *_save = NULL;
+    _save = PyEval_SaveThread();
+    int blocksize = blosc_get_blocksize();
+    // RAM: if blocksize==0, blosc_compress_ctx will try to auto-optimize it.
+    int nthreads = blosc_get_nthreads();
+    cbytes = blosc_compress_ctx(clevel, shuffle, typesize, nbytes,
+			  input, output_ptr, nbytes+BLOSC_MAX_OVERHEAD,
+               cname, blocksize, nthreads);
+     PyEval_RestoreThread(_save);
+     _save = NULL;
   }
-  cbytes = blosc_compress(clevel, shuffle, typesize, nbytes,
+  else
+  { // Hold onto the Python GIL while compressing
+    cbytes = blosc_compress(clevel, shuffle, typesize, nbytes,
 			  input, output_ptr,
 			  nbytes+BLOSC_MAX_OVERHEAD);
-  if( RELEASEGIL )
-  { 
-     PyEval_RestoreThread(_save);
-    _save = NULL;
   }
-     
+
   if (cbytes < 0) {
     blosc_error(cbytes, "while compressing data");
     Py_DECREF(output);
@@ -354,20 +361,24 @@ static int
 decompress_helper(void * input, size_t nbytes, void * output)
 {
   int err;
-  PyThreadState *_save = NULL;
-
   
   /* Do the decompression */
+//  int blosc_decompress_ctx(const void *src, void *dest, size_t destsize,
+//                         int numinternalthreads)
   if( RELEASEGIL )
   { 
-     _save = PyEval_SaveThread();
-  }
-  err = blosc_decompress(input, output, nbytes);
-  if( RELEASEGIL )
-  { 
-     PyEval_RestoreThread(_save);
+    PyThreadState *_save = NULL;
+    _save = PyEval_SaveThread();
+    int nthreads = blosc_get_nthreads();
+    err = blosc_decompress_ctx(input, output, nbytes, nthreads);
+    PyEval_RestoreThread(_save);
     _save = NULL;
   }
+  else
+  { // Run while holding the GIL
+    err = blosc_decompress(input, output, nbytes);
+  }
+
   
   if (err < 0) {
     blosc_error(err, "while decompressing data");
