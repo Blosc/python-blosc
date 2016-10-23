@@ -190,10 +190,10 @@ static PyObject *
 compress_helper(void * input, size_t nbytes, size_t typesize,
                 int clevel, int shuffle, char *cname){
 
-  int cbytes;
+  int cbytes, blocksize, nthreads;
   PyObject *output;
   char *output_ptr;
-  
+  PyThreadState *_save = NULL;
 
 
   /* Alloc memory for compression */
@@ -216,11 +216,11 @@ compress_helper(void * input, size_t nbytes, size_t typesize,
   { 
     // RAM: Run with GIL released, tiny overhead penalty from this (although it
     // may be significant for smaller chunks.) 
-    PyThreadState *_save = NULL;
+    
     _save = PyEval_SaveThread();
-    int blocksize = blosc_get_blocksize();
+    blocksize = blosc_get_blocksize();
     // RAM: if blocksize==0, blosc_compress_ctx will try to auto-optimize it.
-    int nthreads = blosc_get_nthreads();
+    nthreads = blosc_get_nthreads();
     cbytes = blosc_compress_ctx(clevel, shuffle, typesize, nbytes,
 			  input, output_ptr, nbytes+BLOSC_MAX_OVERHEAD,
                cname, blocksize, nthreads);
@@ -360,16 +360,17 @@ get_nbytes(void * input, size_t cbytes, size_t * nbytes)
 static int
 decompress_helper(void * input, size_t nbytes, void * output)
 {
-  int err;
+  int err, nthreads;
+  PyThreadState *_save = NULL;
   
   /* Do the decompression */
 //  int blosc_decompress_ctx(const void *src, void *dest, size_t destsize,
 //                         int numinternalthreads)
   if( RELEASEGIL )
   { 
-    PyThreadState *_save = NULL;
+    
     _save = PyEval_SaveThread();
-    int nthreads = blosc_get_nthreads();
+    nthreads = blosc_get_nthreads();
     err = blosc_decompress_ctx(input, output, nbytes, nthreads);
     PyEval_RestoreThread(_save);
     _save = NULL;
