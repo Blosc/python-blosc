@@ -46,6 +46,7 @@ from blosc.toplevel import (
     free_resources,
     set_nthreads,
     set_blocksize,
+    set_releasegil,
     compressor_list,
     code_to_name,
     name_to_code,
@@ -64,6 +65,10 @@ clib_versions = dict(clib_info(name) for name in cnames)
 
 # Initialize Blosc
 init()
+# RAM: default to keep GIL, since it's just extra overhead if we aren't 
+# threading ourselves
+set_releasegil(False)
+# Internal Blosc threading
 nthreads = ncores = detect_number_of_cores()
 # Protection against too many cores
 if nthreads > 4:
@@ -72,6 +77,7 @@ set_nthreads(nthreads)
 blosclib_version = "%s (%s)" % (VERSION_STRING, VERSION_DATE)
 import atexit
 atexit.register(destroy)
+
 
 # Tests
 from blosc.test import run as test
