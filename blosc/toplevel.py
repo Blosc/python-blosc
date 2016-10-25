@@ -127,7 +127,9 @@ def set_releasegil( gilstate ):
     Notes
     -----
     
-    Designed to be used with larger chunk sizes and a ThreadPool.
+    Designed to be used with larger chunk sizes and a ThreadPool.  There is a 
+    small performance penalty with releasing the GIL that will more harshly 
+    penalize small block sizes.
     
     Examples
     --------
