@@ -7,7 +7,8 @@ how to use it in a Python environment) is pretty easy.  It basically mimics
 the API of the `zlib` module included in the standard Python library.
 
 Here are some examples on how to use it.  For the full documentation, please
-refer to the :ref:`reference` section.
+refer to the `Library Reference <http://python-blosc.blosc.org/reference.html>`_
+section.
 
 Most of the times in this tutorial have been obtained using a VM with 2 cores
 on top of a Intel(R) Core(TM) i5-3380M CPU @ 2.90GHz.
@@ -138,7 +139,7 @@ Finally, here it is the way to discover all the internal codecs inside your
 Blosc package::
 
   >>> blosc.cnames
-  ['blosclz', 'lz4', 'lz4hc', 'snappy', 'zlib']
+  ['blosclz', 'lz4', 'lz4hc', 'snappy', 'zlib', 'zstd']
 
 *Note*: the actual list of codecs may change depening on how you have
 compiled the underlying C-Blosc library.
@@ -256,3 +257,63 @@ method, the `compress_ptr` / `decompress_ptr` functions do not need to
 make internal copies of the data buffers, so they are extremely fast
 (as much as the C-Blosc library can be), but you have to provide a
 container when doing the de-serialization.
+
+`blosc` has a maximum `blocksize` of 2**31 bytes = 2 GB. Larger `numpy` arrays must 
+be chunked by slicing, for example as::
+
+    >>> c = b''
+    >>> for index in np.arange( a.shape[0] ):
+        c += blosc.compress_ptr(a[index,...].__array_interface__['data'][0], a.size, a.dtype.itemsize, 9, True)
+
+Fine-tuning compression parameters
+==================================
+
+There are a number of parameters that affect the de/compression bandwidth 
+achieved by `blosc`:
+
+* The information content of the underlying data, and `chunksize`: the size of
+  the data in each call to `compress` and analogous functions. 'blosc' does not 
+  manage chunksize itself, but an example implementation can be seen in the 
+  `bloscpack` module.  
+* `n_threads`: The number of threads to spawn inside `c-blosc`. 
+  `n_threads` may be changed by calling `blosc.set_nthreads(16)` for example. 
+  `blosc` performance generally scales sub-linearly with the number of threads 
+  with a coefficient roughly around 0.5-0.67.  I.e. the expected performance 
+  compared to a single thread is 1.0 / (0.6*n_threads). For systems with 
+  hyper-threading the optimum number of threads is usually a small over-subscription
+  of the number of _physical_ (not virtual) cores.  
+* `blocksize`: is the size of each continuously memory-element that is compressed,
+  in bytes. Normally `blosc` attempts to automatically guess the size of 
+  each compressed block of data, but the user can set it manually by calling 
+  `blosc.set_blocksize( size_in_bytes )` for hand optimized situations. Often 
+  the L2 cache size (e.g. 256kB for an Intel Haswell) is a good starting 
+  point for optimization.
+* `shuffle`: as discussed above the `shuffle` mode can substantially improve
+  compression ratios when the 
+* `clevel`: the compression level called for the algorithm.  Called as an 
+  argument to `compress` and similar functions.
+* `cname`: the compressor codec itself.  Each codec has its own characteristics
+  that also vary depending on the underlying data.  For example, 'lz4' tends 
+  to prefer smaller `blocksize` and does not slow significantly with `clevel`.  
+  In comparison `zlib` and `zstd` both slow substantially with increasing `clevel`,
+  with an inflection point around `clevel`=4-5 for 'zlib' and `clevel`=2-4 
+  for 'zstd'. Called as an argument to `compress` and similar functions.
+* `releasegil`: optionally the Python Global Interpreter Lock (GIL) can be turned 
+  off during `c-blosc` operations by calling `blosc.set_releasegil(True)`. The 
+  default is off as there is a small overhead in releasing the GIL which can be 
+  significant for a small `blocksize`. GIL release is intended to be used in 
+  situations where other bounds (such as file or network I/O) are the rate-limiting 
+  ones and a Python `ThreadPool` or similar object can be used for parallel 
+  processing either with or without `blosc` threads. Initial testing suggests 
+  that an equal mix of `ThreadPool` and `blosc` threads is near optimal. I.e. a 
+  computer with 16 cores would have 4 `blosc` threads and 4 `ThreadPool` threads.  
+  An example of combining `blosc` and `ThreadPool` may be found in 
+  `bench/threadpool.py`. 
+  
+Links to external discussions on `blosc` optimization
+=====================================================
+
+* `Synthetic Benchmarks <http://www.blosc.org/synthetic-benchmarks.html>`_ by Francesc Alted
+* `Genotype compressor benchmark <http://alimanfoo.github.io/2016/09/21/genotype-compression-benchmark.html>`_ by Alistair Miles
+
+

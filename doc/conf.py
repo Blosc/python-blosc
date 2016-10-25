@@ -17,7 +17,12 @@ import sys, os
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #sys.path.insert(0, os.path.abspath('.'))
-sys.path.insert(0, os.path.abspath('..'))
+
+# Let's do an absolute import of the installed blosc module so that we have a 
+# link 
+import blosc
+blosc_location = os.path.dirname( blosc.__file__ )
+sys.path.insert(0, os.path.abspath(blosc_location))
 
 # -- General configuration -----------------------------------------------------
 
@@ -231,7 +236,7 @@ man_pages = [
 #  dir menu entry, description, category)
 texinfo_documents = [
   ('index', 'python-blosc', u'python-blosc Documentation',
-   u'Francesc Alted, Valentin Hänel', 'python-blosc', 'One line description of project.',
+   u'Francesc Alted, Valentin Hänel', 'python-blosc', 'Wrapper for c-blosc multi-threaded compressor.',
    'Miscellaneous'),
 ]
 
@@ -248,15 +253,20 @@ texinfo_documents = [
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {'http://docs.python.org/': None}
 
-# This is needed for the RTFD that cannot create extensions
-# But this does not work yet for extensions in pure C
-# So going back to host Sphinx docs in our own website
-from mock import Mock as MagicMock
 
-class Mock(MagicMock):
-    @classmethod
-    def __getattr__(cls, name):
-            return Mock()
+# The use of mock prevents ImportErrors when Sphinx cannot find the built C-extension,
+# but we're better if we locate the installed blosc library instead which does 
+# have the the extension library.
 
-MOCK_MODULES = ['numpy', 'blosc', 'blosc_extension', 'blosc.blosc_extension']
-sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
+# # This is needed for the RTFD that cannot create extensions
+# # But this does not work yet for extensions in pure C
+# # So going back to host Sphinx docs in our own website
+# #from mock import Mock as MagicMock
+#
+#class Mock(MagicMock):
+#    @classmethod
+#    def __getattr__(cls, name):
+#            return Mock()
+#
+#MOCK_MODULES = ['numpy', 'blosc', 'blosc_extension', 'blosc.blosc_extension']
+#sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)

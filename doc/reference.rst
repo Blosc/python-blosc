@@ -32,13 +32,11 @@ First level variables
 
 Public functions
 ================
-
 .. automodule:: blosc
-   :members: compress, compress_ptr, decompress, decompress_ptr, pack_array, unpack_array
+   :members: compress, compress_ptr, decompress, decompress_ptr, pack_array, unpack_array, clib_info, compressor_list, detect_number_of_cores, free_resources, get_clib, set_nthreads, set_blocksize, set_releasegil, print_versions, test
 
+:mod:`blosc`
 
-Utilities
-=========
+:func:`blosc.set_releasegil`
 
-.. automodule:: blosc
-   :members: clib_info, compressor_list, detect_number_of_cores, free_resources, get_clib, set_nthreads, print_versions, test
+   

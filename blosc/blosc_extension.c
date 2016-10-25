@@ -209,17 +209,17 @@ compress_helper(void * input, size_t nbytes, size_t typesize,
   }
 
   /* Compress */
-  // RAM: I don't think this macro requires the Python interpreter but let's leave it outside
+  // This macro probably doesn't require the Python interpreter but let's leave it outside for safety
   output_ptr = PyBytes_AS_STRING(output);
 
   if( RELEASEGIL )
   { 
-    // RAM: Run with GIL released, tiny overhead penalty from this (although it
+    // Run with GIL released, tiny overhead penalty from this (although it
     // may be significant for smaller chunks.) 
     
     _save = PyEval_SaveThread();
     blocksize = blosc_get_blocksize();
-    // RAM: if blocksize==0, blosc_compress_ctx will try to auto-optimize it.
+    // if blocksize==0, blosc_compress_ctx will try to auto-optimize it.
     nthreads = blosc_get_nthreads();
     cbytes = blosc_compress_ctx(clevel, shuffle, typesize, nbytes,
 			  input, output_ptr, nbytes+BLOSC_MAX_OVERHEAD,
