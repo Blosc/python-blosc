@@ -30,13 +30,17 @@ First level variables
     The number of cores detected.
 
 
+
 Public functions
 ================
+
 .. automodule:: blosc
-   :members: compress, compress_ptr, decompress, decompress_ptr, pack_array, unpack_array, clib_info, compressor_list, detect_number_of_cores, free_resources, get_clib, set_nthreads, set_blocksize, set_releasegil, print_versions, test
+   :members: compress, compress_ptr, decompress, decompress_ptr, pack_array, unpack_array
 
-:mod:`blosc`
 
-:func:`blosc.set_releasegil`
+Utilities
+=========
 
+.. automodule:: blosc
+   :members: clib_info, compressor_list, detect_number_of_cores, free_resources, get_clib, set_blocksize, set_nthreads, set_releasegil, print_versions, test
    
