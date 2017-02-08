@@ -1,27 +1,14 @@
 =============================
-Announcing python-blosc 1.4.4
+Announcing python-blosc 1.5.0
 =============================
 
 What is new?
 ============
 
-This is a maintenance release to fix #115.  This required an update of
-C-Blosc 1.11.1.
+A new `blosc.set_releasegil()` function that allows to release/acquire
+the GIL at will.  Thanks to Robert McLeod.
 
-Also, in 1.4.0 support for Zstd has been introduced for first time, and
-so far the experience with it is really pleasant. As an example, see how
-Blosc + Zstd can collaborate compressing images delivering pretty
-impressive compression ratios and extremely fast decompression:
-
-https://github.com/Cyan4973/zstd/issues/256
-
-There is also a blog about what you can expect of it in:
-
-http://blosc.org/blog/zstd-has-just-landed-in-blosc.html
-
-For whetting your appetite, look at some benchmarks here:
-
-https://github.com/Blosc/python-blosc#benchmarking
+Also, C-Blosc has been updated to 1.11.2.
 
 For more info, you can have a look at the release notes in:
 
