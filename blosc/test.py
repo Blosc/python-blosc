@@ -271,9 +271,9 @@ class TestCodec(unittest.TestCase):
                 operation()
             gc.collect()
             used_mem_after = psutil.Process(os.getpid()).memory_info()[0]
-            print("mem:", used_mem_after, used_mem_before,
-                   (used_mem_after - used_mem_before), num_elements)
-            return (used_mem_after - used_mem_before) >= num_elements * 8.5
+            # We multiply by an additional factor of .01 to account for
+            # storage overhead of Python classes
+            return (used_mem_after - used_mem_before) >= num_elements * 8.01
 
         def compress():
             blosc.compress(array, typesize, clevel=1)
