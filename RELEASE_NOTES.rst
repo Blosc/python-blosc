@@ -10,17 +10,23 @@
 :URL: https://github.com/Blosc/python-blosc
 
 
+Changes from 1.5.0 to 1.5.1
+===========================
+
+#XXX version-specific blurb XXX#
+
+
 Changes from 1.4.4 to 1.5.0
 ===========================
 
 - Added a new `blosc.set_releasegil()` function that allows to
   release/acquire the GIL at will.  See PR #116.
-  Thanks to Robert MacLeod.
+  Thanks to Robert McLeod.
 
 - Updated to C-Blosc 1.11.2.
 
 - Added tests that detects possible memory leaks.
-  Thanks to Robert MacLeod.
+  Thanks to Robert McLeod.
 
 
 Changes from 1.4.3 to 1.4.4
