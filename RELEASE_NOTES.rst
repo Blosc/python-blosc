@@ -13,7 +13,9 @@
 Changes from 1.5.0 to 1.5.1
 ===========================
 
-#XXX version-specific blurb XXX#
+- License updated from MIT to BSD.
+
+- Updated to C-Blosc 1.11.3.
 
 
 Changes from 1.4.4 to 1.5.0
@@ -25,7 +27,7 @@ Changes from 1.4.4 to 1.5.0
 
 - Updated to C-Blosc 1.11.2.
 
-- Added tests that detects possible memory leaks.
+- Added tests that detect possible memory leaks.
   Thanks to Robert McLeod.
 
 

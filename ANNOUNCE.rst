@@ -1,12 +1,11 @@
 =============================
-Announcing python-blosc 1.5.0
+Announcing python-blosc 1.5.1
 =============================
 
 What is new?
 ============
 
-A new `blosc.set_releasegil()` function that allows to release/acquire
-the GIL at will.  Thanks to Robert McLeod.
+The license has been updated from MIT to BSD.
 
 Also, C-Blosc has been updated to 1.11.2.
 
