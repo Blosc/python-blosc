@@ -211,6 +211,53 @@ will vary!)::
     *** zstd    , bitshuffle ***  0.127 s (5.86 GB/s) / 0.033 s (22.77 GB/s)	Compr. ratio:   6.4x
 
 
+Also, Blosc works quite well on ARM processors (even without NEON support yet):
+
+    -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    python-blosc version: 1.4.4
+    Blosc version: 1.11.2 ($Date:: 2017-01-27 #$)
+    Compressors available: ['blosclz', 'lz4', 'lz4hc', 'snappy', 'zlib', 'zstd']
+    Compressor library versions:
+      BloscLZ: 1.0.5
+      LZ4: 1.7.5
+      Snappy: 1.1.1
+      Zlib: 1.2.8
+      Zstd: 1.1.2
+    Python version: 3.6.0 (default, Dec 31 2016, 21:20:16)
+    [GCC 4.9.2]
+    Platform: Linux-3.4.113-sun8i-armv7l (#50 SMP PREEMPT Mon Nov 14 08:41:55 CET 2016)
+    Linux dist: debian 9.0
+    Processor: not recognized
+    Byte-ordering: little
+    Detected cores: 4
+    Number of threads to use by default: 4
+    -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+      *** ctypes.memmove() *** Time for memcpy():   0.015 s (93.57 MB/s)
+
+    Times for compressing/decompressing with clevel=5 and 4 threads
+
+    *** user input ***
+      *** blosclz , noshuffle  ***  0.015 s (89.93 MB/s) / 0.010 s (138.32 MB/s)    Compr. ratio:   2.7x
+      *** blosclz , shuffle    ***  0.023 s (60.25 MB/s) / 0.012 s (112.71 MB/s)    Compr. ratio:   2.3x
+      *** blosclz , bitshuffle ***  0.018 s (77.63 MB/s) / 0.021 s (66.76 MB/s)     Compr. ratio:   7.3x
+      *** lz4     , noshuffle  ***  0.008 s (177.14 MB/s) / 0.009 s (159.00 MB/s)   Compr. ratio:   3.6x
+      *** lz4     , shuffle    ***  0.010 s (131.29 MB/s) / 0.012 s (117.69 MB/s)   Compr. ratio:   3.5x
+      *** lz4     , bitshuffle ***  0.015 s (89.97 MB/s) / 0.022 s (63.62 MB/s)     Compr. ratio:   8.4x
+      *** lz4hc   , noshuffle  ***  0.071 s (19.30 MB/s) / 0.007 s (186.64 MB/s)    Compr. ratio:   8.6x
+      *** lz4hc   , shuffle    ***  0.079 s (17.30 MB/s) / 0.014 s (95.99 MB/s)     Compr. ratio:   6.2x
+      *** lz4hc   , bitshuffle ***  0.062 s (22.23 MB/s) / 0.027 s (51.53 MB/s)     Compr. ratio:   9.7x
+      *** snappy  , noshuffle  ***  0.008 s (173.87 MB/s) / 0.009 s (148.77 MB/s)   Compr. ratio:   4.4x
+      *** snappy  , shuffle    ***  0.011 s (123.22 MB/s) / 0.016 s (85.16 MB/s)    Compr. ratio:   4.4x
+      *** snappy  , bitshuffle ***  0.015 s (89.02 MB/s) / 0.021 s (64.87 MB/s)     Compr. ratio:   6.2x
+      *** zlib    , noshuffle  ***  0.047 s (29.26 MB/s) / 0.011 s (121.83 MB/s)    Compr. ratio:  14.7x
+      *** zlib    , shuffle    ***  0.080 s (17.20 MB/s) / 0.022 s (63.61 MB/s)     Compr. ratio:   9.4x
+      *** zlib    , bitshuffle ***  0.059 s (23.50 MB/s) / 0.033 s (41.10 MB/s)     Compr. ratio:  10.5x
+      *** zstd    , noshuffle  ***  0.113 s (12.21 MB/s) / 0.011 s (124.64 MB/s)    Compr. ratio:  15.6x
+      *** zstd    , shuffle    ***  0.154 s (8.92 MB/s) / 0.026 s (52.56 MB/s)      Compr. ratio:   9.9x
+      *** zstd    , bitshuffle ***  0.116 s (11.86 MB/s) / 0.036 s (38.40 MB/s)     Compr. ratio:  11.4x
+
+For details on the ARM benchmark see: https://github.com/Blosc/python-blosc/issues/105
+
 In case you find your own results interesting, please report them back
 to the authors!
 
