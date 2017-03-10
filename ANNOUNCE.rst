@@ -5,9 +5,8 @@ Announcing python-blosc 1.5.1
 What is new?
 ============
 
-The license has been updated from MIT to BSD.
-
-Also, C-Blosc has been updated to 1.11.2.
+C-Blosc has been updated to 1.11.3. Also, the license has been updated
+from MIT to BSD.
 
 For more info, you can have a look at the release notes in:
 
