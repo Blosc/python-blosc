@@ -99,13 +99,25 @@ def set_nthreads(nthreads):
 def set_blocksize(blocksize):
     """set_blocksize(blocksize)
 
-    Force the use of a specific blocksize.  If 0, an automatic
+    Force the use of a specific blocksize in bytes.  If 0, an automatic
     blocksize will be used (the default).
 
     Notes
     -----
 
-    This is a low-level function and is recommened for expert users only.
+    This is a low-level function and is recommended for expert users only.
+    Changing the blocksize can have profound effect on the performance of
+    blosc. If the blocksize is too large each block may not fit into the CPU
+    caches anymore and thereby rendering the blocking technique ineffective.
+    For example, a block may have to travel from and to memory twice, once when
+    applying the shuffle filter and a second time for doing the actual
+    compression. Also, for a large blocksize, blosc may not be able to split
+    the input, depending on it's size, which in turns means no multithreading.
+    If the blocksize is too small, the amount of constant overhead is increased
+    since each block must store a header that contains information about it's
+    compressed size. Additionally LZ77 style compressors may not reach the same
+    compression ratio as with larger blocks since their internal dictionary can
+    not be reused across block boundaries.
 
     Examples
     --------
