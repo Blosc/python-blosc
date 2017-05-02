@@ -376,6 +376,9 @@ def parse_arch(raw_arch_string):
 		arch = 'X86_64'
 		bits = 64
 	# ARM
+	elif re.match('^aarch64$', raw_arch_string):
+               arch = 'AARCH_64'
+               bits = 64
 	elif re.match('^armv8-a$', raw_arch_string):
 		arch = 'ARM_8'
 		bits = 64
