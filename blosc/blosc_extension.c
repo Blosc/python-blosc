@@ -57,6 +57,22 @@ PyBlosc_set_blocksize(PyObject *self, PyObject *args)
   Py_RETURN_NONE;
 }
 
+
+PyDoc_STRVAR(get_blocksize__doc__,
+"get_blocksize() -- Get the blocksize currently used.\n"
+             );
+
+static PyObject *
+PyBlosc_get_blocksize(PyObject *self)
+{
+  int blocksize;
+
+  blocksize = blosc_get_blocksize();
+
+  return Py_BuildValue("i", blocksize);
+}
+
+
 PyDoc_STRVAR(set_releasegil__doc__,
 "set_releasegil( gilstate ) -- Whether to release GIL (True) or not (False) during c-blosc calls.\n"
              );
@@ -520,6 +536,8 @@ static PyMethodDef blosc_methods[] =
    set_nthreads__doc__},
   {"set_blocksize", (PyCFunction)PyBlosc_set_blocksize, METH_VARARGS,
    set_blocksize__doc__},
+  {"get_blocksize", (PyCFunction)PyBlosc_get_blocksize, METH_VARARGS,
+   get_blocksize__doc__},
   {"set_releasegil", (PyCFunction)PyBlosc_set_releasegil, METH_VARARGS,
    set_releasegil__doc__},
   {"compressor_list", (PyCFunction)PyBlosc_compressor_list, METH_VARARGS,

@@ -294,6 +294,12 @@ class TestCodec(unittest.TestCase):
         self.assertFalse(leaks(decompress), msg='decompress leaks memory')
         self.assertFalse(leaks(decompress_ptr), msg='decompress_ptr leaks memory')
 
+    def test_get_blocksize(self):
+        s = b'0123456789' * 1000
+        blosc.compress(s, typesize=1)
+        d = blosc.get_blocksize()
+        self.assertNotEqual(d, None)
+
 
 def run(verbosity=2):
     import blosc

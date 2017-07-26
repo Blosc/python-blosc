@@ -115,6 +115,24 @@ def set_blocksize(blocksize):
     """
 
     _ext.set_blocksize(blocksize)
+
+
+def get_blocksize():
+    """
+    get_blocksize()
+
+    Get the blocksize currently used.
+
+    Examples
+    --------
+
+    >>> blosc.get_blocksize()
+    0
+
+    """
+    return _ext.get_blocksize()
+
+
     
 def set_releasegil( gilstate ):
     """
