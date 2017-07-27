@@ -53,6 +53,7 @@ from blosc.toplevel import (
     name_to_code,
     clib_info,
     get_clib,
+    get_cbuffer_sizes,
     print_versions,
     )
 

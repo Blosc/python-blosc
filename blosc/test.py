@@ -298,7 +298,13 @@ class TestCodec(unittest.TestCase):
         s = b'0123456789' * 1000
         blosc.compress(s, typesize=1)
         d = blosc.get_blocksize()
-        self.assertNotEqual(d, None)
+        self.assertEqual(d, 0)
+
+    def test_get_cbuffer_sizes(self):
+        s = b'0123456789' * 100000
+        c = blosc.compress(s, typesize=1)
+        t = blosc.get_cbuffer_sizes(c)
+        self.assertEqual(t, (1000000, 3990, 524288))
 
 
 def run(verbosity=2):

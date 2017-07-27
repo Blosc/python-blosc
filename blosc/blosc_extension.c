@@ -346,6 +346,25 @@ PyBlosc_get_clib(PyObject *self, PyObject *args)
   return Py_BuildValue("s", clib);
 }
 
+PyDoc_STRVAR(get_cbuffer_sizes__doc__,
+"get_cbuffer_sizes() -- Return information about a compressed buffer,\
+the number of uncompressed and compressed bytes and the blocksize.\n"
+            );
+
+static PyObject *
+PyBlosc_get_cbuffer_sizes(PyObject *self, PyObject *args)
+{
+   void *cbuffer;
+   size_t auxbytes, nbytes, cbytes, blocksize;
+
+   if (!PyArg_ParseTuple(args, "s#:get_cbuffer_sizes", &cbuffer, &auxbytes))
+    return NULL;
+
+   blosc_cbuffer_sizes(cbuffer, &nbytes, &cbytes, &blocksize);
+
+   return Py_BuildValue("nnn", nbytes, cbytes, blocksize);
+}
+
 /*  Read blosc header from input and fetch the uncompressed size into nbytes.
  *  Also makes sure that value of the compressed bytes from the header is the
  *  same as the cbytes provided by the input.
@@ -550,6 +569,8 @@ static PyMethodDef blosc_methods[] =
    clib_info__doc__},
   {"get_clib", (PyCFunction)PyBlosc_get_clib, METH_VARARGS,
    get_clib__doc__},
+  {"get_cbuffer_sizes", (PyCFunction)PyBlosc_get_cbuffer_sizes, METH_VARARGS,
+   get_cbuffer_sizes__doc__},
   {"init", (PyCFunction)PyBlosc_init, METH_VARARGS,
    init__doc__},
   {"destroy", (PyCFunction)PyBlosc_destroy, METH_VARARGS,

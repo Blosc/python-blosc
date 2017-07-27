@@ -254,6 +254,35 @@ def get_clib(bytesobj):
     return _ext.get_clib(bytesobj)
 
 
+def get_cbuffer_sizes(bytesobj):
+    """
+    get_cbuffer_sizes(bytesobj)
+
+    Return information about a compressed buffer:
+    (number of uncompressed bytes, number of compressed bytes, blocksize).
+
+    Parameters
+    ----------
+    bytesobj : str / bytes
+        The compressed buffer.
+
+    Returns
+    -------
+    out : tuple
+        The associated uncompressed bytes, compressed bytes and blocksize
+
+    Examples
+    --------
+
+    >>> s = b'0123456789'
+    >>> c = blosc.compress(s, typesize=1)
+    >>> blosc.get_cbuffer_sizes(c)
+    (10, 26, 10)
+    """
+
+    return _ext.get_cbuffer_sizes(bytesobj)
+
+
 def free_resources():
     """
     free_resources()
