@@ -126,6 +126,7 @@ def get_blocksize():
     Examples
     --------
 
+    >>> blosc.set_blocksize(0)
     >>> blosc.get_blocksize()
     0
 
