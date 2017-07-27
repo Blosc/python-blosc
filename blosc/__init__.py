@@ -46,12 +46,14 @@ from blosc.toplevel import (
     free_resources,
     set_nthreads,
     set_blocksize,
+    get_blocksize,
     set_releasegil,
     compressor_list,
     code_to_name,
     name_to_code,
     clib_info,
     get_clib,
+    get_cbuffer_sizes,
     print_versions,
     )
 

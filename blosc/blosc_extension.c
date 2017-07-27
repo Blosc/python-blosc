@@ -57,6 +57,22 @@ PyBlosc_set_blocksize(PyObject *self, PyObject *args)
   Py_RETURN_NONE;
 }
 
+
+PyDoc_STRVAR(get_blocksize__doc__,
+"get_blocksize() -- Get the blocksize currently used.\n"
+             );
+
+static PyObject *
+PyBlosc_get_blocksize(PyObject *self)
+{
+  int blocksize;
+
+  blocksize = blosc_get_blocksize();
+
+  return Py_BuildValue("i", blocksize);
+}
+
+
 PyDoc_STRVAR(set_releasegil__doc__,
 "set_releasegil( gilstate ) -- Whether to release GIL (True) or not (False) during c-blosc calls.\n"
              );
@@ -330,6 +346,25 @@ PyBlosc_get_clib(PyObject *self, PyObject *args)
   return Py_BuildValue("s", clib);
 }
 
+PyDoc_STRVAR(get_cbuffer_sizes__doc__,
+"get_cbuffer_sizes() -- Return information about a compressed buffer,\
+the number of uncompressed and compressed bytes and the blocksize.\n"
+            );
+
+static PyObject *
+PyBlosc_get_cbuffer_sizes(PyObject *self, PyObject *args)
+{
+   void *cbuffer;
+   size_t auxbytes, nbytes, cbytes, blocksize;
+
+   if (!PyArg_ParseTuple(args, "s#:get_cbuffer_sizes", &cbuffer, &auxbytes))
+    return NULL;
+
+   blosc_cbuffer_sizes(cbuffer, &nbytes, &cbytes, &blocksize);
+
+   return Py_BuildValue("nnn", nbytes, cbytes, blocksize);
+}
+
 /*  Read blosc header from input and fetch the uncompressed size into nbytes.
  *  Also makes sure that value of the compressed bytes from the header is the
  *  same as the cbytes provided by the input.
@@ -520,6 +555,8 @@ static PyMethodDef blosc_methods[] =
    set_nthreads__doc__},
   {"set_blocksize", (PyCFunction)PyBlosc_set_blocksize, METH_VARARGS,
    set_blocksize__doc__},
+  {"get_blocksize", (PyCFunction)PyBlosc_get_blocksize, METH_VARARGS,
+   get_blocksize__doc__},
   {"set_releasegil", (PyCFunction)PyBlosc_set_releasegil, METH_VARARGS,
    set_releasegil__doc__},
   {"compressor_list", (PyCFunction)PyBlosc_compressor_list, METH_VARARGS,
@@ -532,6 +569,8 @@ static PyMethodDef blosc_methods[] =
    clib_info__doc__},
   {"get_clib", (PyCFunction)PyBlosc_get_clib, METH_VARARGS,
    get_clib__doc__},
+  {"get_cbuffer_sizes", (PyCFunction)PyBlosc_get_cbuffer_sizes, METH_VARARGS,
+   get_cbuffer_sizes__doc__},
   {"init", (PyCFunction)PyBlosc_init, METH_VARARGS,
    init__doc__},
   {"destroy", (PyCFunction)PyBlosc_destroy, METH_VARARGS,
