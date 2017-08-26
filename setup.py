@@ -20,7 +20,6 @@ from setuptools import Extension
 from setuptools import setup
 from glob import glob
 import cpuinfo
-from numpy.distutils.misc_util import get_numpy_include_dirs
 
 ########### Check versions ##########
 def exit_with_error(message):
@@ -76,7 +75,7 @@ clibs = [] # for build_clib, libraries TO BE BUILT
 
 # Below are parameters for the Extension object
 sources = ["blosc/blosc_extension.c"]
-inc_dirs = [get_numpy_include_dirs()]
+inc_dirs = []
 lib_dirs = []
 libs = []  # Pre-built libraries ONLY, like python36.so
 def_macros = []
