@@ -42,13 +42,35 @@ Building
 There are different ways to compile python-blosc, depending if you want
 to link with an already installed Blosc library or not.
 
-Compiling with an installed Blosc library (recommended)
--------------------------------------------------------
 
-Python and Blosc-powered extensions have a difficult relationship when
-compiled using GCC, so this is why using an external C-Blosc library is
-recommended for maximum performance (for details, see
-https://github.com/Blosc/python-blosc/issues/110).
+Installing via setuptools
+-------------------------
+
+`setuptools` is limited to using the compiler specified in the environment 
+variable `CC` which on posix systems is usually `gcc`. This often causes 
+trouble with the Snappy codec, which is written in C++, and as a result Snappy
+is no longer compiled by default. This problem is not known to affect MSVC or 
+clang. Snappy is considered optional in Blosc as its compression performance 
+is below that of the other codecs.
+
+Any codec can be enabled (`=1`) or disabled (`=0`) on this build-path with the appropriate
+OS environment variables `INCLUDE_LZ4`, `INCLUDE_SNAPPY`, `INCLUDE_ZLIB`, and 
+`INCLUDE_ZLIB`. Snappy is disabled by default on posix systems.
+
+`python-blosc` comes with the Blosc sources with it and can be built with:
+
+.. code-block:: console
+
+    $ python setup.py build_ext --inplace
+
+That's all. You can proceed with testing section now.
+
+
+Compiling with an installed Blosc library
+-----------------------------------------
+
+This approach uses pre-built, fully optimized versions of Blosc built via
+CMake. 
 
 Go to https://github.com/Blosc/c-blosc/releases and download and install
 the C-Blosc library.  Then, you can tell python-blosc where is the
@@ -68,24 +90,6 @@ Using a flag:
 
     $ python setup.py build_ext --inplace --blosc=/usr/local
 
-Compiling without an installed Blosc library
---------------------------------------------
-
-*Warning:* This way of compiling is discouraged for performance reasons.
-See the previous section.
-
-python-blosc also comes with the Blosc sources with it so, assuming that
-you have a C++ compiler installed, do:
-
-.. code-block:: console
-
-    $ python setup.py build_ext --inplace
-
-That's all.  You can proceed with testing section now.
-
-Note: The requirement for the C++ compiler is just for the Snappy
-dependency.  The rest of the other components of Blosc are pure C
-(including the LZ4, Zstd and Zlib libraries).
 
 Testing
 =======

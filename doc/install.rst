@@ -31,23 +31,38 @@ https://github.com/Blosc/python-blosc and download the sources.
 Then, there are different ways to compile python-blosc, depending on whether
 you want to link with an already installed Blosc library or not.
 
-Compiling without an installed Blosc library
---------------------------------------------
+Installing via setuptools
+-------------------------
 
-python-blosc comes with the Blosc sources with it so, assuming that you
-have a C compiler installed, do:
+`setuptools` is limited to using the compiler specified in the environment 
+variable `CC` which on posix systems is usually `gcc`. This often causes 
+trouble with the Snappy codec, which is written in C++, and as a result Snappy
+is no longer compiled by default. This problem is not known to affect MSVC or 
+clang. Snappy is considered optional in Blosc as its compression performance 
+is below that of the other codecs.
+
+Any codec can be enabled (`=1`) or disabled (`=0`) on this build-path with the appropriate
+OS environment variables `INCLUDE_LZ4`, `INCLUDE_SNAPPY`, `INCLUDE_ZLIB`, and 
+`INCLUDE_ZLIB`. Snappy is disabled by default on posix systems.
+
+`python-blosc` comes with the Blosc sources with it and can be built with:
 
 .. code-block:: console
 
     $ python setup.py build_ext --inplace
 
-That's all.  You can proceed with testing section now.
+That's all. You can proceed with testing section now.
+
 
 Compiling with an installed Blosc library
 -----------------------------------------
 
-In case you have Blosc installed as an external library (and disregard
-the included Blosc sources) you can link with it in a couple of ways.
+This approach uses pre-built, fully optimized versions of Blosc built via
+CMake. 
+
+Go to https://github.com/Blosc/c-blosc/releases and download and install
+the C-Blosc library.  Then, you can tell python-blosc where is the
+C-Blosc library in a couple of ways:
 
 Using an environment variable:
 
@@ -56,12 +71,13 @@ Using an environment variable:
     $ BLOSC_DIR=/usr/local     (or "set BLOSC_DIR=\blosc" on Win)
     $ export BLOSC_DIR         (not needed on Win)
     $ python setup.py build_ext --inplace
-
+ 
 Using a flag:
 
 .. code-block:: console
 
     $ python setup.py build_ext --inplace --blosc=/usr/local
+
 
 Generating Sphinx documentation
 -------------------------------

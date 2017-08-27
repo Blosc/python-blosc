@@ -53,6 +53,17 @@ LFLAGS = os.environ.get('LFLAGS', '').split()
 # Allow setting the Blosc dir if installed in the system
 BLOSC_DIR = os.environ.get('BLOSC_DIR', '')
 
+# Check for USE_CODEC environment variables
+try:              INCLUDE_LZ4    = os.environ['INCLUDE_LZ4'] == '1'
+except KeyError:  INCLUDE_LZ4    = True
+try:              INCLUDE_SNAPPY = os.environ['INCLUDE_SNAPPY'] == '1'
+except KeyError:  INCLUDE_SNAPPY = False  # Snappy is disabled by default
+try:              INCLUDE_ZLIB   = os.environ['INCLUDE_ZLIB'] == '1'
+except KeyError:  INCLUDE_ZLIB   = True
+try:              INCLUDE_ZSTD   = os.environ['INCLUDE_ZSTD'] == '1'
+except KeyError:  INCLUDE_ZSTD   = True
+
+
 # Handle --blosc=[PATH] --lflags=[FLAGS] --cflags=[FLAGS]
 args = sys.argv[:]
 for arg in args:
@@ -85,20 +96,6 @@ if BLOSC_DIR != '':
     inc_dirs += [os.path.join(BLOSC_DIR, 'include')]
     libs += ['blosc']
 else:
-    # Libraries to be built with build_clib
-    clibs.append( ('lz4', {'sources': glob('c-blosc/internal-complibs/lz4*/*.c')} ) )
-
-    # Tried and failed to compile Snappy with gcc using 'cflags' on posix
-    # setuptools always uses gcc instead of g++, as it only checks for the 
-    # env var 'CC' and not 'CXX'.
-    clibs.append( ('snappy', {'sources': glob('c-blosc/internal-complibs/snappy*/*.cc'), 
-                               'cflags':'-std=c++11 -lstdc++' } ) )
-
-    clibs.append( ('zlib', {'sources': glob('c-blosc/internal-complibs/zlib*/*.c')} ) )
-
-    clibs.append( ('zstd', {'sources': glob('c-blosc/internal-complibs/zstd*/*/*.c'), 
-                    'include_dirs': glob('c-blosc/internal-complibs/zstd*') + glob('c-blosc/internal-complibs/zstd*/common') } ) )
-    # TODO: do we want env vars checks to disable libraries and macros?
 
     # Configure the Extension
     # Compiling everything from included C-Blosc sources
@@ -107,13 +104,32 @@ else:
 
     inc_dirs += [os.path.join('c-blosc', 'blosc')]
     inc_dirs += glob('c-blosc/internal-complibs/*')
-    inc_dirs += glob('c-blosc/internal-complibs/lz4*')
-    inc_dirs += glob('c-blosc/internal-complibs/snappy*')
-    inc_dirs += glob('c-blosc/internal-complibs/zstd*/common')
-    inc_dirs += glob('c-blosc/internal-complibs/zstd*')
-    
-    # To undefine SNAPPY we have to not define the macro, as opposed to setting it to False
-    def_macros += [('HAVE_LZ4', 1), ('HAVE_SNAPPY', 1), ('HAVE_ZLIB', 1), ('HAVE_ZSTD', 1) ]
+
+    # Codecs to be built with build_clib
+    if INCLUDE_LZ4:
+        clibs.append( ('lz4', {'sources': glob('c-blosc/internal-complibs/lz4*/*.c')} ) )
+        inc_dirs += glob('c-blosc/internal-complibs/lz4*')
+        def_macros += [('HAVE_LZ4',1)]
+
+    # Tried and failed to compile Snappy with gcc using 'cflags' on posix
+    # setuptools always uses gcc instead of g++, as it only checks for the 
+    # env var 'CC' and not 'CXX'.
+    if INCLUDE_SNAPPY:
+        clibs.append( ('snappy', {'sources': glob('c-blosc/internal-complibs/snappy*/*.cc'), 
+                               'cflags':'-std=c++11 -lstdc++' } ) )
+        inc_dirs += glob('c-blosc/internal-complibs/snappy*')
+        def_macros += [('HAVE_SNAPPY',1)]
+
+    if INCLUDE_ZLIB:
+        clibs.append( ('zlib', {'sources': glob('c-blosc/internal-complibs/zlib*/*.c')} ) )
+        def_macros += [('HAVE_ZLIB',1)]
+
+    if INCLUDE_ZSTD:
+        clibs.append( ('zstd', {'sources': glob('c-blosc/internal-complibs/zstd*/*/*.c'), 
+                    'include_dirs': glob('c-blosc/internal-complibs/zstd*') + glob('c-blosc/internal-complibs/zstd*/common') } ) )
+        inc_dirs += glob('c-blosc/internal-complibs/zstd*/common')
+        inc_dirs += glob('c-blosc/internal-complibs/zstd*')
+        def_macros += [('HAVE_ZSTD',1)]
     
 
     # Guess SSE2 or AVX2 capabilities
