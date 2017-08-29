@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 ########################################################################
 #
-#       License: MIT
+#       License: BSD 3-clause
 #       Created: September 22, 2010
 #       Author:  Francesc Alted - faltet@gmail.com
 #
@@ -22,8 +22,6 @@ from glob import glob
 import cpuinfo
 
 ########### Check versions ##########
-
-
 def exit_with_error(message):
     print('ERROR: %s' % message)
     sys.exit(1)
@@ -44,7 +42,6 @@ if sys.version_info[:2] < (2, 7):
 
 ########### End of checks ##########
 
-
 # Blosc version
 VERSION = open('VERSION').read().strip()
 # Create the version.py file
@@ -55,6 +52,17 @@ CFLAGS = os.environ.get('CFLAGS', '').split()
 LFLAGS = os.environ.get('LFLAGS', '').split()
 # Allow setting the Blosc dir if installed in the system
 BLOSC_DIR = os.environ.get('BLOSC_DIR', '')
+
+# Check for USE_CODEC environment variables
+try:              INCLUDE_LZ4    = os.environ['INCLUDE_LZ4'] == '1'
+except KeyError:  INCLUDE_LZ4    = True
+try:              INCLUDE_SNAPPY = os.environ['INCLUDE_SNAPPY'] == '1'
+except KeyError:  INCLUDE_SNAPPY = False  # Snappy is disabled by default
+try:              INCLUDE_ZLIB   = os.environ['INCLUDE_ZLIB'] == '1'
+except KeyError:  INCLUDE_ZLIB   = True
+try:              INCLUDE_ZSTD   = os.environ['INCLUDE_ZSTD'] == '1'
+except KeyError:  INCLUDE_ZSTD   = True
+
 
 # Handle --blosc=[PATH] --lflags=[FLAGS] --cflags=[FLAGS]
 args = sys.argv[:]
@@ -69,11 +77,18 @@ for arg in args:
         CFLAGS = arg.split('=')[1].split()
         sys.argv.remove(arg)
 
+
 # Blosc sources and headers
+
+# To avoid potential namespace collisions use build_clib.py for each codec
+# instead of co-compiling all sources files in one setuptools.Extension object.
+clibs = [] # for build_clib, libraries TO BE BUILT
+
+# Below are parameters for the Extension object
 sources = ["blosc/blosc_extension.c"]
 inc_dirs = []
 lib_dirs = []
-libs = []
+libs = []  # Pre-built libraries ONLY, like python36.so
 def_macros = []
 if BLOSC_DIR != '':
     # Using the Blosc library
@@ -81,18 +96,41 @@ if BLOSC_DIR != '':
     inc_dirs += [os.path.join(BLOSC_DIR, 'include')]
     libs += ['blosc']
 else:
+
+    # Configure the Extension
     # Compiling everything from included C-Blosc sources
     sources += [f for f in glob('c-blosc/blosc/*.c')
                 if 'avx2' not in f and 'sse2' not in f]
-    sources += glob('c-blosc/internal-complibs/lz4*/*.c')
-    sources += glob('c-blosc/internal-complibs/snappy*/*.cc')
-    sources += glob('c-blosc/internal-complibs/zlib*/*.c')
-    sources += glob('c-blosc/internal-complibs/zstd*/*/*.c')
+
     inc_dirs += [os.path.join('c-blosc', 'blosc')]
     inc_dirs += glob('c-blosc/internal-complibs/*')
-    inc_dirs += glob('c-blosc/internal-complibs/zstd*/common')
-    inc_dirs += glob('c-blosc/internal-complibs/zstd*')
-    def_macros += [('HAVE_LZ4', 1), ('HAVE_SNAPPY', 1), ('HAVE_ZLIB', 1), ('HAVE_ZSTD', 1)]
+
+    # Codecs to be built with build_clib
+    if INCLUDE_LZ4:
+        clibs.append( ('lz4', {'sources': glob('c-blosc/internal-complibs/lz4*/*.c')} ) )
+        inc_dirs += glob('c-blosc/internal-complibs/lz4*')
+        def_macros += [('HAVE_LZ4',1)]
+
+    # Tried and failed to compile Snappy with gcc using 'cflags' on posix
+    # setuptools always uses gcc instead of g++, as it only checks for the 
+    # env var 'CC' and not 'CXX'.
+    if INCLUDE_SNAPPY:
+        clibs.append( ('snappy', {'sources': glob('c-blosc/internal-complibs/snappy*/*.cc'), 
+                               'cflags':'-std=c++11 -lstdc++' } ) )
+        inc_dirs += glob('c-blosc/internal-complibs/snappy*')
+        def_macros += [('HAVE_SNAPPY',1)]
+
+    if INCLUDE_ZLIB:
+        clibs.append( ('zlib', {'sources': glob('c-blosc/internal-complibs/zlib*/*.c')} ) )
+        def_macros += [('HAVE_ZLIB',1)]
+
+    if INCLUDE_ZSTD:
+        clibs.append( ('zstd', {'sources': glob('c-blosc/internal-complibs/zstd*/*/*.c'), 
+                    'include_dirs': glob('c-blosc/internal-complibs/zstd*') + glob('c-blosc/internal-complibs/zstd*/common') } ) )
+        inc_dirs += glob('c-blosc/internal-complibs/zstd*/common')
+        inc_dirs += glob('c-blosc/internal-complibs/zstd*')
+        def_macros += [('HAVE_ZSTD',1)]
+    
 
     # Guess SSE2 or AVX2 capabilities
     cpu_info = cpuinfo.get_cpu_info()
@@ -114,6 +152,7 @@ else:
             CFLAGS.append('-mavx2')
         elif os.name == 'nt':
             def_macros += [('__AVX2__', 1)]
+    # TODO: AVX512
 
 classifiers = """\
 Development Status :: 5 - Production/Stable
@@ -127,6 +166,7 @@ Programming Language :: Python :: 2.7
 Programming Language :: Python :: 3.3
 Programming Language :: Python :: 3.4
 Programming Language :: Python :: 3.5
+Programming Language :: Python :: 3.6
 Topic :: Software Development :: Libraries :: Python Modules
 Topic :: System :: Archiving :: Compression
 Operating System :: Microsoft :: Windows
@@ -147,8 +187,9 @@ Blosc is a high performance compressor optimized for binary data.
       maintainer = 'Francesc Alted',
       maintainer_email = 'faltet@gmail.com',
       url = 'http://github.com/blosc/python-blosc',
-      license = 'http://www.opensource.org/licenses/mit-license.php',
+      license = 'https://opensource.org/licenses/BSD-3-Clause',
       platforms = ['any'],
+      libraries = clibs,
       ext_modules = [
         Extension( "blosc.blosc_extension",
                    include_dirs=inc_dirs,
@@ -160,6 +201,7 @@ Blosc is a high performance compressor optimized for binary data.
                    extra_compile_args=CFLAGS ),
         ],
       tests_require=tests_require,
+      zip_safe=False,
       packages = ['blosc'],
 
 )
