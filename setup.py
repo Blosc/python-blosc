@@ -54,14 +54,22 @@ LFLAGS = os.environ.get('LFLAGS', '').split()
 BLOSC_DIR = os.environ.get('BLOSC_DIR', '')
 
 # Check for USE_CODEC environment variables
-try:              INCLUDE_LZ4    = os.environ['INCLUDE_LZ4'] == '1'
-except KeyError:  INCLUDE_LZ4    = True
-try:              INCLUDE_SNAPPY = os.environ['INCLUDE_SNAPPY'] == '1'
-except KeyError:  INCLUDE_SNAPPY = False  # Snappy is disabled by default
-try:              INCLUDE_ZLIB   = os.environ['INCLUDE_ZLIB'] == '1'
-except KeyError:  INCLUDE_ZLIB   = True
-try:              INCLUDE_ZSTD   = os.environ['INCLUDE_ZSTD'] == '1'
-except KeyError:  INCLUDE_ZSTD   = True
+try:
+    INCLUDE_LZ4 = os.environ['INCLUDE_LZ4'] == '1'
+except KeyError:
+    INCLUDE_LZ4 = True
+try:
+    INCLUDE_SNAPPY = os.environ['INCLUDE_SNAPPY'] == '1'
+except KeyError:
+    INCLUDE_SNAPPY = False  # Snappy is disabled by default
+try:
+    INCLUDE_ZLIB = os.environ['INCLUDE_ZLIB'] == '1'
+except KeyError:
+    INCLUDE_ZLIB = True
+try:
+    INCLUDE_ZSTD = os.environ['INCLUDE_ZSTD'] == '1'
+except KeyError:
+    INCLUDE_ZSTD = True
 
 
 # Handle --blosc=[PATH] --lflags=[FLAGS] --cflags=[FLAGS]
