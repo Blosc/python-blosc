@@ -308,6 +308,14 @@ class TestCodec(unittest.TestCase):
         t = blosc.get_cbuffer_sizes(c)
         self.assertEqual(t, (1000000, 4354, 2**16))
 
+    def test_bitshuffle_not_multiple(self):
+        # Check the fix for #133
+        x = numpy.ones(27266, dtype='uint8')
+        xx = x.tobytes()
+        zxx = blosc.compress(xx, typesize=8, shuffle=blosc.BITSHUFFLE)
+        last_xx = blosc.decompress(zxx)[-3:]
+        self.assertEqual(last_xx, b'\x01\x01\x01')
+
 
 def run(verbosity=2):
     import blosc
