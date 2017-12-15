@@ -50,6 +50,7 @@ Installing via setuptools
 
 .. code-block:: console
 
+    $ python setup.py build_clib
     $ python setup.py build_ext --inplace
 
 Any codec can be enabled (`=1`) or disabled (`=0`) on this build-path with the appropriate
@@ -83,12 +84,14 @@ Using an environment variable:
 
     $ BLOSC_DIR=/usr/local     (or "set BLOSC_DIR=\blosc" on Win)
     $ export BLOSC_DIR         (not needed on Win)
+    $ python setup.py build_clib
     $ python setup.py build_ext --inplace
  
 Using a flag:
 
 .. code-block:: console
 
+    $ python setup.py build_clib
     $ python setup.py build_ext --inplace --blosc=/usr/local
 
 
