@@ -306,7 +306,10 @@ class TestCodec(unittest.TestCase):
         blosc.set_blocksize(2**16)
         c = blosc.compress(s, typesize=1)
         t = blosc.get_cbuffer_sizes(c)
-        self.assertEqual(t, (1000000, 4354, 2**16))
+        self.assertEqual(t[0], 1000000)
+        # One cannot be sure of the exact compressed bytes, so round to KB
+        self.assertEqual(t[1] // 2**10, 4354 // 2**10)
+        self.assertEqual(t[2], 2**16)
 
     def test_bitshuffle_not_multiple(self):
         # Check the fix for #133
