@@ -941,7 +941,7 @@ def get_cpu_info_from_cpuid():
 	'''
 
 	returncode, output = run_and_get_stdout([sys.executable, "-c", "import cpuinfo; print(cpuinfo.actual_get_cpu_info_from_cpuid())"])
-	if returncode != 0:
+	if (returncode != 0) or (output.strip() == 'None'):
 		return None
 	info = b64_to_obj(output)
 	return info
@@ -1557,7 +1557,7 @@ def get_cpu_info():
 # Make sure we are running on a supported system
 def _check_arch():
 	arch, bits = parse_arch(DataSource.raw_arch_string)
-	if not arch in ['X86_32', 'X86_64', 'ARM_7', 'ARM_8']:
+	if not arch in ['X86_32', 'X86_64', 'ARM_7', 'ARM_8', 'AARCH_64']:
 		raise Exception("py-cpuinfo currently only works on X86 and some ARM CPUs.")
 
 def main():
