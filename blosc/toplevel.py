@@ -111,6 +111,7 @@ def set_blocksize(blocksize):
     --------
 
     >>> blosc.set_blocksize(512)
+    >>> blosc.set_blocksize(0)
 
     """
 
