@@ -135,30 +135,30 @@ def get_blocksize():
     return _ext.get_blocksize()
 
 
-    
-def set_releasegil( gilstate ):
+def set_releasegil(gilstate):
     """
     set_releasegil( gitstate )
-    
-    Sets a boolean on whether to release the Python global inter-lock (GIL) 
-    during c-blosc compress and decompress operations or not.  This defaults 
+
+    Sets a boolean on whether to release the Python global inter-lock (GIL)
+    during c-blosc compress and decompress operations or not.  This defaults
     to False.
-    
+
     Notes
     -----
-    
-    Designed to be used with larger chunk sizes and a ThreadPool.  There is a 
-    small performance penalty with releasing the GIL that will more harshly 
+
+    Designed to be used with larger chunk sizes and a ThreadPool.  There is a
+    small performance penalty with releasing the GIL that will more harshly
     penalize small block sizes.
-    
+
     Examples
     --------
-    
+
     >>> oldReleaseState = blosc.set_releasegil(True)
-    
+
     """
     gilstate = bool(gilstate)
-    return _ext.set_releasegil( gilstate )
+    return _ext.set_releasegil(gilstate)
+
 
 def compressor_list():
     """
