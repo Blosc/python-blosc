@@ -124,7 +124,7 @@ else:
     # env var 'CC' and not 'CXX'.
     if INCLUDE_SNAPPY:
         clibs.append( ('snappy', {'sources': glob('c-blosc/internal-complibs/snappy*/*.cc'), 
-                               'cflags':'-std=c++11 -lstdc++' } ) )
+                                  'cflags': ['-std=c++11', '-lstdc++'] } ) )
         inc_dirs += glob('c-blosc/internal-complibs/snappy*')
         def_macros += [('HAVE_SNAPPY',1)]
 
