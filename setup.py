@@ -70,14 +70,6 @@ try:
     INCLUDE_ZSTD = os.environ['INCLUDE_ZSTD'] == '1'
 except KeyError:
     INCLUDE_ZSTD = True
-try:
-    INCLUDE_SSE2 = os.environ['INCLUDE_SSE2'] == '1'
-except KeyError:
-    INCLUDE_SSE2 = True
-try:
-    INCLUDE_AVX2 = os.environ['INCLUDE_AVX2'] == '1'
-except KeyError:
-    INCLUDE_AVX2 = True
 
 
 # Handle --blosc=[PATH] --lflags=[FLAGS] --cflags=[FLAGS]
@@ -151,7 +143,7 @@ else:
     # Guess SSE2 or AVX2 capabilities
     cpu_info = cpuinfo.get_cpu_info()
     # SSE2
-    if INCLUDE_SSE2 and (cpu_info != None) and ('sse2' in cpu_info['flags']):
+    if 'DISABLE_BLOSC_SSE2' not in os.environ and (cpu_info != None) and ('sse2' in cpu_info['flags']):
         print('SSE2 detected')
         CFLAGS.append('-DSHUFFLE_SSE2_ENABLED')
         sources += [f for f in glob('c-blosc/blosc/*.c') if 'sse2' in f]
@@ -160,7 +152,7 @@ else:
         elif os.name == 'nt':
             def_macros += [('__SSE2__', 1)]
     # AVX2
-    if INCLUDE_AVX2 and (cpu_info != None) and ('avx2' in cpu_info['flags']):
+    if 'DISABLE_BLOSC_AVX2' not in os.environ and (cpu_info != None) and ('avx2' in cpu_info['flags']):
         print('AVX2 detected')
         CFLAGS.append('-DSHUFFLE_AVX2_ENABLED')
         sources += [f for f in glob('c-blosc/blosc/*.c') if 'avx2' in f]
