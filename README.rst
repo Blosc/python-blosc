@@ -58,6 +58,11 @@ OS environment variables `INCLUDE_LZ4`, `INCLUDE_SNAPPY`, `INCLUDE_ZLIB`, and
 `INCLUDE_ZLIB`. By default all the codecs in Blosc are enabled except Snappy 
 (due to some issues with C++ with the `gcc` toolchain).
 
+Compiler specific optimisations are automatically enabled by inspecting
+the CPU flags building Blosc. They can be manually disabled by setting
+the following environmental variables: `DISABLE_BLOSC_SSE2` and
+`DISABLE_BLOSC_AVX2`.
+
 `setuptools` is limited to using the compiler specified in the environment 
 variable `CC` which on posix systems is usually `gcc`. This often causes 
 trouble with the Snappy codec, which is written in C++, and as a result Snappy
