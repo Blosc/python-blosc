@@ -124,7 +124,7 @@ else:
     # env var 'CC' and not 'CXX'.
     if INCLUDE_SNAPPY:
         clibs.append( ('snappy', {'sources': glob('c-blosc/internal-complibs/snappy*/*.cc'), 
-                               'cflags':'-std=c++11 -lstdc++' } ) )
+                                  'cflags': ['-std=c++11', '-lstdc++'] } ) )
         inc_dirs += glob('c-blosc/internal-complibs/snappy*')
         def_macros += [('HAVE_SNAPPY',1)]
 
@@ -143,7 +143,7 @@ else:
     # Guess SSE2 or AVX2 capabilities
     cpu_info = cpuinfo.get_cpu_info()
     # SSE2
-    if (cpu_info != None) and ('sse2' in cpu_info['flags']):
+    if 'DISABLE_BLOSC_SSE2' not in os.environ and (cpu_info != None) and ('sse2' in cpu_info['flags']):
         print('SSE2 detected')
         CFLAGS.append('-DSHUFFLE_SSE2_ENABLED')
         sources += [f for f in glob('c-blosc/blosc/*.c') if 'sse2' in f]
@@ -152,7 +152,7 @@ else:
         elif os.name == 'nt':
             def_macros += [('__SSE2__', 1)]
     # AVX2
-    if (cpu_info != None) and ('avx2' in cpu_info['flags']):
+    if 'DISABLE_BLOSC_AVX2' not in os.environ and (cpu_info != None) and ('avx2' in cpu_info['flags']):
         print('AVX2 detected')
         CFLAGS.append('-DSHUFFLE_AVX2_ENABLED')
         sources += [f for f in glob('c-blosc/blosc/*.c') if 'avx2' in f]
