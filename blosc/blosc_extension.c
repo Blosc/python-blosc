@@ -626,6 +626,13 @@ PyMODINIT_FUNC
 PyInit_blosc_extension(void) {
   PyObject *m = PyModule_Create(&blosc_def);
 
+
+  BloscError = PyErr_NewException("blosc_extension.error", NULL, NULL);
+  if (BloscError != NULL) {
+    Py_INCREF(BloscError);
+    PyModule_AddObject(m, "error", BloscError);
+  }
+
   /* Integer macros */
   PyModule_AddIntMacro(m, BLOSC_MAX_BUFFERSIZE);
   PyModule_AddIntMacro(m, BLOSC_MAX_THREADS);
