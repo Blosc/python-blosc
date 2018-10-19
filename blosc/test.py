@@ -112,7 +112,7 @@ class TestCodec(unittest.TestCase):
 
         self.assertEqual(expected, blosc.decompress(bytearray(compressed)))
         self.assertEqual(expected, blosc.decompress(np.array([compressed])))
-        
+
     def test_decompress_releasegil(self):
         import numpy as np
         # assume the expected answer was compressed from bytes
@@ -132,7 +132,7 @@ class TestCodec(unittest.TestCase):
         self.assertEqual(expected, blosc.decompress(bytearray(compressed)))
         self.assertEqual(expected, blosc.decompress(np.array([compressed])))
         blosc.set_releasegil(False)
-        
+
     def test_decompress_input_types_as_bytearray(self):
         import numpy as np
         # assume the expected answer was compressed from bytes
@@ -250,6 +250,12 @@ class TestCodec(unittest.TestCase):
 
         # This should always raise an error
         self.assertRaises(ValueError, blosc.pack_array, ones)
+
+    def test_unpack_array_with_unicode_characters(self):
+        import numpy as np
+        input_array = np.array(['å', 'ç', 'ø', 'π', '˚'])
+        packed_array = blosc.pack_array(input_array)
+        np.testing.assert_array_equal(input_array, blosc.unpack_array(packed_array, encoding='UTF-8'))
 
     def test_unpack_array_exceptions(self):
         self.assertRaises(TypeError, blosc.unpack_array, 1.0)

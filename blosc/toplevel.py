@@ -698,7 +698,7 @@ def pack_array(array, clevel=9, shuffle=blosc.SHUFFLE, cname='blosclz'):
     return packed_array
 
 
-def unpack_array(packed_array):
+def unpack_array(packed_array, **kwargs):
     """unpack_array(packed_array)
 
     Unpack (decompress) a packed NumPy array.
@@ -707,6 +707,9 @@ def unpack_array(packed_array):
     ----------
     packed_array : str / bytes
         The packed array to be decompressed.
+
+    **kwargs : fix_imports / encoding / errors
+        Optional parametes that can be passed to the pickle.loads API
 
     Returns
     -------
@@ -737,7 +740,10 @@ def unpack_array(packed_array):
     # First decompress the pickle
     pickled_array = _ext.decompress(packed_array, False)
     # ... and unpickle
-    array = pickle.loads(pickled_array)
+    if kwargs:
+        array = pickle.loads(pickled_array, **kwargs)
+    else:
+        array = pickle.loads(pickled_array)
 
     return array
 
