@@ -17,7 +17,13 @@ except ImportError:
 from blosc import blosc_extension as _ext
 import blosc
 
-if sys.version_info[0] < 3:
+# version number hack
+vi = sys.version_info
+PY26 = vi[0] == 2 and vi[1] == 6
+PY27 = vi[0] == 2 and vi[1] == 7
+PY3X = vi[0] == 3
+
+if vi[0] < 3:
     int_ = (int, long)
 else:
     int_ = (int,)
@@ -737,6 +743,7 @@ def unpack_array(packed_array, **kwargs):
     >>> parray = blosc.pack_array(a)
     >>> a2 = blosc.unpack_array(parray)
     >>> numpy.alltrue(a == a2)
+    True
     """
 
     _check_bytesobj(packed_array)
@@ -744,7 +751,8 @@ def unpack_array(packed_array, **kwargs):
     # First decompress the pickle
     pickled_array = _ext.decompress(packed_array, False)
     # ... and unpickle
-    if kwargs:
+
+    if kwargs and PY3X:
         array = pickle.loads(pickled_array, **kwargs)
     else:
         array = pickle.loads(pickled_array)
