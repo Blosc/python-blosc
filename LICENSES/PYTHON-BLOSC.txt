@@ -5,6 +5,7 @@ For python-blosc - A Python wrapper for the Blosc compression library
 Copyright (C) 2010-2012 Francesc Alted (faltet@gmail.com)
 Copyright (C) 2013-2015 Francesc Alted (faltet@gmail.com), Valentin Hänel (valentin@haenel.co)
 Copyright (C) 2016-2017 Francesc Alted <francesc@blosc.org>
+Copyright (C) 2018 Francesc Alted <francesc@blosc.org>, Valentin Hänel <valentin@haenel.co>
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
