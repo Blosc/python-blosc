@@ -709,7 +709,8 @@ def unpack_array(packed_array, **kwargs):
         The packed array to be decompressed.
 
     **kwargs : fix_imports / encoding / errors
-        Optional parametes that can be passed to the pickle.loads API
+        Optional parameters that can be passed to the pickle.loads API
+        https://docs.python.org/3/library/pickle.html#pickle.loads
 
     Returns
     -------
@@ -732,7 +733,10 @@ def unpack_array(packed_array, **kwargs):
     >>> a2 = blosc.unpack_array(parray)
     >>> numpy.alltrue(a == a2)
     True
-
+    >>> a = numpy.array(['å', 'ç', 'ø'])
+    >>> parray = blosc.pack_array(a)
+    >>> a2 = blosc.unpack_array(parray)
+    >>> numpy.alltrue(a == a2)
     """
 
     _check_bytesobj(packed_array)
