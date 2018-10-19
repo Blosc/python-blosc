@@ -257,6 +257,13 @@ class TestCodec(unittest.TestCase):
         packed_array = blosc.pack_array(input_array)
         np.testing.assert_array_equal(input_array, blosc.unpack_array(packed_array, encoding='UTF-8'))
 
+    def test_unpack_array_with_ascii_exceptions(self):
+        if PY3X:
+            input_str = b'\x02\x01\x03\x02\x85\x00\x00\x00\x84\x00\x00\x00\x95\x00\x00\x00\x80\x02cnumpy.core.multiarray\n_reconstruct\nq\x01cnumpy\nndarray\nq\x02K\x00\x85U\x01b\x87Rq\x03(K\x01K\x05\x85cnumpy\ndtype\nq\x04U\x02S2K\x00K\x01\x87Rq\x05(K\x03U\x01|NNNK\x02K\x01K\x00tb\x89U\n\xc3\xa5\xc3\xa7\xc3\xb8\xcf\x80\xcb\x9atb.'
+            self.assertRaises(UnicodeDecodeError, blosc.unpack_array, input_str)
+        else:
+            pass
+
     def test_unpack_array_exceptions(self):
         self.assertRaises(TypeError, blosc.unpack_array, 1.0)
 
