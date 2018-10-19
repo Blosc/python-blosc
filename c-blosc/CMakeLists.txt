@@ -11,6 +11,8 @@
 #       build test programs and generates the "test" target
 #   BUILD_BENCHMARKS: default ON
 #       build the benchmark program
+#   DEACTIVATE_SSE2: default OFF
+#       do not attempt to build with SSE2 instructions
 #   DEACTIVATE_AVX2: default OFF
 #       do not attempt to build with AVX2 instructions
 #   DEACTIVATE_LZ4: default OFF
@@ -67,7 +69,7 @@
 #    DEV: static includes blosc.a and blosc.h
 
 
-cmake_minimum_required(VERSION 2.8.10)
+cmake_minimum_required(VERSION 2.8.12)
 if (NOT CMAKE_VERSION VERSION_LESS 3.3)
     cmake_policy(SET CMP0063 NEW)
 endif()
@@ -95,8 +97,10 @@ option(BUILD_TESTS
     "Build test programs form the blosc compression library" ON)
 option(BUILD_BENCHMARKS
     "Build benchmark programs form the blosc compression library" ON)
+option(DEACTIVATE_SSE2
+        "Do not attempt to build with SSE2 instructions" OFF)
 option(DEACTIVATE_AVX2
-    "Do not attempt to build with AVX2 instructions" OFF)
+        "Do not attempt to build with AVX2 instructions" OFF)
 option(DEACTIVATE_LZ4
     "Do not include support for the LZ4 library." OFF)
 option(DEACTIVATE_SNAPPY
@@ -245,21 +249,29 @@ else()
     message(WARNING "Unrecognized system processor ${CMAKE_SYSTEM_PROCESSOR}. Cannot determine which hardware features (${CMAKE_C_COMPILER_ID} ${CMAKE_C_COMPILER_VERSION}) supports, so hardware-accelerated implementations will not be available.")
 endif()
 
+# disable SSE2 if specified (useful for cross-compiling, see #236)
+if(DEACTIVATE_SSE2)
+    set(COMPILER_SUPPORT_SSE2 FALSE)
+endif()
+
 # disable AVX2 if specified
 if(DEACTIVATE_AVX2)
     set(COMPILER_SUPPORT_AVX2 FALSE)
 endif()
 
 # flags
-# @TODO: set -Wall
+# Set -Wall and other useful warning flags.
+if(CMAKE_C_COMPILER_ID STREQUAL GNU OR CMAKE_C_COMPILER_ID STREQUAL Clang OR CMAKE_C_COMPILER_ID STREQUAL Intel)
+    add_compile_options(-Wall -Wwrite-strings -Wno-unused-function)
+endif(CMAKE_C_COMPILER_ID STREQUAL GNU OR CMAKE_C_COMPILER_ID STREQUAL Clang OR CMAKE_C_COMPILER_ID STREQUAL Intel)
+
 # @NOTE: -O3 is enabled in Release mode (CMAKE_BUILD_TYPE="Release")
 
-# Set the "-msse2" build flag only if the CMAKE_C_FLAGS is not already set.
-# Probably "-msse2" should be appended to CMAKE_C_FLAGS_RELEASE.
+# Set the "-msse2" build flag if supported.
 if(CMAKE_C_COMPILER_ID STREQUAL GNU OR CMAKE_C_COMPILER_ID STREQUAL Clang OR CMAKE_C_COMPILER_ID STREQUAL Intel)
-     if(NOT CMAKE_C_FLAGS AND COMPILER_SUPPORT_SSE2)
-         set(CMAKE_C_FLAGS -msse2 CACHE STRING "C flags." FORCE)
-     endif(NOT CMAKE_C_FLAGS AND COMPILER_SUPPORT_SSE2)
+     if(COMPILER_SUPPORT_SSE2)
+         add_compile_options(-msse2)
+     endif(COMPILER_SUPPORT_SSE2)
 endif(CMAKE_C_COMPILER_ID STREQUAL GNU OR CMAKE_C_COMPILER_ID STREQUAL Clang OR CMAKE_C_COMPILER_ID STREQUAL Intel)
 
 if(MSVC)
@@ -278,6 +290,11 @@ if(WIN32)
     # For some supporting headers
     include_directories("${CMAKE_CURRENT_SOURCE_DIR}/blosc")
 endif(WIN32)
+
+if(HAIKU)
+    # Haiku have posix_memalign, required by test_common.h
+    SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -D_POSIX_C_SOURCE=200112L")
+endif(HAIKU)
 
 if (NOT DEFINED BLOSC_IS_SUBPROJECT)
   if ("^${CMAKE_SOURCE_DIR}$" STREQUAL "^${PROJECT_SOURCE_DIR}$")
@@ -303,6 +320,7 @@ add_subdirectory(blosc)
 if(BUILD_TESTS)
     enable_testing()
     add_subdirectory(tests)
+    add_subdirectory(compat)
 endif(BUILD_TESTS)
 
 if(BUILD_BENCHMARKS)

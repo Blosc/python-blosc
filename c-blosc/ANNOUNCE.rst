@@ -1,14 +1,15 @@
 ===============================================================
- Announcing C-Blosc 1.13.0
+ Announcing C-Blosc 1.14.4
  A blocking, shuffling and lossless compression library for C
 ===============================================================
 
 What is new?
 ============
 
-Fixed a bug uncovered by the python-blosc test suite: when a buffer is
-to be copied, then we should reserve space for the header, not block
-pointers.
+This is a maintenance release.  Now it is possible to deactivate SSE2,
+which can be useful e.g. when doing cross-compiling from an Intel box.
+Also, there is better protection against passing small output buffers
+for compression, and other improvements.
 
 For more info, please see the release notes in:
 

@@ -23,7 +23,7 @@ size_t size = 1*MB;
 
 
 
-static char *test_cbuffer_sizes() {
+static const char *test_cbuffer_sizes(void) {
   size_t nbytes_, cbytes_, blocksize;
 
   blosc_cbuffer_sizes(dest, &nbytes_, &cbytes_, &blocksize);
@@ -34,7 +34,29 @@ static char *test_cbuffer_sizes() {
   return 0;
 }
 
-static char *test_cbuffer_metainfo() {
+static const char *test_get_complib_info(void) {
+  char *complib, *version;
+  int clibcode;
+
+  clibcode = blosc_get_complib_info("blosclz", &complib, &version);
+  mu_assert("ERROR: complib incorrect", strcmp(complib, "BloscLZ") == 0);
+  mu_assert("ERROR: clibcode incorrect", clibcode == 0);
+  free(complib);
+  free(version);
+  clibcode = blosc_get_complib_info("non-existing", &complib, &version);
+  mu_assert("ERROR: complib should be NULL", complib == NULL);
+  mu_assert("ERROR: clibcode incorrect", clibcode == -1);
+  clibcode = blosc_get_complib_info("blosclz", NULL, NULL);
+  mu_assert("ERROR: clibcode incorrect", clibcode == 0);
+  clibcode = blosc_get_complib_info("blosclz", NULL, &version);
+  mu_assert("ERROR: clibcode incorrect", clibcode == 0);
+  clibcode = blosc_get_complib_info("blosclz", &complib, NULL);
+  mu_assert("ERROR: complib incorrect", strcmp(complib, "BloscLZ") == 0);
+  mu_assert("ERROR: clibcode incorrect", clibcode == 0);
+  return 0;
+}
+
+static const char *test_cbuffer_metainfo(void) {
   size_t typesize_;
   int flags;
 
@@ -45,7 +67,7 @@ static char *test_cbuffer_metainfo() {
 }
 
 
-static char *test_cbuffer_versions() {
+static const char *test_cbuffer_versions(void) {
   int version_;
   int versionlz_;
 
@@ -56,8 +78,8 @@ static char *test_cbuffer_versions() {
 }
 
 
-static char *test_cbuffer_complib() {
-  char *complib;
+static const char *test_cbuffer_complib(void) {
+  const char *complib;
 
   complib = blosc_cbuffer_complib(dest);
   mu_assert("ERROR: complib incorrect", strcmp(complib, "BloscLZ") == 0);
@@ -65,7 +87,7 @@ static char *test_cbuffer_complib() {
 }
 
 
-static char *test_nthreads() {
+static const char *test_nthreads(void) {
   int nthreads;
 
   nthreads = blosc_set_nthreads(4);
@@ -75,7 +97,7 @@ static char *test_nthreads() {
   return 0;
 }
 
-static char *test_blocksize() {
+static const char *test_blocksize(void) {
   int blocksize;
 
   blocksize = blosc_get_blocksize();
@@ -87,21 +109,28 @@ static char *test_blocksize() {
   return 0;
 }
 
+static char *test_set_splitmode() {
+  blosc_set_splitmode(BLOSC_AUTO_SPLIT);
+  return 0;
+}
 
-static char *all_tests() {
+
+static const char *all_tests(void) {
   mu_run_test(test_cbuffer_sizes);
+  mu_run_test(test_get_complib_info);
   mu_run_test(test_cbuffer_metainfo);
   mu_run_test(test_cbuffer_versions);
   mu_run_test(test_cbuffer_complib);
   mu_run_test(test_nthreads);
   mu_run_test(test_blocksize);
+  mu_run_test(test_set_splitmode);
   return 0;
 }
 
 #define BUFFER_ALIGN_SIZE   8
 
 int main(int argc, char **argv) {
-  char *result;
+  const char *result;
 
   printf("STARTING TESTS for %s", argv[0]);
 
