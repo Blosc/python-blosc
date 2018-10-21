@@ -10,6 +10,7 @@ import blosc
 vi = sys.version_info
 PY26 = vi[0] == 2 and vi[1] == 6
 PY27 = vi[0] == 2 and vi[1] == 7
+PY33 = vi[0] == 3 and vi[1] == 3
 PY3X = vi[0] == 3
 
 if PY26:
@@ -263,7 +264,7 @@ class TestCodec(unittest.TestCase):
     def test_unpack_array_with_from_py27_exceptions(self):
         self.assertRaises(UnicodeDecodeError, blosc.unpack_array, self.PY_27_INPUT)
 
-    @unittest.skipIf(not PY3X, "Only required when running Python3.x")
+    @unittest.skipIf(not PY3X or PY33, "Only required when running Python3.x, excluding Python3.3")
     def test_unpack_array_with_unicode_characters_from_py27(self):
         import numpy as np
         out_array = np.array(['å', 'ç', 'ø', 'π', '˚'])
