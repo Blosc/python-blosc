@@ -1,14 +1,16 @@
 ===============================================================
- Announcing C-Blosc 1.13.0
+ Announcing C-Blosc 1.14.3
  A blocking, shuffling and lossless compression library for C
 ===============================================================
 
 What is new?
 ============
 
-Fixed a bug uncovered by the python-blosc test suite: when a buffer is
-to be copied, then we should reserve space for the header, not block
-pointers.
+The main change for this release is that the pthreads library is
+not needed on any Windows build anymore.  Thanks to Steven G. Johnson.
+Also, the internal Zstd sources have been updated to 1.3.4; expect
+an important performance boost (can be up to 10%, specially for low
+compression levels).
 
 For more info, please see the release notes in:
 
