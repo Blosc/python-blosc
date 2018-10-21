@@ -13,9 +13,13 @@
 Changes from 1.5.1 to 1.6.0
 ===========================
 
-- Updated C-Blosc to X.X.X
+- Updated C-Blosc to 1.14.3
 
 - Adding support for aarch64
+
+- `unpack_array` can now accepts keyword arguments. This allows decompressing
+  pickled arrays that were compressed with Python 2.x using Python 3.x. Thanks
+  to Simba Nyatsanga and Juan Maree.
 
 - Implemented `get_blocksize()`, thanks to Alberto Sabater
 
