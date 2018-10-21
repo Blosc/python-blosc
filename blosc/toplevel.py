@@ -8,6 +8,7 @@
 
 import os
 import sys
+import numpy as np
 from distutils.version import LooseVersion
 try:
     import cPickle as pickle
@@ -17,7 +18,13 @@ except ImportError:
 from blosc import blosc_extension as _ext
 import blosc
 
-if sys.version_info[0] < 3:
+# version number hack
+vi = sys.version_info
+PY26 = vi[0] == 2 and vi[1] == 6
+PY27 = vi[0] == 2 and vi[1] == 7
+PY3X = vi[0] == 3
+
+if vi[0] < 3:
     int_ = (int, long)
 else:
     int_ = (int,)
@@ -698,7 +705,7 @@ def pack_array(array, clevel=9, shuffle=blosc.SHUFFLE, cname='blosclz'):
     return packed_array
 
 
-def unpack_array(packed_array):
+def unpack_array(packed_array, **kwargs):
     """unpack_array(packed_array)
 
     Unpack (decompress) a packed NumPy array.
@@ -707,6 +714,10 @@ def unpack_array(packed_array):
     ----------
     packed_array : str / bytes
         The packed array to be decompressed.
+
+    **kwargs : fix_imports / encoding / errors
+        Optional parameters that can be passed to the pickle.loads API
+        https://docs.python.org/3/library/pickle.html#pickle.loads
 
     Returns
     -------
@@ -729,7 +740,11 @@ def unpack_array(packed_array):
     >>> a2 = blosc.unpack_array(parray)
     >>> numpy.alltrue(a == a2)
     True
-
+    >>> a = numpy.array(['å', 'ç', 'ø'])
+    >>> parray = blosc.pack_array(a)
+    >>> a2 = blosc.unpack_array(parray)
+    >>> numpy.alltrue(a == a2)
+    True
     """
 
     _check_bytesobj(packed_array)
@@ -737,7 +752,13 @@ def unpack_array(packed_array):
     # First decompress the pickle
     pickled_array = _ext.decompress(packed_array, False)
     # ... and unpickle
-    array = pickle.loads(pickled_array)
+
+    if kwargs and PY3X:
+        array = pickle.loads(pickled_array, **kwargs)
+        if all(isinstance(x, bytes) for x in array.tolist()):
+            array = np.array([x.decode('utf-8') for x in array.tolist()])
+    else:
+        array = pickle.loads(pickled_array)
 
     return array
 

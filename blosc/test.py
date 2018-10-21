@@ -10,6 +10,7 @@ import blosc
 vi = sys.version_info
 PY26 = vi[0] == 2 and vi[1] == 6
 PY27 = vi[0] == 2 and vi[1] == 7
+PY33 = vi[0] == 3 and vi[1] == 3
 PY3X = vi[0] == 3
 
 if PY26:
@@ -31,6 +32,8 @@ except ImportError:
 
 
 class TestCodec(unittest.TestCase):
+    def setUp(self):
+        self.PY_27_INPUT = b'\x02\x01\x03\x02\x85\x00\x00\x00\x84\x00\x00\x00\x95\x00\x00\x00\x80\x02cnumpy.core.multiarray\n_reconstruct\nq\x01cnumpy\nndarray\nq\x02K\x00\x85U\x01b\x87Rq\x03(K\x01K\x05\x85cnumpy\ndtype\nq\x04U\x02S2K\x00K\x01\x87Rq\x05(K\x03U\x01|NNNK\x02K\x01K\x00tb\x89U\n\xc3\xa5\xc3\xa7\xc3\xb8\xcf\x80\xcb\x9atb.'
 
     def test_basic_codec(self):
         s = b'0123456789'
@@ -112,7 +115,7 @@ class TestCodec(unittest.TestCase):
 
         self.assertEqual(expected, blosc.decompress(bytearray(compressed)))
         self.assertEqual(expected, blosc.decompress(np.array([compressed])))
-        
+
     def test_decompress_releasegil(self):
         import numpy as np
         # assume the expected answer was compressed from bytes
@@ -132,7 +135,7 @@ class TestCodec(unittest.TestCase):
         self.assertEqual(expected, blosc.decompress(bytearray(compressed)))
         self.assertEqual(expected, blosc.decompress(np.array([compressed])))
         blosc.set_releasegil(False)
-        
+
     def test_decompress_input_types_as_bytearray(self):
         import numpy as np
         # assume the expected answer was compressed from bytes
@@ -250,6 +253,22 @@ class TestCodec(unittest.TestCase):
 
         # This should always raise an error
         self.assertRaises(ValueError, blosc.pack_array, ones)
+
+    def test_unpack_array_with_unicode_characters(self):
+        import numpy as np
+        input_array = np.array(['å', 'ç', 'ø', 'π', '˚'])
+        packed_array = blosc.pack_array(input_array)
+        np.testing.assert_array_equal(input_array, blosc.unpack_array(packed_array, encoding='UTF-8'))
+
+    @unittest.skipIf(not PY3X, "Only required when running Python3.x")
+    def test_unpack_array_with_from_py27_exceptions(self):
+        self.assertRaises(UnicodeDecodeError, blosc.unpack_array, self.PY_27_INPUT)
+
+    @unittest.skipIf(not PY3X or PY33, "Only required when running Python3.x, excluding Python3.3")
+    def test_unpack_array_with_unicode_characters_from_py27(self):
+        import numpy as np
+        out_array = np.array(['å', 'ç', 'ø', 'π', '˚'])
+        np.testing.assert_array_equal(out_array, blosc.unpack_array(self.PY_27_INPUT, encoding='bytes'))
 
     def test_unpack_array_exceptions(self):
         self.assertRaises(TypeError, blosc.unpack_array, 1.0)
