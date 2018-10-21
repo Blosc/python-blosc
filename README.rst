@@ -224,7 +224,7 @@ will vary!)::
     *** zstd    , bitshuffle ***  0.127 s (5.86 GB/s) / 0.033 s (22.77 GB/s)	Compr. ratio:   6.4x
 
 
-Also, Blosc works quite well on ARM processors (even without NEON support yet):
+Also, Blosc works quite well on ARM processors (even without NEON support yet)::
 
     -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     python-blosc version: 1.4.4
