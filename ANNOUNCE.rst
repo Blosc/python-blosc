@@ -1,12 +1,13 @@
 =============================
-Announcing python-blosc 1.5.1
+Announcing python-blosc 1.6.0
 =============================
 
 What is new?
 ============
 
-C-Blosc has been updated to 1.11.3. Also, the license has been updated
-from MIT to BSD.
+C-Blosc has been updated to 1.14.3. Additionally there have been a
+number of improvments such as not compiling snappy by default and the
+implementation of the `get_blocksize()` function.
 
 For more info, you can have a look at the release notes in:
 

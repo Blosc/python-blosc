@@ -2,21 +2,19 @@ python-blosc: a Python wrapper for the extremely fast Blosc compression library
 ===============================================================================
 
 :Author: Francesc Alted
-:Author: Valentin Hänel
+:Author: Valentin Haenel
 :Contact: faltet@gmail.com
 :Contact: valentin@haenel.co
 :URL: https://github.com/Blosc/python-blosc
 :URL: http://python-blosc.blosc.org
 :Travis CI: |travis|
 :Appveyor: |appveyor|
-:PyPi: |version| |pypi|
+:PyPi: |version|
 
 .. |travis| image:: https://travis-ci.org/Blosc/python-blosc.png?branch=master
         :target: https://travis-ci.org/Blosc/python-blosc
 .. |appveyor| image:: https://ci.appveyor.com/api/projects/status/dexdkko8omge6o3s/branch/master?svg=true
         :target: https://ci.appveyor.com/project/FrancescAlted/python-blosc/branch/master
-.. |pypi| image:: https://img.shields.io/pypi/dm/blosc.png
-        :target: https://pypi.python.org/pypi/blosc
 .. |version| image:: https://img.shields.io/pypi/v/blosc.png
         :target: https://pypi.python.org/pypi/blosc
 
@@ -36,11 +34,45 @@ regular-spaced values, etc.
 python-blosc a Python package that wraps Blosc.  python-blosc supports
 Python 2.6, 2.7 and 3.4 or higher versions.
 
+
+Installing
+==========
+
+Install it as a typical Python package from PyPi using `pip`:
+
+.. code-block:: console
+
+    $ pip install blosc
+
+Alternatively, Install it as a typical Python package from 'source':
+
+.. code-block:: console
+
+    $ python setup.py install
+
+
+Documentation
+=============
+
+The Sphinx based documentation is here:
+
+http://python-blosc.blosc.org
+
+Also, some examples are available on python-blosc wiki page:
+
+http://github.com/blosc/python-blosc/wiki
+
+Lastly, here is the `recording
+<https://www.youtube.com/watch?v=rilU44j_wUU&list=PLNkWzv63CorW83NY3U93gUar645jTXpJF&index=15>`_
+and the `slides
+<http://www.blosc.org/docs/haenel-ep14-compress-me-stupid.pdf>`_ from the talk
+"Compress me stupid" at the EuroPython 2014.
+
 Building
 ========
 
-There are different ways to compile python-blosc, depending if you want
-to link with an already installed Blosc library or not.
+If you need more control, there are different ways to compile python-blosc,
+depending if you want to link with an already installed Blosc library or not.
 
 
 Installing via setuptools
@@ -274,31 +306,6 @@ For details on the ARM benchmark see: https://github.com/Blosc/python-blosc/issu
 In case you find your own results interesting, please report them back
 to the authors!
 
-Installing
-==========
-
-Install it as a typical Python package:
-
-.. code-block:: console
-
-    $ python setup.py install
-
-Documentation
-=============
-
-The Sphinx based documentation is here:
-
-http://python-blosc.blosc.org
-
-Also, some examples are available on python-blosc wiki page:
-
-http://github.com/blosc/python-blosc/wiki
-
-Lastly, here is the `recording
-<https://www.youtube.com/watch?v=rilU44j_wUU&list=PLNkWzv63CorW83NY3U93gUar645jTXpJF&index=15>`_
-and the `slides
-<http://www.blosc.org/docs/haenel-ep14-compress-me-stupid.pdf>`_ from the talk
-"Compress me stupid" at the EuroPython 2014.
 
 Mailing list
 ============
