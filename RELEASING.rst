@@ -13,7 +13,7 @@ Preliminaries
 * Make sure that ``RELEASE_NOTES.rst`` and ``ANNOUNCE.rst`` are up to
   date with the latest news in the release.
 
-* Check that ``VERSION`` file contains the correct number.
+* Check that ``VERSION`` and ``doc/conf.py`` files contains the correct number.
 
 * Commit the changes::
 
