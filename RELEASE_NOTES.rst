@@ -9,6 +9,10 @@
 :URL: http://python-blosc.blosc.org
 :URL: https://github.com/Blosc/python-blosc
 
+Changes from 1.6.1 to X.Y.Z
+===========================
+
+#XXX version-specific blurb XXX#
 
 Changes from 1.5.1 to 1.6.1
 ===========================
