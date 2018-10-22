@@ -785,8 +785,8 @@ def unpack_array(packed_array, **kwargs):
     if kwargs and PY3X:
         array = pickle.loads(pickled_array, **kwargs)
         if all(isinstance(x, bytes) for x in array.tolist()):
-            import numpy
-            array = numpy.array([x.decode('utf-8') for x in array.tolist()])
+            import numpy as np
+            array = np.array([x.decode('utf-8') for x in array.tolist()])
     else:
         array = pickle.loads(pickled_array)
 
