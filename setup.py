@@ -209,6 +209,9 @@ Blosc is a high performance compressor optimized for binary data.
                    extra_link_args=LFLAGS,
                    extra_compile_args=CFLAGS ),
         ],
+      install_requires=[
+          'numpy'
+      ],
       tests_require=tests_require,
       zip_safe=False,
       packages = ['blosc'],
