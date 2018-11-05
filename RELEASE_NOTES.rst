@@ -9,10 +9,11 @@
 :URL: http://python-blosc.blosc.org
 :URL: https://github.com/Blosc/python-blosc
 
-Changes from 1.6.1 to X.Y.Z
+Changes from 1.6.1 to 1.6.2
 ===========================
 
-#XXX version-specific blurb XXX#
+- Fixed `numpy` import in `toplevel.py`, this makes python-blosc usable without
+  numpy once again.
 
 Changes from 1.5.1 to 1.6.1
 ===========================

@@ -1,13 +1,14 @@
 =============================
-Announcing python-blosc X.Y.Z
+Announcing python-blosc 1.6.2
 =============================
 
 What is new?
 ============
 
-C-Blosc has been updated to 1.14.3. Additionally there have been a
-number of improvments such as not compiling snappy by default and the
-implementation of the `get_blocksize()` function.
+The `import numpy` statement in `toplevel.py` has been moved to a later
+point. This makes python-blosc usable without needing numpy once again.
+This behaviour changed in 1.6.1 and has now been reversed to restore the
+old behaviour.
 
 For more info, you can have a look at the release notes in:
 
