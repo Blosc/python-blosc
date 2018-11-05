@@ -8,7 +8,6 @@
 
 import os
 import sys
-import numpy as np
 from distutils.version import LooseVersion
 try:
     import cPickle as pickle
@@ -756,7 +755,8 @@ def unpack_array(packed_array, **kwargs):
     if kwargs and PY3X:
         array = pickle.loads(pickled_array, **kwargs)
         if all(isinstance(x, bytes) for x in array.tolist()):
-            array = np.array([x.decode('utf-8') for x in array.tolist()])
+            import numpy
+            array = numpy.array([x.decode('utf-8') for x in array.tolist()])
     else:
         array = pickle.loads(pickled_array)
 
