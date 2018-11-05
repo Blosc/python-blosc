@@ -42,6 +42,10 @@ if sys.version_info[:2] < (2, 7):
 
 ########### End of checks ##########
 
+# Read the long_description from README.rst
+with open('README.rst') as f:
+    long_description = f.read()
+
 # Blosc version
 VERSION = open('VERSION').read().strip()
 # Create the version.py file
