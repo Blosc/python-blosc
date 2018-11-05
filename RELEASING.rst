@@ -46,7 +46,7 @@ Updating the online documentation site
 * Make the html version of the docs::
 
   $ rm -rf _build/html
-  $ make html
+  $ PYTHONPATH=../ make html
 
 * Make a backup and upload the files in the doc site (xodo)::
 
