@@ -668,8 +668,7 @@ def pack_array(array, clevel=9, shuffle=blosc.SHUFFLE, cname='blosclz'):
     TypeError
         If array does not quack like a numpy ndarray.
     ValueError
-        If array.itemsize * array.size is larger than the maximum allowed
-            buffer size.
+        If array.itemsize * array.size is larger than the maximum allowed buffer size.
         If typesize is not within the allowed range.
         If clevel is not within the allowed range.
         If cname is not within the supported compressors.
