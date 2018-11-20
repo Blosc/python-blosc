@@ -32,7 +32,7 @@ with relatively low entropy, like sparse data, time series, grids with
 regular-spaced values, etc.
 
 python-blosc a Python package that wraps Blosc.  python-blosc supports
-Python 2.7 and 3.4 or higher versions.
+Python 2.7 and 3.3 or higher versions.
 
 
 Installing
