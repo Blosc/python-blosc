@@ -37,8 +37,6 @@ else:
     exit_with_error("You need Python 2.7/3.3 or greater to install blosc!")
 
 tests_require = ['numpy']
-if sys.version_info[:2] < (2, 7):
-    tests_require += ['unittest2']
 
 ########### End of checks ##########
 
