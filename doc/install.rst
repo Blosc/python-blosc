@@ -10,7 +10,7 @@ from sources, you are going to need a C compiler (GCC, clang and MSVC
 Also, there are situations where you may want to link with an already existing
 Blosc library in your system.  You can do that too.
 
-This package supports Python 2.6, 2.7 and 3.3 or higher versions.
+This package supports Python 2.7 and 3.3 or higher versions.
 
 Installing from PyPI repository
 ===============================

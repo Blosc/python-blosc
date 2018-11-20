@@ -28,17 +28,15 @@ def exit_with_error(message):
 
 # Check for Python
 if sys.version_info[0] == 2:
-    if sys.version_info[1] < 6:
-        exit_with_error("You need Python 2.6 or greater to install blosc!")
+    if sys.version_info[1] < 7:
+        exit_with_error("You need Python 2.7 or greater to install blosc!")
 elif sys.version_info[0] == 3:
     if sys.version_info[1] < 3:
         exit_with_error("You need Python 3.3 or greater to install blosc!")
 else:
-    exit_with_error("You need Python 2.6/3.3 or greater to install blosc!")
+    exit_with_error("You need Python 2.7/3.3 or greater to install blosc!")
 
 tests_require = ['numpy']
-if sys.version_info[:2] < (2, 7):
-    tests_require += ['unittest2']
 
 ########### End of checks ##########
 
@@ -173,7 +171,6 @@ Intended Audience :: Information Technology
 Intended Audience :: Science/Research
 License :: OSI Approved :: MIT License
 Programming Language :: Python
-Programming Language :: Python :: 2.6
 Programming Language :: Python :: 2.7
 Programming Language :: Python :: 3.3
 Programming Language :: Python :: 3.4
