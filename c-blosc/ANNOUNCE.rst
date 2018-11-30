@@ -1,16 +1,19 @@
 ===============================================================
- Announcing C-Blosc 1.14.3
+ Announcing C-Blosc 1.15.0
  A blocking, shuffling and lossless compression library for C
 ===============================================================
 
 What is new?
 ============
 
-The main change for this release is that the pthreads library is
-not needed on any Windows build anymore.  Thanks to Steven G. Johnson.
-Also, the internal Zstd sources have been updated to 1.3.4; expect
-an important performance boost (can be up to 10%, specially for low
-compression levels).
+In this release, the `blosc_compress()` and `blosc_decompress()` interfaces
+are now fork-safe, preventing child-process deadlocks in fork-based
+multiprocessing applications. These interfaces with BLOSC_NOLOCK were, and
+continue to be, fork-safe. `_ctx` interface context reuse continues to be
+unsafe in the child process post-fork.  Thanks to Alex Ford.
+
+Also, a few bugs have been fixed, more compatibility with oldish compilers
+and LZ4 and Zstd codecs have been updated to their latest versions.
 
 For more info, please see the release notes in:
 
