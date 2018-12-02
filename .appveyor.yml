@@ -15,12 +15,12 @@ environment:
 
 install:
   # We need wheel installed to build wheels
-  - "build.cmd %PYTHON%\\python.exe -m pip install numpy psutil"
-  - "build.cmd %PYTHON%\\python.exe setup.py build_clib"
-  - "build.cmd %PYTHON%\\python.exe setup.py build_ext --inplace"
+  - ".build.cmd %PYTHON%\\python.exe -m pip install numpy psutil"
+  - ".build.cmd %PYTHON%\\python.exe setup.py build_clib"
+  - ".build.cmd %PYTHON%\\python.exe setup.py build_ext --inplace"
 
 build: off
 
 test_script:
   - "set PYTHONPATH=."
-  - "build.cmd %PYTHON%\\python.exe blosc/test.py"
+  - ".build.cmd %PYTHON%\\python.exe blosc/test.py"
