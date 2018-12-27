@@ -1,14 +1,22 @@
 =============================
-Announcing python-blosc 1.6.2
+Announcing python-blosc 1.7.0
 =============================
 
 What is new?
 ============
 
-The `import numpy` statement in `toplevel.py` has been moved to a later
-point. This makes python-blosc usable without needing numpy once again.
-This behaviour changed in 1.6.1 and has now been reversed to restore the
-old behaviour.
+This is a maintenance release which takes care of several housekeepting
+tasks. Support for older versions of Python (2.6 and 3.3) has been
+removed from the codebase. A new version of C-Blosc (1.5.1) that now
+passes all unit and integration tests across all supported platforms has
+been included. Finally, a the vendored cpuinfo.py has been upgraded and
+the automatic tests on Windows via Appveyor have been upgraded to
+include a larger variety of Windows/Python combinations.
+
+A big thank you goes out to Daniel Stender from the Debian project for his
+continued efforts to package the Blosc stack -- including python-blosc -- for
+Debian. This also means it is likely that a recent version of
+python-blosc will be included in Buster.
 
 For more info, you can have a look at the release notes in:
 

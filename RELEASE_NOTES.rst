@@ -9,10 +9,14 @@
 :URL: http://python-blosc.blosc.org
 :URL: https://github.com/Blosc/python-blosc
 
-Changes from 1.6.2 to X.Y.Z
+Changes from 1.6.2 to 1.7.0
 ===========================
 
-- XXXYYYZZZ
+- Include C-Blosc v1.15.1
+- Remove Support for Python 2.6 and 3.3
+- Fix vendored cpuinfo.py
+- Rework Windows CI via Appveyor
+- Various minor bugfixes
 
 Changes from 1.6.1 to 1.6.2
 ===========================

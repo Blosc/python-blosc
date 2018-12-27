@@ -10,8 +10,8 @@ Releasing python-blosc
 Preliminaries
 -------------
 
-* Make sure that ``RELEASE_NOTES.rst`` and ``ANNOUNCE.rst`` are up to
-  date with the latest news in the release.
+* Make sure that ``RELEASE_NOTES.rst``
+  and ``ANNOUNCE.rst`` are up to date with the latest news in the release.
 
 * Check that ``VERSION`` and ``doc/conf.py`` files contains the correct number.
 
