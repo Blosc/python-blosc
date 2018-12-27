@@ -9,6 +9,12 @@
 :URL: http://python-blosc.blosc.org
 :URL: https://github.com/Blosc/python-blosc
 
+Changes from 1.7.0 to 1.7.1
+===========================
+
+* #######################
+
+
 Changes from 1.6.2 to 1.7.0
 ===========================
 
