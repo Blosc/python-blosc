@@ -19,6 +19,7 @@ import sys
 from setuptools import Extension
 from setuptools import setup
 from glob import glob
+from distutils.version import LooseVersion
 
 if __name__ == '__main__':
     import cpuinfo
@@ -157,12 +158,19 @@ if __name__ == '__main__':
                 def_macros += [('__SSE2__', 1)]
         # AVX2
         if 'DISABLE_BLOSC_AVX2' not in os.environ and (cpu_info != None) and ('avx2' in cpu_info['flags']):
-            print('AVX2 detected')
-            CFLAGS.append('-DSHUFFLE_AVX2_ENABLED')
-            sources += [f for f in glob('c-blosc/blosc/*.c') if 'avx2' in f]
+            
             if os.name == 'posix':
+                print('AVX2 detected')
+                CFLAGS.append('-DSHUFFLE_AVX2_ENABLED')
+                sources += [f for f in glob('c-blosc/blosc/*.c') if 'avx2' in f]
                 CFLAGS.append('-mavx2')
-            elif os.name == 'nt':
+            elif(os.name == 'nt' and 
+                    LooseVersion(platform.python_version()) >= LooseVersion('3.5.0')):
+                # Neither MSVC2008 for Python 2.7 or MSVC2010 for Python 3.4 have 
+                # sufficient AVX2 support
+                print('AVX2 detected')
+                CFLAGS.append('-DSHUFFLE_AVX2_ENABLED')
+                sources += [f for f in glob('c-blosc/blosc/*.c') if 'avx2' in f]
                 def_macros += [('__AVX2__', 1)]
         # TODO: AVX512
 
