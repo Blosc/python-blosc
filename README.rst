@@ -310,8 +310,8 @@ License
 =======
 
 The software is licenses under a 3-Clause BSD licsense. A copy of the
-python-blosc license can be found in LICENSE.txt. A copy of all licenses can be
-found in LICENSES/.
+python-blosc license can be found in `LICENSE.txt <LICENSE.txt>`_. A copy of all licenses can be
+found in `LICENSES/ <LICENSES/>`_.
 
 Mailing list
 ============
