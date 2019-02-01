@@ -12,7 +12,7 @@
 #include "Python.h"
 #include "blosc.h"
 
-static int RELEASEGIL;     
+static int RELEASEGIL;
 static PyObject *BloscError;
 
 static void
@@ -229,10 +229,10 @@ compress_helper(void * input, size_t nbytes, size_t typesize,
   output_ptr = PyBytes_AS_STRING(output);
 
   if( RELEASEGIL )
-  { 
+  {
     // Run with GIL released, tiny overhead penalty from this (although it
-    // may be significant for smaller chunks.) 
-    
+    // may be significant for smaller chunks.)
+
     _save = PyEval_SaveThread();
     blocksize = blosc_get_blocksize();
     // if blocksize==0, blosc_compress_ctx will try to auto-optimize it.
@@ -255,8 +255,8 @@ compress_helper(void * input, size_t nbytes, size_t typesize,
     Py_DECREF(output);
     return NULL;
   }
-  
-  
+
+
   /* Attempt to resize, if it's much smaller, a copy is required. */
   if (_PyBytes_Resize(&output, cbytes) < 0){
     /* the memory exception will have been set, hopefully */
@@ -397,13 +397,13 @@ decompress_helper(void * input, size_t nbytes, void * output)
 {
   int err, nthreads;
   PyThreadState *_save = NULL;
-  
+
   /* Do the decompression */
 //  int blosc_decompress_ctx(const void *src, void *dest, size_t destsize,
 //                         int numinternalthreads)
   if( RELEASEGIL )
-  { 
-    
+  {
+
     _save = PyEval_SaveThread();
     nthreads = blosc_get_nthreads();
     err = blosc_decompress_ctx(input, output, nbytes, nthreads);
@@ -415,16 +415,16 @@ decompress_helper(void * input, size_t nbytes, void * output)
     err = blosc_decompress(input, output, nbytes);
   }
 
-  
+
   if (err < 0) {
     blosc_error(err, "while decompressing data");
     return 0;
   }
   else if (err != (int)nbytes) {
     PyErr_Format(BloscError,
-		 "expected %d bytes of decompressed data, got %d",
-		 (int) nbytes,
-		 err);
+        "expected %d bytes of decompressed data, got %d",
+        (int) nbytes,
+        err);
     return 0;
   }
   return 1;
@@ -508,14 +508,14 @@ PyBlosc_decompress(PyObject *self, PyObject *args)
     return NULL;
   }
 
-#define branch(from_string_and_size, as_string)				 \
-  /* Book memory for the result */					 \
-    if (!(result_str = from_string_and_size(NULL, (Py_ssize_t)nbytes))){ \
-      PyBuffer_Release(&view);						 \
-      return NULL;							 \
-    }									 \
-                                                                         \
-    output = as_string(result_str);					 \
+#define branch(from_string_and_size, as_string)                               \
+  /* Book memory for the result */                                            \
+    if (!(result_str = from_string_and_size(NULL, (Py_ssize_t)nbytes))){      \
+      PyBuffer_Release(&view);                                                \
+      return NULL;                                                            \
+    }                                                                         \
+                                                                              \
+    output = as_string(result_str);                                           \
     (void)NULL
 
   if (as_bytearray) {
