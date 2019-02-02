@@ -35,6 +35,13 @@ python-blosc a Python package that wraps Blosc.  python-blosc supports
 Python 2.7 and 3.4 or higher versions.
 
 
+Code of Conduct
+===============
+
+The Blosc community has adopted a Code of Conduct that we expect project
+participants to adhere to.  Please read the `full text <CODE_OF_CONDUCT.md>`_
+so that you can understand what actions will and will not be tolerated.
+
 Installing
 ==========
 
