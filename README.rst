@@ -313,6 +313,12 @@ For details on the ARM benchmark see: https://github.com/Blosc/python-blosc/issu
 In case you find your own results interesting, please report them back
 to the authors!
 
+License
+=======
+
+The software is licenses under a 3-Clause BSD licsense. A copy of the
+python-blosc license can be found in `LICENSE.txt <LICENSE.txt>`_. A copy of all licenses can be
+found in `LICENSES/ <LICENSES/>`_.
 
 Mailing list
 ============
