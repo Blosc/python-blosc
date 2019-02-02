@@ -338,7 +338,7 @@ class TestCodec(unittest.TestCase):
         self.assertTrue(blosc.cbuffer_validate(compressed))
         if not PY3X:
             # Python 3 no longer has the buffer
-            self.assertEqual(blosc.cbuffer_validate(buffer(compressed)))
+            self.assertTrue(blosc.cbuffer_validate(buffer(compressed)))
         self.assertTrue(blosc.cbuffer_validate(memoryview(compressed)))
 
         self.assertTrue(blosc.cbuffer_validate(bytearray(compressed)))
