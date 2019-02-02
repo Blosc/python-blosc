@@ -539,6 +539,42 @@ PyBlosc_decompress(PyObject *self, PyObject *args)
 }
 
 
+PyDoc_STRVAR(cbuffer_validate__doc__,
+"cbuffer_validate(bytesobj) -- Check if compressed data is safe.\n\n"
+"Checks that it is safe to attempt decompression of compressed data.\n"
+"This does not guarantee that decompression will be successfull,\n"
+"only that it is safe to attempt decompression.");
+
+static PyObject *
+PyBlosc_cbuffer_validate(PyObject *self, PyObject *args)
+{
+  Py_buffer view;
+  void *input;
+  size_t nbytes, cbytes;
+  int result;
+
+  #if PY_MAJOR_VERSION <= 2
+    if (!PyArg_ParseTuple(args, "s*:decompress", &view))
+      return NULL;
+
+  #elif PY_MAJOR_VERSION >= 3
+    /* y* :bytes like object EXCLUDING unicode and anything that supports
+     * the buffer interface. This is the recommended way to accept binary
+     * data in Python 3. */
+    if (!PyArg_ParseTuple(args, "y*:decompress", &view))
+      return NULL;
+  #endif
+  cbytes = view.len;
+  input = view.buf;
+  result = blosc_cbuffer_validate(input, cbytes, &nbytes);
+  if (result == 0) {
+    Py_RETURN_TRUE;
+  }else{
+    Py_RETURN_FALSE;
+  }
+}
+
+
 static PyMethodDef blosc_methods[] =
 {
   {"compress", (PyCFunction)PyBlosc_compress,  METH_VARARGS,
@@ -571,6 +607,8 @@ static PyMethodDef blosc_methods[] =
    get_clib__doc__},
   {"get_cbuffer_sizes", (PyCFunction)PyBlosc_get_cbuffer_sizes, METH_VARARGS,
    get_cbuffer_sizes__doc__},
+  {"cbuffer_validate", (PyCFunction)PyBlosc_cbuffer_validate, METH_VARARGS,
+   cbuffer_validate__doc__},
   {"init", (PyCFunction)PyBlosc_init, METH_VARARGS,
    init__doc__},
   {"destroy", (PyCFunction)PyBlosc_destroy, METH_VARARGS,
@@ -648,3 +686,5 @@ PyInit_blosc_extension(void) {
   return m;
 }
 #endif
+
+

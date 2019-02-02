@@ -54,6 +54,7 @@ from blosc.toplevel import (
     clib_info,
     get_clib,
     get_cbuffer_sizes,
+    cbuffer_validate,
     print_versions,
     )
 
