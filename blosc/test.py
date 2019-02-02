@@ -100,6 +100,7 @@ class TestCodec(unittest.TestCase):
         compressed = blosc.compress(expected, typesize=1)
 
         # now for all the things that support the buffer interface
+        self.assertEqual(expected, blosc.decompress(compressed))
         if not PY3X:
             # Python 3 no longer has the buffer
             self.assertEqual(expected, blosc.decompress(buffer(compressed)))
@@ -116,6 +117,7 @@ class TestCodec(unittest.TestCase):
         compressed = blosc.compress(expected, typesize=1)
 
         # now for all the things that support the buffer interface
+        self.assertEqual(expected, blosc.decompress(compressed))
         if not PY3X:
             # Python 3 no longer has the buffer
             self.assertEqual(expected, blosc.decompress(buffer(compressed)))
@@ -132,6 +134,7 @@ class TestCodec(unittest.TestCase):
         compressed = blosc.compress(expected, typesize=1)
 
         # now for all the things that support the buffer interface
+        self.assertEqual(expected, blosc.decompress(compressed))
         if not PY3X:
             # Python 3 no longer has the buffer
             self.assertEqual(expected, blosc.decompress(buffer(compressed),
