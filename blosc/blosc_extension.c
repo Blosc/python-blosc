@@ -542,7 +542,7 @@ PyBlosc_decompress(PyObject *self, PyObject *args)
 PyDoc_STRVAR(cbuffer_validate__doc__,
 "cbuffer_validate(bytesobj) -- Check if compressed data is safe.\n\n"
 "Checks that it is safe to attempt decompression of compressed data.\n"
-"This does not guarantee that decompression will be successfull,\n"
+"This does not guarantee that decompression will be successful,\n"
 "only that it is safe to attempt decompression.");
 
 static PyObject *

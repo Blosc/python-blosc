@@ -297,7 +297,7 @@ def cbuffer_validate(bytesobj):
     validate_cbuffer(bytesobj)
 
     Validate the cbuffer. Check that the cbuffer is safe to compress. Note
-    that, this does not guarantee that the blosc will be able to decompress the
+    that this does not guarantee that the blosc will be able to decompress the
     buffer successfully, only that it is safe to attempt to do so.
 
     Parameters
