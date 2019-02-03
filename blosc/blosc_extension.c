@@ -238,16 +238,16 @@ compress_helper(void * input, size_t nbytes, size_t typesize,
     // if blocksize==0, blosc_compress_ctx will try to auto-optimize it.
     nthreads = blosc_get_nthreads();
     cbytes = blosc_compress_ctx(clevel, shuffle, typesize, nbytes,
-			  input, output_ptr, nbytes+BLOSC_MAX_OVERHEAD,
-               cname, blocksize, nthreads);
+                                input, output_ptr, nbytes+BLOSC_MAX_OVERHEAD,
+                                cname, blocksize, nthreads);
      PyEval_RestoreThread(_save);
      _save = NULL;
   }
   else
   { // Hold onto the Python GIL while compressing
     cbytes = blosc_compress(clevel, shuffle, typesize, nbytes,
-			  input, output_ptr,
-			  nbytes+BLOSC_MAX_OVERHEAD);
+                            input, output_ptr,
+                            nbytes+BLOSC_MAX_OVERHEAD);
   }
 
   if (cbytes < 0) {
@@ -282,7 +282,7 @@ PyBlosc_compress_ptr(PyObject *self, PyObject *args)
 
   /* require an address, buffer length, typesize, clevel, shuffle and cname */
   if (!PyArg_ParseTuple(args, "Onniis:compress", &input, &nbytes,
-			&typesize, &clevel, &shuffle, &cname))
+      &typesize, &clevel, &shuffle, &cname))
     return NULL;
   /*  convert to void pointer safely */
   input_ptr = PyLong_AsVoidPtr(input);
