@@ -329,6 +329,35 @@ class TestCodec(unittest.TestCase):
         last_xx = blosc.decompress(zxx)[-3:]
         self.assertEqual(last_xx, b'\x01\x01\x01')
 
+    def test_cbuffer_validate(self):
+        import numpy as np
+        expected = b'0123456789' * 1000
+        compressed = blosc.compress(expected)
+
+        # now for all the things that support the buffer interface
+        self.assertTrue(blosc.cbuffer_validate(compressed))
+        if not PY3X:
+            # Python 3 no longer has the buffer
+            self.assertTrue(blosc.cbuffer_validate(buffer(compressed)))
+        self.assertTrue(blosc.cbuffer_validate(memoryview(compressed)))
+
+        self.assertTrue(blosc.cbuffer_validate(bytearray(compressed)))
+        self.assertTrue(blosc.cbuffer_validate(np.array([compressed])))
+
+    def test_cbuffer_validate_failures(self):
+        import numpy as np
+        compressed = b'this_is_total_garbage'
+
+        # now for all the things that support the buffer interface
+        self.assertFalse(blosc.cbuffer_validate(compressed))
+        if not PY3X:
+            # Python 3 no longer has the buffer
+            self.assertFalse(blosc.cbuffer_validate(buffer(compressed)))
+        self.assertFalse(blosc.cbuffer_validate(memoryview(compressed)))
+
+        self.assertFalse(blosc.cbuffer_validate(bytearray(compressed)))
+        self.assertFalse(blosc.cbuffer_validate(np.array([compressed])))
+
 
 def run(verbosity=2):
     import blosc

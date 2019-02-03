@@ -292,6 +292,36 @@ def get_cbuffer_sizes(bytesobj):
     return _ext.get_cbuffer_sizes(bytesobj)
 
 
+def cbuffer_validate(bytesobj):
+    """
+    validate_cbuffer(bytesobj)
+
+    Validate the cbuffer. Check that the cbuffer is safe to compress. Note
+    that this does not guarantee that the blosc will be able to decompress the
+    buffer successfully, only that it is safe to attempt to do so.
+
+    Parameters
+    ----------
+    bytesobj : str / bytes
+        The compressed buffer.
+
+    Returns
+    -------
+    result : boolean
+        True if safe, False if not.
+
+    Examples
+    --------
+
+    >>> s = b'0123456789'
+    >>> c = blosc.compress(s, typesize=1)
+    >>> blosc.cbuffer_validate(c)
+    True
+    """
+
+    return _ext.cbuffer_validate(bytesobj)
+
+
 def free_resources():
     """
     free_resources()
