@@ -18,15 +18,11 @@ before_install:
   - free -m
   - df -h
   - ulimit -a
-  - pip install -q numpy
-  - pip install -q psutil
   - python -V
+  - pip install -q numpy psutil
 install:
-  - pip install .
+  - make build
 
 script:
-  - mkdir empty
-  - cd empty
-  - python -c"import blosc; blosc.print_versions()"
-  - nosetests --with-doctest blosc
+  - make test
 

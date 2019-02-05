@@ -40,7 +40,7 @@ if __name__ == '__main__':
     else:
         exit_with_error("You need Python 2.7/3.4 or greater to install blosc!")
 
-    tests_require = ['numpy']
+    tests_require = ['numpy', 'psutil']
 
     ########### End of checks ##########
 
