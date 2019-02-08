@@ -49,17 +49,19 @@ so that you can understand what actions will and will not be tolerated.
 Installing
 ==========
 
-Install it as a typical Python package from PyPi using `pip`:
+
+You can install binary packages with ``conda``:
+
+.. code-block:: console
+
+    $ conda install -c conda-forge python-blosc
+
+Or, install it as a typical Python source package (requires c-compiler and
+Python headers  from PyPi using ``pip``:
 
 .. code-block:: console
 
     $ pip install blosc
-
-Alternatively, Install it as a typical Python package from 'source':
-
-.. code-block:: console
-
-    $ python setup.py install
 
 
 Documentation
