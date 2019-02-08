@@ -5,7 +5,7 @@ python-blosc: a Python wrapper for the extremely fast Blosc compression library
 :Author: Valentin Haenel
 :Contact: faltet@gmail.com
 :Contact: valentin@haenel.co
-:URL: https://github.com/Blosc/python-blosc
+:Github: https://github.com/Blosc/python-blosc
 :URL: http://python-blosc.blosc.org
 :Travis CI: |travis|
 :Appveyor: |appveyor|
