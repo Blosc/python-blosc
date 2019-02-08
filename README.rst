@@ -57,7 +57,7 @@ You can install binary packages with ``conda``:
     $ conda install -c conda-forge python-blosc
 
 Or, install it as a typical Python source package (requires c-compiler and
-Python headers  from PyPi using ``pip``:
+Python headers) from PyPi using ``pip``:
 
 .. code-block:: console
 
