@@ -546,7 +546,7 @@ def compress_ptr(address, items, typesize=8, clevel=9, shuffle=blosc.SHUFFLE,
     return _ext.compress_ptr(address, length, typesize, clevel, shuffle, cname)
 
 
-def decompress(bytesobj, as_bytearray=False):
+def decompress(bytesobj, as_bytearray=False, safe=True):
     """decompress(bytesobj)
 
     Decompresses a bytesobj compressed object.
@@ -558,6 +558,10 @@ def decompress(bytesobj, as_bytearray=False):
     as_bytearray : bool, optional
         If this flag is True then the return type will be a bytearray object
         instead of a bytesobject.
+    safe: bool, optional
+        Use the code path that ensures that the buffer is safe to decompress.
+        Note that this doen't mean decompression will be successful, only that
+        attempting to do so will be safe.
 
     Returns
     -------
@@ -591,10 +595,10 @@ def decompress(bytesobj, as_bytearray=False):
 
     """
 
-    return _ext.decompress(bytesobj, as_bytearray)
+    return _ext.decompress(bytesobj, as_bytearray, safe)
 
 
-def decompress_ptr(bytesobj, address):
+def decompress_ptr(bytesobj, address, safe=True):
     """decompress_ptr(bytesobj, address)
 
     Decompresses a bytesobj compressed object into the memory at address.
@@ -605,6 +609,10 @@ def decompress_ptr(bytesobj, address):
         The data to be decompressed.
     address : int or long
         the pointer to the data to be compressed
+    safe: bool, optional
+        Use the code path that ensures that the buffer is safe to decompress.
+        Note that this doen't mean decompression will be successful, only that
+        attempting to do so will be safe.
 
     Returns
     -------
@@ -664,7 +672,7 @@ def decompress_ptr(bytesobj, address):
     _check_bytesobj(bytesobj)
     _check_address(address)
 
-    return _ext.decompress_ptr(bytesobj, address)
+    return _ext.decompress_ptr(bytesobj, address, safe)
 
 
 def pack_array(array, clevel=9, shuffle=blosc.SHUFFLE, cname='blosclz'):
@@ -734,7 +742,7 @@ def pack_array(array, clevel=9, shuffle=blosc.SHUFFLE, cname='blosclz'):
     return packed_array
 
 
-def unpack_array(packed_array, **kwargs):
+def unpack_array(packed_array, safe=True, **kwargs):
     """unpack_array(packed_array)
 
     Unpack (decompress) a packed NumPy array.
@@ -743,6 +751,11 @@ def unpack_array(packed_array, **kwargs):
     ----------
     packed_array : str / bytes
         The packed array to be decompressed.
+
+    safe: bool, optional
+        Use the code path that ensures that the buffer is safe to decompress.
+        Note that this doen't mean decompression will be successful, only that
+        attempting to do so will be safe.
 
     **kwargs : fix_imports / encoding / errors
         Optional parameters that can be passed to the pickle.loads API
@@ -779,7 +792,7 @@ def unpack_array(packed_array, **kwargs):
     _check_bytesobj(packed_array)
 
     # First decompress the pickle
-    pickled_array = _ext.decompress(packed_array, False)
+    pickled_array = _ext.decompress(packed_array, False, safe)
     # ... and unpickle
 
     if kwargs and PY3X:

@@ -393,7 +393,7 @@ get_nbytes(void * input, size_t cbytes, size_t * nbytes)
  *
  *  */
 static int
-decompress_helper(void * input, size_t nbytes, void * output)
+decompress_helper(void * input, size_t nbytes, void * output, int safe)
 {
   int err, nthreads;
   PyThreadState *_save = NULL;
@@ -406,13 +406,22 @@ decompress_helper(void * input, size_t nbytes, void * output)
 
     _save = PyEval_SaveThread();
     nthreads = blosc_get_nthreads();
-    err = blosc_decompress_ctx(input, output, nbytes, nthreads);
+    if (safe) {
+      err = blosc_decompress_ctx(input, output, nbytes, nthreads);
+    }else{
+      err = blosc_decompress_ctx_unsafe(input, output, nbytes, nthreads);
+    }
     PyEval_RestoreThread(_save);
     _save = NULL;
   }
   else
   { // Run while holding the GIL
-    err = blosc_decompress(input, output, nbytes);
+    if (safe) {
+      err = blosc_decompress(input, output, nbytes);
+    }else {
+      err = blosc_decompress_unsafe(input, output, nbytes);
+    }
+
   }
 
 
@@ -432,7 +441,7 @@ decompress_helper(void * input, size_t nbytes, void * output)
 
 
 PyDoc_STRVAR(decompress_ptr__doc__,
-"decompress_ptr(string, pointer) -- Decompress string into pointer.\n"
+"decompress_ptr(string, pointer, safe) -- Decompress string into pointer.\n"
              );
 
 static PyObject *
@@ -441,10 +450,29 @@ PyBlosc_decompress_ptr(PyObject *self, PyObject *args)
   PyObject * pointer;
   void * input, * output;
   size_t cbytes, nbytes;
+  int safe;
+
+#if PY_MAJOR_VERSION <= 2
+  PyObject *safe_obj = NULL;
+  /* s# : bytes like object including unicode and anything that supports
+   * the buffer interface. We cannot use p in python 2 so we will
+   * create an object to hold the predicate. */
+  if (!PyArg_ParseTuple(args, "s#OO:decompress", &input, &cbytes, &pointer, &safe_obj))
+    return NULL;
+
+  if ((safe = PyObject_IsTrue(safe_obj)) < 0) {
+    /* failed to convert predicate to bool */
+    return NULL;
+  }
+#elif PY_MAJOR_VERSION >= 3
+  /* y# :bytes like object EXCLUDING unicode and anything that supports
+   * the buffer interface. This is the recommended way to accept binary
+   * data in Python 3. */
+  if (!PyArg_ParseTuple(args, "y#Op:decompress", &input, &cbytes, &pointer, &safe))
+    return NULL;
+#endif
 
   /* require a compressed string and a pointer  */
-  if (!PyArg_ParseTuple(args, "s#O:decompress", &input, &cbytes, &pointer))
-    return NULL;
 
   /*  convert the int or long Python object to a void * */
   output = PyLong_AsVoidPtr(pointer);
@@ -456,7 +484,7 @@ PyBlosc_decompress_ptr(PyObject *self, PyObject *args)
     return NULL;
 
   /* do decompression */
-  if (!decompress_helper(input, nbytes, output))
+  if (!decompress_helper(input, nbytes, output, safe))
     return NULL;
 
   /*  Return nbytes as python integer. This is legitimate, because
@@ -467,7 +495,7 @@ PyBlosc_decompress_ptr(PyObject *self, PyObject *args)
 }
 
 PyDoc_STRVAR(decompress__doc__,
-"decompress(string, as_bytearray) -- Return decompressed string.\n\n"
+"decompress(string, as_bytearray, safe) -- Return decompressed string.\n\n"
 "If as_bytearray is True then the returned data will be a mutable\n"
 "bytearray object instead of bytes");
 
@@ -479,16 +507,25 @@ PyBlosc_decompress(PyObject *self, PyObject *args)
   void *input, *output;
   size_t nbytes, cbytes;
   int as_bytearray;
+  int safe;
   /* Accept some kind of input */
 #if PY_MAJOR_VERSION <= 2
   PyObject *as_bytearray_obj = NULL;
+  PyObject *safe_obj = NULL;
   /* s* : bytes like object including unicode and anything that supports
    * the buffer interface. We cannot use p in python 2 so we will
    * create an object to hold the predicate. */
-  if (!PyArg_ParseTuple(args, "s*O:decompress", &view, &as_bytearray_obj))
+  if (!PyArg_ParseTuple(args, "s*OO:decompress",
+                        &view,
+                        &as_bytearray_obj,
+                        &safe_obj))
     return NULL;
 
   if ((as_bytearray = PyObject_IsTrue(as_bytearray_obj)) < 0) {
+    /* failed to convert predicate to bool */
+    return NULL;
+  }
+  if ((safe = PyObject_IsTrue(safe_obj)) < 0) {
     /* failed to convert predicate to bool */
     return NULL;
   }
@@ -496,7 +533,7 @@ PyBlosc_decompress(PyObject *self, PyObject *args)
   /* y* :bytes like object EXCLUDING unicode and anything that supports
    * the buffer interface. This is the recommended way to accept binary
    * data in Python 3. */
-  if (!PyArg_ParseTuple(args, "y*p:decompress", &view, &as_bytearray))
+  if (!PyArg_ParseTuple(args, "y*pp:decompress", &view, &as_bytearray, &safe))
     return NULL;
 #endif
 
@@ -528,7 +565,7 @@ PyBlosc_decompress(PyObject *self, PyObject *args)
 #undef branch
 
   /*  do decompression */
-  if (!decompress_helper(input, nbytes, output)){
+  if (!decompress_helper(input, nbytes, output, safe)){
     Py_XDECREF(result_str);
     PyBuffer_Release(&view);
     return NULL;

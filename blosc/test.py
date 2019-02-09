@@ -149,6 +149,22 @@ class TestCodec(unittest.TestCase):
         self.assertEqual(expected, blosc.decompress(np.array([compressed]),
                                                     as_bytearray=True))
 
+    def test_decompress_unsafe(self):
+        expected = b'0123456789' * 100
+        compressed = blosc.compress(expected)
+
+        # now for all the things that support the buffer interface
+        self.assertEqual(expected, blosc.decompress(compressed, safe=True))
+        self.assertEqual(expected, blosc.decompress(compressed, safe=False))
+        try:
+            self.assertEqual(expected, blosc.decompress(b"GARBAGE" * 42, safe=True))
+        except Exception as e:
+            print(e)
+        try:
+            self.assertEqual(expected, blosc.decompress(b"GARBAGE" * 42, safe=False))
+        except Exception as e:
+            print(e)
+
     def test_compress_exceptions(self):
         s = b'0123456789'
 
@@ -244,6 +260,23 @@ class TestCodec(unittest.TestCase):
 
         # This should always raise an error
         self.assertRaises(ValueError, blosc.pack_array, ones)
+
+    def test_unpack_array_with_safe(self):
+        import numpy as np
+        input_array = np.zeros(232323)
+        packed_array = blosc.pack_array(input_array)
+        np.testing.assert_array_equal(input_array, blosc.unpack_array(packed_array, encoding='UTF-8'))
+        try:
+            np.testing.assert_array_equal(input_array, blosc.unpack_array(b"GARBAGE" * 42, encoding='UTF-8'))
+        except Exception as e:
+            print(e)
+        try:
+            np.testing.assert_array_equal(input_array,
+                                          blosc.unpack_array(b"GARBAGE" * 42,
+                                                             safe=False,
+                                                             encoding='UTF-8'))
+        except Exception as e:
+            print(e)
 
     def test_unpack_array_with_unicode_characters(self):
         import numpy as np
