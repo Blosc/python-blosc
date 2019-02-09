@@ -21,6 +21,14 @@ Do:
 
   $ pip install -U blosc
 
+Installing from the Anaconda Cloud
+==================================
+
+Do:
+
+.. code-block:: console
+
+  $ conda install -c conda-forge python-blosc
 
 Building manually
 =================
