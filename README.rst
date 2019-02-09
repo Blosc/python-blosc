@@ -5,11 +5,12 @@ python-blosc: a Python wrapper for the extremely fast Blosc compression library
 :Author: Valentin Haenel
 :Contact: faltet@gmail.com
 :Contact: valentin@haenel.co
-:URL: https://github.com/Blosc/python-blosc
+:Github: https://github.com/Blosc/python-blosc
 :URL: http://python-blosc.blosc.org
 :Travis CI: |travis|
 :Appveyor: |appveyor|
 :PyPi: |version|
+:Anaconda: |anaconda|
 
 .. |travis| image:: https://travis-ci.org/Blosc/python-blosc.png?branch=master
         :target: https://travis-ci.org/Blosc/python-blosc
@@ -17,6 +18,9 @@ python-blosc: a Python wrapper for the extremely fast Blosc compression library
         :target: https://ci.appveyor.com/project/FrancescAlted/python-blosc/branch/master
 .. |version| image:: https://img.shields.io/pypi/v/blosc.png
         :target: https://pypi.python.org/pypi/blosc
+.. |anaconda| image:: https://anaconda.org/conda-forge/python-blosc/badges/version.svg
+        :target: https://anaconda.org/conda-forge/python-blosc
+
 
 
 What it is
@@ -45,17 +49,19 @@ so that you can understand what actions will and will not be tolerated.
 Installing
 ==========
 
-Install it as a typical Python package from PyPi using `pip`:
+
+You can install binary packages with ``conda``:
+
+.. code-block:: console
+
+    $ conda install -c conda-forge python-blosc
+
+Or, install it as a typical Python source package (requires c-compiler and
+Python headers) from PyPi using ``pip``:
 
 .. code-block:: console
 
     $ pip install blosc
-
-Alternatively, Install it as a typical Python package from 'source':
-
-.. code-block:: console
-
-    $ python setup.py install
 
 
 Documentation
