@@ -52,26 +52,37 @@ class build_ext_posix_avx2(build_ext):
     def _test_compiler_flags(self, flags):
         # type: (List[str]) -> Bool
         "Test that a sample program can compile with given flags."
+        # Look to see if we have a written file to cache the result
+        success_file = os.path.join(self.build_temp, "_avx2_present")
+        fail_file = os.path.join(self.build_temp, "_avx2_failed")
+        if os.path.isfile(success_file):
+            return True
+        elif os.path.isfile(fail_file):
+            return False
+        # No cache file, try to run the compile
         try:
             # Write an empty test file
             test_file = os.path.join(self.build_temp, "test_avx2_empty.c")
-            open(test_file, "w").close()
+            # output_object = self.object_filenames([test_file], output_dir=self.build_temp)[0]
+            if not os.path.isfile(test_file):
+                open(test_file, "w").close()
             objects = self.compiler.compile(
                 [test_file], output_dir=self.build_temp, extra_postargs=flags
             )
-            for obj in objects:
-                print("DEBUG: Removing " + obj)
-                os.remove(obj)
+            # Write a success marker so we don't need to compile again
+            open(success_file, 'w').close()
             return True
         except CompileError:
+            # Write a failure marker so we don't need to compile again
+            open(fail_file, 'w').close()
             return False
         finally:
-            os.remove(test_file)
+            # os.remove(test_file)
+            pass
 
     def build_extensions(self):
         # Verify that the compiler supports requested extra flags
         if self._test_compiler_flags(["-mavx2"]):
-            print("AVX2 detected")
             # Apply the AVX2 properties to each extension
             for extension in self.extensions:
                 if hasattr(extension, "avx2_defs"):
@@ -79,7 +90,7 @@ class build_ext_posix_avx2(build_ext):
                     for attr, defs in extension.avx2_defs.items():
                         getattr(extension, attr).extend(defs)
         else:
-            print("CPU has AVX2 but compiler appears not to support")
+            print("AVX2 Unsupported by compiler")
 
         # Call up to the superclass to do the actual build
         build_ext.build_extensions(self)
@@ -226,6 +237,7 @@ if __name__ == '__main__':
         # AVX2
         if 'DISABLE_BLOSC_AVX2' not in os.environ and (cpu_info != None) and ('avx2' in cpu_info['flags']):
             if os.name == 'posix':
+                print("AVX2 detected")
                 avx2_defs = {
                     "extra_compile_args": ["-DSHUFFLE_AVX2_ENABLED", "-mavx2"],
                     "sources": [f for f in glob("c-blosc/blosc/*.c") if "avx2" in f]
