@@ -20,6 +20,66 @@ from setuptools import Extension
 from setuptools import setup
 from glob import glob
 from distutils.version import LooseVersion
+from distutils.command.build_ext import build_ext
+from distutils.errors import CompileError
+
+class BloscExtension(Extension):
+    """Allows extension to carry architecture-capable flag options.
+
+    Attributes:
+        avx2_def (Dict[str]: List[str]):
+            AVX2 support dictionary mapping Extension properties to a
+            list of values. If compiler is AVX2 capable, then these will
+            be appended onto the end of the Extension properties.
+    """
+    def __init__(self, *args, **kwargs):
+        self.avx2_defs = kwargs.pop("avx2_defs", {})
+        Extension.__init__(self, *args, **kwargs)
+
+class build_ext_posix_avx2(build_ext):
+    """build_ext customized to test for AVX2 support in posix compiler.
+
+    This is because until distutils has actually started the build
+    process, we can't be certain what compiler is being used.
+
+    If compiler supports, then the avx2_defs dictionary on any given
+    Extension will be used to extend the other Extension attributes.
+    """
+
+    def _test_compiler_flags(self, flags):
+        # type: (List[str]) -> Bool
+        "Test that a sample program can compile with given flags."
+        try:
+            # Write an empty test file
+            test_file = os.path.join(self.build_temp, "test_avx2_empty.c")
+            open(test_file, 'w').close()
+            objects = self.compiler.compile([test_file],
+                                        output_dir=self.build_temp,
+                                        extra_postargs=flags)
+            for obj in objects:
+                print("DEBUG: Removing " + obj)
+                os.remove(obj)
+            return True
+        except CompileError:
+            return False
+        finally:
+            os.remove(test_file)
+
+    def build_extensions(self):
+        # Verify that the compiler supports requested extra flags
+        if self._test_compiler_flags(['-mavx2']):
+            print('AVX2 detected')
+            # Apply the AVX2 properties to each extension
+            for extension in self.extensions:
+                if hasattr(extension, "avx2_defs"):
+                    # Extend an existing attribute with the stored values
+                    for attr, defs in extension.avx2_defs.items():
+                        getattr(extension, attr).extend(defs)
+        else:
+            print("CPU has AVX2 but compiler appears not to support")
+
+        # Call up to the superclass to do the actual build
+        build_ext.build_extensions(self)
 
 if __name__ == '__main__':
     import cpuinfo
@@ -104,6 +164,9 @@ if __name__ == '__main__':
     lib_dirs = []
     libs = []  # Pre-built libraries ONLY, like python36.so
     def_macros = []
+    builder_class = build_ext # To swap out if we have AVX capability and posix
+    avx2_defs = {} # Definitions to build extension with if compiler supports AVX2
+
     if BLOSC_DIR != '':
         # Using the Blosc library
         lib_dirs += [os.path.join(BLOSC_DIR, 'lib')]
@@ -144,7 +207,7 @@ if __name__ == '__main__':
             inc_dirs += glob('c-blosc/internal-complibs/zstd*/common')
             inc_dirs += glob('c-blosc/internal-complibs/zstd*')
             def_macros += [('HAVE_ZSTD',1)]
-        
+
 
         # Guess SSE2 or AVX2 capabilities
         # SSE2
@@ -158,16 +221,19 @@ if __name__ == '__main__':
                 def_macros += [('__SSE2__', 1)]
         # AVX2
         if 'DISABLE_BLOSC_AVX2' not in os.environ and (cpu_info != None) and ('avx2' in cpu_info['flags']):
-            
             if os.name == 'posix':
-                print('AVX2 detected')
-                CFLAGS.append('-DSHUFFLE_AVX2_ENABLED')
-                sources += [f for f in glob('c-blosc/blosc/*.c') if 'avx2' in f]
-                CFLAGS.append('-mavx2')
-            elif(os.name == 'nt' and 
+                avx2_defs = {
+                    'extra_compile_args': ["-DSHUFFLE_AVX2_ENABLED", "-mavx2"],
+                    'sources': [f for f in glob('c-blosc/blosc/*.c') if 'avx2' in f]
+                }
+                # The CPU supports it but the compiler might not..
+                builder_class = build_ext_posix_avx2
+            elif(os.name == 'nt' and
                     LooseVersion(platform.python_version()) >= LooseVersion('3.5.0')):
-                # Neither MSVC2008 for Python 2.7 or MSVC2010 for Python 3.4 have 
+                # Neither MSVC2008 for Python 2.7 or MSVC2010 for Python 3.4 have
                 # sufficient AVX2 support
+                # Since we don't rely on any special compiler capabilities,
+                # we don't need to rely on testing the compiler
                 print('AVX2 detected')
                 CFLAGS.append('-DSHUFFLE_AVX2_ENABLED')
                 sources += [f for f in glob('c-blosc/blosc/*.c') if 'avx2' in f]
@@ -210,18 +276,20 @@ if __name__ == '__main__':
         platforms = ['any'],
         libraries = clibs,
         ext_modules = [
-            Extension( "blosc.blosc_extension",
+            BloscExtension( "blosc.blosc_extension",
                     include_dirs=inc_dirs,
                     define_macros=def_macros,
                     sources=sources,
                     library_dirs=lib_dirs,
                     libraries=libs,
                     extra_link_args=LFLAGS,
-                    extra_compile_args=CFLAGS ),
+                    extra_compile_args=CFLAGS,
+                    avx2_defs=avx2_defs ),
             ],
         tests_require=tests_require,
         zip_safe=False,
         packages = ['blosc'],
+        cmdclass={'build_ext': builder_class},
         )
 elif __name__ == '__mp_main__':
     # This occurs from `cpuinfo 4.0.0` using multiprocessing to interrogate the 
