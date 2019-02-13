@@ -49,12 +49,20 @@ class build_ext_posix_avx2(build_ext):
     Extension will be used to extend the other Extension attributes.
     """
 
-    def _test_compiler_flags(self, flags):
+    def _test_compiler_flags(self, name, flags):
         # type: (List[str]) -> Bool
-        "Test that a sample program can compile with given flags."
+        """Test that a sample program can compile with given flags.
+
+        Attr:
+            flags (List[str]): the flags to test
+            name (str): An identifier-like name to cache the results as
+
+        Returns:
+            (bool): Whether the compiler accepted the flags(s)
+        """
         # Look to see if we have a written file to cache the result
-        success_file = os.path.join(self.build_temp, "_avx2_present")
-        fail_file = os.path.join(self.build_temp, "_avx2_failed")
+        success_file = os.path.join(self.build_temp, "_{}_present".format(name))
+        fail_file = os.path.join(self.build_temp, "_{}_failed".format(name))
         if os.path.isfile(success_file):
             return True
         elif os.path.isfile(fail_file):
@@ -62,8 +70,7 @@ class build_ext_posix_avx2(build_ext):
         # No cache file, try to run the compile
         try:
             # Write an empty test file
-            test_file = os.path.join(self.build_temp, "test_avx2_empty.c")
-            # output_object = self.object_filenames([test_file], output_dir=self.build_temp)[0]
+            test_file = os.path.join(self.build_temp, "test_{}_empty.c".format(name))
             if not os.path.isfile(test_file):
                 open(test_file, "w").close()
             objects = self.compiler.compile(
@@ -77,12 +84,11 @@ class build_ext_posix_avx2(build_ext):
             open(fail_file, 'w').close()
             return False
         finally:
-            # os.remove(test_file)
             pass
 
     def build_extensions(self):
         # Verify that the compiler supports requested extra flags
-        if self._test_compiler_flags(["-mavx2"]):
+        if self._test_compiler_flags("avx2", ["-mavx2"]):
             # Apply the AVX2 properties to each extension
             for extension in self.extensions:
                 if hasattr(extension, "avx2_defs"):
