@@ -380,8 +380,7 @@ get_nbytes(void * input, size_t cbytes, size_t * nbytes)
   /* Get the length of the uncompressed buffer */
   blosc_cbuffer_sizes(input, nbytes, &cbytes2, &blocksize);
   if ((size_t)cbytes != cbytes2) {
-    blosc_error((int)cbytes,
-		": not a Blosc buffer or header info is corrupted");
+    blosc_error((int)cbytes, ": not a Blosc buffer or header info is corrupted");
     return 0;
   }
   return 1;
