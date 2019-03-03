@@ -157,11 +157,11 @@ class TestCodec(unittest.TestCase):
         self.assertEqual(expected, blosc.decompress(compressed, safe=True))
         self.assertEqual(expected, blosc.decompress(compressed, safe=False))
         try:
-            self.assertEqual(expected, blosc.decompress(b"GARBAGE" * 42, safe=True))
+            blosc.decompress(b"GARBAGE" * 42, safe=True)
         except Exception as e:
             print(e)
         try:
-            self.assertEqual(expected, blosc.decompress(b"GARBAGE" * 42, safe=False))
+            blosc.decompress(b"GARBAGE" * 42, safe=False)
         except Exception as e:
             print(e)
 
@@ -261,20 +261,17 @@ class TestCodec(unittest.TestCase):
         # This should always raise an error
         self.assertRaises(ValueError, blosc.pack_array, ones)
 
-    def test_unpack_array_with_safe(self):
+    def test_unpack_array_unsafe(self):
         import numpy as np
         input_array = np.zeros(232323)
         packed_array = blosc.pack_array(input_array)
-        np.testing.assert_array_equal(input_array, blosc.unpack_array(packed_array, encoding='UTF-8'))
+        np.testing.assert_array_equal(input_array, blosc.unpack_array(packed_array))
         try:
-            np.testing.assert_array_equal(input_array, blosc.unpack_array(b"GARBAGE" * 42, encoding='UTF-8'))
+            blosc.unpack_array(b"GARBAGE" * 42, safe=True)
         except Exception as e:
             print(e)
         try:
-            np.testing.assert_array_equal(input_array,
-                                          blosc.unpack_array(b"GARBAGE" * 42,
-                                                             safe=False,
-                                                             encoding='UTF-8'))
+            blosc.unpack_array(b"GARBAGE" * 42, safe=False)
         except Exception as e:
             print(e)
 
