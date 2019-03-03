@@ -554,14 +554,14 @@ PyBlosc_cbuffer_validate(PyObject *self, PyObject *args)
   int result;
 
   #if PY_MAJOR_VERSION <= 2
-    if (!PyArg_ParseTuple(args, "s*:decompress", &view))
+    if (!PyArg_ParseTuple(args, "s*:cbuffer_validate", &view))
       return NULL;
 
   #elif PY_MAJOR_VERSION >= 3
     /* y* :bytes like object EXCLUDING unicode and anything that supports
      * the buffer interface. This is the recommended way to accept binary
      * data in Python 3. */
-    if (!PyArg_ParseTuple(args, "y*:decompress", &view))
+    if (!PyArg_ParseTuple(args, "y*:cbuffer_validate", &view))
       return NULL;
   #endif
   cbytes = view.len;
