@@ -99,8 +99,8 @@ Installing via setuptools
     $ python setup.py build_ext --inplace
 
 Any codec can be enabled (`=1`) or disabled (`=0`) on this build-path with the appropriate
-OS environment variables `INCLUDE_LZ4`, `INCLUDE_SNAPPY`, `INCLUDE_ZLIB`, and 
-`INCLUDE_ZLIB`. By default all the codecs in Blosc are enabled except Snappy 
+OS environment variables `INCLUDE_LZ4`, `INCLUDE_SNAPPY`, `INCLUDE_ZLIB`, and
+`INCLUDE_ZLIB`. By default all the codecs in Blosc are enabled except Snappy
 (due to some issues with C++ with the `gcc` toolchain).
 
 Compiler specific optimisations are automatically enabled by inspecting
@@ -108,11 +108,11 @@ the CPU flags building Blosc. They can be manually disabled by setting
 the following environmental variables: `DISABLE_BLOSC_SSE2` and
 `DISABLE_BLOSC_AVX2`.
 
-`setuptools` is limited to using the compiler specified in the environment 
-variable `CC` which on posix systems is usually `gcc`. This often causes 
+`setuptools` is limited to using the compiler specified in the environment
+variable `CC` which on posix systems is usually `gcc`. This often causes
 trouble with the Snappy codec, which is written in C++, and as a result Snappy
-is no longer compiled by default. This problem is not known to affect MSVC or 
-clang. Snappy is considered optional in Blosc as its compression performance 
+is no longer compiled by default. This problem is not known to affect MSVC or
+clang. Snappy is considered optional in Blosc as its compression performance
 is below that of the other codecs.
 
 That's all. You can proceed with testing section now.
@@ -122,7 +122,7 @@ Compiling with an installed Blosc library
 -----------------------------------------
 
 This approach uses pre-built, fully optimized versions of Blosc built via
-CMake. 
+CMake.
 
 Go to https://github.com/Blosc/c-blosc/releases and download and install
 the C-Blosc library.  Then, you can tell python-blosc where is the
@@ -136,7 +136,7 @@ Using an environment variable:
     $ export BLOSC_DIR         (not needed on Win)
     $ python setup.py build_clib
     $ python setup.py build_ext --inplace
- 
+
 Using a flag:
 
 .. code-block:: console
@@ -194,7 +194,7 @@ will vary!)::
     Snappy: 1.1.1
     Zlib: 1.2.7
     Zstd: 1.1.2
-  Python version: 3.5.2 |Continuum Analytics, Inc.| (default, Jul  2 2016, 17:53:06) 
+  Python version: 3.5.2 |Continuum Analytics, Inc.| (default, Jul  2 2016, 17:53:06)
   [GCC 4.4.7 20120313 (Red Hat 4.4.7-1)]
   Platform: Linux-3.10.0-327.18.2.el7.x86_64-x86_64 (#1 SMP Thu May 12 11:03:55 UTC 2016)
   Linux dist: CentOS Linux 7.2.1511

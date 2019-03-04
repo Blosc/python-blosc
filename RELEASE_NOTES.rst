@@ -9,11 +9,15 @@
 :URL: http://python-blosc.blosc.org
 :URL: https://github.com/Blosc/python-blosc
 
-Changes from 1.7.0 to 1.7.1
+Changes from 1.7.0 to 1.8.0
 ===========================
 
-* #######################
-
+- Include C-Blosc v1.16.2
+- Fix cpuinfo.py usage on Windows. Thanks to Robert McLeod
+- Implement Python access to the C function `cbuffer_validate` which
+  was added to c-blosc in version 1.16.0
+- Check if compiler supports CPU capabilities. Thanks to Nicholas Devenish
+- Many minor improvements and fixes
 
 Changes from 1.6.2 to 1.7.0
 ===========================

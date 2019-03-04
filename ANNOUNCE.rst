@@ -1,22 +1,16 @@
 =============================
-Announcing python-blosc 1.7.0
+Announcing python-blosc 1.8.0
 =============================
 
 What is new?
 ============
 
-This is a maintenance release which takes care of several housekeepting
-tasks. Support for older versions of Python (2.6 and 3.3) has been
-removed from the codebase. A new version of C-Blosc (1.5.1) that now
-passes all unit and integration tests across all supported platforms has
-been included. Finally, a the vendored cpuinfo.py has been upgraded and
-the automatic tests on Windows via Appveyor have been upgraded to
-include a larger variety of Windows/Python combinations.
-
-A big thank you goes out to Daniel Stender from the Debian project for his
-continued efforts to package the Blosc stack -- including python-blosc -- for
-Debian. This also means it is likely that a recent version of
-python-blosc will be included in Buster.
+This is a maintenance and fetaure release. A regression affecting
+windows users has been fixed by Robert McLeod and support for older C
+compilers has been contributed by Nicholas Devenish. Also, c-blosc
+v1.16.2 has been included and support for the new `cbuffer_validate` is
+included. Lastly there have been several minor improvements and cleanups
+as usual.
 
 For more info, you can have a look at the release notes in:
 
