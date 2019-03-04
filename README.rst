@@ -11,6 +11,7 @@ python-blosc: a Python wrapper for the extremely fast Blosc compression library
 :Appveyor: |appveyor|
 :PyPi: |version|
 :Anaconda: |anaconda|
+:Gitter: |gitter|
 
 .. |travis| image:: https://travis-ci.org/Blosc/python-blosc.png?branch=master
         :target: https://travis-ci.org/Blosc/python-blosc
@@ -20,6 +21,8 @@ python-blosc: a Python wrapper for the extremely fast Blosc compression library
         :target: https://pypi.python.org/pypi/blosc
 .. |anaconda| image:: https://anaconda.org/conda-forge/python-blosc/badges/version.svg
         :target: https://anaconda.org/conda-forge/python-blosc
+.. |gitter| image:: https://badges.gitter.im/Blosc/c-blosc.svg
+        :target: https://gitter.im/Blosc/c-blosc
 
 
 

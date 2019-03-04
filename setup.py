@@ -15,6 +15,7 @@ import os
 import platform
 import re
 import sys
+import io
 
 from setuptools import Extension
 from setuptools import setup
@@ -104,6 +105,10 @@ class build_ext_posix_avx2(build_ext):
 
 
 if __name__ == '__main__':
+
+    with io.open('README.rst', encoding='utf-8') as f:
+        long_description = f.read()
+
     import cpuinfo
     cpu_info = cpuinfo.get_cpu_info()
 
@@ -284,16 +289,12 @@ if __name__ == '__main__':
     setup(name = "blosc",
         version = VERSION,
         description = 'Blosc data compressor',
-        long_description = """\
-
-    Blosc is a high performance compressor optimized for binary data.
-
-    """,
+        long_description = long_description,
         classifiers = [c for c in classifiers.split("\n") if c],
         author = 'Francesc Alted, Valentin Haenel',
         author_email = 'faltet@gmail.com, valentin@haenel.co',
-        maintainer = 'Francesc Alted',
-        maintainer_email = 'faltet@gmail.com',
+        maintainer = 'Francesc Alted, Valentin Haenel',
+        maintainer_email = 'faltet@gmail.com, valentin@haenel.co',
         url = 'http://github.com/blosc/python-blosc',
         license = 'https://opensource.org/licenses/BSD-3-Clause',
         platforms = ['any'],
