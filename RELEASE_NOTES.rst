@@ -12,8 +12,8 @@
 Changes from 1.8.0 to 1.8.1
 ===========================
 
-#XXX version-specific blurb XXX#
-
+- Fix a bug that prevented the source distribution from PyPi to be compiled.
+  Specifcally, `*.inc` were not included via the manifest.
 
 Changes from 1.7.0 to 1.8.0
 ===========================
