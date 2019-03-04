@@ -289,7 +289,7 @@ if __name__ == '__main__':
     setup(name = "blosc",
         version = VERSION,
         description = 'Blosc data compressor',
-        long_description = long_description
+        long_description = long_description,
         classifiers = [c for c in classifiers.split("\n") if c],
         author = 'Francesc Alted, Valentin Haenel',
         author_email = 'faltet@gmail.com, valentin@haenel.co',
