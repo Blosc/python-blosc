@@ -22,6 +22,7 @@ from glob import glob
 from distutils.version import LooseVersion
 from distutils.command.build_ext import build_ext
 from distutils.errors import CompileError
+from textwrap import dedent
 
 
 class BloscExtension(Extension):
@@ -262,7 +263,7 @@ if __name__ == '__main__':
                 def_macros += [('__AVX2__', 1)]
         # TODO: AVX512
 
-    classifiers = """\
+    classifiers = dedent("""\
     Development Status :: 5 - Production/Stable
     Intended Audience :: Developers
     Intended Audience :: Information Technology
@@ -278,7 +279,7 @@ if __name__ == '__main__':
     Topic :: System :: Archiving :: Compression
     Operating System :: Microsoft :: Windows
     Operating System :: Unix
-    """
+    """)
 
     setup(name = "blosc",
         version = VERSION,
@@ -289,7 +290,7 @@ if __name__ == '__main__':
 
     """,
         classifiers = [c for c in classifiers.split("\n") if c],
-        author = 'Francesc Alted, Valentin Hänel',
+        author = 'Francesc Alted, Valentin Haenel',
         author_email = 'faltet@gmail.com, valentin@haenel.co',
         maintainer = 'Francesc Alted',
         maintainer_email = 'faltet@gmail.com',
