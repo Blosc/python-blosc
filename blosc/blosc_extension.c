@@ -158,6 +158,7 @@ PyBlosc_clib_info(PyObject *self, PyObject *args)
   char *cname;
   char *clib;
   char *version;
+  PyObject *info;
 
   if (!PyArg_ParseTuple(args, "s:clib_info", &cname))
     return NULL;
@@ -165,7 +166,10 @@ PyBlosc_clib_info(PyObject *self, PyObject *args)
   if (blosc_get_complib_info(cname, &clib, &version) < 0)
     return NULL;
 
-  return Py_BuildValue("(s, s)", clib, version);
+  info = Py_BuildValue("(s, s)", clib, version);
+  free(clib);
+  free(version);
+  return info;
 }
 
 
