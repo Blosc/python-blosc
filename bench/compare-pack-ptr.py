@@ -40,14 +40,15 @@ np.copyto(out_, in_)
 toc = time.time()
 print("  Time for copying array with np.copyto and empty_like:     %.3f s" % (toc-tic,))
 
-# The numpy zeros_like doens't use calloc, but instead uses
+# Unlike numpy.zeros, numpy.zeros_like doens't use calloc, but instead uses
 # empty_like and explicitely assigns zeros, which is basically like calling
 # full like
+# Here we benchmark what happens when we allocate memory using calloc
 out_ = np.zeros(in_.shape, dtype=in_.dtype)
 tic = time.time()
 np.copyto(out_, in_)
 toc = time.time()
-print("  Time for copying array with np.copyto and zeros_like:     %.3f s" % (toc-tic,))
+print("  Time for copying array with np.copyto and zeros    :     %.3f s" % (toc-tic,))
 
 # Cause a page faults before the benchmark
 out_ = np.full_like(in_, fill_value=0)
