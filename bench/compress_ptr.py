@@ -30,7 +30,8 @@ arrays = ((np.arange(N, dtype=np.int64), "the arange linear distribution"),
           )
 
 in_ = arrays[0][0]
-out_ = np.empty(in_.size, dtype=in_.dtype)
+# cause page faults here
+out_ = np.full(in_.size, fill_value=0, dtype=in_.dtype)
 t0 = time.time()
 #out_ = np.copy(in_)
 out_ = ctypes.memmove(out_.__array_interface__['data'][0],
@@ -50,7 +51,8 @@ for (in_, label) in arrays:
                                    in_.size, in_.dtype.itemsize,
                                    clevel=clevel, shuffle=filter, cname=cname)
             tc = time.time() - t0
-            out = np.empty(in_.size, dtype=in_.dtype)
+            # cause page faults here
+            out = np.full(in_.size, fill_value=0, dtype=in_.dtype)
             t0 = time.time()
             blosc.decompress_ptr(c, out.__array_interface__['data'][0])
             td = time.time() - t0
