@@ -34,7 +34,7 @@ out_ = np.full_like(in_, fill_value=0)
 tic = time.time()
 np.copyto(out_, in_)
 toc = time.time()
-print("  Time for copying array with np.copy():     %.3f s" % (toc-tic,))
+print("  Time for copying array with np.copyto():     %.3f s" % (toc-tic,))
 print()
 
 for cname in blosc.compressor_list():
