@@ -53,7 +53,7 @@ for cname in blosc.compressor_list():
                            in_.size, in_.dtype.itemsize,
                            clevel=clevel, shuffle=True, cname=cname)
     ctoc = time.time()
-    out = np.empty(in_.size, dtype=in_.dtype)
+    out = np.full(in_.size, fill_value=0, dtype=in_.dtype)
     dtic = time.time()
     blosc.decompress_ptr(c, out.__array_interface__['data'][0])
     dtoc = time.time()
