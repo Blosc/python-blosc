@@ -48,7 +48,7 @@ out_ = np.zeros(in_.shape, dtype=in_.dtype)
 tic = time.time()
 np.copyto(out_, in_)
 toc = time.time()
-print("  Time for copying array with np.copyto and zeros    :     %.3f s" % (toc-tic,))
+print("  Time for copying array with np.copyto and zeros     :     %.3f s" % (toc-tic,))
 
 # Cause a page faults before the benchmark
 out_ = np.full_like(in_, fill_value=0)
