@@ -29,12 +29,39 @@ in_ = np.arange(N, dtype=np.int64)  # the trivial linear distribution
 #in_ = np.random.random_integers(0, 100, N)  # random distribution
 print(" ", in_)
 
+tic = time.time()
+out_ = np.copy(in_)
+toc = time.time()
+print("  Time for copying array with np.copy():                    %.3f s" % (toc-tic,))
+
+out_ = np.empty_like(in_)
+tic = time.time()
+np.copyto(out_, in_)
+toc = time.time()
+print("  Time for copying array with np.copyto and empty_like:     %.3f s" % (toc-tic,))
+
+# The numpy zeros_like doens't use calloc, but instead uses
+# empty_like and explicitely assigns zeros, which is basically like calling
+# full like
+out_ = np.zeros(in_.shape, dtype=in_.dtype)
+tic = time.time()
+np.copyto(out_, in_)
+toc = time.time()
+print("  Time for copying array with np.copyto and zeros_like:     %.3f s" % (toc-tic,))
+
 # Cause a page faults before the benchmark
 out_ = np.full_like(in_, fill_value=0)
 tic = time.time()
 np.copyto(out_, in_)
 toc = time.time()
-print("  Time for copying array with np.copyto():     %.3f s" % (toc-tic,))
+print("  Time for copying array with np.copyto and full_like:      %.3f s" % (toc-tic,))
+
+out_ = np.full_like(in_, fill_value=0)
+tic = time.time()
+tic = time.time()
+out_[...] = in_
+toc = time.time()
+print("  Time for copying array with numpy assignment:             %.3f s" % (toc-tic,))
 print()
 
 for cname in blosc.compressor_list():
