@@ -29,8 +29,10 @@ in_ = np.arange(N, dtype=np.int64)  # the trivial linear distribution
 #in_ = np.random.random_integers(0, 100, N)  # random distribution
 print(" ", in_)
 
+# Cause a page faults before the benchmark
+out_ = np.full_like(in_, fill_value=0)
 tic = time.time()
-out_ = np.copy(in_)
+np.copyto(out_, in_)
 toc = time.time()
 print("  Time for copying array with np.copy():     %.3f s" % (toc-tic,))
 print()
