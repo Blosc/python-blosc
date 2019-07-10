@@ -72,7 +72,7 @@ blosc.print_versions()
 blosc.set_blocksize( BLOCKSIZE )
 print("Creating NumPy stack with %d float32 elements:" %(m*N*N) )
 
-stack = np.zeros( [m,N,N], dtype=dtype )
+stack = np.full( [m,N,N], fill_value=0, dtype=dtype )
 xmesh, ymesh = np.meshgrid( np.arange(-N/2,N/2), np.arange(-N/2,N/2) )
 compress_mesh = (np.cos( xmesh ) + np.exp( -ymesh**2 / N )).astype(dtype)
 for J in np.arange(m):
@@ -88,10 +88,10 @@ bloscThreads = np.hstack( [1, powProduct[::-1]] )
 #poolThreads = np.arange( 1, maxThreads+1 )
 #bloscThreads = np.ones_like( poolThreads )
 
-solo_times = np.zeros_like( poolThreads, dtype='float64' )
-solo_unlocked_times = np.zeros_like( poolThreads, dtype='float64' )
-locked_times = np.zeros_like( poolThreads, dtype='float64' )
-unlocked_times = np.zeros_like( poolThreads, dtype='float64' )
+solo_times = np.full_like( poolThreads, fill_value=0, dtype='float64' )
+solo_unlocked_times = np.full_like( poolThreads, fill_value=0, dtype='float64' )
+locked_times = np.full_like( poolThreads, fill_value=0, dtype='float64' )
+unlocked_times = np.full_like( poolThreads, fill_value=0, dtype='float64' )
 
 for J in np.arange(nRuns):
     print( "Run  %d of %d" % (J+1, nRuns) )
