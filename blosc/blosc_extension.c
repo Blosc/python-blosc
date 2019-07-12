@@ -99,7 +99,7 @@ PyDoc_STRVAR(compressor_list__doc__,
 static PyObject *
 PyBlosc_compressor_list(PyObject *self)
 {
-  char *list;
+  const char *list;
 
   list = blosc_list_compressors();
 
@@ -115,7 +115,7 @@ static PyObject *
 PyBlosc_code_to_name(PyObject *self, PyObject *args)
 {
   int code;
-  char *name;
+  const char *name;
 
   if (!PyArg_ParseTuple(args, "i:code_to_name", &code))
     return NULL;
@@ -341,7 +341,7 @@ PyBlosc_get_clib(PyObject *self, PyObject *args)
 {
   void *input;
   size_t cbytes;
-  char *clib;
+  const char *clib;
 
   /* require Python string object, typesize, clevel and shuffle agrs */
   if (!PyArg_ParseTuple(args, "s#:get_clib", &input, &cbytes))
