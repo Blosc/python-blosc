@@ -109,8 +109,12 @@ if __name__ == '__main__':
     with io.open('README.rst', encoding='utf-8') as f:
         long_description = f.read()
 
-    import cpuinfo
-    cpu_info = cpuinfo.get_cpu_info()
+    try:
+        import cpuinfo
+        cpu_info = cpuinfo.get_cpu_info()
+    except Exception:
+        # newer cpuinfo versions fail to import on unsupported architectures
+        cpu_info = None
 
     ########### Check versions ##########
     def exit_with_error(message):
