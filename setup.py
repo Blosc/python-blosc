@@ -238,7 +238,7 @@ if __name__ == '__main__':
 
         # Guess SSE2 or AVX2 capabilities
         # SSE2
-        if 'DISABLE_BLOSC_SSE2' not in os.environ and (cpu_info != None) and ('sse2' in cpu_info['flags']):
+        if 'DISABLE_BLOSC_SSE2' not in os.environ and cpu_info != None and 'sse2' in cpu_info.get('flags', {}):
             print('SSE2 detected')
             CFLAGS.append('-DSHUFFLE_SSE2_ENABLED')
             sources += [f for f in glob('c-blosc/blosc/*.c') if 'sse2' in f]
@@ -247,7 +247,7 @@ if __name__ == '__main__':
             elif os.name == 'nt':
                 def_macros += [('__SSE2__', 1)]
         # AVX2
-        if 'DISABLE_BLOSC_AVX2' not in os.environ and (cpu_info != None) and ('avx2' in cpu_info['flags']):
+        if 'DISABLE_BLOSC_AVX2' not in os.environ and cpu_info != None and 'sse2' in cpu_info.get('flags', {}):
             if os.name == 'posix':
                 print("AVX2 detected")
                 avx2_defs = {
