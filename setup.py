@@ -65,26 +65,8 @@ if __name__ == '__main__':
     # Create the version.py file
     open('blosc/version.py', 'w').write('__version__ = "%s"\n' % VERSION)
 
-    # Allow setting the Blosc dir if installed in the system
-    BLOSC_DIR = os.environ.get('BLOSC_DIR', '')
-
-    # Check for USE_CODEC environment variables
-    try:
-        INCLUDE_LZ4 = os.environ['INCLUDE_LZ4'] == '1'
-    except KeyError:
-        INCLUDE_LZ4 = True
-    try:
-        INCLUDE_SNAPPY = os.environ['INCLUDE_SNAPPY'] == '1'
-    except KeyError:
-        INCLUDE_SNAPPY = False  # Snappy is disabled by default
-    try:
-        INCLUDE_ZLIB = os.environ['INCLUDE_ZLIB'] == '1'
-    except KeyError:
-        INCLUDE_ZLIB = True
-    try:
-        INCLUDE_ZSTD = os.environ['INCLUDE_ZSTD'] == '1'
-    except KeyError:
-        INCLUDE_ZSTD = True
+    def cmake_bool(cond):
+        return 'ON' if cond else 'OFF'
 
     classifiers = dedent("""\
     Development Status :: 5 - Production/Stable
@@ -116,8 +98,17 @@ if __name__ == '__main__':
         url = 'http://github.com/blosc/python-blosc',
         license = 'https://opensource.org/licenses/BSD-3-Clause',
         platforms = ['any'],
+        cmake_args = [
+          '-DBLOSC_DIR:PATH=%s' % os.environ.get('BLOSC_DIR', ''),
+          '-DDEACTIVATE_SSE2:BOOL=%s' % cmake_bool('DISABLE_BLOSC_SSE2' in os.environ or 'sse2' not in cpu_info['flags']),
+          '-DDEACTIVATE_AVX2:BOOL=%s' % cmake_bool('DISABLE_BLOSC_AVX2' in os.environ),
+          '-DDEACTIVATE_LZ4:BOOL=%s' % cmake_bool(not int(os.environ.get('INCLUDE_LZ4', '1'))),
+          # Snappy is disabled by default
+          '-DDEACTIVATE_SNAPPY:BOOL=%s' % cmake_bool(not int(os.environ.get('INCLUDE_SNAPPY', '0'))),
+          '-DDEACTIVATE_ZLIB:BOOL=%s' % cmake_bool(not int(os.environ.get('INCLUDE_ZLIB', '1'))),
+          '-DDEACTIVATE_ZSTD:BOOL=%s' % cmake_bool(not int(os.environ.get('INCLUDE_ZSTD', '1'))),
+        ],
         tests_require=tests_require,
-        zip_safe=False,
         packages = ['blosc'],
         )
 elif __name__ == '__mp_main__':
