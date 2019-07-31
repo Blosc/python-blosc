@@ -1,4 +1,3 @@
-setuptools
-setuptools_scm
+scikit-build
 numpydoc
 mock
