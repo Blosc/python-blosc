@@ -46,7 +46,7 @@ Installing via setuptools
 
 .. code-block:: console
 
-    $ python setup.py build_clib
+    $ python -m pip install -r requirements-dev.txt
     $ python setup.py build_ext --inplace
 
 Any codec can be enabled (`=1`) or disabled (`=0`) on this build-path with the appropriate
