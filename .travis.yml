@@ -20,7 +20,7 @@ before_install:
   - ulimit -a
   - python -V
   - pip install -q numpy psutil
-  - pip install -r requirements-rtfd.txt
+  - pip install -r requirements-dev.txt
 install:
   - make build
 

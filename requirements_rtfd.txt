@@ -1,3 +1,2 @@
-scikit-build
 numpydoc
 mock
