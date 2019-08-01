@@ -800,6 +800,20 @@ def load_tests(loader, tests, pattern):
     tests.addTests(doctest.DocTestSuite())
     return tests
 
+def os_release_pretty_name():
+    for p in ('/etc/os-release', '/usr/lib/os-release'):
+        try:
+            f = open(p, 'rt')
+            for line in f:
+                name, _, value = line.rstrip().partition('=')
+                if name == 'PRETTY_NAME':
+                    if len(value) >= 2 and value[0] in '"\'' and value[0] == value[-1]:
+                        value = value[1:-1]
+                    return value
+        except IOError:
+            pass
+    else:
+        return None
 
 def print_versions():
     """Print all the versions of software that python-blosc relies on."""
@@ -815,7 +829,9 @@ def print_versions():
     (sysname, nodename, release, version, machine, processor) = platform.uname()
     print("Platform: %s-%s-%s (%s)" % (sysname, release, machine, version))
     if sysname == "Linux":
-        print("Linux dist: %s" % " ".join(platform.linux_distribution()[:-1]))
+        distro = os_release_pretty_name()
+        if distro:
+            print("Linux dist:", distro)
     if not processor:
         processor = "not recognized"
     print("Processor: %s" % processor)
