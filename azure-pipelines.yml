@@ -1,0 +1,32 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- master
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: '3.7'
+      architecture: 'x64'
+
+  - script: |
+      python -m pip install --upgrade pip
+      python -m pip install numpy psutil ninja cmake scikit-build
+    displayName: 'Install build dependencies'
+
+  - script: |
+      python setup.py bdist_wheel
+    displayName: 'Build wheel'
+
+  - script: |
+      python setup.py clean
+      python -m pip install .
+      python blosc/test.py
+    displayName: 'Test'
+
