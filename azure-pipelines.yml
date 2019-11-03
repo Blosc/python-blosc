@@ -6,13 +6,18 @@
 trigger:
 - master
 
-pool:
-  vmImage: 'ubuntu-latest'
+jobs:
 
-steps:
+- job: 'Linux'
+  displayName: 'Linux'
+
+  pool:
+    vmImage: 'ubuntu-latest'
+
+  steps:
   - task: UsePythonVersion@0
     inputs:
-      versionSpec: '3.7'
+      versionSpec: '3.X'
       architecture: 'x64'
 
   - script: |
@@ -21,12 +26,19 @@ steps:
     displayName: 'Install build dependencies'
 
   - script: |
-      python setup.py bdist_wheel
-    displayName: 'Build wheel'
-
-  - script: |
       python setup.py clean
       python -m pip install .
       python blosc/test.py
     displayName: 'Test'
 
+  - script: |
+      docker pull dockcross/manylinux1-x64
+      docker run dockcross/manylinux1-x64 > ./dockcross-manylinux-x64
+      chmod +x ./dockcross-manylinux-x64
+      ./dockcross-manylinux-x64 ./.build_wheels_in_manylinux.sh
+    displayName: 'Build wheel'
+
+  - task: PublishPipelineArtifact@0
+    inputs:
+      artifactName: 'LinuxWheels'
+      targetPath: './dist'
