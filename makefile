@@ -3,7 +3,6 @@
 .PHONY: build test clean doc
 
 build:
-	python setup.py build_clib
 	python setup.py build_ext -i
 
 test:

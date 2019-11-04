@@ -6,4 +6,4 @@ dist/
 blosc.egg-info/
 *~
 *.pyc
-
+_skbuild

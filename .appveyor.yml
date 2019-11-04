@@ -3,20 +3,11 @@ environment:
   matrix:
     - PYTHON: "C:\\Python27"
     - PYTHON: "C:\\Python27-x64"
-    - PYTHON: "C:\\Python34"
-    - PYTHON: "C:\\Python34-x64"
-      DISTUTILS_USE_SDK: "1"
-    - PYTHON: "C:\\Python35"
-    - PYTHON: "C:\\Python35-x64"
-    - PYTHON: "C:\\Python36"
-    - PYTHON: "C:\\Python36-x64"
-    - PYTHON: "C:\\Python37"
-    - PYTHON: "C:\\Python37-x64"
 
 install:
   # We need wheel installed to build wheels
-  - ".build.cmd %PYTHON%\\python.exe -m pip install numpy psutil"
-  - ".build.cmd %PYTHON%\\python.exe setup.py build_clib"
+  - ".build.cmd %PYTHON%\\python.exe -m pip install numpy psutil ninja"
+  - ".build.cmd %PYTHON%\\python.exe -m pip install -r requirements-dev.txt"
   - ".build.cmd %PYTHON%\\python.exe setup.py build_ext --inplace"
 
 build: off

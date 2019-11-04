@@ -11,6 +11,7 @@ IF "%DISTUTILS_USE_SDK%"=="1" (
     ECHO Using Windows SDK 7.1
     "C:\Program Files\Microsoft SDKs\Windows\v7.1\Setup\WindowsSdkVer.exe" -q -version:v7.1
     CALL "C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv.cmd" /x64 /release
+    CALL "C:\Program Files\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsx86_amd64.bat"
     SET MSSdk=1
     REM Need the following to allow tox to see the SDK compiler
     SET TOX_TESTENV_PASSENV=DISTUTILS_USE_SDK MSSdk INCLUDE LIB
