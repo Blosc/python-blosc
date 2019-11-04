@@ -94,3 +94,46 @@ jobs:
     inputs:
       artifactName: 'MacWheel$(python.version)'
       targetPath: './dist'
+
+- job: 'Windows'
+  displayName: 'Windows'
+
+  pool:
+    vmImage: 'vs2017-win2016'
+
+  strategy:
+    matrix:
+      Python35:
+        python.version: '3.5'
+      Python36:
+        python.version: '3.6'
+      Python37:
+        python.version: '3.7'
+
+  steps:
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: '$(python.version)'
+      architecture: 'x64'
+
+  - script: |
+      python -m pip install --upgrade pip
+      python -m pip install numpy psutil ninja cmake scikit-build
+    displayName: 'Install build dependencies'
+
+  - script: |
+      call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
+      set CC=cl.exe
+      set CXX=cl.exe
+      python setup.py bdist_wheel --build-type Release -G Ninja
+    displayName: 'Build wheel'
+
+  - script: |
+      python -m pip install blosc --force-reinstall --no-index --no-cache-dir -f ./dist/
+      python blosc/test.py
+    displayName: 'Test wheel'
+
+  - task: PublishPipelineArtifact@0
+    inputs:
+      artifactName: 'Windows$(python.version)'
+      targetPath: './dist'
