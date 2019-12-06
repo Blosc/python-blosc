@@ -15,7 +15,7 @@ PY3X = vi[0] == 3
 
 
 try:
-    import numpy
+    import numpy as np
 except ImportError:
     has_numpy = False
 else:
@@ -66,8 +66,8 @@ class TestCodec(unittest.TestCase):
         self.assertRaises(ValueError, blosc.set_nthreads,
                           blosc.MAX_THREADS + 1)
 
+    @unittest.skipIf(not has_numpy, "Numpy not available")
     def test_compress_input_types(self):
-        import numpy as np
         # assume the expected answer was compressed from bytes
         expected = blosc.compress(b'0123456789', typesize=1)
 
@@ -93,8 +93,8 @@ class TestCodec(unittest.TestCase):
         self.assertEqual(expected, blosc.compress(
             np.array([b'0123456789']), typesize=1))
 
+    @unittest.skipIf(not has_numpy, "Numpy not available")
     def test_decompress_input_types(self):
-        import numpy as np
         # assume the expected answer was compressed from bytes
         expected = b'0123456789'
         compressed = blosc.compress(expected, typesize=1)
@@ -109,8 +109,8 @@ class TestCodec(unittest.TestCase):
         self.assertEqual(expected, blosc.decompress(bytearray(compressed)))
         self.assertEqual(expected, blosc.decompress(np.array([compressed])))
 
+    @unittest.skipIf(not has_numpy, "Numpy not available")
     def test_decompress_releasegil(self):
-        import numpy as np
         # assume the expected answer was compressed from bytes
         blosc.set_releasegil(True)
         expected = b'0123456789'
@@ -127,8 +127,8 @@ class TestCodec(unittest.TestCase):
         self.assertEqual(expected, blosc.decompress(np.array([compressed])))
         blosc.set_releasegil(False)
 
+    @unittest.skipIf(not has_numpy, "Numpy not available")
     def test_decompress_input_types_as_bytearray(self):
-        import numpy as np
         # assume the expected answer was compressed from bytes
         expected = bytearray(b'0123456789')
         compressed = blosc.compress(expected, typesize=1)
@@ -234,30 +234,31 @@ class TestCodec(unittest.TestCase):
         self.assertRaises(TypeError, blosc.pack_array, 1.0)
 
         items = (blosc.MAX_BUFFERSIZE // 8) + 1
-        one = numpy.ones(1, dtype=numpy.int64)
+        one = np.ones(1, dtype=np.int64)
         self.assertRaises(ValueError, blosc.pack_array, one, clevel=-1)
         self.assertRaises(ValueError, blosc.pack_array, one, clevel=10)
 
         # use stride trick to make an array that looks like a huge one
-        ones = numpy.lib.stride_tricks.as_strided(one, shape=(1, items),
+        ones = np.lib.stride_tricks.as_strided(one, shape=(1, items),
                                                   strides=(8, 0))[0]
 
         # This should always raise an error
         self.assertRaises(ValueError, blosc.pack_array, ones)
 
+    @unittest.skipIf(not has_numpy, "Numpy not available")
     def test_unpack_array_with_unicode_characters(self):
-        import numpy as np
         input_array = np.array(['å', 'ç', 'ø', 'π', '˚'])
         packed_array = blosc.pack_array(input_array)
         np.testing.assert_array_equal(input_array, blosc.unpack_array(packed_array, encoding='UTF-8'))
 
+    @unittest.skipIf(not has_numpy, "Numpy not available")
     @unittest.skipIf(not PY3X, "Only required when running Python3.x")
     def test_unpack_array_with_from_py27_exceptions(self):
         self.assertRaises(UnicodeDecodeError, blosc.unpack_array, self.PY_27_INPUT)
 
+    @unittest.skipIf(not has_numpy, "Numpy not available")
     @unittest.skipIf(not PY3X, "Only required when running Python3.x")
     def test_unpack_array_with_unicode_characters_from_py27(self):
-        import numpy as np
         out_array = np.array(['å', 'ç', 'ø', 'π', '˚'])
         np.testing.assert_array_equal(out_array, blosc.unpack_array(self.PY_27_INPUT, encoding='bytes'))
 
@@ -321,9 +322,10 @@ class TestCodec(unittest.TestCase):
         self.assertEqual(t[1] // 2**10, 4354 // 2**10)
         self.assertEqual(t[2], 2**16)
 
+    @unittest.skipIf(not has_numpy, "Numpy not available")
     def test_bitshuffle_not_multiple(self):
         # Check the fix for #133
-        x = numpy.ones(27266, dtype='uint8')
+        x = np.ones(27266, dtype='uint8')
         xx = x.tobytes()
         zxx = blosc.compress(xx, typesize=8, shuffle=blosc.BITSHUFFLE)
         last_xx = blosc.decompress(zxx)[-3:]
