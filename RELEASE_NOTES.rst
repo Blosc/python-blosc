@@ -9,10 +9,13 @@
 :URL: http://python-blosc.blosc.org
 :URL: https://github.com/Blosc/python-blosc
 
-Changes from 1.8.0 to 1.8.2
+
+Changes from 1.8.1 to 1.8.2
 ===========================
 
-#XXX version-specific blurb XXX#
+- Include C-Blosc v1.17.1
+
+-
 
 Changes from 1.8.0 to 1.8.1
 ===========================

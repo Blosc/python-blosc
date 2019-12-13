@@ -80,6 +80,7 @@ if __name__ == '__main__':
     Programming Language :: Python :: 3.5
     Programming Language :: Python :: 3.6
     Programming Language :: Python :: 3.7
+    Programming Language :: Python :: 3.8
     Topic :: Software Development :: Libraries :: Python Modules
     Topic :: System :: Archiving :: Compression
     Operating System :: Microsoft :: Windows
@@ -112,7 +113,7 @@ if __name__ == '__main__':
         packages = ['blosc'],
         )
 elif __name__ == '__mp_main__':
-    # This occurs from `cpuinfo 4.0.0` using multiprocessing to interrogate the 
+    # This occurs from `cpuinfo 4.0.0` using multiprocessing to interrogate the
     # CPUID flags
     # https://github.com/workhorsy/py-cpuinfo/issues/108
     pass
