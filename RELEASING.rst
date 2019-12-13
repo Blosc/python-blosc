@@ -67,7 +67,7 @@ Uploading
 
 * Register and upload it also in the PyPi repository::
 
-    $ python setup.py sdist upload
+    $ twine upload dist/blosc-X.Y.Z.tar.gz
 
 
 Tagging
