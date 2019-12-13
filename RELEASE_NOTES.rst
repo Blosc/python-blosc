@@ -13,9 +13,12 @@
 Changes from 1.8.1 to 1.8.2
 ===========================
 
-- Include C-Blosc v1.17.1
+- Use cmake internally to build the Python extension via the scikit-build library.
+  This seems enough to cope with the conflicting types in using XGETBV when using
+  a recent GCC (>= 9.1) compiler.  Fixes #203 and #209.
+  Thanks to Matt McCormick.
 
--
+- Include C-Blosc v1.17.1.
 
 Changes from 1.8.0 to 1.8.1
 ===========================

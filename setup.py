@@ -12,16 +12,10 @@
 from __future__ import print_function
 
 import os
-import platform
-import re
 import sys
 import io
 
 from skbuild import setup
-from glob import glob
-from distutils.version import LooseVersion
-from distutils.command.build_ext import build_ext
-from distutils.errors import CompileError
 from textwrap import dedent
 
 
