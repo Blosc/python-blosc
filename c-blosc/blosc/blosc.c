@@ -438,17 +438,6 @@ static int lz4_wrap_decompress(const void* input, int compressed_length,
   return LZ4_decompress_safe(input, output, compressed_length, maxout);
 }
 
-static int lz4_wrap_decompress_unsafe(const void* input, int  compressed_length,
-                                      void* output, int maxout)
-{
-  size_t cbytes;
-  cbytes = LZ4_decompress_fast(input, output, (int)maxout);
-  if (cbytes != compressed_length) {
-    return 0;
-  }
-  return (int)maxout;
-}
-
 #endif /* HAVE_LZ4 */
 
 #if defined(HAVE_SNAPPY)
@@ -552,8 +541,7 @@ static int initialize_decompress_func(struct blosc_context* context,
     if (compversion != BLOSC_LZ4_VERSION_FORMAT) {
       return -9;
     }
-    context->decompress_func =
-        unsafe ? &lz4_wrap_decompress_unsafe : &lz4_wrap_decompress;
+    context->decompress_func = &lz4_wrap_decompress;
     return 0;
   }
 #endif /*  HAVE_LZ4 */
@@ -664,8 +652,9 @@ static int blosc_c(const struct blosc_context* context, int32_t blocksize,
       }
     }
     if (context->compcode == BLOSC_BLOSCLZ) {
+      int doshuffle = (*(context->header_flags) & BLOSC_DOSHUFFLE) && (typesize > 1);
       cbytes = blosclz_compress(context->clevel, _tmp+j*neblock, neblock,
-                                dest, maxout);
+                                dest, maxout, doshuffle);
     }
     #if defined(HAVE_LZ4)
     else if (context->compcode == BLOSC_LZ4) {
@@ -700,6 +689,9 @@ static int blosc_c(const struct blosc_context* context, int32_t blocksize,
 
     else {
       blosc_compcode_to_compname(context->compcode, &compname);
+      if (compname == NULL) {
+          compname = "(null)";
+      }
       fprintf(stderr, "Blosc has not been compiled with '%s' ", compname);
       fprintf(stderr, "compression support.  Please use one having it.");
       return -5;    /* signals no compression support */
@@ -885,6 +877,7 @@ static int serial_blosc(struct blosc_context* context)
 static int parallel_blosc(struct blosc_context* context)
 {
   int rc;
+  (void)rc;  // just to avoid 'unused-variable' warning
 
   /* Check whether we need to restart threads */
   blosc_set_nthreads_(context);
@@ -1186,6 +1179,9 @@ static int write_compression_header(struct blosc_context* context, int clevel, i
   {
     const char *compname;
     compname = clibcode_to_clibname(compformat);
+    if (compname == NULL) {
+        compname = "(null)";
+    }
     fprintf(stderr, "Blosc has not been compiled with '%s' ", compname);
     fprintf(stderr, "compression support.  Please use one having it.");
     return -5;    /* signals no compression support */
@@ -1748,6 +1744,7 @@ static void *t_blosc(void *ctxt)
   uint8_t *tmp2;
   uint8_t *tmp3;
   int rc;
+  (void)rc;  // just to avoid 'unused-variable' warning
 
   while(1)
   {
@@ -2282,6 +2279,7 @@ int blosc_release_threadpool(struct blosc_context* context)
   void* status;
   int rc;
   int rc2;
+  (void)rc;  // just to avoid 'unused-variable' warning
 
   if (context->threads_started > 0)
   {

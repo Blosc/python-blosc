@@ -10,7 +10,7 @@ Releasing python-blosc
 Preliminaries
 -------------
 
-* Make sure that te current master branch is passing the tests on all
+* Make sure that the current master branch is passing the tests on all
   continuous integrations systems such as Travis and Appveyor.
 
 * Make sure that ``RELEASE_NOTES.rst``

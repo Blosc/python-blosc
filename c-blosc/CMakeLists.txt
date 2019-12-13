@@ -23,6 +23,8 @@
 #       do not include support for the Zlib library
 #   DEACTIVATE_ZSTD: default OFF
 #       do not include support for the Zstd library
+#   DEACTIVATE_SYMBOLS_CHECK: default ON
+#       do not check for symbols in shared or static libraries
 #   PREFER_EXTERNAL_LZ4: default OFF
 #       when found, use the installed LZ4 libs instead of included
 #       sources
@@ -108,7 +110,9 @@ option(DEACTIVATE_SNAPPY
 option(DEACTIVATE_ZLIB
     "Do not include support for the Zlib library." OFF)
 option(DEACTIVATE_ZSTD
-    "Do not include support for the Zstd library." OFF)
+        "Do not include support for the Zstd library." OFF)
+option(DEACTIVATE_SYMBOLS_CHECK
+        "Do not check for symbols in shared or static libraries." ON)
 option(PREFER_EXTERNAL_LZ4
     "Find and use external LZ4 library instead of included sources." OFF)
 option(PREFER_EXTERNAL_SNAPPY
@@ -223,10 +227,7 @@ if(CMAKE_SYSTEM_PROCESSOR STREQUAL i386 OR
     elseif(CMAKE_C_COMPILER_ID STREQUAL Intel)
         set(COMPILER_SUPPORT_SSE2 TRUE)
         if(CMAKE_C_COMPILER_VERSION VERSION_GREATER 14.0 OR CMAKE_C_COMPILER_VERSION VERSION_EQUAL 14.0)
-	    # icc (ICC) 15.0.3 does not work compiling AVX2 code
-	    # (perhaps my machine does not have AVX2 and the compiler
-	    # cannot generate code for that?)
-            set(COMPILER_SUPPORT_AVX2 FALSE)
+            set(COMPILER_SUPPORT_AVX2 TRUE)
         else()
             set(COMPILER_SUPPORT_AVX2 FALSE)
         endif()
