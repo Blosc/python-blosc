@@ -1,16 +1,16 @@
 =============================
-Announcing python-blosc 1.8.0
+Announcing python-blosc 1.8.2
 =============================
 
 What is new?
 ============
 
-This is a maintenance and fetaure release. A regression affecting
-windows users has been fixed by Robert McLeod and support for older C
-compilers has been contributed by Nicholas Devenish. Also, c-blosc
-v1.16.2 has been included and support for the new `cbuffer_validate` is
-included. Lastly there have been several minor improvements and cleanups
-as usual.
+This is a maintenance release mainly improving the AVX2 detection mechanism.
+Now, the Python extension is generated via the scikit-build library, which uses
+cmake behind the scenes, making the AVX2 detection process more solid.  Fixes
+#203 and #209.  Thanks to Matt McCormick.
+
+Also, sources for C-Blosc v1.17.2 have been included.
 
 For more info, you can have a look at the release notes in:
 
