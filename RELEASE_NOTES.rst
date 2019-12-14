@@ -13,7 +13,8 @@
 Changes from 1.8.2 to 1.8.3
 ===========================
 
-#XXX version-specific blurb XXX#
+- Add a missing pyproject.toml to MANIFEST.in.  This allows to install the necessary
+  skbuild module.  Thanks to Manuel Castro.
 
 Changes from 1.8.1 to 1.8.2
 ===========================

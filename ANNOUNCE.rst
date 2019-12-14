@@ -1,15 +1,12 @@
 =============================
-Announcing python-blosc 1.8.2
+Announcing python-blosc 1.8.3
 =============================
 
 What is new?
 ============
 
-This is a maintenance release mainly improving the AVX2 detection mechanism.
-Now, the Python extension is generated via the scikit-build library, which uses
-cmake behind the scenes, making the AVX2 detection process more solid.  Fixes
-#203 and #209.  Thanks to Matt McCormick.
-
+This is a quick release to fix a missing pyproject.toml that
+prevented to install the skbuild dependency.
 Also, sources for C-Blosc v1.17.2 have been included.
 
 For more info, you can have a look at the release notes in:
