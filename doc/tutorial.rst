@@ -265,6 +265,13 @@ be chunked by slicing, for example as::
     >>> for index in np.arange( a.shape[0] ):
         c += blosc.compress_ptr(a[index,...].__array_interface__['data'][0], a.size, a.dtype.itemsize, 9, True)
 
+You can also use this method with other Python objects like Bytes and bytearray, by converting them into numpy arrays using np.frombuffer(). Should work with any object that implements the buffer interface. As np.frombuffer() does not do a copy of data of the array, the conversion overhead is low.
+
+   >>> byte_arr = bytearray(b'\x01\x02\x03\x04\x05\x06\x07\x08........')
+   >>> a = np.frombuffer(byte_arr, dtype=np.int8)
+   >>> c = blosc.compress_ptr(a.__array_interface__['data'][0], a.size, a.dtype.itemsize, 9, True)
+
+
 Fine-tuning compression parameters
 ==================================
 
