@@ -10,10 +10,11 @@
 :URL: https://github.com/Blosc/python-blosc
 
 
-Changes from 1.8.3 to 1.8.4
+Changes from 1.8.3 to 1.9.0
 ===========================
 
-#XXX version-specific blurb XXX#
+- Dropped support for Python 2.7 and 3.5.
+
 
 Changes from 1.8.2 to 1.8.3
 ===========================

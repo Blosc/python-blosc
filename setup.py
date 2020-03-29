@@ -37,14 +37,11 @@ if __name__ == '__main__':
         sys.exit(1)
 
     # Check for Python
-    if sys.version_info[0] == 2:
-        if sys.version_info[1] < 7:
-            exit_with_error("You need Python 2.7 or greater to install blosc!")
-    elif sys.version_info[0] == 3:
-        if sys.version_info[1] < 4:
-            exit_with_error("You need Python 3.4 or greater to install blosc!")
+    if sys.version_info[0] == 3:
+        if sys.version_info[1] < 6:
+            exit_with_error("You need Python 3.6 or greater to install blosc!")
     else:
-        exit_with_error("You need Python 2.7/3.4 or greater to install blosc!")
+        exit_with_error("You need Python 3.6 or greater to install blosc!")
 
     tests_require = ['numpy', 'psutil']
 

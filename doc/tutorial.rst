@@ -186,8 +186,8 @@ Supporting the buffer interface
 ===============================
 
 python-blosc supports compressing and decompressing from any bytes-like
-object that supports the buffer-interface: this includes `buffer`,
-`memoryview` and `bytearray`::
+object that supports the buffer-interface: this includes `memoryview` and
+`bytearray`::
 
   >>> input_bytes = b"abcdefghijklmnopqrstuvwxyz"
   >>> blosc.compress(input_bytes, typesize=1)
@@ -204,10 +204,8 @@ object that supports the buffer-interface: this includes `buffer`,
   >>> blosc.decompress(bytearray(compressed))
   'abcdefghijklmnopqrstuvwxyz'
 
-Note however, that there are subtle differences between Python 2.x and 3.x.
-For example, in Python 2.x we can compress/decompress both `str` and `unicode`
-types, whereas in Python 3.x we can only compress 'binary' data which does
-*not* include `unicode`.
+Note however, that we can only compress 'binary' data which does *not* include
+`unicode`.
 
 
 Packaging NumPy arrays

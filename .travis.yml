@@ -1,20 +1,9 @@
-sudo: false
 language: python
 
 python:
-  - 2.7
-  - 3.4
-  - 3.5
   - 3.6
-# Enable 3.7 and 3.8 without globally enabling sudo and dist: xenial for other build jobs
-matrix:
-  include:
-    - python: 3.7
-      dist: xenial
-      sudo: true
-    - python: 3.8
-      dist: xenial
-      sudo: true
+  - 3.7
+  - 3.8
 
 before_install:
   - uname -a
@@ -29,4 +18,3 @@ install:
 
 script:
   - make test
-
