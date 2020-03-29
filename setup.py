@@ -43,8 +43,6 @@ if __name__ == '__main__':
     else:
         exit_with_error("You need Python 3.6 or greater to install blosc!")
 
-    tests_require = ['numpy', 'psutil']
-
     ########### End of checks ##########
 
     # Read the long_description from README.rst
@@ -100,7 +98,8 @@ if __name__ == '__main__':
           '-DDEACTIVATE_ZLIB:BOOL=%s' % cmake_bool(not int(os.environ.get('INCLUDE_ZLIB', '1'))),
           '-DDEACTIVATE_ZSTD:BOOL=%s' % cmake_bool(not int(os.environ.get('INCLUDE_ZSTD', '1'))),
         ],
-        tests_require=tests_require,
+        setup_requires=['scikit-build'],
+        tests_require=['numpy', 'psutil'],
         packages = ['blosc'],
         )
 elif __name__ == '__mp_main__':
