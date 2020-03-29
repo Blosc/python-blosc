@@ -10,9 +10,6 @@ import unittest
 
 # version number hack
 vi = sys.version_info
-PY27 = vi[0] == 2 and vi[1] == 7
-PY3X = vi[0] == 3
-
 
 try:
     import numpy
@@ -71,19 +68,7 @@ class TestCodec(unittest.TestCase):
         # assume the expected answer was compressed from bytes
         expected = blosc.compress(b'0123456789', typesize=1)
 
-        if not PY3X:
-            # Python 3 can't compress unicode
-            self.assertEqual(expected,
-                             blosc.compress(u'0123456789', typesize=1))
-            # And the basic string is unicode
-            self.assertEqual(expected,
-                             blosc.compress('0123456789', typesize=1))
-
         # now for all the things that support the buffer interface
-        if not PY3X:
-            # Python 3 no longer has the buffer
-            self.assertEqual(expected, blosc.compress(
-                buffer(b'0123456789'), typesize=1))
         self.assertEqual(expected,
                          blosc.compress(memoryview(b'0123456789'),
                                         typesize=1))
@@ -101,9 +86,6 @@ class TestCodec(unittest.TestCase):
 
         # now for all the things that support the buffer interface
         self.assertEqual(expected, blosc.decompress(compressed))
-        if not PY3X:
-            # Python 3 no longer has the buffer
-            self.assertEqual(expected, blosc.decompress(buffer(compressed)))
         self.assertEqual(expected, blosc.decompress(memoryview(compressed)))
 
         self.assertEqual(expected, blosc.decompress(bytearray(compressed)))
@@ -118,9 +100,6 @@ class TestCodec(unittest.TestCase):
 
         # now for all the things that support the buffer interface
         self.assertEqual(expected, blosc.decompress(compressed))
-        if not PY3X:
-            # Python 3 no longer has the buffer
-            self.assertEqual(expected, blosc.decompress(buffer(compressed)))
         self.assertEqual(expected, blosc.decompress(memoryview(compressed)))
 
         self.assertEqual(expected, blosc.decompress(bytearray(compressed)))
@@ -136,10 +115,6 @@ class TestCodec(unittest.TestCase):
         # now for all the things that support the buffer interface
         self.assertEqual(expected, blosc.decompress(compressed,
                                                     as_bytearray=True))
-        if not PY3X:
-            # Python 3 no longer has the buffer
-            self.assertEqual(expected, blosc.decompress(buffer(compressed),
-                                                        as_bytearray=True))
         self.assertEqual(expected,
                          blosc.decompress(memoryview(compressed),
                                           as_bytearray=True))
@@ -164,11 +139,6 @@ class TestCodec(unittest.TestCase):
 
         self.assertRaises(ValueError, blosc.compress, 'abc',
                           typesize=1, cname='foo')
-
-        if PY3X:
-            # Python 3 doesn't support unicode
-            self.assertRaises(ValueError, blosc.compress,
-                              '0123456789', typesize=0)
 
         # Create a simple mock to avoid having to create a buffer of 2 GB
         class LenMock(object):
@@ -251,11 +221,9 @@ class TestCodec(unittest.TestCase):
         packed_array = blosc.pack_array(input_array)
         np.testing.assert_array_equal(input_array, blosc.unpack_array(packed_array, encoding='UTF-8'))
 
-    @unittest.skipIf(not PY3X, "Only required when running Python3.x")
     def test_unpack_array_with_from_py27_exceptions(self):
         self.assertRaises(UnicodeDecodeError, blosc.unpack_array, self.PY_27_INPUT)
 
-    @unittest.skipIf(not PY3X, "Only required when running Python3.x")
     def test_unpack_array_with_unicode_characters_from_py27(self):
         import numpy as np
         out_array = np.array(['å', 'ç', 'ø', 'π', '˚'])
@@ -336,9 +304,6 @@ class TestCodec(unittest.TestCase):
 
         # now for all the things that support the buffer interface
         self.assertTrue(blosc.cbuffer_validate(compressed))
-        if not PY3X:
-            # Python 3 no longer has the buffer
-            self.assertTrue(blosc.cbuffer_validate(buffer(compressed)))
         self.assertTrue(blosc.cbuffer_validate(memoryview(compressed)))
 
         self.assertTrue(blosc.cbuffer_validate(bytearray(compressed)))
@@ -350,9 +315,6 @@ class TestCodec(unittest.TestCase):
 
         # now for all the things that support the buffer interface
         self.assertFalse(blosc.cbuffer_validate(compressed))
-        if not PY3X:
-            # Python 3 no longer has the buffer
-            self.assertFalse(blosc.cbuffer_validate(buffer(compressed)))
         self.assertFalse(blosc.cbuffer_validate(memoryview(compressed)))
 
         self.assertFalse(blosc.cbuffer_validate(bytearray(compressed)))

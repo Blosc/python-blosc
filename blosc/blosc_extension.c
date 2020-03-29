@@ -311,17 +311,12 @@ PyBlosc_compress(PyObject *self, PyObject *args)
   const char *format;
 
   /* Accept some kind of input followed by
-   * typesize, clevel, shuffle and cname */
-#if PY_MAJOR_VERSION <= 2
-  /* s* : bytes like object including unicode and anything that supports
-   * the buffer interface */
-  format = "s*niis:compress";
-#elif PY_MAJOR_VERSION >= 3
-  /* y* :bytes like object EXCLUDING unicode and anything that supports
+   * typesize, clevel, shuffle and cname
+   * y* :bytes like object EXCLUDING unicode and anything that supports
    * the buffer interface. This is the recommended way to accept binary
-   * data in Python 3. */
+   * data in Python 3.
+   */
   format = "y*niis:compress";
-#endif
   if (!PyArg_ParseTuple(args, format , &view,
                         &typesize, &clevel, &shuffle, &cname))
     return NULL;
@@ -483,26 +478,14 @@ PyBlosc_decompress(PyObject *self, PyObject *args)
   void *input, *output;
   size_t nbytes, cbytes;
   int as_bytearray;
-  /* Accept some kind of input */
-#if PY_MAJOR_VERSION <= 2
-  PyObject *as_bytearray_obj = NULL;
-  /* s* : bytes like object including unicode and anything that supports
-   * the buffer interface. We cannot use p in python 2 so we will
-   * create an object to hold the predicate. */
-  if (!PyArg_ParseTuple(args, "s*O:decompress", &view, &as_bytearray_obj))
-    return NULL;
 
-  if ((as_bytearray = PyObject_IsTrue(as_bytearray_obj)) < 0) {
-    /* failed to convert predicate to bool */
-    return NULL;
-  }
-#elif PY_MAJOR_VERSION >= 3
-  /* y* :bytes like object EXCLUDING unicode and anything that supports
+  /* Accept some kind of input
+   * y* :bytes like object EXCLUDING unicode and anything that supports
    * the buffer interface. This is the recommended way to accept binary
-   * data in Python 3. */
+   * data in Python 3.
+   */
   if (!PyArg_ParseTuple(args, "y*p:decompress", &view, &as_bytearray))
     return NULL;
-#endif
 
   cbytes = view.len;
   input = view.buf;
@@ -557,17 +540,13 @@ PyBlosc_cbuffer_validate(PyObject *self, PyObject *args)
   size_t nbytes, cbytes;
   int result;
 
-  #if PY_MAJOR_VERSION <= 2
-    if (!PyArg_ParseTuple(args, "s*:cbuffer_validate", &view))
-      return NULL;
-
-  #elif PY_MAJOR_VERSION >= 3
-    /* y* :bytes like object EXCLUDING unicode and anything that supports
-     * the buffer interface. This is the recommended way to accept binary
-     * data in Python 3. */
-    if (!PyArg_ParseTuple(args, "y*:cbuffer_validate", &view))
-      return NULL;
-  #endif
+  /* Accept some kind of input
+   * y* :bytes like object EXCLUDING unicode and anything that supports
+   * the buffer interface. This is the recommended way to accept binary
+   * data in Python 3.
+   */
+  if (!PyArg_ParseTuple(args, "y*:cbuffer_validate", &view))
+    return NULL;
   cbytes = view.len;
   input = view.buf;
   result = blosc_cbuffer_validate(input, cbytes, &nbytes);
@@ -621,36 +600,6 @@ static PyMethodDef blosc_methods[] =
 };
 
 
-#if PY_MAJOR_VERSION < 3
-/* Python 2 module initialization */
-PyMODINIT_FUNC
-initblosc_extension(void)
-{
-  PyObject *m;
-  m = Py_InitModule("blosc_extension", blosc_methods);
-  if (m == NULL)
-    return;
-
-  BloscError = PyErr_NewException("blosc_extension.error", NULL, NULL);
-  if (BloscError != NULL) {
-    Py_INCREF(BloscError);
-    PyModule_AddObject(m, "error", BloscError);
-  }
-
-  /* Integer macros */
-  PyModule_AddIntMacro(m, BLOSC_MAX_BUFFERSIZE);
-  PyModule_AddIntMacro(m, BLOSC_MAX_THREADS);
-  PyModule_AddIntMacro(m, BLOSC_MAX_TYPESIZE);
-  PyModule_AddIntMacro(m, BLOSC_NOSHUFFLE);
-  PyModule_AddIntMacro(m, BLOSC_SHUFFLE);
-  PyModule_AddIntMacro(m, BLOSC_BITSHUFFLE);
-
-  /* String macros */
-  PyModule_AddStringMacro(m, BLOSC_VERSION_STRING);
-  PyModule_AddStringMacro(m, BLOSC_VERSION_DATE);
-
-}
-# else
 /* Python 3 module initialization */
 static struct PyModuleDef blosc_def = {
   PyModuleDef_HEAD_INIT,
@@ -689,6 +638,5 @@ PyInit_blosc_extension(void) {
 
   return m;
 }
-#endif
 
 

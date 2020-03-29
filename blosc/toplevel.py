@@ -20,14 +20,6 @@ import blosc
 
 # version number hack
 vi = sys.version_info
-PY26 = vi[0] == 2 and vi[1] == 6
-PY27 = vi[0] == 2 and vi[1] == 7
-PY3X = vi[0] == 3
-
-if vi[0] < 3:
-    int_ = (int, long)
-else:
-    int_ = (int,)
 
 
 def detect_number_of_cores():
@@ -388,7 +380,7 @@ def _check_input_length(input_name, input_len):
 
 
 def _check_address(address):
-    if not isinstance(address, int_):
+    if not isinstance(address, int):
         raise TypeError("only int or long objects are supported as address")
 
 
@@ -782,7 +774,7 @@ def unpack_array(packed_array, **kwargs):
     pickled_array = _ext.decompress(packed_array, False)
     # ... and unpickle
 
-    if kwargs and PY3X:
+    if kwargs:
         array = pickle.loads(pickled_array, **kwargs)
         if all(isinstance(x, bytes) for x in array.tolist()):
             import numpy
