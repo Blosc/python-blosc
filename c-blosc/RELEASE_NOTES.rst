@@ -3,6 +3,15 @@
 ===========================
 
 
+Changes from 1.17.1 to 1.18.0
+=============================
+
+- Fixed the copy of the leftovers of a chunk when its size is not a
+  multiple of the typesize.  Although this is a very unusual situation,
+  it can certainly happen (e.g.
+  https://github.com/Blosc/python-blosc/issues/220).
+
+
 Changes from 1.17.0 to 1.17.1
 =============================
 

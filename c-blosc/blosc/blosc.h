@@ -19,11 +19,11 @@ extern "C" {
 /* Version numbers */
 #define BLOSC_VERSION_MAJOR    1    /* for major interface/format changes  */
 #define BLOSC_VERSION_MINOR    17   /* for minor interface/format changes  */
-#define BLOSC_VERSION_RELEASE  1    /* for tweaks, bug-fixes, or development */
+#define BLOSC_VERSION_RELEASE  2    /* for tweaks, bug-fixes, or development */
 
-#define BLOSC_VERSION_STRING   "1.17.1"  /* string version.  Sync with above! */
+#define BLOSC_VERSION_STRING   "1.18.0"  /* string version.  Sync with above! */
 #define BLOSC_VERSION_REVISION "$Rev$"   /* revision version */
-#define BLOSC_VERSION_DATE     "$Date:: 2019-12-12 #$"    /* date version */
+#define BLOSC_VERSION_DATE     "$Date:: 2020-03-29 #$"    /* date version */
 
 #define BLOSCLZ_VERSION_STRING "2.0.0"   /* the internal compressor version */
 
@@ -369,7 +369,7 @@ BLOSC_EXPORT const char* blosc_get_compressor(void);
 
 /**
   Select the compressor to be used.  The supported ones are "blosclz",
-  "lz4", "lz4hc", "snappy", "zlib" and "ztsd".  If this function is not
+  "lz4", "lz4hc", "snappy", "zlib" and "zstd".  If this function is not
   called, then "blosclz" will be used by default.
 
   In case the compressor is not recognized, or there is not support
