@@ -10,6 +10,12 @@
 :URL: https://github.com/Blosc/python-blosc
 
 
+Changes from 1.9.0 to 1.9.1
+===========================
+
+#XXX version-specific blurb XXX#
+
+
 Changes from 1.8.3 to 1.9.0
 ===========================
 
