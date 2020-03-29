@@ -1,13 +1,15 @@
 =============================
-Announcing python-blosc 1.8.3
+Announcing python-blosc 1.9.0
 =============================
 
 What is new?
 ============
 
-This is a quick release to fix a missing pyproject.toml that
-prevented to install the skbuild dependency.
-Also, sources for C-Blosc v1.17.2 have been included.
+In this release we got rid of support for Python 2.7 and 3.5.
+Also, we fixed the copy of the leftovers of a chunk when its size is not a
+multiple of the typesize.  Although this is a very unusual situation,
+it can certainly happen (e.g. https://github.com/Blosc/python-blosc/issues/220).
+Finally, sources for C-Blosc v1.18.1 have been included.
 
 For more info, you can have a look at the release notes in:
 
