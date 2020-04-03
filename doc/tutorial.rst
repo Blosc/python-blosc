@@ -141,7 +141,7 @@ Blosc package::
   >>> blosc.cnames
   ['blosclz', 'lz4', 'lz4hc', 'snappy', 'zlib', 'zstd']
 
-*Note*: the actual list of codecs may change depening on how you have
+*Note*: the actual list of codecs may change depending on how you have
 compiled the underlying C-Blosc library.
 
 Using different filters
@@ -178,7 +178,7 @@ You can also deactivate filters completely with `NOSHUFFLE`::
 
 So you have quite a bit of flexibility on choosing different codecs and
 filters inside Blosc. Again, depending on the dataset you have and the
-requeriments on performance, you may want to experiment a bit before
+requirements on performance, you may want to experiment a bit before
 sticking with your preferred one.
 
 
