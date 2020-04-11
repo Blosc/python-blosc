@@ -1,15 +1,13 @@
 =============================
-Announcing python-blosc 1.9.0
+Announcing python-blosc 1.9.1
 =============================
 
 What is new?
 ============
 
-In this release we got rid of support for Python 2.7 and 3.5.
-Also, we fixed the copy of the leftovers of a chunk when its size is not a
-multiple of the typesize.  Although this is a very unusual situation,
-it can certainly happen (e.g. https://github.com/Blosc/python-blosc/issues/220).
-Finally, sources for C-Blosc v1.18.1 have been included.
+We disabled the attempt to include support for SSE2 and AVX2 on
+non-Intel platforms, allowing the build on such platforms (see #244).
+Thanks to Lehman Garrison.
 
 For more info, you can have a look at the release notes in:
 

@@ -13,7 +13,9 @@
 Changes from 1.9.0 to 1.9.1
 ===========================
 
-#XXX version-specific blurb XXX#
+- Disable the attempt to include support for SSE2 and AVX2 on non-Intel
+  platforms, allowing the build on such platforms (see #244).  Thanks
+  to Lehman Garrison.
 
 
 Changes from 1.8.3 to 1.9.0
