@@ -427,9 +427,9 @@ def compress(bytesobj, typesize=8, clevel=9, shuffle=blosc.SHUFFLE,
     Examples
     --------
 
-    >>> import array
+    >>> import array, sys
     >>> a = array.array('i', range(1000*1000))
-    >>> a_bytesobj = a.tostring()
+    >>> a_bytesobj = a.tobytes() if sys.version_info >= (3, 0, 0) else a.tostring()
     >>> c_bytesobj = blosc.compress(a_bytesobj, typesize=4)
     >>> len(c_bytesobj) < len(a_bytesobj)
     True
@@ -566,9 +566,9 @@ def decompress(bytesobj, as_bytearray=False):
     Examples
     --------
 
-    >>> import array
+    >>> import array, sys
     >>> a = array.array('i', range(1000*1000))
-    >>> a_bytesobj = a.tostring()
+    >>> a_bytesobj = a.tobytes() if sys.version_info >= (3, 0, 0) else a.tostring()
     >>> c_bytesobj = blosc.compress(a_bytesobj, typesize=4)
     >>> a_bytesobj2 = blosc.decompress(c_bytesobj)
     >>> a_bytesobj == a_bytesobj2
