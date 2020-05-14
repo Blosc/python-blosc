@@ -2,7 +2,7 @@
 
 set -x
 
-versions=(cp27-cp27m cp27-cp27mu cp35-cp35m cp36-cp36m cp37-cp37m cp38-cp38)
+versions=(cp36-cp36m cp37-cp37m cp38-cp38)
 
 for version in "${versions[@]}"; do
   /opt/python/${version}/bin/python -m pip install --upgrade pip
