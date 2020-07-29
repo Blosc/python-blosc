@@ -596,7 +596,7 @@ def decompress_ptr(bytesobj, address):
     bytesobj : str / bytes
         The data to be decompressed.
     address : int or long
-        the pointer to the data to be compressed
+        The address at which to write the decompressed data
 
     Returns
     -------
