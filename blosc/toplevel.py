@@ -607,7 +607,7 @@ def decompress_ptr(bytes_like, address):
         that supports the Python Buffer Protocol, like bytes, bytearray,
         memoryview, or numpy.ndarray.
     address : int or long
-        the pointer to the data to be compressed
+        The address at which to write the decompressed data
 
     Returns
     -------
