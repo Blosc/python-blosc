@@ -431,7 +431,7 @@ decompress_helper(void * input, size_t nbytes, void * output)
 
 
 PyDoc_STRVAR(decompress_ptr__doc__,
-"decompress_ptr(bytes_like, pointer) -- Decompress bytes into pointer.\n"
+"decompress_ptr(bytes_like, pointer) -- Decompress bytes-like into pointer.\n"
              );
 
 static PyObject *
@@ -443,7 +443,7 @@ PyBlosc_decompress_ptr(PyObject *self, PyObject *args)
   size_t nbytes;
 
   /* require a compressed string and a pointer  */
-  if (!PyArg_ParseTuple(args, "y*O:decompress", &input, &pointer)){
+  if (!PyArg_ParseTuple(args, "y*O:decompress_ptr", &input, &pointer)){
     PyBuffer_Release(&input);
     return NULL;
   }
