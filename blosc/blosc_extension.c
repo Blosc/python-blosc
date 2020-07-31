@@ -431,37 +431,47 @@ decompress_helper(void * input, size_t nbytes, void * output)
 
 
 PyDoc_STRVAR(decompress_ptr__doc__,
-"decompress_ptr(string, pointer) -- Decompress string into pointer.\n"
+"decompress_ptr(bytes_like, pointer) -- Decompress bytes-like into pointer.\n"
              );
 
 static PyObject *
 PyBlosc_decompress_ptr(PyObject *self, PyObject *args)
 {
   PyObject * pointer;
-  void * input, * output;
-  size_t cbytes, nbytes;
+  Py_buffer input;
+  void * output;
+  size_t nbytes;
 
   /* require a compressed string and a pointer  */
-  if (!PyArg_ParseTuple(args, "s#O:decompress", &input, &cbytes, &pointer))
+  if (!PyArg_ParseTuple(args, "y*O:decompress_ptr", &input, &pointer)){
+    PyBuffer_Release(&input);
     return NULL;
+  }
 
   /*  convert the int or long Python object to a void * */
   output = PyLong_AsVoidPtr(pointer);
-  if (output == NULL)
+  if (output == NULL){
+    PyBuffer_Release(&input);
     return NULL;
+  }
 
   /*  fetch the uncompressed size into nbytes */
-  if (!get_nbytes(input, cbytes, &nbytes))
+  if (!get_nbytes(input.buf, input.len, &nbytes)){
+    PyBuffer_Release(&input);
     return NULL;
+  }
 
   /* do decompression */
-  if (!decompress_helper(input, nbytes, output))
+  if (!decompress_helper(input.buf, nbytes, output)){
+    PyBuffer_Release(&input);
     return NULL;
+  }
 
   /*  Return nbytes as python integer. This is legitimate, because
    *  decompress_helper above has checked that the number of bytes written
    *  was indeed nbytes.
    *  */
+  PyBuffer_Release(&input);
   return PyLong_FromSize_t(nbytes);
 }
 

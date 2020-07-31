@@ -373,6 +373,13 @@ def _check_bytesobj(bytesobj):
                         "supported as input")
 
 
+def _check_byteslike(bytes_like):
+    try:
+        memoryview(bytes_like)
+    except:
+        raise TypeError("Input type %s must be a bytes-like object that supports Python Buffer Protocol" % type(bytes_like))
+
+
 def _check_input_length(input_name, input_len):
     if input_len > blosc.MAX_BUFFERSIZE:
         raise ValueError("%s cannot be larger than %d bytes" %
@@ -538,15 +545,17 @@ def compress_ptr(address, items, typesize=8, clevel=9, shuffle=blosc.SHUFFLE,
     return _ext.compress_ptr(address, length, typesize, clevel, shuffle, cname)
 
 
-def decompress(bytesobj, as_bytearray=False):
-    """decompress(bytesobj)
+def decompress(bytes_like, as_bytearray=False):
+    """decompress(bytes_like)
 
-    Decompresses a bytesobj compressed object.
+    Decompresses a bytes-like compressed object.
 
     Parameters
     ----------
-    bytesobj : str / bytes
-        The data to be decompressed.
+    bytes_like : bytes-like object
+        The data to be decompressed.  Must be a bytes-like object
+        that supports the Python Buffer Protocol, like bytes, bytearray,
+        memoryview, or numpy.ndarray.
     as_bytearray : bool, optional
         If this flag is True then the return type will be a bytearray object
         instead of a bytesobject.
@@ -561,7 +570,7 @@ def decompress(bytesobj, as_bytearray=False):
     Raises
     ------
     TypeError
-        If bytesobj is not of type bytes or string.
+        If bytes_like does not support Buffer Protocol
 
     Examples
     --------
@@ -583,18 +592,20 @@ def decompress(bytesobj, as_bytearray=False):
 
     """
 
-    return _ext.decompress(bytesobj, as_bytearray)
+    return _ext.decompress(bytes_like, as_bytearray)
 
 
-def decompress_ptr(bytesobj, address):
-    """decompress_ptr(bytesobj, address)
+def decompress_ptr(bytes_like, address):
+    """decompress_ptr(bytes_like, address)
 
-    Decompresses a bytesobj compressed object into the memory at address.
+    Decompresses a bytes_like compressed object into the memory at address.
 
     Parameters
     ----------
-    bytesobj : str / bytes
-        The data to be decompressed.
+    bytes_like : bytes-like object
+        The data to be decompressed. Must be a bytes-like object
+        that supports the Python Buffer Protocol, like bytes, bytearray,
+        memoryview, or numpy.ndarray.
     address : int or long
         The address at which to write the decompressed data
 
@@ -653,10 +664,10 @@ def decompress_ptr(bytesobj, address):
 
     """
 
-    _check_bytesobj(bytesobj)
+    _check_byteslike(bytes_like)
     _check_address(address)
 
-    return _ext.decompress_ptr(bytesobj, address)
+    return _ext.decompress_ptr(bytes_like, address)
 
 
 def pack_array(array, clevel=9, shuffle=blosc.SHUFFLE, cname='blosclz'):
