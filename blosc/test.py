@@ -91,6 +91,34 @@ class TestCodec(unittest.TestCase):
         self.assertEqual(expected, blosc.decompress(bytearray(compressed)))
         self.assertEqual(expected, blosc.decompress(np.array([compressed])))
 
+    def test_decompress_ptr_input_types(self):
+        import numpy as np
+        # assume the expected answer was compressed from bytes
+        expected = b'0123456789'
+        out = np.zeros(len(expected), dtype=np.byte)
+        compressed = blosc.compress(expected, typesize=1)
+
+        # now for all the things that support the buffer interface
+        out[:] = 0  # reset the output array
+        nout = blosc.decompress_ptr(compressed, out.ctypes.data)
+        self.assertEqual(expected, out.tobytes())
+        self.assertEqual(len(expected), nout)  # check that we didn't write too many bytes
+
+        out[:] = 0
+        nout = blosc.decompress_ptr(memoryview(compressed), out.ctypes.data)
+        self.assertEqual(expected, out.tobytes())
+        self.assertEqual(len(expected), nout)
+
+        out[:] = 0
+        nout = blosc.decompress_ptr(bytearray(compressed), out.ctypes.data)
+        self.assertEqual(expected, out.tobytes())
+        self.assertEqual(len(expected), nout)
+
+        out[:] = 0
+        nout = blosc.decompress_ptr(np.frombuffer(compressed, dtype=np.byte), out.ctypes.data)
+        self.assertEqual(expected, out.tobytes())
+        self.assertEqual(len(expected), nout)
+
     def test_decompress_releasegil(self):
         import numpy as np
         # assume the expected answer was compressed from bytes
