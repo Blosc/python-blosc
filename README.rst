@@ -12,6 +12,7 @@ python-blosc: a Python wrapper for the extremely fast Blosc compression library
 :PyPi: |version|
 :Anaconda: |anaconda|
 :Gitter: |gitter|
+:Code of Conduct: |Contributor Covenant|
 
 .. |travis| image:: https://travis-ci.org/Blosc/python-blosc.png?branch=master
         :target: https://travis-ci.org/Blosc/python-blosc
@@ -42,13 +43,6 @@ regular-spaced values, etc.
 python-blosc a Python package that wraps Blosc.  python-blosc supports
 Python 3.6 or higher versions.
 
-
-Code of Conduct
-===============
-
-The Blosc community has adopted a Code of Conduct that we expect project
-participants to adhere to.  Please read the `full text <CODE_OF_CONDUCT.md>`_
-so that you can understand what actions will and will not be tolerated.
 
 Installing
 ==========
