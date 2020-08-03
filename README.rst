@@ -23,7 +23,8 @@ python-blosc: a Python wrapper for the extremely fast Blosc compression library
         :target: https://anaconda.org/conda-forge/python-blosc
 .. |gitter| image:: https://badges.gitter.im/Blosc/c-blosc.svg
         :target: https://gitter.im/Blosc/c-blosc
-
+.. |Contributor Covenant| image:: https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg
+        :target: code_of_conduct.md
 
 
 What it is
