@@ -28,7 +28,7 @@ Changes from 1.9.1 to 1.9.2
   internal threads to be used by default has been increased from 4 to 8.
 
 - Allow zero-copy decompression by allowing bytes-like input.  See PR:
-  https://github.com/Blosc/python-blosc/issues/229.  Thanks to Lehman
+  https://github.com/Blosc/python-blosc/pull/230.  Thanks to Lehman
   Garrison.
 
 - Fix DeprecationWarning due to invalid escape sequence and use
