@@ -26,7 +26,7 @@ blosc.print_versions()
 print("Creating NumPy arrays with 10**%d int64/float64 elements:" % Nexp)
 arrays = ((np.arange(N, dtype=np.int64), "the arange linear distribution"),
           (np.linspace(0, 1000, N), "the linspace linear distribution"),
-          (np.random.random_integers(0, 1000, N), "the random distribution")
+          (np.random.randint(0, 1000 + 1, N), "the random distribution")
           )
 
 in_ = arrays[0][0]
@@ -41,7 +41,7 @@ print("  *** ctypes.memmove() *** Time for memcpy():\t%.3f s\t(%.2f GB/s)" % (
     tcpy, (N*8 / tcpy) / 2**30))
 
 print("\nTimes for compressing/decompressing with clevel=%d and %d threads" % (
-    clevel, blosc.ncores))
+    clevel, blosc.nthreads))
 for (in_, label) in arrays:
     print("\n*** %s ***" % label)
     for cname in blosc.compressor_list():
