@@ -13,7 +13,20 @@
 Changes from 1.9.1 to 1.9.2
 ===========================
 
-#XXX version-specific blurb XXX#
+- Internal C-Blosc updated to 1.20.1.  This fixes
+  https://github.com/Blosc/python-blosc/issues/229, and also brings
+  many new updates in internal codecs, providing interesting bumps
+  in performance in some cases.
+
+- Due to recent addition of more cores in new CPUs, the number of
+  internal threads to be used by default has been increased from 4 to 8.
+
+- Allow zero-copy decompression by allowing bytes-like input.  See PR:
+  https://github.com/Blosc/python-blosc/issues/229.  Thanks to Lehman
+  Garrison.
+
+- Fix DeprecationWarning due to invalid escape sequence and use
+  array.tobytes for Python 3.9.
 
 
 Changes from 1.9.0 to 1.9.1
@@ -202,7 +215,7 @@ Changes from 1.3.0 to 1.3.1
     BLOSC_MAX_THREADS
     BLOSC_MAX_TYPESIZE
   However, these are considered deprecated and should be replaced by
-  libraries using python-blosc by the ones without the BLOSC_ prefix.
+  libraries using python-blosc by the ones without the `BLOSC_` prefix.
 
 
 Changes from 1.2.8 to 1.3.0

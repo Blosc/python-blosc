@@ -1,13 +1,15 @@
 =============================
-Announcing python-blosc 1.9.1
+Announcing python-blosc 1.9.2
 =============================
 
 What is new?
 ============
 
-We disabled the attempt to include support for SSE2 and AVX2 on
-non-Intel platforms, allowing the build on such platforms (see #244).
-Thanks to Lehman Garrison.
+This is a maintenance release for better support recent version of Python
+(3.8 and 3.9).  Also, and due to the evolution of modern CPUs, the
+number of default threads has been raised to 8 (from 4).
+Finally, zero-copy decompression is now supported by allowing bytes-like
+input.  Thanks to Lehman Garrison.
 
 For more info, you can have a look at the release notes in:
 
