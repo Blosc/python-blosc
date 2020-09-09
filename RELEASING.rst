@@ -47,6 +47,10 @@ Updating the online documentation site
 
 * Check that the new manual is accessible in http://python-blosc.blosc.org
 
+* If everything goes well, remove the old docs backup::
+
+  $ ssh blosc@xodo.blosc.org "rm -r $UPSTREAM/docs/html.bck"
+
 * Go up to the root directory for further proceeding with packging::
 
   $ cd ..
@@ -86,7 +90,7 @@ Tagging
 Announcing
 ----------
 
-* Send an announcement to the blosc, numpy list and python-announce
+* Send an announcement to the blosc, pydata list and python-announce
   lists.  Use the ``ANNOUNCE.rst`` file as skeleton (or possibly as
   the definitive version).
 
