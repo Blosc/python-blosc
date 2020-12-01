@@ -21,7 +21,13 @@ jobs:
         with:
           python-version: '3.7'
 
+      - name: Install Ninja
+        uses: seanmiddleditch/gha-setup-ninja@master
 
+      - name: Install MSVC x86
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x86
 
       - name: Build wheels (Windows x86)
         if: runner.os == 'Windows'
