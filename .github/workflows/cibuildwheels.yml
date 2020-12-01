@@ -68,7 +68,7 @@ jobs:
 
       - name: Test cibuildwheel
         run: |
-          PYTHONPATH=.
+          PYTHONPATH=./blosc
           python ./blosc/test.py
         env:
           CIBW_TEST_EXTRAS: test
