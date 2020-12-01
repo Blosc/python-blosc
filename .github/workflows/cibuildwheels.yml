@@ -66,6 +66,12 @@ jobs:
         with:
           path: ./wheelhouse/*.whl
 
+      - name: Test wheels
+        env:
+          CIBW_TEST_EXTRAS: test
+          CIBW_TEST_COMMAND: pytest blosc/test.py
+          CIBW_BUILD_VERBOSITY: 1
+
   build_sdist:
     name: Build SDist
     runs-on: ubuntu-latest
