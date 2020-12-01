@@ -66,10 +66,13 @@ jobs:
         with:
           path: ./wheelhouse/*.whl
 
-      - name: Test wheels
+      - name: Test cibuildwheel
+        run: |
+          PYTHONPATH=.
+          python ./blosc/test.py
         env:
           CIBW_TEST_EXTRAS: test
-          CIBW_TEST_COMMAND: pytest blosc/test.py
+          CIBW_TEST_COMMAND: pytest {project}/tests
           CIBW_BUILD_VERBOSITY: 1
 
   build_sdist:
