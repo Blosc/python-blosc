@@ -60,8 +60,7 @@ jobs:
         env:
           CIBW_BUILD: 'cp37-* cp38-* cp39-*'
           CIBW_BEFORE_BUILD: pip install -r requirements.txt
-          CIBW_TEST_EXTRAS: test
-          CIBW_TEST_COMMAND: python ./blosc/test.py
+          CIBW_TEST_COMMAND: python {project}/blosc/test.py
           CIBW_BUILD_VERBOSITY: 1
 
       - name: Upload wheels
@@ -69,11 +68,7 @@ jobs:
         with:
           path: ./wheelhouse/*.whl
 
-      - name: Test cibuildwheel
-        run: |
-          PYTHONPATH=.
-          export PYTHONPATH=.
-          python ./blosc/test.py
+
 
   build_sdist:
     name: Build SDist
