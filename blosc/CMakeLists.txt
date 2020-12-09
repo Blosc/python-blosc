@@ -9,7 +9,7 @@ set(BUILD_BENCHMARKS OFF CACHE BOOL "Build benchmark programs form the blosc com
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 add_subdirectory(c-blosc)
 
-add_library(blosc_extension MODULE blosc/blosc_extension.c)
+add_library(blosc_extension MODULE blosc_extension.c)
 target_link_libraries(blosc_extension blosc_static)
 python_extension_module(blosc_extension)
 install(TARGETS blosc_extension LIBRARY DESTINATION blosc)
