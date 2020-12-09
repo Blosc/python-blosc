@@ -8,6 +8,8 @@ set(BUILD_TESTS OFF CACHE BOOL "Build test programs form the blosc compression l
 set(BUILD_BENCHMARKS OFF CACHE BOOL "Build benchmark programs form the blosc compression library")
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 add_subdirectory(c-blosc)
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}/c-blosc/blosc")
+
 
 add_library(blosc_extension MODULE blosc_extension.c)
 target_link_libraries(blosc_extension blosc_static)
