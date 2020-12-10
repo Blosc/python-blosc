@@ -102,7 +102,7 @@ jobs:
           path: dist/*.tar.gz
 
   upload_pypi:
-    needs: [ build_wheels, build_sdist ]
+    needs: [ build_wheels, build_sdist ]  # last but not least
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags')
     steps:
