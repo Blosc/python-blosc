@@ -114,4 +114,4 @@ jobs:
       - uses: pypa/gh-action-pypi-publish@master
         with:
           user: __token__
-          password: ${{ env.BLOSC_PYPI_REPO_KEY }}
+          password: ${{ secrets.pypi_password }}
