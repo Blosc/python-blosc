@@ -1,20 +1,10 @@
-=====================================================
- Compiling C files with blosc wheels on Windows
-=====================================================
+===============================================
+ Compiling C files with blosc wheels on Linux
+===============================================
 
 - The main requirement for compiling C files on Windows is having installed a Microsoft compiler. You can either install Visual Studio with the Visual C++ components or the Build Tools for Visual Studio. The last package only contains the command-line toolset, compilers and libraries you need to build C programs. If you do not have none of them yet, they are easy to install following the instructions on https://visualstudio.microsoft.com/es/downloads/.
 
-- Blosc libraries are also necessary, so if you do not have it installed you just have to open a command prompt window and execute:
-
-.. code-block:: console
-
-    > pip install blosc
-    Collecting blosc==1.9.3.dev0
-      Using cached blosc-1.9.3.dev0-cp37-cp37m-win_amd64.whl (1.5 MB)
-    Installing collected packages: blosc
-    Successfully installed blosc-1.9.3.dev0
-
-- Once installed MSVC and blosc, the first step is to open the Visual Studio directory, which typical installation location uses to be  C:\\Program files (x86)\\Microsoft Visual Studio. Then, to set up the build architecture environment you can open a command prompt window in the VC\\Auxiliary\\Build subdirectory and execute "vcvarsall.bat x64" if your achitecture is 64 bits or "vcvarsall.bat x86" if it is 32 bits.
+- Once installed MSVC, the first step is to open the Visual Studio directory, which typical installation location uses to be  C:\\Program files (x86)\\Microsoft Visual Studio. Then, to set up the build architecture environment you can open a command prompt window in the VC\\Auxiliary\\Build subdirectory and execute "vcvarsall.bat x64" if your achitecture is 64 bits or "vcvarsall.bat x86" if it is 32 bits.
 
 - Now, in order to verify that the MSVC command line is set up correctly enter ``cl`` in the command prompt window and verify that the output looks something like this:
 
