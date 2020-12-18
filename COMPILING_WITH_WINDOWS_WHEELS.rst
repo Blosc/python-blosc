@@ -4,7 +4,7 @@
 
 - The main requirement for compiling C files on Windows is having installed a Microsoft compiler. You can either install Visual Studio with the Visual C++ components or the Build Tools for Visual Studio. The last package only contains the command-line toolset, compilers and libraries you need to build C programs. If you do not have none of them yet, they are easy to install following the instructions on https://visualstudio.microsoft.com/es/downloads/.
 
-- Blosc libraries are also necessary, so if you do not have it installed you just have to open a command prompt window and execute:
+- Blosc libraries are also necessary, so if you do not have them installed you just have to open a command prompt window and execute:
 
 .. code-block:: console
 
