@@ -2,16 +2,15 @@
 Releasing python-blosc
 =======================
 
-:Author: Francesc Alted
-:Contact: faltet@gmail.com
-:Date: 2012-09-16
+:Author: The Blosc Development Team
+:Contact: blosc@blosc.org
+:Date: 2020-12-22
 
 
 Preliminaries
 -------------
 
-* Make sure that the current master branch is passing the tests on all
-  continuous integrations systems such as Travis and Appveyor.
+* Make sure that the current master branch is passing the tests on Github Actions.
 
 * Make sure that ``RELEASE_NOTES.rst``
   and ``ANNOUNCE.rst`` are up to date with the latest news in the release.
@@ -56,24 +55,6 @@ Updating the online documentation site
   $ cd ..
 
 
-Packaging
----------
-
-* Make the tarball with the command::
-
-  $ python setup.py sdist
-
-Do a quick check that the tarball is sane.
-
-
-Uploading
----------
-
-* Register and upload it also in the PyPi repository::
-
-    $ twine upload dist/blosc-X.Y.Z.tar.gz
-
-
 Tagging
 -------
 
@@ -86,6 +67,8 @@ Tagging
     $ git push
     $ git push --tags
 
+
+* Check that wheels are created and uploaded to PyPI.
 
 Announcing
 ----------

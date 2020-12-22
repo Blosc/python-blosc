@@ -3,6 +3,5 @@ include *.txt *.rst
 include setup.py cpuinfo.py VERSION
 include pyproject.toml
 
-recursive-include blosc *.py *.c
-recursive-include c-blosc *.c *.h *.cpp *.hpp *.inc *.txt *.in
+recursive-include blosc *.py *.c *.h *.txt *.in
 recursive-include LICENSES *

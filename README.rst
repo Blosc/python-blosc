@@ -7,17 +7,11 @@ python-blosc: a Python wrapper for the extremely fast Blosc compression library
 :Contact: valentin@haenel.co
 :Github: https://github.com/Blosc/python-blosc
 :URL: http://python-blosc.blosc.org
-:Travis CI: |travis|
-:Appveyor: |appveyor|
 :PyPi: |version|
 :Anaconda: |anaconda|
 :Gitter: |gitter|
 :Code of Conduct: |Contributor Covenant|
 
-.. |travis| image:: https://travis-ci.org/Blosc/python-blosc.png?branch=master
-        :target: https://travis-ci.org/Blosc/python-blosc
-.. |appveyor| image:: https://ci.appveyor.com/api/projects/status/dexdkko8omge6o3s/branch/master?svg=true
-        :target: https://ci.appveyor.com/project/FrancescAlted/python-blosc/branch/master
 .. |version| image:: https://img.shields.io/pypi/v/blosc.png
         :target: https://pypi.python.org/pypi/blosc
 .. |anaconda| image:: https://anaconda.org/conda-forge/python-blosc/badges/version.svg

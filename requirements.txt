@@ -1,0 +1,8 @@
+cython>=0.29
+numpy>=1.16
+scikit-build>=0.11.1
+pytest>=3.4.2
+msgpack>=0.6.1
+cmake>=3.14.0
+matplotlib>=3.2.1
+ndindex>=1.4
