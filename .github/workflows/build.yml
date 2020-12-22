@@ -31,4 +31,6 @@ jobs:
         python setup.py install
     - name: Test
       run: |
-        PYTHONPATH=. python blosc/test.py
+        python blosc/test.py
+      env:
+        PYTHONPATH: '.'
