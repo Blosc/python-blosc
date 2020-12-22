@@ -15,4 +15,10 @@ include_directories("${CMAKE_CURRENT_SOURCE_DIR}/c-blosc/blosc")
 add_library(blosc_extension MODULE blosc_extension.c)
 target_link_libraries(blosc_extension blosc_static)
 python_extension_module(blosc_extension)
+
+add_custom_command(
+    TARGET blosc_extension POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:blosc_extension> ${CMAKE_SOURCE_DIR}/blosc
+)
+
 install(TARGETS blosc_extension LIBRARY DESTINATION blosc)
