@@ -17,8 +17,8 @@ Preliminaries
 
 * Check that ``VERSION`` and ``doc/conf.py`` files contains the correct number.
 
-* Check any copyright listings and update them if necessary. You can use ``grep
-  -i copyright`` to figure out where they might be.
+* Check any copyright listings and update them if necessary. You can use
+  ``git grep -i copyright`` to figure out where they might be.
 
 * Commit the changes::
 
