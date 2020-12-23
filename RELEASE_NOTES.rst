@@ -8,10 +8,23 @@
 :URL: https://github.com/Blosc/python-blosc
 
 
-Changes from 1.9.2 to 1.9.3
+Changes from 1.9.2 to 1.10.0
 ===========================
 
-#XXX version-specific blurb XXX#
+- Updated vendored C-Blosc to 1.21.0
+
+- Wheels for Intel (32 and 64 bits) and all major OS (Win, Linux, Mac) are here.
+  The wheels have support for runtime detection for AVX2, so it will be
+  automatically leveraged in case the local host has AVX2.  No need anymore to
+  worry about using different binaries for CPUs not having AVX2 hardware.
+
+  Also, we are distributing binaries for C-Blosc libraries (dynamic and static)
+  and headers.  This way, people trying to use the C-Blosc library can use the
+  python-blosc wheels to install the necessary development files.  For details,
+  see: https://github.com/Blosc/c-blosc/blob/master/COMPILING_WITH_WHEELS.rst
+
+  We gratefully acknowledge Jeff Hammerbacher for supporting the addition of
+  wheels for Blosc.
 
 
 Changes from 1.9.1 to 1.9.2
