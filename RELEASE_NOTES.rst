@@ -8,8 +8,14 @@
 :URL: https://github.com/Blosc/python-blosc
 
 
+Changes from 1.10.0 to 1.10.1
+============================
+
+#XXX version-specific blurb XXX#
+
+
 Changes from 1.9.2 to 1.10.0
-===========================
+============================
 
 - Updated vendored C-Blosc to 1.21.0.
 
