@@ -5,11 +5,11 @@ Announcing python-blosc 1.9.2
 What is new?
 ============
 
-This is a maintenance release to better support recent version of Python
-(3.8 and 3.9).  Also, and due to the evolution of modern CPUs, the
-number of default threads has been raised to 8 (from 4).
-Finally, zero-copy decompression is now supported by allowing bytes-like
-input.  Thanks to Lehman Garrison.
+This is a maintenance release to better support Python packaging.
+Also, we have been successful at generating wheels for Intel (32 and 64 bits) and all major OS (Win, Linux, Mac).
+This way, people trying to use the C-Blosc library can use these wheels to install the necessary development files. For details, see: https://github.com/Blosc/c-blosc/blob/master/COMPILING_WITH_WHEELS.rst
+
+
 
 For more info, you can have a look at the release notes in:
 
