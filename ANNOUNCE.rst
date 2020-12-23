@@ -1,15 +1,19 @@
-=============================
-Announcing python-blosc 1.9.2
-=============================
+==============================
+Announcing python-blosc 1.10.0
+==============================
 
 What is new?
 ============
 
-This is a maintenance release to better support Python packaging.
-Also, we have been successful at generating wheels for Intel (32 and 64 bits) and all major OS (Win, Linux, Mac).
-This way, people trying to use the C-Blosc library can use these wheels to install the necessary development files. For details, see: https://github.com/Blosc/c-blosc/blob/master/COMPILING_WITH_WHEELS.rst
+This is a maintenance release mainly to support Python wheels.  Also,
+we have updated the internal C-Blosc sources to 1.21.0.
 
-
+We are generating wheels for Intel (32 and 64 bits) and all major OS
+(Win, Linux, Mac). In addition to extensions, we are distributing library
+binaries in the wheels too.  This way, people willing to use the C-Blosc
+library can make use of these wheels to install the necessary development
+files.  For details, see:
+https://github.com/Blosc/c-blosc/blob/master/COMPILING_WITH_WHEELS.rst
 
 For more info, you can have a look at the release notes in:
 

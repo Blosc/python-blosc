@@ -11,7 +11,7 @@
 Changes from 1.9.2 to 1.10.0
 ===========================
 
-- Updated vendored C-Blosc to 1.21.0
+- Updated vendored C-Blosc to 1.21.0.
 
 - Wheels for Intel (32 and 64 bits) and all major OS (Win, Linux, Mac) are here.
   The wheels have support for runtime detection for AVX2, so it will be
@@ -25,6 +25,10 @@ Changes from 1.9.2 to 1.10.0
 
   We gratefully acknowledge Jeff Hammerbacher for supporting the addition of
   wheels for Blosc.
+
+- Officially drop support for Python < 3.7.  Although we did not any explicit
+  action that is incompatible with older Python versions, we only provide
+  wheels for Python >= 3.7 (til 3.9).
 
 
 Changes from 1.9.1 to 1.9.2
