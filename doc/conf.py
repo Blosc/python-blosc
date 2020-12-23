@@ -192,7 +192,7 @@ latex_elements = {
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
   ('index', 'python-blosc.tex', u'python-blosc Documentation',
-   u'Francesc Alted, Valentin Haenel', 'manual'),
+   u'The Blosc development team', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -222,7 +222,7 @@ latex_documents = [
 # (source start file, name, description, authors, manual section).
 man_pages = [
     ('index', 'python-blosc', u'python-blosc Documentation',
-     [u'Francesc Alted, Valentin Haenel'], 1)
+     [u'The Blosc development team'], 1)
 ]
 
 # If true, show URL addresses after external links.
@@ -236,7 +236,7 @@ man_pages = [
 #  dir menu entry, description, category)
 texinfo_documents = [
   ('index', 'python-blosc', u'python-blosc Documentation',
-   u'Francesc Alted, Valentin Haenel', 'python-blosc', 'Wrapper for c-blosc multi-threaded compressor.',
+   u'The Blosc development team', 'python-blosc', 'Wrapper for c-blosc multi-threaded compressor.',
    'Miscellaneous'),
 ]
 

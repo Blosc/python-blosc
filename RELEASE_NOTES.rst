@@ -2,10 +2,8 @@
  Release notes for python-blosc
 ================================
 
-:Author: Francesc Alted
-:Author: Valentin Hänel
-:Contact: faltet@gmail.com
-:Contact: valentin@haenel.co
+:Author: The Blosc development team
+:Contact: blosc@blosc.org
 :URL: http://python-blosc.blosc.org
 :URL: https://github.com/Blosc/python-blosc
 

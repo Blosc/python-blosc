@@ -3,7 +3,7 @@
 #
 #       License: BSD 3-clause
 #       Created: September 22, 2010
-#       Author:  Francesc Alted - faltet@gmail.com
+#       Author:  The Blosc development team
 #
 ########################################################################
 
@@ -78,10 +78,10 @@ if __name__ == '__main__':
         description = 'Blosc data compressor',
         long_description = long_description,
         classifiers = [c for c in classifiers.split("\n") if c],
-        author = 'Francesc Alted, Valentin Haenel',
-        author_email = 'faltet@gmail.com, valentin@haenel.co',
-        maintainer = 'Francesc Alted, Valentin Haenel',
-        maintainer_email = 'faltet@gmail.com, valentin@haenel.co',
+        author = 'The Blosc development team',
+        author_email = 'blosc@blosc.org',
+        maintainer = 'The Blosc development team',
+        maintainer_email = 'blosc@blosc.org',
         url = 'http://github.com/blosc/python-blosc',
         license = 'https://opensource.org/licenses/BSD-3-Clause',
         platforms = ['any'],

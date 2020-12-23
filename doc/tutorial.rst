@@ -309,7 +309,7 @@ achieved by `blosc`:
   significant for a small `blocksize`. GIL release is intended to be used in 
   situations where other bounds (such as file or network I/O) are the rate-limiting 
   ones and a Python `ThreadPool` or similar object can be used for parallel 
-  processing either with or without `blosc` threads. Initial testing suggests 
+  processing either with or without `blosc` threads. Preliminary tests suggest
   that an equal mix of `ThreadPool` and `blosc` threads is near optimal. I.e. a 
   computer with 16 cores would have 4 `blosc` threads and 4 `ThreadPool` threads.  
   An example of combining `blosc` and `ThreadPool` may be found in 
@@ -320,5 +320,3 @@ Links to external discussions on `blosc` optimization
 
 * `Synthetic Benchmarks <http://www.blosc.org/synthetic-benchmarks.html>`_ by Francesc Alted
 * `Genotype compressor benchmark <http://alimanfoo.github.io/2016/09/21/genotype-compression-benchmark.html>`_ by Alistair Miles
-
-

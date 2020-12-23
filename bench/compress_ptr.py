@@ -1,8 +1,7 @@
 ########################################################################
 #
-#       License: MIT
 #       Created: Jan 19, 2013
-#       Author:  Francesc Alted - faltet@gmail.com
+#       Author:  The Blosc development team - blosc@blosc.org
 #
 ########################################################################
 

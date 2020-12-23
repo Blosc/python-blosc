@@ -1,9 +1,8 @@
 /*********************************************************************
   Blosc - Blocked Shuffling and Compression Library
 
-      License: MIT
       Created: September 22, 2010
-      Author:  Francesc Alted - faltet@pytables.org
+      Author:  The Blosc development team - blosc@blosc.org
 
   See LICENSES/BLOSC.txt for details about copyright and rights to use.
 **********************************************************************/

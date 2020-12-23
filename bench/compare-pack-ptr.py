@@ -1,9 +1,7 @@
 ########################################################################
 #
-#       License: MIT
 #       Created: May 4, 2013
-#       Author:  Valentin Haenel - valentin@haenel.co
-#       Author:  Francesc Alted - faltet@gmail.com
+#       Author:  The Blosc development team - blosc@blosc.org
 #
 ########################################################################
 

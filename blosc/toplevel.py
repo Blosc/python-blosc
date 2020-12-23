@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 ########################################################################
 #
-#       License: MIT
 #       Created: September 22, 2010
-#       Author:  Francesc Alted - faltet@gmail.com
+#       Author:  The Blosc development team - blosc@blosc.org
 #
 ########################################################################
 
