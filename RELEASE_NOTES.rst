@@ -11,7 +11,12 @@
 Changes from 1.10.0 to 1.10.1
 ============================
 
-#XXX version-specific blurb XXX#
+- Added pyproject.toml to fix issues when building the package for a
+  Python version that does not have a wheel. See:
+  https://github.com/Blosc/python-blosc/issues/239
+
+- Added blosc/c-blosc/README.md in the source distribution. See:
+  https://github.com/Blosc/python-blosc/pull/240
 
 
 Changes from 1.9.2 to 1.10.0
