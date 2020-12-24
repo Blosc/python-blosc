@@ -8,8 +8,14 @@
 :URL: https://github.com/Blosc/python-blosc
 
 
+Changes from 1.10.1 to 1.10.2
+=============================
+
+#XXX version-specific blurb XXX#
+
+
 Changes from 1.10.0 to 1.10.1
-============================
+=============================
 
 - Added pyproject.toml to fix issues when building the package for a
   Python version that does not have a wheel. See:

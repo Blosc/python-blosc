@@ -12,6 +12,16 @@ Preliminaries
 
 * Make sure that the current master branch is passing the tests on Github Actions.
 
+* Create a new branch (if it does not exist) called vX.Y.x (e.g. v1.10.x).
+  Merge master into the current branch:
+
+  - $ git switch master
+  - $ git pull
+  - $ git switch vX.Y.x
+  - $ git merge master
+
+  - Delete the possible old branch vX.(Y-1).x.
+
 * Make sure that ``RELEASE_NOTES.rst``
   and ``ANNOUNCE.rst`` are up to date with the latest news in the release.
 
@@ -70,6 +80,18 @@ Tagging
 
 * Check that wheels are created and uploaded to PyPI.
 
+Merging
+-------
+
+* Merge the vX.Y.x branch back into master.
+
+Releasing on GitHub
+-------------------
+
+* Go to: https://github.com/Blosc/python-blosc/releases.
+
+* Draft a new release. Make sure you use an existing tag.
+
 Announcing
 ----------
 
@@ -82,6 +104,8 @@ Announcing
 
 Post-release actions
 --------------------
+
+* Make sure you are in the master branch.
 
 * Edit ``VERSION`` in master to increment the version to the next
   minor one (i.e. X.Y.Z --> X.Y.(Z+1).dev0).
