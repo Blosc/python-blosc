@@ -120,6 +120,7 @@ Post-release actions
 * Commit your changes with::
 
   $ git commit -a -m"Post X.Y.Z release actions done"
+  $ git push
 
 
 That's all folks!
