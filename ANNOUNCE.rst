@@ -1,12 +1,13 @@
 ==============================
-Announcing python-blosc 1.10.0
+Announcing python-blosc 1.10.1
 ==============================
 
 What is new?
 ============
 
-This is a maintenance release mainly to support Python wheels.  Also,
-we have updated the internal C-Blosc sources to 1.21.0.
+This is a maintenance release mainly to support Python wheels.
+We added pyproject.toml to fix issues when building the package for
+a Python version that does not have a wheel.
 
 We are generating wheels for Intel (32 and 64 bits) and all major OS
 (Win, Linux, Mac). In addition to extensions, we are distributing library
