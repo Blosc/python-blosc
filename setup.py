@@ -64,9 +64,9 @@ if __name__ == '__main__':
     Intended Audience :: Science/Research
     License :: OSI Approved :: BSD License
     Programming Language :: Python
-    Programming Language :: Python :: 3.6
     Programming Language :: Python :: 3.7
     Programming Language :: Python :: 3.8
+    Programming Language :: Python :: 3.9
     Topic :: Software Development :: Libraries :: Python Modules
     Topic :: System :: Archiving :: Compression
     Operating System :: Microsoft :: Windows
@@ -95,7 +95,6 @@ if __name__ == '__main__':
           '-DDEACTIVATE_ZLIB:BOOL=%s' % cmake_bool(not int(os.environ.get('INCLUDE_ZLIB', '1'))),
           '-DDEACTIVATE_ZSTD:BOOL=%s' % cmake_bool(not int(os.environ.get('INCLUDE_ZSTD', '1'))),
         ],
-        setup_requires=['scikit-build'],
         tests_require=['numpy', 'psutil'],
         packages = ['blosc'],
         )
