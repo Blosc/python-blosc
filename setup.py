@@ -51,7 +51,7 @@ if __name__ == '__main__':
 
     # Blosc version
     with open('VERSION') as f:
-        VERSION = .read().strip()
+        VERSION = f.read().strip()
 
     # Create the version.py file
     with open('blosc/version.py', 'w') as f:
