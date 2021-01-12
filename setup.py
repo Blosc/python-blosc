@@ -50,9 +50,12 @@ if __name__ == '__main__':
         long_description = f.read()
 
     # Blosc version
-    VERSION = open('VERSION').read().strip()
+    with open('VERSION') as f:
+        VERSION = .read().strip()
+
     # Create the version.py file
-    open('blosc/version.py', 'w').write('__version__ = "%s"\n' % VERSION)
+    with open('blosc/version.py', 'w') as f:
+        f.write('__version__ = "%s"\n' % VERSION)
 
     def cmake_bool(cond):
         return 'ON' if cond else 'OFF'
