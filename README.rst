@@ -33,21 +33,14 @@ with relatively low entropy, like sparse data, time series, grids with
 regular-spaced values, etc.
 
 python-blosc a Python package that wraps Blosc.  python-blosc supports
-Python 3.6 or higher versions.
+Python 3.7 or higher versions.
 
 
 Installing
 ==========
 
 
-You can install binary packages with ``conda``:
-
-.. code-block:: console
-
-    $ conda install -c conda-forge python-blosc
-
-Or, install it as a typical Python source package (requires c-compiler and
-Python headers) from PyPi using ``pip``:
+Blosc is now offering Python wheels for the main OS (Win, Mac and Linux) and platforms. You can install binary packages from PyPi using ``pip``:
 
 .. code-block:: console
 
