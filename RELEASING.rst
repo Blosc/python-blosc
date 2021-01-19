@@ -70,11 +70,6 @@ Tagging
 
 * Check that wheels are created and uploaded to PyPI.
 
-Merging
--------
-
-* Merge the vX.Y.x branch back into master.
-
 Releasing on GitHub
 -------------------
 
