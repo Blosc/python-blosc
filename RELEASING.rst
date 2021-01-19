@@ -12,16 +12,6 @@ Preliminaries
 
 * Make sure that the current master branch is passing the tests on Github Actions.
 
-* Create a new branch (if it does not exist) called vX.Y.x (e.g. v1.10.x).
-  Merge master into the current branch:
-
-  - $ git switch master
-  - $ git pull
-  - $ git switch vX.Y.x
-  - $ git merge master
-
-  - Delete the possible old branch vX.(Y-1).x.
-
 * Make sure that ``RELEASE_NOTES.rst``
   and ``ANNOUNCE.rst`` are up to date with the latest news in the release.
 

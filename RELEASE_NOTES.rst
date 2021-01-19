@@ -11,8 +11,7 @@
 Changes from 1.10.1 to 1.10.2
 =============================
 
-#XXX version-specific blurb XXX#
-
+- README.rst updated with wheels information.
 
 Changes from 1.10.0 to 1.10.1
 =============================
