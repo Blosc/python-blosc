@@ -85,16 +85,19 @@ if __name__ == '__main__':
         url = 'http://github.com/blosc/python-blosc',
         license = 'https://opensource.org/licenses/BSD-3-Clause',
         platforms = ['any'],
-        cmake_args = [
-          '-DBLOSC_DIR:PATH=%s' % os.environ.get('BLOSC_DIR', ''),
-          '-DDEACTIVATE_SSE2:BOOL=%s' % cmake_bool(('DISABLE_BLOSC_SSE2' in os.environ) or (cpu_info is None) or ('sse2' not in cpu_info['flags'])),
-          '-DDEACTIVATE_AVX2:BOOL=%s' % cmake_bool(('DISABLE_BLOSC_AVX2' in os.environ) or (cpu_info is None) or ('avx2' not in cpu_info['flags'])),
-          '-DDEACTIVATE_LZ4:BOOL=%s' % cmake_bool(not int(os.environ.get('INCLUDE_LZ4', '1'))),
-          # Snappy is disabled by default
-          '-DDEACTIVATE_SNAPPY:BOOL=%s' % cmake_bool(not int(os.environ.get('INCLUDE_SNAPPY', '0'))),
-          '-DDEACTIVATE_ZLIB:BOOL=%s' % cmake_bool(not int(os.environ.get('INCLUDE_ZLIB', '1'))),
-          '-DDEACTIVATE_ZSTD:BOOL=%s' % cmake_bool(not int(os.environ.get('INCLUDE_ZSTD', '1'))),
-        ],
+        cmake_args = (
+          ['-DUSE_SYSTEM_BLOSC:BOOL=ON'] if int(os.environ.get('USE_SYSTEM_BLOSC', '0'))
+          else
+          ['-DUSE_SYSTEM_BLOSC:BOOL=OFF',
+           '-DDEACTIVATE_SSE2:BOOL=%s' % cmake_bool(('DISABLE_BLOSC_SSE2' in os.environ) or (cpu_info is None) or ('sse2' not in cpu_info['flags'])),
+           '-DDEACTIVATE_AVX2:BOOL=%s' % cmake_bool(('DISABLE_BLOSC_AVX2' in os.environ) or (cpu_info is None) or ('avx2' not in cpu_info['flags'])),
+           '-DDEACTIVATE_LZ4:BOOL=%s' % cmake_bool(not int(os.environ.get('INCLUDE_LZ4', '1'))),
+           # Snappy is disabled by default
+           '-DDEACTIVATE_SNAPPY:BOOL=%s' % cmake_bool(not int(os.environ.get('INCLUDE_SNAPPY', '0'))),
+           '-DDEACTIVATE_ZLIB:BOOL=%s' % cmake_bool(not int(os.environ.get('INCLUDE_ZLIB', '1'))),
+           '-DDEACTIVATE_ZSTD:BOOL=%s' % cmake_bool(not int(os.environ.get('INCLUDE_ZSTD', '1'))),
+           ]
+        ),
         setup_requires=['scikit-build'],
         tests_require=['numpy', 'psutil'],
         packages = ['blosc'],
