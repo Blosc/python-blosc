@@ -8,7 +8,7 @@
 :URL: https://github.com/Blosc/python-blosc
 
 
-Changes from 1.10.2 to 1.10.3
+Changes from 1.10.2 to 1.10.4
 =============================
 
 * Update `blosc.nthreads` when `blosc.set_nthreads()` is called.
