@@ -11,7 +11,8 @@
 Changes from 1.10.2 to 1.10.3
 =============================
 
-#XXX version-specific blurb XXX#
+* Update `blosc.nthreads` when `blosc.set_nthreads()` is called.
+  Fixes #246
 
 
 Changes from 1.10.1 to 1.10.2
