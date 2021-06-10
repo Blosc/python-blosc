@@ -79,7 +79,7 @@ Installing via setuptools
 .. code-block:: console
 
     $ python -m pip install -r requirements-dev.txt
-    $ python setup.py build_ext --inplace
+    $ python setup.py build --inplace
 
 Any codec can be enabled (`=1`) or disabled (`=0`) on this build-path with the appropriate
 OS environment variables `INCLUDE_LZ4`, `INCLUDE_SNAPPY`, `INCLUDE_ZLIB`, and
@@ -115,17 +115,15 @@ Using an environment variable:
 
 .. code-block:: console
 
-    $ BLOSC_DIR=/usr/local     (or "set BLOSC_DIR=\blosc" on Win)
-    $ export BLOSC_DIR         (not needed on Win)
-    $ python setup.py build_clib
-    $ python setup.py build_ext --inplace
+    $ export USE_SYSTEM_BLOSC=1                 # or "set USE_SYSTEM_BLOSC=1" on Windows
+    $ export Blosc_ROOT=/usr/local/customprefix # If you installed Blosc into a custom location
+    $ python setup.py build --inplace
 
-Using a flag:
+Using flags:
 
 .. code-block:: console
 
-    $ python setup.py build_clib
-    $ python setup.py build_ext --inplace --blosc=/usr/local
+    $ python setup.py build --inplace -DUSE_SYSTEM_BLOSC:BOOL=YES -DBlosc_ROOT:PATH=/usr/local/customprefix
 
 
 Testing
