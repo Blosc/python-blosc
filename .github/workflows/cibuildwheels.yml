@@ -15,7 +15,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-                arch: [auto, aarch64]
+        arch: [auto, aarch64]
         exclude:
           - os: windows-latest
             arch: aarch64
