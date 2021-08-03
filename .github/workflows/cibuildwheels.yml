@@ -10,11 +10,17 @@ on:
 
 jobs:
   build_wheels:
-    name: Build wheels on ${{ matrix.os }}
+    name: Build wheels for ${{ matrix.arch }} on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
+                arch: [auto, aarch64]
+        exclude:
+          - os: windows-latest
+            arch: aarch64
+          - os: macos-latest
+            arch: aarch64
 
     steps:
       - name: Checkout repo
@@ -26,6 +32,10 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: '3.7'
+
+      - name: Set up QEMU
+        if: ${{ matrix.arch == 'aarch64' }}
+        uses: docker/setup-qemu-action@v1
 
       - name: Install Ninja
         uses: seanmiddleditch/gha-setup-ninja@master
@@ -72,6 +82,7 @@ jobs:
         env:
           CIBW_BUILD: 'cp37-* cp38-* cp39-*'
           CIBW_SKIP: '*-manylinux*_i686'
+          CIBW_ARCHS_LINUX: ${{ matrix.arch }}
           CIBW_BEFORE_BUILD: pip install -r requirements.txt
           CIBW_BEFORE_TEST: pip install numpy
           CIBW_TEST_COMMAND: python {project}/blosc/test.py
