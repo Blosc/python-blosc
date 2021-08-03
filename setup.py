@@ -99,7 +99,7 @@ if __name__ == '__main__':
            '-DDEACTIVATE_SNAPPY:BOOL=%s' % cmake_bool(not int(os.environ.get('INCLUDE_SNAPPY', '0'))),
            '-DDEACTIVATE_ZLIB:BOOL=%s' % cmake_bool(not int(os.environ.get('INCLUDE_ZLIB', '1'))),
            '-DDEACTIVATE_ZSTD:BOOL=%s' % cmake_bool(not int(os.environ.get('INCLUDE_ZSTD', '1'))),
-           ],        
+           ]),        
         setup_requires=['scikit-build'],
         tests_require=['numpy', 'psutil'],
         packages = ['blosc'],
