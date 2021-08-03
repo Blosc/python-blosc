@@ -50,9 +50,12 @@ if __name__ == '__main__':
         long_description = f.read()
 
     # Blosc version
-    VERSION = open('VERSION').read().strip()
+    with open('VERSION') as f:
+        VERSION = f.read().strip()
+
     # Create the version.py file
-    open('blosc/version.py', 'w').write('__version__ = "%s"\n' % VERSION)
+    with open('blosc/version.py', 'w') as f:
+        f.write('__version__ = "%s"\n' % VERSION)
 
     def cmake_bool(cond):
         return 'ON' if cond else 'OFF'
@@ -87,8 +90,8 @@ if __name__ == '__main__':
         platforms = ['any'],
         cmake_args = (
           ['-DUSE_SYSTEM_BLOSC:BOOL=ON'] if int(os.environ.get('USE_SYSTEM_BLOSC', '0'))
-          else
-          ['-DUSE_SYSTEM_BLOSC:BOOL=OFF',
+          else [
+           '-DUSE_SYSTEM_BLOSC:BOOL=OFF',
            '-DDEACTIVATE_SSE2:BOOL=%s' % cmake_bool(('DISABLE_BLOSC_SSE2' in os.environ) or (cpu_info is None) or ('sse2' not in cpu_info['flags'])),
            '-DDEACTIVATE_AVX2:BOOL=%s' % cmake_bool(('DISABLE_BLOSC_AVX2' in os.environ) or (cpu_info is None) or ('avx2' not in cpu_info['flags'])),
            '-DDEACTIVATE_LZ4:BOOL=%s' % cmake_bool(not int(os.environ.get('INCLUDE_LZ4', '1'))),
@@ -96,8 +99,7 @@ if __name__ == '__main__':
            '-DDEACTIVATE_SNAPPY:BOOL=%s' % cmake_bool(not int(os.environ.get('INCLUDE_SNAPPY', '0'))),
            '-DDEACTIVATE_ZLIB:BOOL=%s' % cmake_bool(not int(os.environ.get('INCLUDE_ZLIB', '1'))),
            '-DDEACTIVATE_ZSTD:BOOL=%s' % cmake_bool(not int(os.environ.get('INCLUDE_ZSTD', '1'))),
-           ]
-        ),
+           ],        
         setup_requires=['scikit-build'],
         tests_require=['numpy', 'psutil'],
         packages = ['blosc'],

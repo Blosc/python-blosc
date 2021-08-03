@@ -91,6 +91,7 @@ def set_nthreads(nthreads):
         raise ValueError("the number of threads cannot be larger than %d" %
                          blosc.MAX_THREADS)
 
+    blosc.nthreads = nthreads
     return _ext.set_nthreads(nthreads)
 
 

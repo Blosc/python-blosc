@@ -1,12 +1,12 @@
 ==============================
-Announcing python-blosc 1.10.2
+Announcing python-blosc 1.10.4
 ==============================
 
 What is new?
 ============
 
-This is a maintenance release mainly to support Python wheels.
-We updated README.rst for a new version that supports wheels.
+This is a maintenance release to update `blosc.nthreads`
+when `blosc.set_nthreads()` is called.
 
 We are generating wheels for Intel (32 and 64 bits) and all major OS
 (Win, Linux, Mac). In addition to extensions, we are distributing library
@@ -56,6 +56,11 @@ The sources and documentation are managed through github services at:
 
 http://github.com/Blosc/python-blosc
 
+
+Twitter
+=======
+
+Please follow @Blosc2 to get informed about the latest developments.
 
 
 ----
