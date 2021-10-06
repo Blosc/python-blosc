@@ -11,13 +11,19 @@
 Changes from 1.10.4 to 1.10.5
 =============================
 
-#XXX version-specific blurb XXX#
+- Reenable the possibility to use an already installed C-Blosc library.
+  See #244.  Thanks to Ben Greiner.
+- Add aarch64 wheels. See #250.  Thanks to @odidev.
+- Deactivate SSE2 and AVX2 if a CPU has no flags.  See #242.
+  Thanks to Graham Inggs.
+- Wheels for Linux 32 bits are not distributed anymore.
+- Updated vendored C-Blosc to 1.21.1.
 
 
 Changes from 1.10.2 to 1.10.4
 =============================
 
-* Update `blosc.nthreads` when `blosc.set_nthreads()` is called.
+- Update `blosc.nthreads` when `blosc.set_nthreads()` is called.
   Fixes #246
 
 

@@ -1,14 +1,14 @@
 ==============================
-Announcing python-blosc 1.10.4
+Announcing python-blosc 1.10.5
 ==============================
 
 What is new?
 ============
 
-This is a maintenance release to update `blosc.nthreads`
-when `blosc.set_nthreads()` is called.
+This is a maintenance release fixing several things, and
+updating vendored C-Blosc to 1.21.1.
 
-We are generating wheels for Intel (32 and 64 bits) and all major OS
+We are generating wheels for Intel (64 bits) and all major OS
 (Win, Linux, Mac). In addition to extensions, we are distributing library
 binaries in the wheels too.  This way, people willing to use the C-Blosc
 library can make use of these wheels to install the necessary development
