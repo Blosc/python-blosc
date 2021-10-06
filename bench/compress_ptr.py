@@ -1,8 +1,7 @@
 ########################################################################
 #
-#       License: MIT
 #       Created: Jan 19, 2013
-#       Author:  Francesc Alted - faltet@gmail.com
+#       Author:  The Blosc development team - blosc@blosc.org
 #
 ########################################################################
 
@@ -26,11 +25,12 @@ blosc.print_versions()
 print("Creating NumPy arrays with 10**%d int64/float64 elements:" % Nexp)
 arrays = ((np.arange(N, dtype=np.int64), "the arange linear distribution"),
           (np.linspace(0, 1000, N), "the linspace linear distribution"),
-          (np.random.random_integers(0, 1000, N), "the random distribution")
+          (np.random.randint(0, 1000 + 1, N), "the random distribution")
           )
 
 in_ = arrays[0][0]
-out_ = np.empty(in_.size, dtype=in_.dtype)
+# cause page faults here
+out_ = np.full(in_.size, fill_value=0, dtype=in_.dtype)
 t0 = time.time()
 #out_ = np.copy(in_)
 out_ = ctypes.memmove(out_.__array_interface__['data'][0],
@@ -40,7 +40,7 @@ print("  *** ctypes.memmove() *** Time for memcpy():\t%.3f s\t(%.2f GB/s)" % (
     tcpy, (N*8 / tcpy) / 2**30))
 
 print("\nTimes for compressing/decompressing with clevel=%d and %d threads" % (
-    clevel, blosc.ncores))
+    clevel, blosc.nthreads))
 for (in_, label) in arrays:
     print("\n*** %s ***" % label)
     for cname in blosc.compressor_list():
@@ -50,7 +50,8 @@ for (in_, label) in arrays:
                                    in_.size, in_.dtype.itemsize,
                                    clevel=clevel, shuffle=filter, cname=cname)
             tc = time.time() - t0
-            out = np.empty(in_.size, dtype=in_.dtype)
+            # cause page faults here
+            out = np.full(in_.size, fill_value=0, dtype=in_.dtype)
             t0 = time.time()
             blosc.decompress_ptr(c, out.__array_interface__['data'][0])
             td = time.time() - t0

@@ -1,9 +1,8 @@
 /*********************************************************************
   Blosc - Blocked Shuffling and Compression Library
 
-      License: MIT
       Created: September 22, 2010
-      Author:  Francesc Alted - faltet@pytables.org
+      Author:  The Blosc development team - blosc@blosc.org
 
   See LICENSES/BLOSC.txt for details about copyright and rights to use.
 **********************************************************************/
@@ -99,7 +98,7 @@ PyDoc_STRVAR(compressor_list__doc__,
 static PyObject *
 PyBlosc_compressor_list(PyObject *self)
 {
-  char *list;
+  const char *list;
 
   list = blosc_list_compressors();
 
@@ -115,7 +114,7 @@ static PyObject *
 PyBlosc_code_to_name(PyObject *self, PyObject *args)
 {
   int code;
-  char *name;
+  const char *name;
 
   if (!PyArg_ParseTuple(args, "i:code_to_name", &code))
     return NULL;
@@ -158,6 +157,7 @@ PyBlosc_clib_info(PyObject *self, PyObject *args)
   char *cname;
   char *clib;
   char *version;
+  PyObject *info;
 
   if (!PyArg_ParseTuple(args, "s:clib_info", &cname))
     return NULL;
@@ -165,7 +165,10 @@ PyBlosc_clib_info(PyObject *self, PyObject *args)
   if (blosc_get_complib_info(cname, &clib, &version) < 0)
     return NULL;
 
-  return Py_BuildValue("(s, s)", clib, version);
+  info = Py_BuildValue("(s, s)", clib, version);
+  free(clib);
+  free(version);
+  return info;
 }
 
 
@@ -307,17 +310,12 @@ PyBlosc_compress(PyObject *self, PyObject *args)
   const char *format;
 
   /* Accept some kind of input followed by
-   * typesize, clevel, shuffle and cname */
-#if PY_MAJOR_VERSION <= 2
-  /* s* : bytes like object including unicode and anything that supports
-   * the buffer interface */
-  format = "s*niis:compress";
-#elif PY_MAJOR_VERSION >= 3
-  /* y* :bytes like object EXCLUDING unicode and anything that supports
+   * typesize, clevel, shuffle and cname
+   * y* :bytes like object EXCLUDING unicode and anything that supports
    * the buffer interface. This is the recommended way to accept binary
-   * data in Python 3. */
+   * data in Python 3.
+   */
   format = "y*niis:compress";
-#endif
   if (!PyArg_ParseTuple(args, format , &view,
                         &typesize, &clevel, &shuffle, &cname))
     return NULL;
@@ -337,7 +335,7 @@ PyBlosc_get_clib(PyObject *self, PyObject *args)
 {
   void *input;
   size_t cbytes;
-  char *clib;
+  const char *clib;
 
   /* require Python string object, typesize, clevel and shuffle agrs */
   if (!PyArg_ParseTuple(args, "s#:get_clib", &input, &cbytes))
@@ -432,37 +430,47 @@ decompress_helper(void * input, size_t nbytes, void * output)
 
 
 PyDoc_STRVAR(decompress_ptr__doc__,
-"decompress_ptr(string, pointer) -- Decompress string into pointer.\n"
+"decompress_ptr(bytes_like, pointer) -- Decompress bytes-like into pointer.\n"
              );
 
 static PyObject *
 PyBlosc_decompress_ptr(PyObject *self, PyObject *args)
 {
   PyObject * pointer;
-  void * input, * output;
-  size_t cbytes, nbytes;
+  Py_buffer input;
+  void * output;
+  size_t nbytes;
 
   /* require a compressed string and a pointer  */
-  if (!PyArg_ParseTuple(args, "s#O:decompress", &input, &cbytes, &pointer))
+  if (!PyArg_ParseTuple(args, "y*O:decompress_ptr", &input, &pointer)){
+    PyBuffer_Release(&input);
     return NULL;
+  }
 
   /*  convert the int or long Python object to a void * */
   output = PyLong_AsVoidPtr(pointer);
-  if (output == NULL)
+  if (output == NULL){
+    PyBuffer_Release(&input);
     return NULL;
+  }
 
   /*  fetch the uncompressed size into nbytes */
-  if (!get_nbytes(input, cbytes, &nbytes))
+  if (!get_nbytes(input.buf, input.len, &nbytes)){
+    PyBuffer_Release(&input);
     return NULL;
+  }
 
   /* do decompression */
-  if (!decompress_helper(input, nbytes, output))
+  if (!decompress_helper(input.buf, nbytes, output)){
+    PyBuffer_Release(&input);
     return NULL;
+  }
 
   /*  Return nbytes as python integer. This is legitimate, because
    *  decompress_helper above has checked that the number of bytes written
    *  was indeed nbytes.
    *  */
+  PyBuffer_Release(&input);
   return PyLong_FromSize_t(nbytes);
 }
 
@@ -479,26 +487,14 @@ PyBlosc_decompress(PyObject *self, PyObject *args)
   void *input, *output;
   size_t nbytes, cbytes;
   int as_bytearray;
-  /* Accept some kind of input */
-#if PY_MAJOR_VERSION <= 2
-  PyObject *as_bytearray_obj = NULL;
-  /* s* : bytes like object including unicode and anything that supports
-   * the buffer interface. We cannot use p in python 2 so we will
-   * create an object to hold the predicate. */
-  if (!PyArg_ParseTuple(args, "s*O:decompress", &view, &as_bytearray_obj))
-    return NULL;
 
-  if ((as_bytearray = PyObject_IsTrue(as_bytearray_obj)) < 0) {
-    /* failed to convert predicate to bool */
-    return NULL;
-  }
-#elif PY_MAJOR_VERSION >= 3
-  /* y* :bytes like object EXCLUDING unicode and anything that supports
+  /* Accept some kind of input
+   * y* :bytes like object EXCLUDING unicode and anything that supports
    * the buffer interface. This is the recommended way to accept binary
-   * data in Python 3. */
+   * data in Python 3.
+   */
   if (!PyArg_ParseTuple(args, "y*p:decompress", &view, &as_bytearray))
     return NULL;
-#endif
 
   cbytes = view.len;
   input = view.buf;
@@ -553,17 +549,13 @@ PyBlosc_cbuffer_validate(PyObject *self, PyObject *args)
   size_t nbytes, cbytes;
   int result;
 
-  #if PY_MAJOR_VERSION <= 2
-    if (!PyArg_ParseTuple(args, "s*:decompress", &view))
-      return NULL;
-
-  #elif PY_MAJOR_VERSION >= 3
-    /* y* :bytes like object EXCLUDING unicode and anything that supports
-     * the buffer interface. This is the recommended way to accept binary
-     * data in Python 3. */
-    if (!PyArg_ParseTuple(args, "y*:decompress", &view))
-      return NULL;
-  #endif
+  /* Accept some kind of input
+   * y* :bytes like object EXCLUDING unicode and anything that supports
+   * the buffer interface. This is the recommended way to accept binary
+   * data in Python 3.
+   */
+  if (!PyArg_ParseTuple(args, "y*:cbuffer_validate", &view))
+    return NULL;
   cbytes = view.len;
   input = view.buf;
   result = blosc_cbuffer_validate(input, cbytes, &nbytes);
@@ -617,36 +609,6 @@ static PyMethodDef blosc_methods[] =
 };
 
 
-#if PY_MAJOR_VERSION < 3
-/* Python 2 module initialization */
-PyMODINIT_FUNC
-initblosc_extension(void)
-{
-  PyObject *m;
-  m = Py_InitModule("blosc_extension", blosc_methods);
-  if (m == NULL)
-    return;
-
-  BloscError = PyErr_NewException("blosc_extension.error", NULL, NULL);
-  if (BloscError != NULL) {
-    Py_INCREF(BloscError);
-    PyModule_AddObject(m, "error", BloscError);
-  }
-
-  /* Integer macros */
-  PyModule_AddIntMacro(m, BLOSC_MAX_BUFFERSIZE);
-  PyModule_AddIntMacro(m, BLOSC_MAX_THREADS);
-  PyModule_AddIntMacro(m, BLOSC_MAX_TYPESIZE);
-  PyModule_AddIntMacro(m, BLOSC_NOSHUFFLE);
-  PyModule_AddIntMacro(m, BLOSC_SHUFFLE);
-  PyModule_AddIntMacro(m, BLOSC_BITSHUFFLE);
-
-  /* String macros */
-  PyModule_AddStringMacro(m, BLOSC_VERSION_STRING);
-  PyModule_AddStringMacro(m, BLOSC_VERSION_DATE);
-
-}
-# else
 /* Python 3 module initialization */
 static struct PyModuleDef blosc_def = {
   PyModuleDef_HEAD_INIT,
@@ -685,6 +647,5 @@ PyInit_blosc_extension(void) {
 
   return m;
 }
-#endif
 
 

@@ -1,9 +1,7 @@
 ########################################################################
 #
-#       License: MIT
 #       Created: May 4, 2013
-#       Author:  Valentin Haenel - valentin@haenel.co
-#       Author:  Francesc Alted - faltet@gmail.com
+#       Author:  The Blosc development team - blosc@blosc.org
 #
 ########################################################################
 
@@ -32,7 +30,37 @@ print(" ", in_)
 tic = time.time()
 out_ = np.copy(in_)
 toc = time.time()
-print("  Time for copying array with np.copy():     %.3f s" % (toc-tic,))
+print("  Time for copying array with np.copy():                    %.3f s" % (toc-tic,))
+
+out_ = np.empty_like(in_)
+tic = time.time()
+np.copyto(out_, in_)
+toc = time.time()
+print("  Time for copying array with np.copyto and empty_like:     %.3f s" % (toc-tic,))
+
+# Unlike numpy.zeros, numpy.zeros_like doens't use calloc, but instead uses
+# empty_like and explicitely assigns zeros, which is basically like calling
+# full like
+# Here we benchmark what happens when we allocate memory using calloc
+out_ = np.zeros(in_.shape, dtype=in_.dtype)
+tic = time.time()
+np.copyto(out_, in_)
+toc = time.time()
+print("  Time for copying array with np.copyto and zeros     :     %.3f s" % (toc-tic,))
+
+# Cause a page faults before the benchmark
+out_ = np.full_like(in_, fill_value=0)
+tic = time.time()
+np.copyto(out_, in_)
+toc = time.time()
+print("  Time for copying array with np.copyto and full_like:      %.3f s" % (toc-tic,))
+
+out_ = np.full_like(in_, fill_value=0)
+tic = time.time()
+tic = time.time()
+out_[...] = in_
+toc = time.time()
+print("  Time for copying array with numpy assignment:             %.3f s" % (toc-tic,))
 print()
 
 for cname in blosc.compressor_list():
@@ -53,7 +81,7 @@ for cname in blosc.compressor_list():
                            in_.size, in_.dtype.itemsize,
                            clevel=clevel, shuffle=True, cname=cname)
     ctoc = time.time()
-    out = np.empty(in_.size, dtype=in_.dtype)
+    out = np.full(in_.size, fill_value=0, dtype=in_.dtype)
     dtic = time.time()
     blosc.decompress_ptr(c, out.__array_interface__['data'][0])
     dtoc = time.time()

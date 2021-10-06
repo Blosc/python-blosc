@@ -1,26 +1,23 @@
 python-blosc: a Python wrapper for the extremely fast Blosc compression library
 ===============================================================================
 
-:Author: Francesc Alted
-:Author: Valentin Haenel
-:Contact: faltet@gmail.com
-:Contact: valentin@haenel.co
+:Author: The Blosc development team
+:Contact: blosc@blosc.org
 :Github: https://github.com/Blosc/python-blosc
 :URL: http://python-blosc.blosc.org
-:Travis CI: |travis|
-:Appveyor: |appveyor|
 :PyPi: |version|
 :Anaconda: |anaconda|
+:Gitter: |gitter|
+:Code of Conduct: |Contributor Covenant|
 
-.. |travis| image:: https://travis-ci.org/Blosc/python-blosc.png?branch=master
-        :target: https://travis-ci.org/Blosc/python-blosc
-.. |appveyor| image:: https://ci.appveyor.com/api/projects/status/dexdkko8omge6o3s/branch/master?svg=true
-        :target: https://ci.appveyor.com/project/FrancescAlted/python-blosc/branch/master
 .. |version| image:: https://img.shields.io/pypi/v/blosc.png
         :target: https://pypi.python.org/pypi/blosc
 .. |anaconda| image:: https://anaconda.org/conda-forge/python-blosc/badges/version.svg
         :target: https://anaconda.org/conda-forge/python-blosc
-
+.. |gitter| image:: https://badges.gitter.im/Blosc/c-blosc.svg
+        :target: https://gitter.im/Blosc/c-blosc
+.. |Contributor Covenant| image:: https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg
+        :target: code_of_conduct.md
 
 
 What it is
@@ -36,28 +33,14 @@ with relatively low entropy, like sparse data, time series, grids with
 regular-spaced values, etc.
 
 python-blosc a Python package that wraps Blosc.  python-blosc supports
-Python 2.7 and 3.4 or higher versions.
+Python 3.7 or higher versions.
 
-
-Code of Conduct
-===============
-
-The Blosc community has adopted a Code of Conduct that we expect project
-participants to adhere to.  Please read the `full text <CODE_OF_CONDUCT.md>`_
-so that you can understand what actions will and will not be tolerated.
 
 Installing
 ==========
 
 
-You can install binary packages with ``conda``:
-
-.. code-block:: console
-
-    $ conda install -c conda-forge python-blosc
-
-Or, install it as a typical Python source package (requires c-compiler and
-Python headers) from PyPi using ``pip``:
+Blosc is now offering Python wheels for the main OS (Win, Mac and Linux) and platforms. You can install binary packages from PyPi using ``pip``:
 
 .. code-block:: console
 
@@ -95,12 +78,12 @@ Installing via setuptools
 
 .. code-block:: console
 
-    $ python setup.py build_clib
-    $ python setup.py build_ext --inplace
+    $ python -m pip install -r requirements-dev.txt
+    $ python setup.py build --inplace
 
 Any codec can be enabled (`=1`) or disabled (`=0`) on this build-path with the appropriate
-OS environment variables `INCLUDE_LZ4`, `INCLUDE_SNAPPY`, `INCLUDE_ZLIB`, and 
-`INCLUDE_ZLIB`. By default all the codecs in Blosc are enabled except Snappy 
+OS environment variables `INCLUDE_LZ4`, `INCLUDE_SNAPPY`, `INCLUDE_ZLIB`, and
+`INCLUDE_ZLIB`. By default all the codecs in Blosc are enabled except Snappy
 (due to some issues with C++ with the `gcc` toolchain).
 
 Compiler specific optimisations are automatically enabled by inspecting
@@ -108,11 +91,11 @@ the CPU flags building Blosc. They can be manually disabled by setting
 the following environmental variables: `DISABLE_BLOSC_SSE2` and
 `DISABLE_BLOSC_AVX2`.
 
-`setuptools` is limited to using the compiler specified in the environment 
-variable `CC` which on posix systems is usually `gcc`. This often causes 
+`setuptools` is limited to using the compiler specified in the environment
+variable `CC` which on posix systems is usually `gcc`. This often causes
 trouble with the Snappy codec, which is written in C++, and as a result Snappy
-is no longer compiled by default. This problem is not known to affect MSVC or 
-clang. Snappy is considered optional in Blosc as its compression performance 
+is no longer compiled by default. This problem is not known to affect MSVC or
+clang. Snappy is considered optional in Blosc as its compression performance
 is below that of the other codecs.
 
 That's all. You can proceed with testing section now.
@@ -122,7 +105,7 @@ Compiling with an installed Blosc library
 -----------------------------------------
 
 This approach uses pre-built, fully optimized versions of Blosc built via
-CMake. 
+CMake.
 
 Go to https://github.com/Blosc/c-blosc/releases and download and install
 the C-Blosc library.  Then, you can tell python-blosc where is the
@@ -132,17 +115,15 @@ Using an environment variable:
 
 .. code-block:: console
 
-    $ BLOSC_DIR=/usr/local     (or "set BLOSC_DIR=\blosc" on Win)
-    $ export BLOSC_DIR         (not needed on Win)
-    $ python setup.py build_clib
-    $ python setup.py build_ext --inplace
- 
-Using a flag:
+    $ export USE_SYSTEM_BLOSC=1                 # or "set USE_SYSTEM_BLOSC=1" on Windows
+    $ export Blosc_ROOT=/usr/local/customprefix # If you installed Blosc into a custom location
+    $ python setup.py build --inplace
+
+Using flags:
 
 .. code-block:: console
 
-    $ python setup.py build_clib
-    $ python setup.py build_ext --inplace --blosc=/usr/local
+    $ python setup.py build --inplace -DUSE_SYSTEM_BLOSC:BOOL=YES -DBlosc_ROOT:PATH=/usr/local/customprefix
 
 
 Testing
@@ -194,7 +175,7 @@ will vary!)::
     Snappy: 1.1.1
     Zlib: 1.2.7
     Zstd: 1.1.2
-  Python version: 3.5.2 |Continuum Analytics, Inc.| (default, Jul  2 2016, 17:53:06) 
+  Python version: 3.5.2 |Continuum Analytics, Inc.| (default, Jul  2 2016, 17:53:06)
   [GCC 4.4.7 20120313 (Red Hat 4.4.7-1)]
   Platform: Linux-3.10.0-327.18.2.el7.x86_64-x86_64 (#1 SMP Thu May 12 11:03:55 UTC 2016)
   Linux dist: CentOS Linux 7.2.1511

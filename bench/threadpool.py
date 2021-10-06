@@ -5,8 +5,8 @@ Created on Sun Oct 23 12:03:46 2016
 @author: Robert A. Mcleod - robbmcleod@gmail.com
 
 Compares running blosc with and without GIL release, and compares various
-combinations of ThreadPool threads and blosc-threads for operating on large 
-chunks.  The target is an image stack [50,1024,1024], where each frame can 
+combinations of ThreadPool threads and blosc-threads for operating on large
+chunks.  The target is an image stack [50,1024,1024], where each frame can
 be compressed as a chunk.
 """
 
@@ -27,7 +27,7 @@ BLOCKSIZE = 2**18
 CLEVEL = 4
 SHUFFLE = blosc.SHUFFLE
 COMPRESSOR = 'zstd'
-                 
+
 def compressSlice( args ):
     """
     args = (numpy array address, array_size, item_size, bytesList, bytesIndex)
@@ -36,12 +36,12 @@ def compressSlice( args ):
                        clevel=CLEVEL, shuffle=SHUFFLE, cname=COMPRESSOR )
 
 def decompressSlice( J, list_bytes ):
-    
+
     pass
 
 def compressStack( imageStack, blosc_threads = 1, pool_threads=maxThreads ):
     """
-    Does frame compression using a ThreadPool to distribute the load. 
+    Does frame compression using a ThreadPool to distribute the load.
     """
     blosc.set_nthreads( blosc_threads )
     tPool = ThreadPool( pool_threads )
@@ -54,18 +54,18 @@ def compressStack( imageStack, blosc_threads = 1, pool_threads=maxThreads ):
     for J in np.arange(num_slices):
         tArgs[J] = (imageStack[J,:,:].__array_interface__['data'][0], \
                     N*N, itemSize, bytesList, J)
-    
-    # All operations are done 'in-place' 
+
+    # All operations are done 'in-place'
     tPool.map( compressSlice, tArgs )
     tPool.close()
     tPool.join()
-    
+
 def decompressStack( imageShape, imageDtype, blosc_threads = 1, pool_threads=maxThreads ):
     blosc.set_nthreads( blosc_threads )
     tPool = ThreadPool( pool_threads )
-    
+
     num_slices = imageShape[0]
-    imageStack = np.empty( imageShape  )
+    imageStack = np.full(imageShape, fill_value=0)
 
 
 blosc.print_versions()
@@ -117,13 +117,13 @@ for J in np.arange(nRuns):
         compressStack( stack, blosc_threads=bloscThreads[I], pool_threads=poolThreads[I] )
         unlocked_times[I] += time.time() - t3
 
-        
+
     blosc.set_releasegil(False)
     for I in np.arange( len(poolThreads) ):
         t4 = time.time()
         compressStack( stack, blosc_threads=bloscThreads[I], pool_threads=poolThreads[I] )
         locked_times[I] += time.time() - t4
-      
+
 solo_times /= nRuns
 solo_unlocked_times /= nRuns
 locked_times /= nRuns

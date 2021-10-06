@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 ########################################################################
 #
-#       License: MIT
 #       Created: September 22, 2010
-#       Author:  Francesc Alted - faltet@gmail.com
+#       Author:  The Blosc development team - blosc@blosc.org
 #
 ########################################################################
 
@@ -20,14 +19,6 @@ import blosc
 
 # version number hack
 vi = sys.version_info
-PY26 = vi[0] == 2 and vi[1] == 6
-PY27 = vi[0] == 2 and vi[1] == 7
-PY3X = vi[0] == 3
-
-if vi[0] < 3:
-    int_ = (int, long)
-else:
-    int_ = (int,)
 
 
 def detect_number_of_cores():
@@ -100,6 +91,7 @@ def set_nthreads(nthreads):
         raise ValueError("the number of threads cannot be larger than %d" %
                          blosc.MAX_THREADS)
 
+    blosc.nthreads = nthreads
     return _ext.set_nthreads(nthreads)
 
 
@@ -381,6 +373,13 @@ def _check_bytesobj(bytesobj):
                         "supported as input")
 
 
+def _check_byteslike(bytes_like):
+    try:
+        memoryview(bytes_like)
+    except:
+        raise TypeError("Input type %s must be a bytes-like object that supports Python Buffer Protocol" % type(bytes_like))
+
+
 def _check_input_length(input_name, input_len):
     if input_len > blosc.MAX_BUFFERSIZE:
         raise ValueError("%s cannot be larger than %d bytes" %
@@ -388,7 +387,7 @@ def _check_input_length(input_name, input_len):
 
 
 def _check_address(address):
-    if not isinstance(address, int_):
+    if not isinstance(address, int):
         raise TypeError("only int or long objects are supported as address")
 
 
@@ -435,9 +434,9 @@ def compress(bytesobj, typesize=8, clevel=9, shuffle=blosc.SHUFFLE,
     Examples
     --------
 
-    >>> import array
+    >>> import array, sys
     >>> a = array.array('i', range(1000*1000))
-    >>> a_bytesobj = a.tostring()
+    >>> a_bytesobj = a.tobytes() if sys.version_info >= (3, 0, 0) else a.tostring()
     >>> c_bytesobj = blosc.compress(a_bytesobj, typesize=4)
     >>> len(c_bytesobj) < len(a_bytesobj)
     True
@@ -546,15 +545,17 @@ def compress_ptr(address, items, typesize=8, clevel=9, shuffle=blosc.SHUFFLE,
     return _ext.compress_ptr(address, length, typesize, clevel, shuffle, cname)
 
 
-def decompress(bytesobj, as_bytearray=False):
-    """decompress(bytesobj)
+def decompress(bytes_like, as_bytearray=False):
+    """decompress(bytes_like)
 
-    Decompresses a bytesobj compressed object.
+    Decompresses a bytes-like compressed object.
 
     Parameters
     ----------
-    bytesobj : str / bytes
-        The data to be decompressed.
+    bytes_like : bytes-like object
+        The data to be decompressed.  Must be a bytes-like object
+        that supports the Python Buffer Protocol, like bytes, bytearray,
+        memoryview, or numpy.ndarray.
     as_bytearray : bool, optional
         If this flag is True then the return type will be a bytearray object
         instead of a bytesobject.
@@ -569,14 +570,14 @@ def decompress(bytesobj, as_bytearray=False):
     Raises
     ------
     TypeError
-        If bytesobj is not of type bytes or string.
+        If bytes_like does not support Buffer Protocol
 
     Examples
     --------
 
-    >>> import array
+    >>> import array, sys
     >>> a = array.array('i', range(1000*1000))
-    >>> a_bytesobj = a.tostring()
+    >>> a_bytesobj = a.tobytes() if sys.version_info >= (3, 0, 0) else a.tostring()
     >>> c_bytesobj = blosc.compress(a_bytesobj, typesize=4)
     >>> a_bytesobj2 = blosc.decompress(c_bytesobj)
     >>> a_bytesobj == a_bytesobj2
@@ -591,20 +592,22 @@ def decompress(bytesobj, as_bytearray=False):
 
     """
 
-    return _ext.decompress(bytesobj, as_bytearray)
+    return _ext.decompress(bytes_like, as_bytearray)
 
 
-def decompress_ptr(bytesobj, address):
-    """decompress_ptr(bytesobj, address)
+def decompress_ptr(bytes_like, address):
+    """decompress_ptr(bytes_like, address)
 
-    Decompresses a bytesobj compressed object into the memory at address.
+    Decompresses a bytes_like compressed object into the memory at address.
 
     Parameters
     ----------
-    bytesobj : str / bytes
-        The data to be decompressed.
+    bytes_like : bytes-like object
+        The data to be decompressed. Must be a bytes-like object
+        that supports the Python Buffer Protocol, like bytes, bytearray,
+        memoryview, or numpy.ndarray.
     address : int or long
-        the pointer to the data to be compressed
+        The address at which to write the decompressed data
 
     Returns
     -------
@@ -661,10 +664,10 @@ def decompress_ptr(bytesobj, address):
 
     """
 
-    _check_bytesobj(bytesobj)
+    _check_byteslike(bytes_like)
     _check_address(address)
 
-    return _ext.decompress_ptr(bytesobj, address)
+    return _ext.decompress_ptr(bytes_like, address)
 
 
 def pack_array(array, clevel=9, shuffle=blosc.SHUFFLE, cname='blosclz'):
@@ -782,7 +785,7 @@ def unpack_array(packed_array, **kwargs):
     pickled_array = _ext.decompress(packed_array, False)
     # ... and unpickle
 
-    if kwargs and PY3X:
+    if kwargs:
         array = pickle.loads(pickled_array, **kwargs)
         if all(isinstance(x, bytes) for x in array.tolist()):
             import numpy as np
@@ -800,6 +803,20 @@ def load_tests(loader, tests, pattern):
     tests.addTests(doctest.DocTestSuite())
     return tests
 
+def os_release_pretty_name():
+    for p in ('/etc/os-release', '/usr/lib/os-release'):
+        try:
+            f = open(p, 'rt')
+            for line in f:
+                name, _, value = line.rstrip().partition('=')
+                if name == 'PRETTY_NAME':
+                    if len(value) >= 2 and value[0] in '"\'' and value[0] == value[-1]:
+                        value = value[1:-1]
+                    return value
+        except IOError:
+            pass
+    else:
+        return None
 
 def print_versions():
     """Print all the versions of software that python-blosc relies on."""
@@ -815,7 +832,9 @@ def print_versions():
     (sysname, nodename, release, version, machine, processor) = platform.uname()
     print("Platform: %s-%s-%s (%s)" % (sysname, release, machine, version))
     if sysname == "Linux":
-        print("Linux dist: %s" % " ".join(platform.linux_distribution()[:-1]))
+        distro = os_release_pretty_name()
+        if distro:
+            print("Linux dist:", distro)
     if not processor:
         processor = "not recognized"
     print("Processor: %s" % processor)

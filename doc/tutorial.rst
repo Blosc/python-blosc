@@ -141,7 +141,7 @@ Blosc package::
   >>> blosc.cnames
   ['blosclz', 'lz4', 'lz4hc', 'snappy', 'zlib', 'zstd']
 
-*Note*: the actual list of codecs may change depening on how you have
+*Note*: the actual list of codecs may change depending on how you have
 compiled the underlying C-Blosc library.
 
 Using different filters
@@ -178,7 +178,7 @@ You can also deactivate filters completely with `NOSHUFFLE`::
 
 So you have quite a bit of flexibility on choosing different codecs and
 filters inside Blosc. Again, depending on the dataset you have and the
-requeriments on performance, you may want to experiment a bit before
+requirements on performance, you may want to experiment a bit before
 sticking with your preferred one.
 
 
@@ -186,8 +186,8 @@ Supporting the buffer interface
 ===============================
 
 python-blosc supports compressing and decompressing from any bytes-like
-object that supports the buffer-interface: this includes `buffer`,
-`memoryview` and `bytearray`::
+object that supports the buffer-interface: this includes `memoryview` and
+`bytearray`::
 
   >>> input_bytes = b"abcdefghijklmnopqrstuvwxyz"
   >>> blosc.compress(input_bytes, typesize=1)
@@ -204,10 +204,8 @@ object that supports the buffer-interface: this includes `buffer`,
   >>> blosc.decompress(bytearray(compressed))
   'abcdefghijklmnopqrstuvwxyz'
 
-Note however, that there are subtle differences between Python 2.x and 3.x.
-For example, in Python 2.x we can compress/decompress both `str` and `unicode`
-types, whereas in Python 3.x we can only compress 'binary' data which does
-*not* include `unicode`.
+Note however, that we can only compress 'binary' data which does *not* include
+`unicode`.
 
 
 Packaging NumPy arrays
@@ -265,6 +263,13 @@ be chunked by slicing, for example as::
     >>> for index in np.arange( a.shape[0] ):
         c += blosc.compress_ptr(a[index,...].__array_interface__['data'][0], a.size, a.dtype.itemsize, 9, True)
 
+You can also use this method with other Python objects like Bytes and bytearray, by converting them into numpy arrays using np.frombuffer(). Should work with any object that implements the buffer interface. As np.frombuffer() does not do a copy of data of the array, the conversion overhead is low.
+
+   >>> byte_arr = bytearray(b'\x01\x02\x03\x04\x05\x06\x07\x08........')
+   >>> a = np.frombuffer(byte_arr, dtype=np.int8)
+   >>> c = blosc.compress_ptr(a.__array_interface__['data'][0], a.size, a.dtype.itemsize, 9, True)
+
+
 Fine-tuning compression parameters
 ==================================
 
@@ -304,7 +309,7 @@ achieved by `blosc`:
   significant for a small `blocksize`. GIL release is intended to be used in 
   situations where other bounds (such as file or network I/O) are the rate-limiting 
   ones and a Python `ThreadPool` or similar object can be used for parallel 
-  processing either with or without `blosc` threads. Initial testing suggests 
+  processing either with or without `blosc` threads. Preliminary tests suggest
   that an equal mix of `ThreadPool` and `blosc` threads is near optimal. I.e. a 
   computer with 16 cores would have 4 `blosc` threads and 4 `ThreadPool` threads.  
   An example of combining `blosc` and `ThreadPool` may be found in 
@@ -315,5 +320,3 @@ Links to external discussions on `blosc` optimization
 
 * `Synthetic Benchmarks <http://www.blosc.org/synthetic-benchmarks.html>`_ by Francesc Alted
 * `Genotype compressor benchmark <http://alimanfoo.github.io/2016/09/21/genotype-compression-benchmark.html>`_ by Alistair Miles
-
-

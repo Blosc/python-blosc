@@ -10,9 +10,6 @@ import unittest
 
 # version number hack
 vi = sys.version_info
-PY27 = vi[0] == 2 and vi[1] == 7
-PY3X = vi[0] == 3
-
 
 try:
     import numpy as np
@@ -42,7 +39,7 @@ class TestCodec(unittest.TestCase):
         for cname in blosc.compressor_list():
             c = blosc.compress(s, typesize=1, cname=cname)
             clib = blosc.get_clib(c)
-            self.assert_(clib == blosc.cname2clib[cname])
+            self.assertEqual(clib, blosc.cname2clib[cname])
 
     def test_all_compressors(self):
         s = b'0123456789'*100
@@ -71,19 +68,7 @@ class TestCodec(unittest.TestCase):
         # assume the expected answer was compressed from bytes
         expected = blosc.compress(b'0123456789', typesize=1)
 
-        if not PY3X:
-            # Python 3 can't compress unicode
-            self.assertEqual(expected,
-                             blosc.compress(u'0123456789', typesize=1))
-            # And the basic string is unicode
-            self.assertEqual(expected,
-                             blosc.compress('0123456789', typesize=1))
-
         # now for all the things that support the buffer interface
-        if not PY3X:
-            # Python 3 no longer has the buffer
-            self.assertEqual(expected, blosc.compress(
-                buffer(b'0123456789'), typesize=1))
         self.assertEqual(expected,
                          blosc.compress(memoryview(b'0123456789'),
                                         typesize=1))
@@ -101,13 +86,39 @@ class TestCodec(unittest.TestCase):
 
         # now for all the things that support the buffer interface
         self.assertEqual(expected, blosc.decompress(compressed))
-        if not PY3X:
-            # Python 3 no longer has the buffer
-            self.assertEqual(expected, blosc.decompress(buffer(compressed)))
         self.assertEqual(expected, blosc.decompress(memoryview(compressed)))
 
         self.assertEqual(expected, blosc.decompress(bytearray(compressed)))
         self.assertEqual(expected, blosc.decompress(np.array([compressed])))
+
+    @unittest.skipIf(not has_numpy, "Numpy not available")
+    def test_decompress_ptr_input_types(self):
+        import numpy as np
+        # assume the expected answer was compressed from bytes
+        expected = b'0123456789'
+        out = np.zeros(len(expected), dtype=np.byte)
+        compressed = blosc.compress(expected, typesize=1)
+
+        # now for all the things that support the buffer interface
+        out[:] = 0  # reset the output array
+        nout = blosc.decompress_ptr(compressed, out.ctypes.data)
+        self.assertEqual(expected, out.tobytes())
+        self.assertEqual(len(expected), nout)  # check that we didn't write too many bytes
+
+        out[:] = 0
+        nout = blosc.decompress_ptr(memoryview(compressed), out.ctypes.data)
+        self.assertEqual(expected, out.tobytes())
+        self.assertEqual(len(expected), nout)
+
+        out[:] = 0
+        nout = blosc.decompress_ptr(bytearray(compressed), out.ctypes.data)
+        self.assertEqual(expected, out.tobytes())
+        self.assertEqual(len(expected), nout)
+
+        out[:] = 0
+        nout = blosc.decompress_ptr(np.frombuffer(compressed, dtype=np.byte), out.ctypes.data)
+        self.assertEqual(expected, out.tobytes())
+        self.assertEqual(len(expected), nout)
 
     @unittest.skipIf(not has_numpy, "Numpy not available")
     def test_decompress_releasegil(self):
@@ -118,9 +129,6 @@ class TestCodec(unittest.TestCase):
 
         # now for all the things that support the buffer interface
         self.assertEqual(expected, blosc.decompress(compressed))
-        if not PY3X:
-            # Python 3 no longer has the buffer
-            self.assertEqual(expected, blosc.decompress(buffer(compressed)))
         self.assertEqual(expected, blosc.decompress(memoryview(compressed)))
 
         self.assertEqual(expected, blosc.decompress(bytearray(compressed)))
@@ -136,10 +144,6 @@ class TestCodec(unittest.TestCase):
         # now for all the things that support the buffer interface
         self.assertEqual(expected, blosc.decompress(compressed,
                                                     as_bytearray=True))
-        if not PY3X:
-            # Python 3 no longer has the buffer
-            self.assertEqual(expected, blosc.decompress(buffer(compressed),
-                                                        as_bytearray=True))
         self.assertEqual(expected,
                          blosc.decompress(memoryview(compressed),
                                           as_bytearray=True))
@@ -164,11 +168,6 @@ class TestCodec(unittest.TestCase):
 
         self.assertRaises(ValueError, blosc.compress, 'abc',
                           typesize=1, cname='foo')
-
-        if PY3X:
-            # Python 3 doesn't support unicode
-            self.assertRaises(ValueError, blosc.compress,
-                              '0123456789', typesize=0)
 
         # Create a simple mock to avoid having to create a buffer of 2 GB
         class LenMock(object):
@@ -338,9 +337,6 @@ class TestCodec(unittest.TestCase):
 
         # now for all the things that support the buffer interface
         self.assertTrue(blosc.cbuffer_validate(compressed))
-        if not PY3X:
-            # Python 3 no longer has the buffer
-            self.assertTrue(blosc.cbuffer_validate(buffer(compressed)))
         self.assertTrue(blosc.cbuffer_validate(memoryview(compressed)))
 
         self.assertTrue(blosc.cbuffer_validate(bytearray(compressed)))
@@ -352,13 +348,18 @@ class TestCodec(unittest.TestCase):
 
         # now for all the things that support the buffer interface
         self.assertFalse(blosc.cbuffer_validate(compressed))
-        if not PY3X:
-            # Python 3 no longer has the buffer
-            self.assertFalse(blosc.cbuffer_validate(buffer(compressed)))
         self.assertFalse(blosc.cbuffer_validate(memoryview(compressed)))
 
         self.assertFalse(blosc.cbuffer_validate(bytearray(compressed)))
         self.assertFalse(blosc.cbuffer_validate(np.array([compressed])))
+
+    def test_bithuffle_leftovers(self):
+        # Test for https://github.com/Blosc/c-blosc2/pull/100
+        import numpy as np
+        buffer = b" " * 641091  # a buffer that is not divisible by 8
+        cbuffer = blosc.compress(buffer, typesize=8, shuffle=blosc.BITSHUFFLE, clevel=1)
+        dbuffer = blosc.decompress(cbuffer)
+        self.assertTrue(buffer == dbuffer)
 
 
 def run(verbosity=2):

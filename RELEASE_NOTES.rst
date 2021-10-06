@@ -2,18 +2,136 @@
  Release notes for python-blosc
 ================================
 
-:Author: Francesc Alted
-:Author: Valentin Hänel
-:Contact: faltet@gmail.com
-:Contact: valentin@haenel.co
+:Author: The Blosc development team
+:Contact: blosc@blosc.org
 :URL: http://python-blosc.blosc.org
 :URL: https://github.com/Blosc/python-blosc
 
-Changes from 1.7.0 to 1.7.1
+
+Changes from 1.10.4 to 1.10.5
+=============================
+
+#XXX version-specific blurb XXX#
+
+
+Changes from 1.10.2 to 1.10.4
+=============================
+
+* Update `blosc.nthreads` when `blosc.set_nthreads()` is called.
+  Fixes #246
+
+
+Changes from 1.10.1 to 1.10.2
+=============================
+
+- README.rst updated with wheels information.
+
+
+Changes from 1.10.0 to 1.10.1
+=============================
+
+- Added pyproject.toml to fix issues when building the package for a
+  Python version that does not have a wheel. See:
+  https://github.com/Blosc/python-blosc/issues/239
+
+- Added blosc/c-blosc/README.md in the source distribution. See:
+  https://github.com/Blosc/python-blosc/pull/240
+
+- Vendored cpuinfo.py updated to version 7.0.0.
+
+
+Changes from 1.9.2 to 1.10.0
+============================
+
+- Updated vendored C-Blosc to 1.21.0.
+
+- Wheels for Intel (32 and 64 bits) and all major OS (Win, Linux, Mac) are here.
+  The wheels have support for runtime detection for AVX2, so it will be
+  automatically leveraged in case the local host has AVX2.  No need anymore to
+  worry about using different binaries for CPUs not having AVX2 hardware.
+
+  Also, we are distributing binaries for C-Blosc libraries (dynamic and static)
+  and headers.  This way, people trying to use the C-Blosc library can use the
+  python-blosc wheels to install the necessary development files.  For details,
+  see: https://github.com/Blosc/c-blosc/blob/master/COMPILING_WITH_WHEELS.rst
+
+  We gratefully acknowledge Jeff Hammerbacher for supporting the addition of
+  wheels for Blosc.
+
+- Officially drop support for Python < 3.7.  Although we did not any explicit
+  action that is incompatible with older Python versions, we only provide
+  wheels for Python >= 3.7 (til 3.9).
+
+
+Changes from 1.9.1 to 1.9.2
 ===========================
 
-* #######################
+- Internal C-Blosc updated to 1.20.1.  This fixes
+  https://github.com/Blosc/python-blosc/issues/229, and also brings
+  many new updates in internal codecs, providing interesting bumps
+  in performance in some cases.
 
+- Due to recent addition of more cores in new CPUs, the number of
+  internal threads to be used by default has been increased from 4 to 8.
+
+- Allow zero-copy decompression by allowing bytes-like input.  See PR:
+  https://github.com/Blosc/python-blosc/pull/230.  Thanks to Lehman
+  Garrison.
+
+- Fix DeprecationWarning due to invalid escape sequence and use
+  array.tobytes for Python 3.9.
+
+
+Changes from 1.9.0 to 1.9.1
+===========================
+
+- Disable the attempt to include support for SSE2 and AVX2 on non-Intel
+  platforms, allowing the build on such platforms (see #244).  Thanks
+  to Lehman Garrison.
+
+
+Changes from 1.8.3 to 1.9.0
+===========================
+
+- Dropped support for Python 2.7 and 3.5.
+
+- Fixed the copy of the leftovers of a chunk when its size is not a
+  multiple of the typesize.  Although this is a very unusual situation,
+  it can certainly happen (e.g.
+  https://github.com/Blosc/python-blosc/issues/220).
+
+
+Changes from 1.8.2 to 1.8.3
+===========================
+
+- Add a missing pyproject.toml to MANIFEST.in.  This allows to install the necessary
+  skbuild module.  Thanks to Manuel Castro.
+
+Changes from 1.8.1 to 1.8.2
+===========================
+
+- Use cmake internally to build the Python extension via the scikit-build library.
+  This seems enough to cope with the conflicting types in using XGETBV when using
+  a recent GCC (>= 9.1) compiler.  Fixes #203 and #209.
+  Thanks to Matt McCormick.
+
+- Include C-Blosc v1.17.1.
+
+Changes from 1.8.0 to 1.8.1
+===========================
+
+- Fix a bug that prevented the source distribution from PyPi to be compiled.
+  Specifcally, `*.inc` were not included via the manifest.
+
+Changes from 1.7.0 to 1.8.0
+===========================
+
+- Include C-Blosc v1.16.2
+- Fix cpuinfo.py usage on Windows. Thanks to Robert McLeod
+- Implement Python access to the C function `cbuffer_validate` which
+  was added to c-blosc in version 1.16.0
+- Check if compiler supports CPU capabilities. Thanks to Nicholas Devenish
+- Many minor improvements and fixes
 
 Changes from 1.6.2 to 1.7.0
 ===========================
@@ -150,7 +268,7 @@ Changes from 1.3.0 to 1.3.1
     BLOSC_MAX_THREADS
     BLOSC_MAX_TYPESIZE
   However, these are considered deprecated and should be replaced by
-  libraries using python-blosc by the ones without the BLOSC_ prefix.
+  libraries using python-blosc by the ones without the `BLOSC_` prefix.
 
 
 Changes from 1.2.8 to 1.3.0

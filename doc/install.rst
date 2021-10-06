@@ -10,7 +10,7 @@ from sources, you are going to need a C compiler (GCC, clang and MSVC
 Also, there are situations where you may want to link with an already existing
 Blosc library in your system.  You can do that too.
 
-This package supports Python 2.7 and 3.4 or higher versions.
+This package supports Python 3.6 or higher versions.
 
 Installing from PyPI repository
 ===============================
@@ -46,7 +46,7 @@ Installing via setuptools
 
 .. code-block:: console
 
-    $ python setup.py build_clib
+    $ python -m pip install -r requirements-dev.txt
     $ python setup.py build_ext --inplace
 
 Any codec can be enabled (`=1`) or disabled (`=0`) on this build-path with the appropriate
