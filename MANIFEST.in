@@ -2,6 +2,7 @@ include MANIFEST.in
 include *.txt *.rst
 include setup.py cpuinfo.py VERSION
 include pyproject.toml
+graft cmake
 
 recursive-include blosc *.py *.c *.h *.txt *.in *.md
 recursive-include LICENSES *
