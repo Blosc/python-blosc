@@ -8,6 +8,12 @@
 :URL: https://github.com/Blosc/python-blosc
 
 
+Changes from 1.10.6 to 1.10.7
+=============================
+
+#XXX version-specific blurb XXX#
+
+
 Changes from 1.10.5 to 1.10.6
 =============================
 
