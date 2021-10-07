@@ -11,7 +11,8 @@
 Changes from 1.10.5 to 1.10.6
 =============================
 
-#XXX version-specific blurb XXX#
+* Add a missed cmake folder to distributed files.  See #253.
+  Thanks to Ben Greiner.
 
 
 Changes from 1.10.4 to 1.10.5

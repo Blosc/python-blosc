@@ -1,12 +1,12 @@
 ==============================
-Announcing python-blosc 1.10.5
+Announcing python-blosc 1.10.6
 ==============================
 
 What is new?
 ============
 
-This is a maintenance release fixing several things, and
-updating vendored C-Blosc to 1.21.1.
+This is a maintenance release for including the cmake directory in
+distributed files.
 
 We are generating wheels for Intel (64 bits) and all major OS
 (Win, Linux, Mac). In addition to extensions, we are distributing library
