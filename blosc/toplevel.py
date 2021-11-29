@@ -104,7 +104,7 @@ def set_blocksize(blocksize):
     Notes
     -----
 
-    This is a low-level function and is recommened for expert users only.
+    This is a low-level function and is recommended for expert users only.
 
     Examples
     --------
