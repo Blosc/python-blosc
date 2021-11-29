@@ -24,7 +24,7 @@ Changes from 1.10.5 to 1.10.6
 Changes from 1.10.4 to 1.10.5
 =============================
 
-- Reenable the possibility to use an already installed C-Blosc library.
+- Re-enable the possibility to use an already installed C-Blosc library.
   See #244.  Thanks to Ben Greiner.
 - Add aarch64 wheels. See #250.  Thanks to @odidev.
 - Deactivate SSE2 and AVX2 if a CPU has no flags.  See #242.
@@ -180,7 +180,7 @@ Changes from 1.5.1 to 1.6.1
 
 - Implemented `get_blocksize()`, thanks to Alberto Sabater
 
-- Seperate compilation of codecs, thanks to Robert McLeod
+- Separate compilation of codecs, thanks to Robert McLeod
 
 - Removal of Numpy dependencies, thanks to Robert McLeod
 
@@ -387,7 +387,7 @@ Changes from 1.2.0 to 1.2.1
 
 - Updated to c-blosc 1.3.3.
 
-- Added a new `cname2clib` map for programatically determine the library
+- Added a new `cname2clib` map for programmatically determine the library
   associated to a compressor.
 
 - New `get_clib(cbuffer)` that tells which compression library format
