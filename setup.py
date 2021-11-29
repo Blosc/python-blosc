@@ -21,9 +21,6 @@ from textwrap import dedent
 
 if __name__ == '__main__':
 
-    with io.open('README.rst', encoding='utf-8') as f:
-        long_description = f.read()
-
     try:
         import cpuinfo
         cpu_info = cpuinfo.get_cpu_info()
