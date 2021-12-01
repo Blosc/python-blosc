@@ -60,7 +60,7 @@ from blosc.toplevel import (
 # Dictionaries for the maps between compressor names and libs
 cnames = compressor_list()
 # Map for compression names and libs
-cname2clib = dict((name, clib_info(name)[0]) for name in cnames)
+cname2clib = {name: clib_info(name)[0] for name in cnames}
 # Map for compression libraries and versions
 clib_versions = dict(clib_info(name) for name in cnames)
 
