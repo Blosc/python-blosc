@@ -73,8 +73,7 @@ set_releasegil(False)
 # Internal Blosc threading
 nthreads = ncores = detect_number_of_cores()
 # Protection against too many cores
-if nthreads > 8:
-    nthreads = 8
+nthreads = min(nthreads, 8)
 set_nthreads(nthreads)
 blosclib_version = "%s (%s)" % (VERSION_STRING, VERSION_DATE)
 import atexit
