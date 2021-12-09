@@ -376,7 +376,7 @@ def _check_bytesobj(bytesobj):
 def _check_byteslike(bytes_like):
     try:
         memoryview(bytes_like)
-    except:
+    except Exception:
         raise TypeError("Input type %s must be a bytes-like object that supports Python Buffer Protocol" % type(bytes_like))
 
 
