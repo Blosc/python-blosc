@@ -815,8 +815,7 @@ def os_release_pretty_name():
                     return value
         except IOError:
             pass
-    else:
-        return None
+    return None
 
 def print_versions():
     """Print all the versions of software that python-blosc relies on."""
