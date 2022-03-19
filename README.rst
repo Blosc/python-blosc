@@ -83,7 +83,7 @@ Installing via setuptools
 
 Any codec can be enabled (`=1`) or disabled (`=0`) on this build-path with the appropriate
 OS environment variables `INCLUDE_LZ4`, `INCLUDE_SNAPPY`, `INCLUDE_ZLIB`, and
-`INCLUDE_ZLIB`. By default all the codecs in Blosc are enabled except Snappy
+`INCLUDE_ZSTD`. By default all the codecs in Blosc are enabled except Snappy
 (due to some issues with C++ with the `gcc` toolchain).
 
 Compiler specific optimisations are automatically enabled by inspecting
