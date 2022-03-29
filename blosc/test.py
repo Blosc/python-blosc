@@ -3,7 +3,7 @@ from __future__ import division
 import sys
 import gc
 import os
-from distutils.version import LooseVersion
+from ._version import LooseVersion
 import ctypes
 import blosc
 import unittest

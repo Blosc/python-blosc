@@ -8,7 +8,7 @@
 
 import os
 import sys
-from distutils.version import LooseVersion
+from ._version import LooseVersion
 try:
     import cPickle as pickle
 except ImportError:
