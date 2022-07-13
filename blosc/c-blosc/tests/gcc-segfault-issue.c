@@ -7,7 +7,7 @@
 
     https://github.com/Blosc/python-blosc/issues/110
 
-    Apparently this only affects to blosc-powered Python extensions.
+    Apparently this only affects blosc-powered Python extensions.
 
     To compile this program:
 
@@ -54,7 +54,7 @@ int main(){
   printf("Blosc version info: %s (%s)\n",
 	 BLOSC_VERSION_STRING, BLOSC_VERSION_DATE);
 
-  /* Initialize the gobal Blosc context */
+  /* Initialize the global Blosc context */
   blosc_init();
 
   /* Use multithreading */
