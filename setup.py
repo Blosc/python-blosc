@@ -33,13 +33,6 @@ if __name__ == '__main__':
         print('ERROR: %s' % message)
         sys.exit(1)
 
-    # Check for Python
-    if sys.version_info[0] == 3:
-        if sys.version_info[1] < 6:
-            exit_with_error("You need Python 3.6 or greater to install blosc!")
-    else:
-        exit_with_error("You need Python 3.6 or greater to install blosc!")
-
     ########### End of checks ##########
 
     # Read the long_description from README.rst
@@ -63,10 +56,12 @@ if __name__ == '__main__':
     Intended Audience :: Information Technology
     Intended Audience :: Science/Research
     License :: OSI Approved :: BSD License
-    Programming Language :: Python
+    Programming Language :: Python :: 3
     Programming Language :: Python :: 3.7
     Programming Language :: Python :: 3.8
     Programming Language :: Python :: 3.9
+    Programming Language :: Python :: 3.10
+    Programming Language :: Python :: 3 :: Only
     Topic :: Software Development :: Libraries :: Python Modules
     Topic :: System :: Archiving :: Compression
     Operating System :: Microsoft :: Windows
@@ -78,6 +73,7 @@ if __name__ == '__main__':
         description = 'Blosc data compressor',
         long_description = long_description,
         classifiers = [c for c in classifiers.split("\n") if c],
+        python_requires=">=3.7, <4",
         author = 'The Blosc development team',
         author_email = 'blosc@blosc.org',
         maintainer = 'The Blosc development team',
