@@ -31,9 +31,7 @@ jobs:
         python setup.py install
     - name: Test
       run: |
-        python blosc/test.py
-      env:
-        PYTHONPATH: '.'
+        python -m blosc.test
 
   test-aarch64:
     name: "Build and test on aarch64"

@@ -110,9 +110,7 @@ running the doctests in ``blosc/test.py``:
 
 .. code-block:: console
 
-    $ PYTHONPATH=.   (or "set PYTHONPATH=." on Win)
-    $ export PYTHONPATH=.  (not needed on Win)
-    $ python blosc/test.py  (add -v for verbose mode)
+    $ python -m blosc.test  (add -v for verbose mode)
 
 Or alternatively, you can use the third-party ``nosetests`` script to run both
 the doctests and the test suite:
