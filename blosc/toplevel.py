@@ -8,7 +8,7 @@
 
 import os
 import sys
-import _version
+from ._version import LooseVersion
 try:
     import cPickle as pickle
 except ImportError:
@@ -344,7 +344,7 @@ def _check_shuffle(shuffle):
         raise ValueError("shuffle can only be one of NOSHUFFLE, SHUFFLE"
                          " and BITSHUFFLE.")
     if (shuffle == blosc.BITSHUFFLE and
-        _version.LooseVersion(blosc.blosclib_version) < _version.LooseVersion("1.8.0")):
+        LooseVersion(blosc.blosclib_version) < LooseVersion("1.8.0")):
         raise ValueError("You need C-Blosc 1.8.0 or higher for using"
                          " BITSHUFFLE.")
 
