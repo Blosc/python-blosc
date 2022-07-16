@@ -136,12 +136,6 @@ running the doctests in ``blosc/test.py``:
 
     $ python -m blosc.test  (add -v for verbose mode)
 
-Or alternatively, you can use the third-party ``nosetests`` script:
-
-.. code-block:: console
-
-    $ nosetests --with-doctest (add -v for verbose mode)
-
 Once installed, you can re-run the tests at any time with:
 
 .. code-block:: console
