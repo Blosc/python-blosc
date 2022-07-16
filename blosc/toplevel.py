@@ -17,9 +17,6 @@ except ImportError:
 from blosc import blosc_extension as _ext
 import blosc
 
-# version number hack
-vi = sys.version_info
-
 
 def detect_number_of_cores():
     """
@@ -436,7 +433,7 @@ def compress(bytesobj, typesize=8, clevel=9, shuffle=blosc.SHUFFLE,
 
     >>> import array, sys
     >>> a = array.array('i', range(1000*1000))
-    >>> a_bytesobj = a.tobytes() if sys.version_info >= (3, 0, 0) else a.tostring()
+    >>> a_bytesobj = a.tobytes()
     >>> c_bytesobj = blosc.compress(a_bytesobj, typesize=4)
     >>> len(c_bytesobj) < len(a_bytesobj)
     True
@@ -577,7 +574,7 @@ def decompress(bytes_like, as_bytearray=False):
 
     >>> import array, sys
     >>> a = array.array('i', range(1000*1000))
-    >>> a_bytesobj = a.tobytes() if sys.version_info >= (3, 0, 0) else a.tostring()
+    >>> a_bytesobj = a.tobytes()
     >>> c_bytesobj = blosc.compress(a_bytesobj, typesize=4)
     >>> a_bytesobj2 = blosc.decompress(c_bytesobj)
     >>> a_bytesobj == a_bytesobj2

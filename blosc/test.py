@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from __future__ import division
 import sys
 import gc
 import os
@@ -7,9 +6,6 @@ from ._version import LooseVersion
 import ctypes
 import blosc
 import unittest
-
-# version number hack
-vi = sys.version_info
 
 try:
     import numpy

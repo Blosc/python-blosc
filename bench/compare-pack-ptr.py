@@ -10,7 +10,6 @@ Small benchmark that compares a plain NumPy array copy against
 compression through different compressors in Blosc.
 """
 
-from __future__ import print_function
 import numpy as np
 import time
 import blosc

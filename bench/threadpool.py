@@ -10,7 +10,6 @@ chunks.  The target is an image stack [50,1024,1024], where each frame can
 be compressed as a chunk.
 """
 
-from __future__ import print_function
 import numpy as np
 import time
 import blosc
