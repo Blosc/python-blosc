@@ -11,7 +11,6 @@
 
 import os
 import sys
-import io
 
 from skbuild import setup
 from textwrap import dedent
