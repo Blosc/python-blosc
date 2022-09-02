@@ -3,24 +3,10 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to python-blosc's documentation!
-========================================
 
-Contents:
+.. include:: ../README.rst
 
 .. toctree::
-   :maxdepth: 2
+   :hidden:
 
-   intro
-   install
-   tutorial
-   reference
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
-
+   python-blosc
