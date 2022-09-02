@@ -1,4 +1,4 @@
-project = 'Blosc2'
+project = 'Python-Blosc'
 copyright = '2019-present, The Blosc Developers'
 author = 'The Blosc Developers'
 extensions = [
