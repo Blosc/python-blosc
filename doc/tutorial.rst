@@ -98,7 +98,7 @@ in compression also happens with ZLib::
 
 Here it is a plot with the different compression ratios achieved:
 
-.. image:: cratio-blosc-codecs.png
+.. image:: _static/cratio-blosc-codecs.png
    :scale: 75 %
 
 The explanation for this apparently shocking result is that Blosc uses
@@ -126,7 +126,7 @@ Here we see a couple of things:
 
 The next plot summarizes the speed benchmarks above:
 
-.. image:: speed-blosc-codecs.png
+.. image:: _static/speed-blosc-codecs.png
    :scale: 75 %
 
 These results should reinforce the idea that there is not a single codec
