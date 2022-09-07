@@ -56,11 +56,11 @@ Documentation
 
 The Sphinx based documentation is here:
 
-http://python-blosc.blosc.org
+https://blosc.org/python-blosc/python-blosc.html
 
 Also, some examples are available on python-blosc wiki page:
 
-http://github.com/blosc/python-blosc/wiki
+https://github.com/blosc/python-blosc/wiki
 
 Lastly, here is the `recording
 <https://www.youtube.com/watch?v=rilU44j_wUU&list=PLNkWzv63CorW83NY3U93gUar645jTXpJF&index=15>`_
