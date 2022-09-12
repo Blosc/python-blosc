@@ -21,7 +21,7 @@ A Python wrapper for the extremely fast Blosc compression library
 .. |gitter| image:: https://badges.gitter.im/Blosc/c-blosc.svg
         :target: https://gitter.im/Blosc/c-blosc
 .. |Contributor Covenant| image:: https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg
-        :target: code_of_conduct.md
+        :target: https://github.com/Blosc/community/blob/master/code_of_conduct.md
 
 
 What it is
@@ -300,8 +300,8 @@ License
 =======
 
 The software is licenses under a 3-Clause BSD licsense. A copy of the
-python-blosc license can be found in `LICENSE.txt <LICENSE.txt>`_. A copy of all licenses can be
-found in `LICENSES/ <LICENSES/>`_.
+python-blosc license can be found in
+`LICENSE.txt <https://github.com/Blosc/python-blosc/blob/main/LICENSE.txt>`_.
 
 Mailing list
 ============
