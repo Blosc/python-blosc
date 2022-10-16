@@ -1,4 +1,3 @@
-
 name: "Code Scanning - Action"
 
 on:
@@ -16,7 +15,7 @@ on:
     #        │  │ │ │ │
     #        │  │ │ │ │
     #        *  * * * *
-    - cron: '30 1 * * 0'
+    - cron: '11 4 * * 6'
 
 jobs:
   CodeQL-Build:
@@ -38,9 +37,9 @@ jobs:
       # Initializes the CodeQL tools for scanning.
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v2
-        # Override language selection by uncommenting this and choosing your languages
-        # with:
-        #   languages: go, javascript, csharp, python, cpp, java
+        with:
+          languages: python
+          queries: +security-extended
 
       # Autobuild attempts to build any compiled languages (C/C++, C#, or Java).
       # If this step fails, then you should remove it and run the build manually (see below).
@@ -60,3 +59,8 @@ jobs:
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v2
+        with:
+          patterns: |
+            - cpuinfo.py
+            - blosc/_version.py
+            - blosc/c-blosc/*
