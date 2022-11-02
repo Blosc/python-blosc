@@ -337,7 +337,7 @@ def free_resources():
 
 
 def _check_shuffle(shuffle):
-    if shuffle not in [blosc.NOSHUFFLE, blosc.SHUFFLE, blosc.BITSHUFFLE]:
+    if shuffle not in (blosc.NOSHUFFLE, blosc.SHUFFLE, blosc.BITSHUFFLE):
         raise ValueError("shuffle can only be one of NOSHUFFLE, SHUFFLE"
                          " and BITSHUFFLE.")
     if (shuffle == blosc.BITSHUFFLE and
