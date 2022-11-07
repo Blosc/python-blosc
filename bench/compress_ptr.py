@@ -43,7 +43,7 @@ print("\nTimes for compressing/decompressing with clevel=%d and %d threads" % (
 for (in_, label) in arrays:
     print("\n*** %s ***" % label)
     for cname in blosc.compressor_list():
-        for shuffle in [blosc.NOSHUFFLE, blosc.SHUFFLE, blosc.BITSHUFFLE]:
+        for shuffle in (blosc.NOSHUFFLE, blosc.SHUFFLE, blosc.BITSHUFFLE):
             t0 = time.time()
             c = blosc.compress_ptr(in_.__array_interface__['data'][0],
                                    in_.size, in_.dtype.itemsize,
