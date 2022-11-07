@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 threadpool.py
 Created on Sun Oct 23 12:03:46 2016

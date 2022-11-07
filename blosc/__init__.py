@@ -67,7 +67,7 @@ clib_versions = dict(clib_info(name) for name in cnames)
 
 # Initialize Blosc
 init()
-# default to keep GIL, since it's just extra overhead if we aren't 
+# default to keep GIL, since it's just extra overhead if we aren't
 # threading ourselves
 set_releasegil(False)
 # Internal Blosc threading
