@@ -6,13 +6,10 @@
 ########################################################################
 
 import os
+import pickle
 import subprocess
 import sys
 from ._version import LooseVersion
-try:
-    import cPickle as pickle
-except ImportError:
-    import pickle
 
 from blosc import blosc_extension as _ext
 import blosc
