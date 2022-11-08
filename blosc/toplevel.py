@@ -6,6 +6,7 @@
 ########################################################################
 
 import os
+import subprocess
 import sys
 from ._version import LooseVersion
 try:
@@ -37,7 +38,8 @@ def detect_number_of_cores():
             if isinstance(ncpus, int) and ncpus > 0:
                 return ncpus
         else:  # OSX:
-            return int(os.popen2(("sysctl", "-n", "hw.ncpu"))[1].read())
+            return int(subprocess.run(("sysctl", "-n", "hw.ncpu"),
+                                      stdout=subprocess.PIPE).stdout)
     # Windows:
     if "NUMBER_OF_PROCESSORS" in os.environ:
         ncpus = int(os.environ["NUMBER_OF_PROCESSORS"])
