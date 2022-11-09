@@ -6,12 +6,14 @@ extensions = [
     'sphinx.ext.intersphinx',
     'numpydoc',
 ]
+source_suffix = [".rst", ".md"]
 html_theme = "pydata_sphinx_theme"
 html_static_path = ['_static']
 html_css_files = [
     'css/custom.css',
 ]
 html_logo = "_static/blosc-logo_256.png"
+html_favicon = "_static/blosc-logo_128.png"
 html_theme_options = {
     "logo": {
         "link": "/index",
