@@ -21,7 +21,7 @@ https://github.com/Blosc/python-blosc/blob/master/RELEASE_NOTES.rst
 
 More docs and examples are available in the documentation site:
 
-http://python-blosc.blosc.org
+https://www.blosc.org/python-blosc/python-blosc.html
 
 
 What is it?

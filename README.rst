@@ -8,7 +8,7 @@ A Python wrapper for the extremely fast Blosc compression library
 :Author: The Blosc development team
 :Contact: blosc@blosc.org
 :Github: https://github.com/Blosc/python-blosc
-:URL: http://python-blosc.blosc.org
+:URL: https://www.blosc.org/python-blosc/python-blosc.html
 :PyPi: |version|
 :Anaconda: |anaconda|
 :Gitter: |gitter|
