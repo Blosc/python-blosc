@@ -44,7 +44,7 @@ Updating the online documentation site
   $ ssh blosc@xodo.blosc.org "mv $UPSTREAM/docs/html $UPSTREAM/docs/html.bck"
   $ scp -r _build/html blosc@xodo.blosc.org:$UPSTREAM/docs
 
-* Check that the new manual is accessible in http://python-blosc.blosc.org
+* Check that the new manual is accessible in https://www.blosc.org/python-blosc/python-blosc.html
 
 * If everything goes well, remove the old docs backup::
 

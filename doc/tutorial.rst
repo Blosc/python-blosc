@@ -7,7 +7,7 @@ how to use it in a Python environment) is pretty easy.  It basically mimics
 the API of the `zlib` module included in the standard Python library.
 
 Here are some examples on how to use it.  For the full documentation, please
-refer to the `Library Reference <http://python-blosc.blosc.org/reference.html>`_
+refer to the `Library Reference <https://www.blosc.org/python-blosc/reference.html>`_
 section.
 
 Most of the times in this tutorial have been obtained using a VM with 2 cores

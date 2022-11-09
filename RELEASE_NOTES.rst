@@ -4,7 +4,7 @@
 
 :Author: The Blosc development team
 :Contact: blosc@blosc.org
-:URL: http://python-blosc.blosc.org
+:URL: https://www.blosc.org/python-blosc/python-blosc.html
 :URL: https://github.com/Blosc/python-blosc
 
 
