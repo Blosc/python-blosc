@@ -1,6 +1,6 @@
 include MANIFEST.in
 include *.txt *.rst
-include setup.py cpuinfo.py VERSION
+include setup.py VERSION
 include pyproject.toml
 graft cmake
 
