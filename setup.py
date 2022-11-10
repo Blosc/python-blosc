@@ -57,6 +57,7 @@ if __name__ == '__main__':
     Programming Language :: Python :: 3.8
     Programming Language :: Python :: 3.9
     Programming Language :: Python :: 3.10
+    Programming Language :: Python :: 3.11
     Programming Language :: Python :: 3 :: Only
     Topic :: Software Development :: Libraries :: Python Modules
     Topic :: System :: Archiving :: Compression
@@ -69,7 +70,7 @@ if __name__ == '__main__':
         description = 'Blosc data compressor',
         long_description = long_description,
         classifiers = [c for c in classifiers.split("\n") if c],
-        python_requires=">=3.7, <4",
+        python_requires=">=3.7",
         author = 'The Blosc development team',
         author_email = 'blosc@blosc.org',
         maintainer = 'The Blosc development team',
