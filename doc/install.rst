@@ -125,4 +125,4 @@ Install it as a typical Python package:
 
 .. code-block:: console
 
-    $ python setup.py install
+    $ python -m pip install .
