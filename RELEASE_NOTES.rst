@@ -11,7 +11,12 @@
 Changes from 1.10.6 to 1.10.7
 =============================
 
-#XXX version-specific blurb XXX#
+* Internal C-Blosc sources updated to 1.21.2 (they are a git submodule now).
+
+* Many small code improvements, improved consistency and typo fixes.
+  Thanks to Dimitri Papadopoulos Orfanos.
+
+
 
 
 Changes from 1.10.5 to 1.10.6

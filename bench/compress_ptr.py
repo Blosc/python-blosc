@@ -56,5 +56,5 @@ for (in_, label) in arrays:
             td = time.time() - t0
             assert((in_ == out).all())
             print("  *** %-8s, %-10s *** %6.3f s (%.2f GB/s) / %5.3f s (%.2f GB/s)" % (
-                cname, blosc.filters[filter], tc, ((N*8 / tc) / 2**30), td, ((N*8 / td) / 2**30)), end='')
+                cname, blosc.filters[shuffle], tc, ((N*8 / tc) / 2**30), td, ((N*8 / td) / 2**30)), end='')
             print("\tCompr. ratio: %5.1fx" % (N*8. / len(c)))
