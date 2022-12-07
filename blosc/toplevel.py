@@ -35,10 +35,14 @@ def detect_number_of_cores():
             if isinstance(ncpus, int) and ncpus > 0:
                 return ncpus
         else:  # OSX:
-            return int(subprocess.run(("sysctl", "-n", "hw.ncpu"),
-                                      stdout=subprocess.PIPE).stdout)
+            completed = subprocess.run(("sysctl", "-n", "hw.ncpu"),
+                                       stdout=subprocess.PIPE)
+            if completed.returncode == 0:
+                ncpus = int(completed.stdout)
+                if ncpus > 0:
+                    return ncpus
     # Windows:
-    if "NUMBER_OF_PROCESSORS" in os.environ:
+    elif "NUMBER_OF_PROCESSORS" in os.environ:
         ncpus = int(os.environ["NUMBER_OF_PROCESSORS"])
         if ncpus > 0:
             return ncpus
