@@ -1,15 +1,17 @@
 ==============================
-Announcing python-blosc 1.10.6
+Announcing python-blosc 1.11.0
 ==============================
 
 What is new?
 ============
 
-This is a maintenance release for including the cmake directory in
-distributed files.
+This is a maintenance release with many improvements cummulated during
+the last year.  Besides coming with the latest C-Blosc sources (1.21.2),
+there are quite a lot of fixes, specially in the build process.  And we
+added support for Python 3.10 and 3.11, and deprecated Python 3.7.
 
-We are generating wheels for Intel (64 bits) and all major OS
-(Win, Linux, Mac). In addition to extensions, we are distributing library
+Now, we are generating wheels for Python 3.10 and 3.11 (finally!).
+In addition to extensions, we are distributing library
 binaries in the wheels too.  This way, people willing to use the C-Blosc
 library can make use of these wheels to install the necessary development
 files.  For details, see:

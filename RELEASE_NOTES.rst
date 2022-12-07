@@ -16,7 +16,11 @@ Changes from 1.10.6 to 1.10.7
 * Many small code improvements, improved consistency and typo fixes.
   Thanks to Dimitri Papadopoulos Orfanos.
 
+* Support for Python 3.11.  Support for Python 3.7 has been dropped.
+  Thanks to Dimitri Papadopoulos Orfanos.
 
+* Several other fixes, mainly related with the building process, which
+  should be more solid now in different situations.
 
 
 Changes from 1.10.5 to 1.10.6
