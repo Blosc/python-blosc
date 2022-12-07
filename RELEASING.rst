@@ -27,33 +27,8 @@ Preliminaries
 Updating the online documentation site
 --------------------------------------
 
-* Go to the doc directory::
-
-  $ cd doc
-
-* Make the html version of the docs::
-
-  $ rm -rf _build/html
-  $ PYTHONPATH=../ make html
-
-* Make a backup and upload the files in the doc site (xodo) (this step is
-  currently pretty broken and won't work as listed, just make sure the docs are
-  in the right place with the correct permissions.)::
-
-  $ export UPSTREAM="/home/blosc/srv/www/python-blosc.blosc.org"
-  $ ssh blosc@xodo.blosc.org "mv $UPSTREAM/docs/html $UPSTREAM/docs/html.bck"
-  $ scp -r _build/html blosc@xodo.blosc.org:$UPSTREAM/docs
-
-* Check that the new manual is accessible in https://www.blosc.org/python-blosc/python-blosc.html
-
-* If everything goes well, remove the old docs backup::
-
-  $ ssh blosc@xodo.blosc.org "rm -r $UPSTREAM/docs/html.bck"
-
-* Go up to the root directory for further proceeding with packging::
-
-  $ cd ..
-
+* Go to Blosc/blogsite repo and click on the `Re-run all jobs` button to regenerate the
+  documentation and check that it has been correctly updated in https://www.blosc.org.
 
 Tagging
 -------
@@ -66,7 +41,6 @@ Tagging
 
     $ git push
     $ git push --tags
-
 
 * Check that wheels are created and uploaded to PyPI.
 
