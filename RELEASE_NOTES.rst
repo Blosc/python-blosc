@@ -8,7 +8,13 @@
 :URL: https://github.com/Blosc/python-blosc
 
 
-Changes from 1.10.6 to 1.10.7
+Changes from 1.11.0 to 1.11.1
+=============================
+
+#XXX version-specific blurb XXX#
+
+
+Changes from 1.10.6 to 1.11.0
 =============================
 
 * Internal C-Blosc sources updated to 1.21.2 (they are a git submodule now).
@@ -81,7 +87,7 @@ Changes from 1.9.2 to 1.10.0
   Also, we are distributing binaries for C-Blosc libraries (dynamic and static)
   and headers.  This way, people trying to use the C-Blosc library can use the
   python-blosc wheels to install the necessary development files.  For details,
-  see: https://github.com/Blosc/c-blosc/blob/master/COMPILING_WITH_WHEELS.rst
+  see: https://github.com/Blosc/c-blosc/blob/main/COMPILING_WITH_WHEELS.rst
 
   We gratefully acknowledge Jeff Hammerbacher for supporting the addition of
   wheels for Blosc.

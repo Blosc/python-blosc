@@ -15,11 +15,11 @@ In addition to extensions, we are distributing library
 binaries in the wheels too.  This way, people willing to use the C-Blosc
 library can make use of these wheels to install the necessary development
 files.  For details, see:
-https://github.com/Blosc/c-blosc/blob/master/COMPILING_WITH_WHEELS.rst
+https://github.com/Blosc/c-blosc/blob/main/COMPILING_WITH_WHEELS.rst
 
 For more info, you can have a look at the release notes in:
 
-https://github.com/Blosc/python-blosc/blob/master/RELEASE_NOTES.rst
+https://github.com/Blosc/python-blosc/blob/main/RELEASE_NOTES.rst
 
 More docs and examples are available in the documentation site:
 
