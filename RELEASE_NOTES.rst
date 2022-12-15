@@ -11,7 +11,7 @@
 Changes from 1.11.0 to 1.11.1
 =============================
 
-#XXX version-specific blurb XXX#
+* Internal C-Blosc sources updated to 1.21.3.
 
 
 Changes from 1.10.6 to 1.11.0

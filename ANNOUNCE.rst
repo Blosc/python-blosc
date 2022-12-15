@@ -1,16 +1,13 @@
 ==============================
-Announcing python-blosc 1.11.0
+Announcing python-blosc 1.11.1
 ==============================
 
 What is new?
 ============
 
-This is a maintenance release with many improvements cummulated during
-the last year.  Besides coming with the latest C-Blosc sources (1.21.2),
-there are quite a lot of fixes, specially in the build process.  And we
-added support for Python 3.10 and 3.11, and deprecated Python 3.7.
+This is a maintenance release.  Besides coming with the latest C-Blosc
+sources (1.21.3), there are new arm64 wheels for MacOS.
 
-Now, we are generating wheels for Python 3.10 and 3.11 (finally!).
 In addition to extensions, we are distributing library
 binaries in the wheels too.  This way, people willing to use the C-Blosc
 library can make use of these wheels to install the necessary development
@@ -25,6 +22,9 @@ More docs and examples are available in the documentation site:
 
 https://www.blosc.org/python-blosc/python-blosc.html
 
+**Important note**: There is a new Python-Blosc2 wrapper
+on top of the next generation C-Blosc2 library.  Check it out at:
+https://github.com/Blosc/python-blosc2
 
 What is it?
 ===========
