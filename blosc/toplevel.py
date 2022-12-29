@@ -796,7 +796,7 @@ def unpack_array(packed_array, **kwargs):
 
 
 # For the load tests protocol:
-# http://docs.python.org/2/library/unittest.html#load-tests-protocol
+# https://docs.python.org/3/library/unittest.html#load-tests-protocol
 def load_tests(loader, tests, pattern):
     import doctest
     tests.addTests(doctest.DocTestSuite())
