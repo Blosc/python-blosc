@@ -27,7 +27,7 @@ A Python wrapper for the extremely fast Blosc compression library
 What it is
 ==========
 
-Blosc (http://blosc.org) is a high performance compressor optimized for
+Blosc (https://blosc.org) is a high performance compressor optimized for
 binary data.  It has been designed to transmit data to the processor
 cache faster than the traditional, non-compressed, direct memory fetch
 approach via a memcpy() OS call.
@@ -65,7 +65,7 @@ https://github.com/blosc/python-blosc/wiki
 Lastly, here is the `recording
 <https://www.youtube.com/watch?v=rilU44j_wUU&list=PLNkWzv63CorW83NY3U93gUar645jTXpJF&index=15>`_
 and the `slides
-<http://www.blosc.org/docs/haenel-ep14-compress-me-stupid.pdf>`_ from the talk
+<https://www.blosc.org/docs/haenel-ep14-compress-me-stupid.pdf>`_ from the talk
 "Compress me stupid" at the EuroPython 2014.
 
 Building
@@ -310,7 +310,7 @@ Discussion about this module is welcome in the Blosc list:
 
 blosc@googlegroups.com
 
-http://groups.google.es/group/blosc
+https://groups.google.com/g/blosc
 
 ----
 

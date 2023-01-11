@@ -74,7 +74,7 @@ if __name__ == '__main__':
         author_email = 'blosc@blosc.org',
         maintainer = 'The Blosc development team',
         maintainer_email = 'blosc@blosc.org',
-        url = 'http://github.com/blosc/python-blosc',
+        url = 'https://github.com/blosc/python-blosc',
         license = 'https://opensource.org/licenses/BSD-3-Clause',
         platforms = ['any'],
         cmake_args = (

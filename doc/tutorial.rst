@@ -318,5 +318,5 @@ achieved by `blosc`:
 Links to external discussions on `blosc` optimization
 =====================================================
 
-* `Synthetic Benchmarks <http://www.blosc.org/synthetic-benchmarks.html>`_ by Francesc Alted
-* `Genotype compressor benchmark <http://alimanfoo.github.io/2016/09/21/genotype-compression-benchmark.html>`_ by Alistair Miles
+* `Synthetic Benchmarks <https://www.blosc.org/pages/synthetic-benchmarks/>`_ by Francesc Alted
+* `Genotype compressor benchmark <https://alimanfoo.github.io/2016/09/21/genotype-compression-benchmark.html>`_ by Alistair Miles
