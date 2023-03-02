@@ -299,7 +299,7 @@ to the authors!
 License
 =======
 
-The software is licenses under a 3-Clause BSD license. A copy of the
+The software is licensed under a 3-Clause BSD license. A copy of the
 python-blosc license can be found in
 `LICENSE.txt <https://github.com/Blosc/python-blosc/blob/main/LICENSE.txt>`_.
 
