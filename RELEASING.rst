@@ -2,7 +2,7 @@
 Releasing python-blosc
 =======================
 
-:Author: The Blosc Development Team
+:Author: Blosc Development Team
 :Contact: blosc@blosc.org
 :Date: 2020-12-22
 
