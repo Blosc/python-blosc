@@ -91,7 +91,7 @@ jobs:
           CIBW_BUILD_VERBOSITY: 1
 
       - name: Upload wheels
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           path: ./wheelhouse/*.whl
 
@@ -117,7 +117,7 @@ jobs:
       - name: Build SDist
         run: python setup.py sdist
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           path: dist/*.tar.gz
 
