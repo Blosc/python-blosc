@@ -70,7 +70,7 @@ for cname in blosc.compressor_list():
     dtic = time.time()
     out = blosc.unpack_array(c)
     dtoc = time.time()
-    assert((in_ == out).all())
+    assert (in_ == out).all()
     print("  Time for pack_array/unpack_array:     %.3f/%.3f s." % \
           (ctoc-ctic, dtoc-dtic), end='')
     print("\tCompr ratio: %.2f" % (in_.size*in_.dtype.itemsize*1. / len(c)))
@@ -84,7 +84,7 @@ for cname in blosc.compressor_list():
     dtic = time.time()
     blosc.decompress_ptr(c, out.__array_interface__['data'][0])
     dtoc = time.time()
-    assert((in_ == out).all())
+    assert (in_ == out).all()
     print("  Time for compress_ptr/decompress_ptr: %.3f/%.3f s." % \
           (ctoc-ctic, dtoc-dtic), end='')
     print("\tCompr ratio: %.2f" % (in_.size*in_.dtype.itemsize*1. / len(c)))
