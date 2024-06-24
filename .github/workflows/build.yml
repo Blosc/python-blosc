@@ -39,7 +39,7 @@ jobs:
     name: "Build and test on aarch64"
     strategy:
       matrix:
-        pyver: [cp38-cp38, cp311-cp311]
+        pyver: [cp310-cp310, cp312-cp312]
       fail-fast: false
     runs-on: ubuntu-latest
     env:
