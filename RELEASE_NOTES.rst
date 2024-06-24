@@ -11,7 +11,15 @@
 Changes from 1.11.1 to 1.11.2
 =============================
 
-#XXX version-specific blurb XXX#
+* Add support for NumPy 2.0. Thanks to Michał Górny.
+
+* Internal C-Blosc sources updated to 1.21.6.
+
+* Add assembly source in MANIFEST.in. Thanks to Ben Hekster.
+
+* Deprecated support for Python 3.8 and added support for Python 3.12.
+
+* Some fixes in the building process.
 
 
 Changes from 1.11.0 to 1.11.1
