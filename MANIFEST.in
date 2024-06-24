@@ -4,4 +4,4 @@ include setup.py VERSION
 include pyproject.toml
 graft cmake
 
-recursive-include blosc *.py *.c *.h *.txt *.in *.md
+recursive-include blosc *.py *.c *.h *.S *.txt *.in *.md
