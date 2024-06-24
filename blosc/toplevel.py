@@ -514,7 +514,7 @@ def compress_ptr(address, items, typesize=8, clevel=9, shuffle=blosc.SHUFFLE,
         items, np_array.dtype.itemsize)
     >>> d = blosc.decompress(c)
     >>> np_ans = numpy.fromstring(d, dtype=np_array.dtype)
-    >>> (np_array == np_ans).all()
+    >>> bool((np_array == np_ans).all())
     True
 
     >>> import ctypes
@@ -640,7 +640,7 @@ def decompress_ptr(bytes_like, address):
         items, np_array.dtype.itemsize)
     >>> np_ans = numpy.empty(items, dtype=np_array.dtype)
     >>> nbytes = blosc.decompress_ptr(c, np_ans.__array_interface__['data'][0])
-    >>> (np_array == np_ans).all()
+    >>> bool((np_array == np_ans).all())
     True
     >>> nbytes == items * np_array.dtype.itemsize
     True
@@ -769,12 +769,12 @@ def unpack_array(packed_array, **kwargs):
     >>> len(parray) < a.size*a.itemsize
     True
     >>> a2 = blosc.unpack_array(parray)
-    >>> numpy.alltrue(a == a2)
+    >>> bool(numpy.all(a == a2))
     True
     >>> a = numpy.array(['å', 'ç', 'ø'])
     >>> parray = blosc.pack_array(a)
     >>> a2 = blosc.unpack_array(parray)
-    >>> numpy.alltrue(a == a2)
+    >>> bool(numpy.all(a == a2))
     True
     """
 
