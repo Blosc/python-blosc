@@ -27,6 +27,10 @@ A Python wrapper for the extremely fast Blosc compression library
 What it is
 ==========
 
+**Note**: There is a more modern version of this package called Python-Blosc2
+which supports many more features and is more actively maintained.  Visit it at:
+https://github.com/Blosc/python-blosc2
+
 Blosc (https://blosc.org) is a high performance compressor optimized for
 binary data.  It has been designed to transmit data to the processor
 cache faster than the traditional, non-compressed, direct memory fetch
@@ -38,7 +42,6 @@ regular-spaced values, etc.
 
 python-blosc a Python package that wraps Blosc.  python-blosc supports
 Python 3.9 or higher versions.
-
 
 Installing
 ==========
