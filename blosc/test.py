@@ -344,7 +344,6 @@ class TestCodec(unittest.TestCase):
 
     def test_bithuffle_leftovers(self):
         # Test for https://github.com/Blosc/c-blosc2/pull/100
-        import numpy as np
         buffer = b" " * 641091  # a buffer that is not divisible by 8
         cbuffer = blosc.compress(buffer, typesize=8, shuffle=blosc.BITSHUFFLE, clevel=1)
         dbuffer = blosc.decompress(cbuffer)
