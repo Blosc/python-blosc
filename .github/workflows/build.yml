@@ -9,7 +9,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-        python-version: ['3.9', '3.10', '3.11', '3.12']
+        python-version: ['3.9', '3.10', '3.11', '3.12', '3.13']
 
     steps:
     - uses: actions/checkout@v4
@@ -39,7 +39,7 @@ jobs:
     name: "Build and test on aarch64"
     strategy:
       matrix:
-        pyver: [cp310-cp310, cp312-cp312]
+        pyver: [cp310-cp310, cp313-cp313]
       fail-fast: false
     runs-on: ubuntu-latest
     env:

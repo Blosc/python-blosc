@@ -52,7 +52,7 @@ jobs:
           python -m pip install cibuildwheel
           python -m cibuildwheel --output-dir wheelhouse
         env:
-          CIBW_BUILD: 'cp39-win32 cp310-win32 cp311-win32 cp312-win32'
+          CIBW_BUILD: 'cp39-win32 cp310-win32 cp311-win32 cp312-win32, cp313-win32'
           CIBW_BEFORE_BUILD: pip install -r requirements.txt
           CIBW_BEFORE_TEST: pip install numpy
           CIBW_TEST_COMMAND: python -m blosc.test
@@ -69,7 +69,7 @@ jobs:
           python -m pip install cibuildwheel
           python -m cibuildwheel --output-dir wheelhouse
         env:
-          CIBW_BUILD: 'cp39-win_amd64 cp310-win_amd64 cp311-win_amd64 cp312-win_amd64'
+          CIBW_BUILD: 'cp39-win_amd64 cp310-win_amd64 cp311-win_amd64 cp312-win_amd64 cp313-win_amd64'
           CIBW_BEFORE_BUILD: pip install -r requirements.txt
           CIBW_BEFORE_TEST: pip install numpy
           CIBW_TEST_COMMAND: python -m blosc.test
@@ -81,7 +81,7 @@ jobs:
           python -m pip install cibuildwheel
           python -m cibuildwheel --output-dir wheelhouse
         env:
-          CIBW_BUILD: 'cp39-* cp310-* cp311-* cp312-*'
+          CIBW_BUILD: 'cp39-* cp310-* cp311-* cp312-* cp313-*'
           CIBW_SKIP: '*-manylinux*_i686'
           CIBW_ARCHS_MACOS: "x86_64 arm64"
           CIBW_ARCHS_LINUX: ${{ matrix.arch }}
