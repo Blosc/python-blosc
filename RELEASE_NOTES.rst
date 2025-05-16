@@ -11,7 +11,11 @@
 Changes from 1.11.2 to 1.11.3
 =============================
 
-#XXX version-specific blurb XXX#
+* Added support for Python 3.13. Thanks to David Stansby.
+
+* Internal C-Blosc sources updated to 051b9d2cb9437e375dead8574f66d80ebce47bee.
+
+* CI fixes.
 
 
 Changes from 1.11.1 to 1.11.2
