@@ -91,8 +91,9 @@ jobs:
           CIBW_BUILD_VERBOSITY: 1
 
       - name: Upload wheels
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
+          name: wheels-${{ matrix.os }}
           path: ./wheelhouse/*.whl
 
 
@@ -117,8 +118,9 @@ jobs:
       - name: Build SDist
         run: python setup.py sdist
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
+          name: wheels-source
           path: dist/*.tar.gz
 
   upload_pypi:
@@ -126,12 +128,13 @@ jobs:
     runs-on: ubuntu-latest
     if: startsWith(github.event.ref, 'refs/tags')
     steps:
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
-          name: artifact
           path: dist
+          pattern: wheels-*
+          merge-multiple: true
 
-      - uses: pypa/gh-action-pypi-publish@master
+      - uses: pypa/gh-action-pypi-publish@release/v1
         with:
           user: __token__
           password: ${{ secrets.blosc_pypi_secret }}
