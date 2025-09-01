@@ -513,7 +513,7 @@ def compress_ptr(address, items, typesize=8, clevel=9, shuffle=blosc.SHUFFLE,
     >>> c = blosc.compress_ptr(np_array.__array_interface__['data'][0], \
         items, np_array.dtype.itemsize)
     >>> d = blosc.decompress(c)
-    >>> np_ans = numpy.fromstring(d, dtype=np_array.dtype)
+    >>> np_ans = numpy.frombuffer(d, dtype=np_array.dtype)
     >>> bool((np_array == np_ans).all())
     True
 
