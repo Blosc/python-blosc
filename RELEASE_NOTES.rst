@@ -11,8 +11,11 @@
 Changes from 1.11.3 to 1.11.4
 =============================
 
-#XXX version-specific blurb XXX#
+* Added support for Python 3.14 (with GIL).
 
+* Fix deprecated Numpy usage (see #347). Thanks to Finn Womack and Marius Grossu.
+
+* CI upgrades.
 
 Changes from 1.11.2 to 1.11.3
 =============================

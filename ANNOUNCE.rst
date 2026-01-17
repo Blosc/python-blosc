@@ -1,12 +1,12 @@
 ==============================
-Announcing python-blosc 1.11.3
+Announcing python-blosc 1.11.4
 ==============================
 
 What is new?
 ============
 
-This is a maintenance release.  Besides coming with the latest C-Blosc
-sources, there are new wheels for Python 3.13, as well as some CI fixes.
+This is a maintenance release. Besides a Numpy fix, new wheels for
+Python 3.14 were added and the CI tools were upgraded.
 
 In addition to extensions, we are distributing library
 binaries in the wheels too.  This way, people willing to use the C-Blosc
