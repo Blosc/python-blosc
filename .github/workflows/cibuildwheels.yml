@@ -13,7 +13,7 @@ jobs:
   build_wheels:
     name: Build wheels for ${{ matrix.arch }} on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}    # Only build wheels when tagging (typically a release)
-    if: startsWith(github.event.ref, 'refs/tags')
+    # if: startsWith(github.event.ref, 'refs/tags')
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, windows-11-arm, macos-latest]
