@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - win-arm64
       - v[0-9]+.[0-9]+.x
     tags:
       - v*
@@ -12,7 +13,7 @@ jobs:
   build_wheels:
     name: Build wheels for ${{ matrix.arch }} on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}    # Only build wheels when tagging (typically a release)
-    if: startsWith(github.event.ref, 'refs/tags')
+    # if: startsWith(github.event.ref, 'refs/tags')
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, windows-11-arm, macos-latest]
@@ -89,7 +90,7 @@ jobs:
           python -m pip install cibuildwheel
           python -m cibuildwheel --output-dir wheelhouse
         env:
-          CIBW_BUILD: 'cp39-win_arm64 cp310-win_arm64 cp311-win_arm64 cp312-win_arm64 cp313-win_arm64'
+          CIBW_BUILD: 'cp39-win_arm64 cp310-win_arm64 cp311-win_arm64 cp312-win_arm64 cp313-win_arm64 cp314-win_arm64'
           CIBW_BEFORE_BUILD: pip install -r requirements.txt
           CIBW_BEFORE_TEST: pip install numpy
           CIBW_TEST_COMMAND: python -m blosc.test
